@@ -1,1 +1,0 @@
-# frontend-central-controle
