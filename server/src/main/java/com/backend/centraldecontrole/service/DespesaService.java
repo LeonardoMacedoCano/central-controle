@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -56,12 +58,14 @@ public class DespesaService {
             return null;
         }
 
+        LocalDateTime dataLocalDateTime = despesa.getData().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+
         return new DespesaResponseDTO(
                 despesa.getId(),
                 despesa.getCategoria().getId(),
                 despesa.getDescricao(),
                 despesa.getValor(),
-                despesa.getData()
+                dataLocalDateTime
         );
     }
 }

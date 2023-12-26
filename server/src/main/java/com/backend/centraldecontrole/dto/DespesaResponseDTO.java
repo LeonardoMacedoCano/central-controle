@@ -1,5 +1,7 @@
 package com.backend.centraldecontrole.dto;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-public record DespesaResponseDTO(Long id, Long idCategoria, String descricao, Double valor, Date data) {
+import java.time.LocalDateTime;
+
+public record DespesaResponseDTO(Long id, Long idCategoria, String descricao, Double valor, @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss") LocalDateTime data) {
 }
