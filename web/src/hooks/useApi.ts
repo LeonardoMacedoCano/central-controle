@@ -7,15 +7,25 @@ const api = axios.create({
 
 export const useApi = () => ({
     validateToken: async (token: string) => {
-        const response = await api.get('auth/validateToken?token=' + token);
-        return response.data;
+        try {
+            const response = await api.get('auth/validateToken?token=' + token);
+            return response.data;
+        } catch (error: any) {
+            console.error('Erro ao validar token:', error.message);
+            throw error;
+        }
     },
     login: async (username: string, senha: string) => {
-        const response = await api.post('/auth/login', {
-            username: username,
-            senha: senha,
-        });
-        return response.data;
+        try {
+            const response = await api.post('/auth/login', {
+                username: username,
+                senha: senha,
+            });
+            return response.data;
+        } catch (error: any) {
+            console.error('Erro ao logar:', error.message);
+            throw error;
+        }
     },
     logout: async () => {
         return { status: true };
