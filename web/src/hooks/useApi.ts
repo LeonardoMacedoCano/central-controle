@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Despesa } from '../types/Despesa';
 
 const api = axios.create({
     baseURL: 'http://localhost:8080'
@@ -20,5 +21,19 @@ export const useApi = () => ({
         return { status: true };
         const response = await api.post('/logout');
         return response.data;
+    },
+    listarDespesas: async (token: string): Promise<Despesa[]> => {
+        try {
+            const response = await api.get('/despesa/listar', {
+                headers: {
+                Authorization: `Bearer ${token}`,
+                },
+            });
+        
+            return response.data;
+        } catch (error: any) {
+            console.error('Erro ao listar as despesas:', error.message);
+            throw error;
+        }
     },
 });
