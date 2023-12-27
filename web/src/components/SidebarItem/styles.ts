@@ -3,9 +3,10 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   align-items: center;
-  background-color: #1A202C; 
+  background-color: ${props => props.theme.colors.primary};
+  border: 1px solid ${props => props.theme.colors.gray};
   font-size: 20px;
-  color: white;
+  color: ${props => props.theme.colors.white};
   padding: 10px;
   cursor: pointer;
   border-radius: 10px;
@@ -16,6 +17,6 @@ export const Container = styled.div`
   }
 
   &:hover {
-    background-color: black;
+    color: ${props => props.theme.colors.gray};
   }
 `;

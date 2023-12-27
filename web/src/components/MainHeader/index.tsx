@@ -3,7 +3,7 @@ import { Container, Title  } from './styles';
 import { FaBars } from 'react-icons/fa';
 import Sidebar from '../Sidebar';
 
-const Header: React.FC = () => {
+const MainHeader: React.FC = () => {
   const [sidebar, setSidebar] = useState(false);
 
   const showSidebar = () => setSidebar(!sidebar);
@@ -17,4 +17,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default MainHeader;

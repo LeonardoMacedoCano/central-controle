@@ -1,21 +1,23 @@
-import './App.css'
+import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { Private } from './pages/Private';
 import ListaDespesas from './pages/ListaDespesas';
+import MainHeader from './components/MainHeader';
+import { ThemeProvider } from 'styled-components';
 
-import Header from './components/Header';
+import dark from './styles/themes/dark';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <Header />
+    <ThemeProvider theme={dark}>
+      <MainHeader />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/ControleDespesas" element={<ListaDespesas />} />
+        <Route path="/controledespesas" element={<ListaDespesas />} />
         <Route path="/private" element={<Private />} />
       </Routes>
-    </div>
+    </ThemeProvider>
   )
 }
 
