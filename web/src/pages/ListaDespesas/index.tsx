@@ -12,6 +12,19 @@ const ListaDespesas: React.FC = () => {
   const auth = useContext(AuthContext);
   const api = useApi();
 
+  const customColumnNames = {
+    id: { label: 'ID', width: 50 },
+    idCategoria: { label: 'Categoria', width: 100 },
+    descricao: { label: 'Descrição' },
+    valor: { label: 'Valor', width: 150 },
+    data: { label: 'Data', width: 100 },
+  };
+
+  const customFormatters = {
+    valor: (value: string | number | Date) => Number(value).toFixed(2),
+    data: (value: string | number | Date) => new Date(value).toLocaleDateString(),
+  };
+
   useEffect(() => {
     setToken(auth.usuario?.token || null);
   }, [auth.usuario?.token]);
@@ -39,13 +52,15 @@ const ListaDespesas: React.FC = () => {
         <C.HeaderText>Despesa</C.HeaderText>
       </C.Header>
       <C.Body>
-
         {loading ? (
           <p>Carregando...</p>
         ) : (
-          <TableArea list={despesas} />
-        )}  
-
+          <TableArea
+            list={despesas}
+            columnNames={customColumnNames}
+            columnFormatters={customFormatters}
+          />
+        )}
       </C.Body>
     </C.Container>
   );
