@@ -8,6 +8,7 @@ export const Header = styled.div`
 
 export const HeaderText = styled.h1`
     color: #000;
+    margin-top: 20px;
 `;
 
 export const Body = styled.div`

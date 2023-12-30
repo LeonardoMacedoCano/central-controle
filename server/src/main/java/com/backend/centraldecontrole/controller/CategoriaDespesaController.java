@@ -1,6 +1,5 @@
 package com.backend.centraldecontrole.controller;
 
-
 import com.backend.centraldecontrole.dto.CategoriaDespesaResponseDTO;
 import com.backend.centraldecontrole.service.CategoriaDespesaService;
 import org.springframework.beans.factory.annotation.Autowired;
