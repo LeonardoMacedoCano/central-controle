@@ -47,6 +47,25 @@ export const useApi = () => ({
             throw error;
         }
     },
+    AddDespesas: async (token: string, data: Despesa) => {
+        try {
+            const response = await api.post('/despesa/add', {
+                idCategoria: data.idCategoria,
+                descricao: data.descricao,
+                valor: data.valor,
+                data: data.data,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+    
+            return response.data;
+        } catch (error: any) {
+            console.error('Erro ao adicionar despesa:', error.message);
+            throw error;
+        }
+    },
     listarTodasCategoriasDespesas: async (token: string): Promise<CategoriaDespesa[]> => {
         try {
             const response = await api.get('/categoriadespesa/getTodasCategoriasDespesa', {
