@@ -12,7 +12,6 @@ export const Login = () => {
     const [username, setUsername] = useState('');
     const [senha, setSenha] = useState('');
     const [show, setShow] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
 
     const handleUsernameInput = (event: ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
@@ -37,51 +36,42 @@ export const Login = () => {
             }
         }
     }
-    
+        
     return (
-        <>
-            <div style={styles.Container}>
-                <div style={styles.CaixaCentral}>
-                    <h1 style={styles.Titulo}>Central de Controle</h1>
-                    <div style={styles.CampoUsername}>
-                        <MdAccountCircle  style={styles.IconeUsername} />
-                        <input
-                            type="text"
-                            placeholder="Digite seu usuário"
-                            value={username}
-                            onChange={handleUsernameInput}
-                            style={styles.InputCampoUsername}
-                        />
-                    </div>
+        <styles.Container>
+            <styles.CaixaCentral>
+                <styles.Titulo>Central de Controle</styles.Titulo>
+                <styles.CampoUsername>
+                    <MdAccountCircle  style={styles.IconeUsername} />
+                    <styles.InputCampoUsername
+                        type="text"
+                        placeholder="Digite seu usuário"
+                        value={username}
+                        onChange={handleUsernameInput}
+                    />
+                </styles.CampoUsername>
 
-                    <div style={styles.CampoSenha}>
-                        <MdLock style={styles.IconeSenha} />
-                        <input
-                            placeholder="Digite sua senha"
-                            type={show ? 'text' : 'password'}
-                            value={senha}
-                            onChange={handlePasswordInput}
-                            style={styles.InputCampoSenha}
-                        />
-                        <div style={styles.IconeOlho}>
-                            {show ? (
-                                <HiEye size={20} onClick={handleClick} />
-                            ) : (
-                                <HiEyeOff size={20} onClick={handleClick} />
-                            )}
-                        </div>
-                    </div>
+                <styles.CampoSenha>
+                    <MdLock style={styles.IconeSenha} />
+                    <styles.InputCampoSenha
+                        placeholder="Digite sua senha"
+                        type={show ? 'text' : 'password'}
+                        value={senha}
+                        onChange={handlePasswordInput}
+                    />
+                    <styles.IconeOlho>
+                        {show ? (
+                            <HiEye size={20} onClick={handleClick} />
+                        ) : (
+                            <HiEyeOff size={20} onClick={handleClick} />
+                        )}
+                    </styles.IconeOlho>
+                </styles.CampoSenha>
 
-                    <button onClick={handleLogin} 
-                        type="submit"
-                        style={isHovered ? { ...styles.BotaoEntrar, ...styles.BotaoEntrarHover } : styles.BotaoEntrar}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
-                    >
-                        Entrar
-                    </button>
-                </div>
-            </div>      
-        </>      
+                <styles.BotaoEntrar onClick={handleLogin} type="submit">
+                    Entrar
+                </styles.BotaoEntrar>
+            </styles.CaixaCentral>
+        </styles.Container>           
     )
 }

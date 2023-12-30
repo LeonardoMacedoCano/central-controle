@@ -4,18 +4,32 @@ import { Home } from './pages/Home';
 import ControleDespesas from './pages/ControleDespesas';
 import MainHeader from './components/MainHeader';
 import { ThemeProvider } from 'styled-components';
+import GlobalStyles from './styles/GlobalStyles';
+import { BrowserRouter } from 'react-router-dom'
+import { AuthProvider } from './contexts/Auth/AuthProvider.tsx'
+import { RequireAuth } from './contexts/Auth/RequireAuth';
 
 import dark from './styles/themes/dark';
+import light from './styles/themes/light';
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={dark}>
-      <MainHeader />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/controledespesas" element={<ControleDespesas />} />
-      </Routes>
-    </ThemeProvider>
+    <AuthProvider>
+      <BrowserRouter>
+        <ThemeProvider theme={dark}>
+          <GlobalStyles />
+          {<RequireAuth>
+            <>
+              <MainHeader />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/controledespesas" element={<ControleDespesas />} />
+              </Routes>
+            </>
+          </RequireAuth>}
+        </ThemeProvider>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 

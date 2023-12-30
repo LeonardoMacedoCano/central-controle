@@ -1,110 +1,107 @@
-export const Container = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    width: '100%',
-    backgroundColor: '#121214',
-    color: 'white',
-};
+import styled from 'styled-components';
 
-export const CaixaCentral: React.CSSProperties = {
-    backgroundColor: '#29292E',
-    borderRadius: '5px',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '20px',
-    width: '500px',
-    height: '500px',
-};
+export const Container = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    color: white;
+    background-color: ${props => props.theme.colors.tertiary};
+`;
 
-export const Titulo = {
-    fontFamily: 'Roboto Slab',
-    fontSize: '40px',
-    marginBottom: '80px',
-};
+export const CaixaCentral = styled.div`
+  background-color: ${props => props.theme.colors.primary};
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 500px;
+  height: 500px;
+`;
 
-export const CampoUsername = {
-    display: 'flex',
-    alignItems: 'center',
-    color: 'gray',
-    backgroundColor: '#1A1A1D',
-    borderRadius: '5px',
-    padding: '3px',
-    width: '98%',
-    height: '50px',
-};
+export const Titulo = styled.h1`
+    color: ${props => props.theme.colors.white};
+    font-family: 'Roboto Slab';
+    font-size: 40px;
+    margin-bottom: 80px;
+`;
+
+export const CampoUsername = styled.div`
+    display: flex;
+    align-items: center;
+    color: gray;
+    background-color: ${props => props.theme.colors.secondary};
+    border-radius: 5px;
+    padding: 3px;
+    width: 98%;
+    height: 50px;
+`;
 
 export const IconeUsername = {
     marginLeft: '10px',
     fontSize: '25px',
 };
 
-export const InputCampoUsername = {
-    background: 'transparent',
-    width: '100%',
-    outlineWidth: '0',
-    color: '#E1E1E6',
-    border: 'none',
-    fontSize: '17px',
-    marginLeft: '10px',
-    marginRight: '10px',
-};
+export const InputCampoUsername = styled.input`
+    background: transparent;
+    width: 100%;
+    outline-width: 0;
+    color: ${props => props.theme.colors.white};
+    border: none;
+    font-size: 17px;
+    margin-left: 10px;
+    margin-right: 10px;
+`;
 
-export const CampoSenha = {
-    display: 'flex',
-    alignItems: 'center',
-    color: 'gray',
-    backgroundColor: '#1A1A1D',
-    padding: '3px',
-    margin: '5px',
-    marginTop: '10px',
-    width: '98%',
-    height: '50px',
-    borderRadius: '5px',
-};
+export const CampoSenha = styled.div`
+    display: flex;
+    align-items: center;
+    color: gray;
+    background-color: ${props => props.theme.colors.secondary};
+    padding: 3px;
+    margin: 5px;
+    margin-top: 10px;
+    width: 98%;
+    height: 50px;
+    border-radius: 5px;
+`;
 
 export const IconeSenha = {
     marginLeft: '10px',
     fontSize: '25px',
 };
 
-export const InputCampoSenha: React.CSSProperties = {
-    background: 'transparent',
-    width: '100%',
-    outlineWidth: '0',
-    color: '#E1E1E6',
-    border: 'none',
-    fontSize: '17px',
-    marginLeft: '12px',
-    marginRight: '10px',
-};
+export const InputCampoSenha = styled.input`
+    background: transparent;
+    width: 100%;
+    outline-width: 0;
+    color: ${props => props.theme.colors.white};
+    border: none;
+    font-size: 17px;
+    margin-left: 12px;
+    margin-right: 10px;
+`;
 
-export const IconeOlho: React.CSSProperties =  {
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '30',
-    cursor: 'pointer',
-    marginRight: '10px',
-};
+export const IconeOlho = styled.div`
+    align-items: center;
+    justify-content: center;
+    font-size: 30;
+    cursor: pointer;
+    margin-right: 10px;
+`;
 
-export const BotaoEntrar: React.CSSProperties = {
-    width: '98%',
-    backgroundColor: '#202024',
-    color: '#EFF2F5',
-    fontWeight: '800',
-    height: '50px',
-    borderRadius: '5px',
-    fontSize: '18px',
-    marginTop: '30px',
-    border: 'none',
-    outlineWidth: '0',
-};
-
-export const BotaoEntrarHover: React.CSSProperties = {
-    backgroundColor: '#121214',
-    color: '#EFF2F5',
-    cursor: 'pointer',
-};
+export const BotaoEntrar = styled.button`
+    width: 98%;
+    background-color: ${props => props.theme.colors.secondary};
+    color: ${props => props.theme.colors.white};
+    font-weight: 800;
+    height: 50px;
+    border-radius: 5px;
+    font-size: 18px;
+    margin-top: 30px;
+    border: none;
+    outline-width: 0;
+`;
