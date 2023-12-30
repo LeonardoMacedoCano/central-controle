@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Despesa } from '../types/Despesa';
+import { CategoriaDespesa } from '../types/CategoriaDespesa';
 
 const api = axios.create({
     baseURL: 'http://localhost:8080'
@@ -43,6 +44,20 @@ export const useApi = () => ({
             return response.data;
         } catch (error: any) {
             console.error('Erro ao listar as despesas:', error.message);
+            throw error;
+        }
+    },
+    listarTodasCategoriasDespesas: async (token: string): Promise<CategoriaDespesa[]> => {
+        try {
+            const response = await api.get('/categoriadespesa/getTodasCategoriasDespesa', {
+                headers: {
+                Authorization: `Bearer ${token}`,
+                },
+            });
+        
+            return response.data;
+        } catch (error: any) {
+            console.error('Erro ao listar as categorias de despesas:', error.message);
             throw error;
         }
     },
