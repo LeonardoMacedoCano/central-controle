@@ -9,6 +9,7 @@ const ListaDespesas: React.FC = () => {
   const [despesas, setDespesas] = useState<Despesa[]>([]);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const auth = useContext(AuthContext);
   const api = useApi();
 
@@ -46,6 +47,10 @@ const ListaDespesas: React.FC = () => {
     fetchData();
   }, [api, token]);
 
+  const handleEditClick = (itemId: number | null) => {
+    setSelectedItemId(itemId);
+  };
+
   return (
     <C.Container>
       <C.Header>
@@ -59,6 +64,8 @@ const ListaDespesas: React.FC = () => {
             list={despesas}
             columnNames={customColumnNames}
             columnFormatters={customFormatters}
+            onEditClick={handleEditClick}
+            selectedItemId={selectedItemId}
           />
         )}
       </C.Body>
