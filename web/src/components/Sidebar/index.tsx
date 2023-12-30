@@ -49,7 +49,7 @@ const Sidebar: FC<SidebarProps> = ({ sidebar, setSidebar }) => {
         <LinkContainer to="/">
           <SidebarItem Icon={FaRegCalendarAlt} Text="Calendario" />
         </LinkContainer>
-        <LinkContainer to="/private">
+        <LinkContainer to="/">
           <SidebarItem Icon={FaRegSun} Text="Configuração" />
         </LinkContainer>
         {auth.usuario && 
