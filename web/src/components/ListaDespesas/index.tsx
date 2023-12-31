@@ -62,14 +62,6 @@ const ListaDespesas: React.FC = () => {
     fetchData();
   }, [api, token, categoriaDespesas]);
 
-  const clearFields = () => {
-    setFormFields({
-      data: '',
-      categoria: '',
-      descricao: '',
-      valor: 0,
-    });
-  };
 
   function inverterCategoriaMap(categoriaMap: Record<number, string>): Record<string, number> {
     const novoMapa: Record<string, number> = {};
@@ -110,32 +102,46 @@ const ListaDespesas: React.FC = () => {
         valor: despesaSelecionada?.valor || 0,
       }));
 
-    } else {
-      clearFields(); 
     }
   }; 
 
-  const handleAddDespesa = (data: FormFields) => {
-    const novaDespesa = convertToDespesa(data);
-
-    if (token !== null && typeof token === 'string') {
-      api.AddDespesa(token, novaDespesa);
+  const handleAddDespesa = async (data: FormFields) => {
+    try {
+      const novaDespesa = convertToDespesa(data);
+    
+      if (token !== null && typeof token === 'string') {
+        await api.addDespesa(token, novaDespesa);
+      }
+    } catch (error) {
+      console.error('Erro ao adicionar despesa');
     }
   };
-
-  const handleEditDespesa = (data: FormFields) => {
-    const despesa = convertToDespesa(data);
-
-    if (token !== null && typeof token === 'string') {
-      api.EditarDespesa(token, despesa);
+  
+  const handleEditDespesa = async (data: FormFields) => {
+    try {
+      const despesa = convertToDespesa(data);
+    
+      if (token !== null && typeof token === 'string') {
+        await api.editarDespesa(token, despesa);
+      }
+      setSelectedItemId(null);
+    } catch (error) {
+      console.error('Erro ao editar despesa');
     }
-
-    setSelectedItemId(null);
   };
+  
+  const handleDeleteDespesa = async () => {
+    try {
+      if (selectedItemId !== null && token !== null && typeof token === 'string') {
+        await api.excluirDespesa(token, selectedItemId);
+      }
 
-  const handleDeleteDespesa = () => {
-    // to do
+      setSelectedItemId(null);
+    } catch (error) {
+      console.error('Erro ao excluir despesa');
+    }
   };
+    
 
   return (
     <C.Container>

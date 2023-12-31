@@ -42,15 +42,22 @@ export const InputArea: React.FC<InputAreaProps> = ({
     setFormFields((prevFields) => ({ ...prevFields, [key]: value }));
   };
 
-  const handleAddEvent = () => {
+  const handleDeleteEvent = () => {
+    if (selectedItem !== null) {
+      clearFields();
+      onDelete();
+    }
+  };
+  
+  const handleAddOrEditEvent = () => {
     const errors: string[] = inputFields
       .filter(({ key }) => !formFields[key])
       .map(({ label }) => `${label} vazio!`);
-
+  
     if (isNaN(new Date(formFields.data).getTime())) {
       errors.push('Data inválida!');
     }
-
+  
     if (errors.length > 0) {
       alert(errors.join('\n'));
     } else {
@@ -58,14 +65,7 @@ export const InputArea: React.FC<InputAreaProps> = ({
       clearFields();
     }
   };
-
-  const handleDeleteEvent = () => {
-    if (selectedItem !== null) {
-      onDelete();
-      clearFields();
-    }
-  };
-
+  
   return (
     <C.Container>
       {inputFields.map(({ label, type, key }) => (
@@ -92,7 +92,7 @@ export const InputArea: React.FC<InputAreaProps> = ({
 
       <C.InputLabel>
         <C.InputTitle>&nbsp;</C.InputTitle>
-        <C.Button onClick={handleAddEvent}>
+        <C.Button onClick={handleAddOrEditEvent}>
           {selectedItem === null ? 'Adicionar' : 'Editar'}
         </C.Button>
         {selectedItem !== null && (
