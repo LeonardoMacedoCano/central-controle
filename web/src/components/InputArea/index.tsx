@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import * as C from './styles';
 import { FormFields } from '../../types/FormFields';
 import { InputAreaProps } from '../../types/InputAreaProps';
+import { FaTrashAlt } from 'react-icons/fa';
 
 export const InputArea: React.FC<InputAreaProps> = ({
   inputFields,
@@ -95,9 +96,9 @@ export const InputArea: React.FC<InputAreaProps> = ({
           {selectedItem === null ? 'Adicionar' : 'Editar'}
         </C.Button>
         {selectedItem !== null && (
-          <C.Button onClick={handleDeleteEvent}>
-            Deletar
-          </C.Button>
+          <C.ButtonDelete onClick={handleDeleteEvent}>
+            <FaTrashAlt />
+          </C.ButtonDelete>
         )}
       </C.InputLabel>
     </C.Container>

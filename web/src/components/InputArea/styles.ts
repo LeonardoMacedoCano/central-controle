@@ -32,17 +32,20 @@ export const Select = styled.select`
     border-radius: 5px;
 `;
 export const Button = styled.button`
-    width: 100%;
-    height: 30px;
-    padding: 0 5px;
-    border: 1px solid lightblue;
-    border-radius: 5px;
-    background-color: lightblue;
-    color: black;
-    cursor: pointer;
-
-    &:hover {
-        background-color: blue;
-        color: white;
-    }
+  background-color: ${props => props.theme.colors.tertiary};
+  color: ${props => props.theme.colors.white};
+  width: 75%;
+  height: 30px;
+  padding: 0 5px;
+  border: 1px solid lightblue;
+  border-radius: 5px;
+`;
+export const ButtonDelete = styled.button`
+  background-color: ${props => props.theme.colors.tertiary};
+  color: ${props => props.theme.colors.white};
+  width: 25%;
+  height: 30px;
+  padding: 0 5px;
+  border: 1px solid lightblue;
+  border-radius: 5px;
 `;

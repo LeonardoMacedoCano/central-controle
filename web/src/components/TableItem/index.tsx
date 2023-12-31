@@ -16,7 +16,7 @@ export function TableItem<T extends Record<string, any>>({
   const columns = Object.keys(item);
 
   return (
-    <C.TableLine style={{ backgroundColor: isSelected ? 'green' : 'transparent' }} onClick={onClick}>
+    <C.TableLine isSelected={isSelected} onClick={onClick}>
       {columns.map((column, index) => (
         <C.TableColumn key={index}>
           {columnFormatters[column as keyof T]
