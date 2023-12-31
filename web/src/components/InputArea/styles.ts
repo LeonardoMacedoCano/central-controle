@@ -31,7 +31,16 @@ export const Select = styled.select`
     border: 1px solid lightblue;
     border-radius: 5px;
 `;
-export const Button = styled.button`
+export const ButtonAdd = styled.button`
+  background-color: ${props => props.theme.colors.tertiary};
+  color: ${props => props.theme.colors.white};
+  width: 100%;
+  height: 30px;
+  padding: 0 5px;
+  border: 1px solid lightblue;
+  border-radius: 5px;
+`;
+export const ButtonEdit = styled.button`
   background-color: ${props => props.theme.colors.tertiary};
   color: ${props => props.theme.colors.white};
   width: 75%;

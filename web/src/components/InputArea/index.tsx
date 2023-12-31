@@ -92,9 +92,15 @@ export const InputArea: React.FC<InputAreaProps> = ({
 
       <C.InputLabel>
         <C.InputTitle>&nbsp;</C.InputTitle>
-        <C.Button onClick={handleAddOrEditEvent}>
-          {selectedItem === null ? 'Adicionar' : 'Editar'}
-        </C.Button>
+        {selectedItem === null ? (
+          <C.ButtonAdd onClick={handleAddOrEditEvent}>
+          Adicionar
+        </C.ButtonAdd>
+        ) : (
+          <C.ButtonEdit onClick={handleAddOrEditEvent}>
+          Editar
+        </C.ButtonEdit>
+        )}
         {selectedItem !== null && (
           <C.ButtonDelete onClick={handleDeleteEvent}>
             <FaTrashAlt />
