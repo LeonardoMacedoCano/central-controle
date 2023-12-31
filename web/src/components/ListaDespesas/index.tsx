@@ -1,42 +1,33 @@
 import React, { useState, useEffect, useContext } from 'react';
 import * as C from './styles';
-import { Despesa } from '../../types/Despesa';
-import { CategoriaDespesa } from '../../types/CategoriaDespesa';
 import { useApi } from '../../hooks/useApi';
 import { AuthContext } from '../../contexts/Auth/AuthContext';
 import { TableArea } from '../../components/TableArea';
+import { InputArea } from '../../components/InputArea';
+import { Despesa } from '../../types/Despesa';
+import { Categoria } from '../../types/Categoria';
+import { FormFields } from '../../types/FormFields';
+import { DespesaColumnNames } from '../../config/Despesas/DespesaColumnNames';
+import { DespesaColumnFormatters } from '../../config/Despesas/DespesaColumnFormatters';
+import { DespesaInputFields } from '../../config/Despesas/DespesaInputFields';
+import { formatarDataParaString } from '../../utils/DateUtils';
 
 const ListaDespesas: React.FC = () => {
   const [despesas, setDespesas] = useState<Despesa[]>([]);
-  const [categoriaDespesas, setCategoriaDespesas] = useState<CategoriaDespesa[]>([]);
+  const [categoriaDespesas, setCategoriaDespesas] = useState<Categoria[]>([]);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [categoriaMap, setCategoriaMap] = useState<Record<number, string>>({});
+  const [formFields, setFormFields] = useState<FormFields>({
+    data: '',
+    categoria: '',
+    descricao: '',
+    valor: 0,
+  });
 
   const auth = useContext(AuthContext);
   const api = useApi();
-
-  const customColumnNames = {
-    id: { label: 'ID', width: 50 },
-    idCategoria: { label: 'Categoria', width: 150 },
-    descricao: { label: 'Descrição' },
-    valor: { label: 'Valor', width: 100 },
-    data: { label: 'Data', width: 100 },
-  };
-
-  type ColumnFormatters<T> = Partial<Record<keyof T, (value: T[keyof T]) => React.ReactNode>>;
-
-  const customFormatters: ColumnFormatters<Despesa> = {
-    id: (value: string | number | Date) => Number(value),
-    descricao: (value: string | number | Date) => String(value),
-    valor: (value: string | number | Date) => Number(value).toFixed(2),
-    data: (value: string | number | Date) => new Date(value).toLocaleDateString(),
-    idCategoria: (value: string | number | Date) => {
-      const categoryId = typeof value === 'number' ? value : Number(value);
-      return categoriaMap[categoryId] || 'Categoria Desconhecida';
-    },
-  };
 
   useEffect(() => {
     setToken(auth.usuario?.token || null);
@@ -69,21 +60,97 @@ const ListaDespesas: React.FC = () => {
     };
 
     fetchData();
-  }, [api, token]);
+  }, [api, token, categoriaDespesas]);
+
+  const clearFields = () => {
+    setFormFields({
+      data: '',
+      categoria: '',
+      descricao: '',
+      valor: 0,
+    });
+  };
+
+  function inverterCategoriaMap(categoriaMap: Record<number, string>): Record<string, number> {
+    const novoMapa: Record<string, number> = {};
+
+    Object.keys(categoriaMap).forEach((key) => {
+      const valor = categoriaMap[parseInt(key, 10)];
+      novoMapa[valor] = parseInt(key, 10);
+    });
+
+    return novoMapa;
+  }
+
+  const convertToDespesa = (data: FormFields): Despesa => {
+    const mapaInvertido = inverterCategoriaMap(categoriaMap);
+
+    const despesa: Despesa = {
+      id: 0,
+      idCategoria: mapaInvertido[data.categoria] || 0,
+      descricao: data.descricao,
+      valor: data.valor,
+      data: new Date(data.data),
+    };
+    
+    return despesa;
+  }; 
 
   const handleEditClick = (itemId: number | null) => {
     setSelectedItemId(itemId);
+  
+    if (itemId !== null) {
+      const despesaSelecionada = despesas.find((despesa) => despesa.id === itemId);
+
+      setFormFields((prevFields) => ({
+        ...prevFields,
+        data: formatarDataParaString(despesaSelecionada?.data || undefined),
+        categoria: categoriaMap[despesaSelecionada?.idCategoria || 0] || '', 
+        descricao: despesaSelecionada?.descricao || '',
+        valor: despesaSelecionada?.valor || 0,
+      }));
+
+    } else {
+      clearFields(); 
+    }
+  }; 
+
+  const handleAddDespesa = (data: FormFields) => {
+    const novaDespesa = convertToDespesa(data);
+
+    if (token !== null && typeof token === 'string') {
+      api.AddDespesas(token, novaDespesa);
+    }
+  };
+
+  const handleEditDespesa = (data: FormFields) => {
+    console.log(data);
+    // to do
+  };
+
+  const handleDeleteDespesa = () => {
+    // to do
   };
 
   return (
     <C.Container>
+      <InputArea
+        inputFields={DespesaInputFields}
+        onAdd={handleAddDespesa}
+        onEdit={handleEditDespesa}
+        onDelete={handleDeleteDespesa}
+        selectedItem={selectedItemId}
+        categoriaOptions={categoriaDespesas}
+        initialValues={formFields}
+      />
+
       {loading ? (
         <p>Carregando...</p>
       ) : (
         <TableArea
           list={despesas}
-          columnNames={customColumnNames}
-          columnFormatters={customFormatters}
+          columnNames={DespesaColumnNames}
+          columnFormatters={DespesaColumnFormatters({ categoriaMap })}
           onEditClick={handleEditClick}
           selectedItemId={selectedItemId}
         />
