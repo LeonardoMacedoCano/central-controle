@@ -6,7 +6,7 @@ const ControleDespesas: React.FC = () => {
   return (
     <C.Container>
       <C.Header>
-        <C.HeaderText>Controle de despesas</C.HeaderText>
+        <C.HeaderText>Despesas</C.HeaderText>
       </C.Header>
       <C.Body>
         <ListaDespesas />
