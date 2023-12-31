@@ -7,7 +7,9 @@ import com.backend.centraldecontrole.model.Despesa;
 import com.backend.centraldecontrole.model.Usuario;
 import com.backend.centraldecontrole.repository.CategoriaDespesaRepository;
 import com.backend.centraldecontrole.repository.DespesaRepository;
+import com.backend.centraldecontrole.util.MensagemConstantes;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -45,14 +47,15 @@ class DespesaServiceTest {
         ResponseEntity<String> response = despesaService.adicionarDespesa(requestDTO, usuario);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Despesa adicionada com sucesso!", response.getBody());
+        assertEquals(MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO, response.getBody());
 
         verify(despesaRepository, times(1)).save(any());
     }
 
     @Test
     void adicionarDespesa_CategoriaNaoEncontrada_RetornaBadRequest() {
-        DespesaRequestDTO requestDTO = new DespesaRequestDTO(1L, "Descrição da despesa", 100.0, new Date());
+        Long IdDespesa = 1L;
+        DespesaRequestDTO requestDTO = new DespesaRequestDTO(IdDespesa, "Descrição da despesa", 100.0, new Date());
         Usuario usuario = new Usuario();
 
         when(categoriaDespesaRepository.findById(1L)).thenReturn(Optional.empty());
@@ -60,7 +63,7 @@ class DespesaServiceTest {
         ResponseEntity<String> response = despesaService.adicionarDespesa(requestDTO, usuario);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Categoria de despesa não encontrada com o id 1", response.getBody());
+        assertEquals(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID + IdDespesa, response.getBody());
 
         verify(despesaRepository, never()).save(any());
     }
@@ -89,5 +92,51 @@ class DespesaServiceTest {
         DespesaResponseDTO despesaResponseDTO2 = resultado.get(1);
         assertEquals(despesa2.getId(), despesaResponseDTO2.id());
         assertEquals(despesa2.getDescricao(), despesaResponseDTO2.descricao());
+    }
+
+    @Test
+    public void testEditarDespesa() {
+        Long idDespesa = 1L;
+        DespesaRequestDTO despesaRequestDTO = new DespesaRequestDTO(idDespesa, "teste", 10.00, new Date());
+        Usuario usuario = new Usuario("username", "senha", new Date());
+
+        CategoriaDespesa categoria = new CategoriaDespesa("categoria teste");
+        when(categoriaDespesaRepository.findById(eq(despesaRequestDTO.idCategoria()))).thenReturn(Optional.of(categoria));
+
+        Despesa despesaExistente = new Despesa(usuario, categoria, "teste", 10.00, new Date());
+        when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
+
+        ResponseEntity<String> response = despesaService.editarDespesa(idDespesa, despesaRequestDTO, usuario);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode(), "O status HTTP deve ser OK");
+        assertEquals(MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO, response.getBody());
+
+        verify(despesaRepository, times(1)).findById(idDespesa);
+        verify(categoriaDespesaRepository, times(1)).findById(eq(despesaRequestDTO.idCategoria()));
+
+        ArgumentCaptor<Despesa> despesaCaptor = ArgumentCaptor.forClass(Despesa.class);
+        verify(despesaRepository, times(1)).save(despesaCaptor.capture());
+
+        Despesa despesaEditada = despesaCaptor.getValue();
+        assertEquals(categoria, despesaEditada.getCategoria(), "A categoria da despesa deve ser a mesma da categoria mockada");
+    }
+
+    @Test
+    public void testExcluirDespesa() {
+        Long idDespesa = 1L;
+
+        Usuario usuario = new Usuario("username", "senha", new Date());
+        CategoriaDespesa categoria = new CategoriaDespesa("categoria teste");
+
+        Despesa despesaExistente = new Despesa(usuario, categoria, "teste", 10.00, new Date());
+        when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
+
+        ResponseEntity<String> response = despesaService.excluirDespesa(idDespesa);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO, response.getBody());
+
+        verify(despesaRepository, times(1)).findById(idDespesa);
+        verify(despesaRepository, times(1)).delete(despesaExistente);
     }
 }

@@ -1,0 +1,15 @@
+package com.backend.centraldecontrole.util;
+
+public class MensagemConstantes {
+    public static final String TOKEN_EXPIRADO_OU_NAO_ENCONTRADO = "Token expirado ou não encontrado";
+
+    public static final String USUARIO_JA_CADASTRADO = "Usuário já cadastrado!";
+    public static final String USUARIO_NOME_OU_SENHA_INCORRETOS = "Nome de usuário ou senha incorretos";
+
+    public static final String DESPESA_NAO_ENCONTRADA_COM_ID = "Despesa não encontrada com o id ";
+    public static final String DESPESA_ADICIONADA_COM_SUCESSO = "Despesa adicionada com sucesso!";
+    public static final String DESPESA_EDITADA_COM_SUCESSO = "Despesa editada com sucesso!";
+    public static final String DESPESA_EXCLUIDA_COM_SUCESSO = "Despesa excluída com sucesso!";
+
+    public static final String CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID = "Categoria de despesa não encontrada com o id ";
+}

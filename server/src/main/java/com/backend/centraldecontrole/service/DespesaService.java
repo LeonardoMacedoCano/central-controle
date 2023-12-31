@@ -7,6 +7,7 @@ import com.backend.centraldecontrole.model.Despesa;
 import com.backend.centraldecontrole.model.Usuario;
 import com.backend.centraldecontrole.repository.CategoriaDespesaRepository;
 import com.backend.centraldecontrole.repository.DespesaRepository;
+import com.backend.centraldecontrole.util.MensagemConstantes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,32 +32,30 @@ public class DespesaService {
                 .map(categoria -> {
                     Despesa novaDespesa = new Despesa(usuario, categoria, data.descricao(), data.valor(), data.data());
                     salvarDespesa(novaDespesa);
-                    return ResponseEntity.ok("Despesa adicionada com sucesso!");
+                    return ResponseEntity.ok(MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO);
                 })
                 .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body("Categoria de despesa não encontrada com o id " + data.idCategoria()));
+                        .body(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID + data.idCategoria()));
     }
 
     public ResponseEntity<String> editarDespesa(Long idDespesa, DespesaRequestDTO data, Usuario usuario) {
         return despesaRepository.findById(idDespesa)
-            .map(despesaExistente -> {
-                return getCategoriaPorId(data.idCategoria())
-                        .map(categoria -> {
-                            despesaExistente.setCategoria(categoria);
-                            despesaExistente.setDescricao(data.descricao());
-                            despesaExistente.setValor(data.valor());
-                            despesaExistente.setData(data.data());
-                            despesaExistente.setUsuario(usuario);
+            .map(despesaExistente -> getCategoriaPorId(data.idCategoria())
+                    .map(categoria -> {
+                        despesaExistente.setCategoria(categoria);
+                        despesaExistente.setDescricao(data.descricao());
+                        despesaExistente.setValor(data.valor());
+                        despesaExistente.setData(data.data());
+                        despesaExistente.setUsuario(usuario);
 
-                            salvarDespesa(despesaExistente);
+                        salvarDespesa(despesaExistente);
 
-                            return ResponseEntity.ok("Despesa editada com sucesso!");
-                        })
-                        .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                                .body("Categoria de despesa não encontrada com o id " + data.idCategoria()));
-            })
+                        return ResponseEntity.ok(MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO);
+                    })
+                    .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID + data.idCategoria())))
             .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Despesa não encontrada com o id " + idDespesa));
+                    .body(MensagemConstantes.DESPESA_NAO_ENCONTRADA_COM_ID + idDespesa));
     }
 
     public ResponseEntity<String> excluirDespesa(Long idDespesa) {
@@ -64,9 +63,9 @@ public class DespesaService {
 
         if (despesaOptional.isPresent()) {
             despesaRepository.delete(despesaOptional.get());
-            return ResponseEntity.ok("Despesa excluída com sucesso!");
+            return ResponseEntity.ok(MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Despesa não encontrada com o id " + idDespesa);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MensagemConstantes.DESPESA_NAO_ENCONTRADA_COM_ID + idDespesa);
         }
     }
 

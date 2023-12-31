@@ -6,6 +6,7 @@ import com.backend.centraldecontrole.model.Usuario;
 import com.backend.centraldecontrole.repository.UsuarioRepository;
 import com.backend.centraldecontrole.secutity.TokenService;
 import com.backend.centraldecontrole.service.AuthorizationService;
+import com.backend.centraldecontrole.util.MensagemConstantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +53,7 @@ public class AuthenticationController {
 
             return ResponseEntity.ok().body(responseBody);
         } catch (AuthenticationException ex) {
-            var responseBody = Map.of("error", "Nome de usuário ou senha incorretos");
+            var responseBody = Map.of("error", MensagemConstantes.USUARIO_NOME_OU_SENHA_INCORRETOS);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseBody);
         }
     }
@@ -81,7 +82,7 @@ public class AuthenticationController {
 
             return ResponseEntity.ok().body(responseBody);
         } else {
-            var responseBody = Map.of("error", "Token expirado ou não encontrado");
+            var responseBody = Map.of("error", MensagemConstantes.TOKEN_EXPIRADO_OU_NAO_ENCONTRADO);
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseBody);
         }
     }
