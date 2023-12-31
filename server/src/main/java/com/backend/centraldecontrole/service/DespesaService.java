@@ -59,6 +59,17 @@ public class DespesaService {
                     .body("Despesa não encontrada com o id " + idDespesa));
     }
 
+    public ResponseEntity<String> excluirDespesa(Long idDespesa) {
+        Optional<Despesa> despesaOptional = despesaRepository.findById(idDespesa);
+
+        if (despesaOptional.isPresent()) {
+            despesaRepository.delete(despesaOptional.get());
+            return ResponseEntity.ok("Despesa excluída com sucesso!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Despesa não encontrada com o id " + idDespesa);
+        }
+    }
+
     public List<DespesaResponseDTO> listarDespesasDoUsuario(Long idUsuario) {
         List<Despesa> despesas = despesaRepository.findByUsuarioId(idUsuario);
         return despesas.stream()

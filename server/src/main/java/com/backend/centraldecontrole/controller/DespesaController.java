@@ -29,6 +29,11 @@ public class DespesaController {
         return despesaService.editarDespesa(idDespesa, data, usuario);
     }
 
+    @DeleteMapping("/excluir/{idDespesa}")
+    public ResponseEntity<String> excluirDespesa(@PathVariable Long idDespesa) {
+        return despesaService.excluirDespesa(idDespesa);
+    }
+
     @GetMapping("/listar")
     public ResponseEntity<List<DespesaResponseDTO>> listarDespesasDoUsuario(HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
