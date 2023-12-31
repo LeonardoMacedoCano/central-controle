@@ -1,4 +1,4 @@
-export type CategoriaDespesa = {
+export type Categoria = {
     id: number;
     descricao: string;
   }

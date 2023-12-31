@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Despesa } from '../types/Despesa';
-import { CategoriaDespesa } from '../types/CategoriaDespesa';
+import { Categoria } from '../types/Categoria';
 
 const api = axios.create({
     baseURL: 'http://localhost:8080'
@@ -66,7 +66,7 @@ export const useApi = () => ({
             throw error;
         }
     },
-    listarTodasCategoriasDespesas: async (token: string): Promise<CategoriaDespesa[]> => {
+    listarTodasCategoriasDespesas: async (token: string): Promise<Categoria[]> => {
         try {
             const response = await api.get('/categoriadespesa/getTodasCategoriasDespesa', {
                 headers: {
