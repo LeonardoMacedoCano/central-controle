@@ -86,13 +86,13 @@ const ListaDespesas: React.FC = () => {
     const mapaInvertido = inverterCategoriaMap(categoriaMap);
 
     const despesa: Despesa = {
-      id: 0,
+      id: selectedItemId || 0,
       idCategoria: mapaInvertido[data.categoria] || 0,
       descricao: data.descricao,
       valor: data.valor,
       data: new Date(data.data),
     };
-    
+
     return despesa;
   }; 
 
@@ -119,13 +119,18 @@ const ListaDespesas: React.FC = () => {
     const novaDespesa = convertToDespesa(data);
 
     if (token !== null && typeof token === 'string') {
-      api.AddDespesas(token, novaDespesa);
+      api.AddDespesa(token, novaDespesa);
     }
   };
 
   const handleEditDespesa = (data: FormFields) => {
-    console.log(data);
-    // to do
+    const despesa = convertToDespesa(data);
+
+    if (token !== null && typeof token === 'string') {
+      api.EditarDespesa(token, despesa);
+    }
+
+    setSelectedItemId(null);
   };
 
   const handleDeleteDespesa = () => {

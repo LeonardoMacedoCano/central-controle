@@ -47,7 +47,7 @@ export const useApi = () => ({
             throw error;
         }
     },
-    AddDespesas: async (token: string, data: Despesa) => {
+    AddDespesa: async (token: string, data: Despesa) => {
         try {
             const response = await api.post('/despesa/add', {
                 idCategoria: data.idCategoria,
@@ -63,6 +63,25 @@ export const useApi = () => ({
             return response.data;
         } catch (error: any) {
             console.error('Erro ao adicionar despesa:', error.message);
+            throw error;
+        }
+    },
+    EditarDespesa: async (token: string, data: Despesa) => {
+        try {
+            const response = await api.put(`/despesa/editar/${data.id}`, {
+                idCategoria: data.idCategoria,
+                descricao: data.descricao,
+                valor: data.valor,
+                data: data.data,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+    
+            return response.data;
+        } catch (error: any) {
+            console.error('Erro ao editar despesa:', error.message);
             throw error;
         }
     },
