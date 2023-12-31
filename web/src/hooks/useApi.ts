@@ -47,7 +47,7 @@ export const useApi = () => ({
             throw error;
         }
     },
-    AddDespesa: async (token: string, data: Despesa) => {
+    addDespesa: async (token: string, data: Despesa) => {
         try {
             const response = await api.post('/despesa/add', {
                 idCategoria: data.idCategoria,
@@ -66,7 +66,7 @@ export const useApi = () => ({
             throw error;
         }
     },
-    EditarDespesa: async (token: string, data: Despesa) => {
+    editarDespesa: async (token: string, data: Despesa) => {
         try {
             const response = await api.put(`/despesa/editar/${data.id}`, {
                 idCategoria: data.idCategoria,
@@ -82,6 +82,20 @@ export const useApi = () => ({
             return response.data;
         } catch (error: any) {
             console.error('Erro ao editar despesa:', error.message);
+            throw error;
+        }
+    },
+    excluirDespesa: async (token: string, id: number) => {
+        try {
+            const response = await api.delete(`/despesa/excluir/${id}`, {
+                headers: {
+                Authorization: `Bearer ${token}`,
+                },
+            });
+        
+            return response.data;
+        } catch (error: any) {
+            console.error('Erro ao deletar a despesa:', error.message);
             throw error;
         }
     },
