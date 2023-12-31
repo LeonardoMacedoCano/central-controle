@@ -37,6 +37,28 @@ public class DespesaService {
                         .body("Categoria de despesa não encontrada com o id " + data.idCategoria()));
     }
 
+    public ResponseEntity<String> editarDespesa(Long idDespesa, DespesaRequestDTO data, Usuario usuario) {
+        return despesaRepository.findById(idDespesa)
+            .map(despesaExistente -> {
+                return getCategoriaPorId(data.idCategoria())
+                        .map(categoria -> {
+                            despesaExistente.setCategoria(categoria);
+                            despesaExistente.setDescricao(data.descricao());
+                            despesaExistente.setValor(data.valor());
+                            despesaExistente.setData(data.data());
+                            despesaExistente.setUsuario(usuario);
+
+                            salvarDespesa(despesaExistente);
+
+                            return ResponseEntity.ok("Despesa editada com sucesso!");
+                        })
+                        .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                .body("Categoria de despesa não encontrada com o id " + data.idCategoria()));
+            })
+            .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Despesa não encontrada com o id " + idDespesa));
+    }
+
     public List<DespesaResponseDTO> listarDespesasDoUsuario(Long idUsuario) {
         List<Despesa> despesas = despesaRepository.findByUsuarioId(idUsuario);
         return despesas.stream()

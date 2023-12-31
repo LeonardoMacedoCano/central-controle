@@ -23,6 +23,12 @@ public class DespesaController {
         return despesaService.adicionarDespesa(data, usuario);
     }
 
+    @PutMapping("/editar/{idDespesa}")
+    public ResponseEntity<String> editarDespesa(@PathVariable Long idDespesa, @RequestBody DespesaRequestDTO data, HttpServletRequest request) {
+        Usuario usuario = (Usuario) request.getAttribute("usuario");
+        return despesaService.editarDespesa(idDespesa, data, usuario);
+    }
+
     @GetMapping("/listar")
     public ResponseEntity<List<DespesaResponseDTO>> listarDespesasDoUsuario(HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
