@@ -8,9 +8,9 @@ import { InfoArea } from '../../components/InfoArea';
 import { Despesa } from '../../types/Despesa';
 import { Categoria } from '../../types/Categoria';
 import { FormFields } from '../../types/FormFields';
-import { DespesaColumnNames } from '../../config/Despesas/DespesaColumnNames';
-import { DespesaColumnFormatters } from '../../config/Despesas/DespesaColumnFormatters';
-import { DespesaInputFields } from '../../config/Despesas/DespesaInputFields';
+import { DespesaColunasConfig } from '../../config/Despesas/DespesaColunasConfig';
+import { DespesaColunasFormat } from '../../config/Despesas/DespesaColunasFormat';
+import { DespesaCampos } from '../../config/Despesas/DespesaCampos';
 import { formatarDataParaString, getMesAnoAtual } from '../../utils/DateUtils';
 
 const ListaDespesas: React.FC = () => {
@@ -159,24 +159,24 @@ const ListaDespesas: React.FC = () => {
       />
 
       <InputArea
-        inputFields={DespesaInputFields}
+        campos={DespesaCampos}
         onAdd={handleAddDespesa}
         onEdit={handleEditDespesa}
         onDelete={handleDeleteDespesa}
-        selectedItem={idDespesaSelecionada}
-        categoriaOptions={categoriaDespesas}
-        initialValues={formFields}
+        itemSelecionado={idDespesaSelecionada}
+        opcoesCategoria={categoriaDespesas}
+        valoresIniciais={formFields}
       />
 
       {carregando ? (
         <p>Carregando...</p>
       ) : (
         <TableArea
-          list={despesas}
-          columnNames={DespesaColumnNames}
-          columnFormatters={DespesaColumnFormatters({ categoriaMap })}
+          lista={despesas}
+          colunasConfig={DespesaColunasConfig}
+          colunasFormat={DespesaColunasFormat({ categoriaMap })}
           onEditClick={handleEditClick}
-          selectedItemId={idDespesaSelecionada}
+          itemIdSelecionado={idDespesaSelecionada}
         />
       )}
     </C.Container>

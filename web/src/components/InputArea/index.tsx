@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import * as C from './styles';
 import { FormFields } from '../../types/FormFields';
-import { InputAreaProps } from '../../types/InputAreaProps';
+import { InputField } from '../../types/InputField';
+import { Categoria } from '../../types/Categoria';
 import { FaTrashAlt } from 'react-icons/fa';
 
-export const InputArea: React.FC<InputAreaProps> = ({
-  inputFields,
+type Props = {
+  campos: InputField[];
+  onAdd: (data: FormFields) => void;
+  onEdit: (data: FormFields) => void;
+  onDelete: () => void;
+  itemSelecionado: number | null;
+  opcoesCategoria: Categoria[];
+  valoresIniciais?: FormFields;
+};
+
+export const InputArea: React.FC<Props> = ({
+  campos,
   onAdd,
   onEdit,
   onDelete,
-  selectedItem,
-  categoriaOptions,
-  initialValues,
+  itemSelecionado,
+  opcoesCategoria,
+  valoresIniciais,
 }) => {
   const [formFields, setFormFields] = useState<FormFields>({
     data: '',
@@ -21,13 +32,13 @@ export const InputArea: React.FC<InputAreaProps> = ({
   });
 
   useEffect(() => {
-    setFormFields(initialValues || {
+    setFormFields(valoresIniciais || {
       data: '',
       categoria: '',
       descricao: '',
       valor: 0,
     });
-  }, [initialValues]);
+  }, [valoresIniciais]);
 
   const clearFields = () => {
     setFormFields({
@@ -43,14 +54,14 @@ export const InputArea: React.FC<InputAreaProps> = ({
   };
 
   const handleDeleteEvent = () => {
-    if (selectedItem !== null) {
+    if (itemSelecionado !== null) {
       clearFields();
       onDelete();
     }
   };
   
   const handleAddOrEditEvent = () => {
-    const errors: string[] = inputFields
+    const errors: string[] = campos
       .filter(({ key }) => !formFields[key])
       .map(({ label }) => `${label} vazio!`);
   
@@ -61,20 +72,20 @@ export const InputArea: React.FC<InputAreaProps> = ({
     if (errors.length > 0) {
       alert(errors.join('\n'));
     } else {
-      selectedItem === null ? onAdd(formFields) : onEdit(formFields);
+      itemSelecionado === null ? onAdd(formFields) : onEdit(formFields);
       clearFields();
     }
   };
   
   return (
     <C.Container>
-      {inputFields.map(({ label, type, key }) => (
+      {campos.map(({ label, type, key }) => (
         <C.InputLabel key={key}>
           <C.InputTitle>{label}</C.InputTitle>
           {type === 'select' ? (
             <C.Select value={formFields[key] as string} onChange={(e) => handleInputChange(key, e.target.value)}>
               <option value="">Selecione...</option>
-              {categoriaOptions.map((categoria) => (
+              {opcoesCategoria.map((categoria) => (
                 <option key={categoria.id} value={categoria.descricao}>
                   {categoria.descricao}
                 </option>
@@ -92,7 +103,7 @@ export const InputArea: React.FC<InputAreaProps> = ({
 
       <C.InputLabel>
         <C.InputTitle>&nbsp;</C.InputTitle>
-        {selectedItem === null ? (
+        {itemSelecionado === null ? (
           <C.ButtonAdd onClick={handleAddOrEditEvent}>
           Adicionar
         </C.ButtonAdd>
@@ -101,7 +112,7 @@ export const InputArea: React.FC<InputAreaProps> = ({
           Editar
         </C.ButtonEdit>
         )}
-        {selectedItem !== null && (
+        {itemSelecionado !== null && (
           <C.ButtonDelete onClick={handleDeleteEvent}>
             <FaTrashAlt />
           </C.ButtonDelete>

@@ -1,8 +1,8 @@
-type ColumnFormattersArgs = {
+type DespesaColunasFormatArgs = {
   categoriaMap: Record<number, string>;
 };
 
-export const DespesaColumnFormatters = ({ categoriaMap }: ColumnFormattersArgs) => ({
+export const DespesaColunasFormat = ({ categoriaMap }: DespesaColunasFormatArgs) => ({
   id: (value: string | number | Date) => Number(value),
   descricao: (value: string | number | Date) => String(value),
   valor: (value: string | number | Date) => Number(value).toFixed(2),
