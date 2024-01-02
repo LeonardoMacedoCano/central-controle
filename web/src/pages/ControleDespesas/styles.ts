@@ -6,17 +6,9 @@ export const Container = styled.div`
     padding: 0;
 `;
 
-export const Header = styled.div`
-    text-align: center;
-`;
-
-export const HeaderText = styled.h1`
-    color: ${props => props.theme.colors.white};
-    padding-top: 20px;
-`;
-
 export const Body = styled.div`
     margin: auto;
     max-width: 950px;
-    margin-bottom: 50px;
+    padding-top: 50px;
+    padding: 25px 0 10px 0;
 `;
