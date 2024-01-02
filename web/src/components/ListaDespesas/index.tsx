@@ -92,17 +92,15 @@ const ListaDespesas: React.FC = () => {
   const handleEditClick = (idDespesa: number | null) => {
     setIdDespesaSelecionada(idDespesa);
   
-    if (idDespesa !== null) {
-      const despesaSelecionada = despesas.find((despesa) => despesa.id === idDespesa);
+    const despesaSelecionada = despesas.find((despesa) => despesa.id === idDespesa);
 
-      setFormFields((prevFields) => ({
-        ...prevFields,
-        data: formatarDataParaString(despesaSelecionada?.data || undefined),
-        categoria: categoriaMap[despesaSelecionada?.idCategoria || 0] || '', 
-        descricao: despesaSelecionada?.descricao || '',
-        valor: despesaSelecionada?.valor || 0,
-      }));
-    }
+    setFormFields((prevFields) => ({
+      ...prevFields,
+      data: formatarDataParaString(despesaSelecionada?.data || undefined),
+      categoria: categoriaMap[despesaSelecionada?.idCategoria || 0] || '', 
+      descricao: despesaSelecionada?.descricao || '',
+      valor: despesaSelecionada?.valor || 0,
+    }));
   }; 
 
   const handleAddDespesa = async (data: FormFields) => {
@@ -144,10 +142,8 @@ const ListaDespesas: React.FC = () => {
 
   const handleMesChange = (newMonth: string) => {
     setDataSelecionada(newMonth);
-    console.log('newMonth: ', newMonth)
   }
     
-
   return (
     <C.Container>
       <InfoArea
