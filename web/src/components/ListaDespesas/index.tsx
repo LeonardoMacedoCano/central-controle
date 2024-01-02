@@ -4,21 +4,23 @@ import { useApi } from '../../hooks/useApi';
 import { AuthContext } from '../../contexts/Auth/AuthContext';
 import { TableArea } from '../../components/TableArea';
 import { InputArea } from '../../components/InputArea';
+import { InfoArea } from '../../components/InfoArea';
 import { Despesa } from '../../types/Despesa';
 import { Categoria } from '../../types/Categoria';
 import { FormFields } from '../../types/FormFields';
 import { DespesaColumnNames } from '../../config/Despesas/DespesaColumnNames';
 import { DespesaColumnFormatters } from '../../config/Despesas/DespesaColumnFormatters';
 import { DespesaInputFields } from '../../config/Despesas/DespesaInputFields';
-import { formatarDataParaString } from '../../utils/DateUtils';
+import { formatarDataParaString, getMesAnoAtual } from '../../utils/DateUtils';
 
 const ListaDespesas: React.FC = () => {
   const [despesas, setDespesas] = useState<Despesa[]>([]);
   const [categoriaDespesas, setCategoriaDespesas] = useState<Categoria[]>([]);
   const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [carregando, setCarregando] = useState(true);
+  const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
   const [categoriaMap, setCategoriaMap] = useState<Record<number, string>>({});
+  const [dataSelecionada, setDataSelecionada] = useState(() => getMesAnoAtual());
   const [formFields, setFormFields] = useState<FormFields>({
     data: '',
     categoria: '',
@@ -34,7 +36,7 @@ const ListaDespesas: React.FC = () => {
   }, [auth.usuario?.token]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const buscarDados = async () => {
       try {
         if (token !== null && typeof token === 'string') {
           const [despesasResult, categoriasResult] = await Promise.all([
@@ -55,13 +57,12 @@ const ListaDespesas: React.FC = () => {
       } catch (error: any) {
         console.error('Erro ao carregar as despesas ou categorias de despesas:', error.message);
       } finally {
-        setLoading(false);
+        setCarregando(false);
       }
     };
 
-    fetchData();
+    buscarDados();
   }, [api, token, categoriaDespesas]);
-
 
   function inverterCategoriaMap(categoriaMap: Record<number, string>): Record<string, number> {
     const novoMapa: Record<string, number> = {};
@@ -78,7 +79,7 @@ const ListaDespesas: React.FC = () => {
     const mapaInvertido = inverterCategoriaMap(categoriaMap);
 
     const despesa: Despesa = {
-      id: selectedItemId || 0,
+      id: idDespesaSelecionada || 0,
       idCategoria: mapaInvertido[data.categoria] || 0,
       descricao: data.descricao,
       valor: data.valor,
@@ -88,11 +89,11 @@ const ListaDespesas: React.FC = () => {
     return despesa;
   }; 
 
-  const handleEditClick = (itemId: number | null) => {
-    setSelectedItemId(itemId);
+  const handleEditClick = (idDespesa: number | null) => {
+    setIdDespesaSelecionada(idDespesa);
   
-    if (itemId !== null) {
-      const despesaSelecionada = despesas.find((despesa) => despesa.id === itemId);
+    if (idDespesa !== null) {
+      const despesaSelecionada = despesas.find((despesa) => despesa.id === idDespesa);
 
       setFormFields((prevFields) => ({
         ...prevFields,
@@ -101,7 +102,6 @@ const ListaDespesas: React.FC = () => {
         descricao: despesaSelecionada?.descricao || '',
         valor: despesaSelecionada?.valor || 0,
       }));
-
     }
   }; 
 
@@ -124,7 +124,7 @@ const ListaDespesas: React.FC = () => {
       if (token !== null && typeof token === 'string') {
         await api.editarDespesa(token, despesa);
       }
-      setSelectedItemId(null);
+      setIdDespesaSelecionada(null);
     } catch (error) {
       console.error('Erro ao editar despesa');
     }
@@ -132,30 +132,43 @@ const ListaDespesas: React.FC = () => {
   
   const handleDeleteDespesa = async () => {
     try {
-      if (selectedItemId !== null && token !== null && typeof token === 'string') {
-        await api.excluirDespesa(token, selectedItemId);
+      if (idDespesaSelecionada !== null && token !== null && typeof token === 'string') {
+        await api.excluirDespesa(token, idDespesaSelecionada);
       }
 
-      setSelectedItemId(null);
+      setIdDespesaSelecionada(null);
     } catch (error) {
       console.error('Erro ao excluir despesa');
     }
   };
+
+  const handleMesChange = (newMonth: string) => {
+    setDataSelecionada(newMonth);
+    console.log('newMonth: ', newMonth)
+  }
     
 
   return (
     <C.Container>
+      <InfoArea
+        dataSelecionada={dataSelecionada}
+        onMesChange={handleMesChange}
+        titulo={'Despesas'}
+        infoDescricao={'Descricao'}
+        infoValor={'Valor'}
+      />
+
       <InputArea
         inputFields={DespesaInputFields}
         onAdd={handleAddDespesa}
         onEdit={handleEditDespesa}
         onDelete={handleDeleteDespesa}
-        selectedItem={selectedItemId}
+        selectedItem={idDespesaSelecionada}
         categoriaOptions={categoriaDespesas}
         initialValues={formFields}
       />
 
-      {loading ? (
+      {carregando ? (
         <p>Carregando...</p>
       ) : (
         <TableArea
@@ -163,7 +176,7 @@ const ListaDespesas: React.FC = () => {
           columnNames={DespesaColumnNames}
           columnFormatters={DespesaColumnFormatters({ categoriaMap })}
           onEditClick={handleEditClick}
-          selectedItemId={selectedItemId}
+          selectedItemId={idDespesaSelecionada}
         />
       )}
     </C.Container>
