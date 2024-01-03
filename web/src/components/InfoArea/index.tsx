@@ -1,6 +1,6 @@
 import * as C from './styles';
 import { formatarMesAno } from '../../utils/DateUtils';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa6';
+import { FaCaretSquareRight, FaCaretSquareLeft } from "react-icons/fa";
 
 type Props = {
     dataSelecionada: string;
@@ -33,17 +33,23 @@ export const InfoArea = ({
 
     return (
         <C.Container>
-            <C.AreaMes>
-                <C.SetaMes onClick={() => handleMesChange('anterior')}>
-                    <FaArrowLeft />
-                </C.SetaMes>
-                <C.TituloMes>
-                    {formatarMesAno(dataSelecionada)}
-                </C.TituloMes>
-                <C.SetaMes onClick={() => handleMesChange('posterior')}>
-                    <FaArrowRight />
-                </C.SetaMes>
-            </C.AreaMes>
+            <C.AreaData>
+                <C.DataDescricao>
+                    Data
+                </C.DataDescricao>
+
+                <C.DataValor>
+                    <C.DataSeta onClick={() => handleMesChange('anterior')}>
+                        <FaCaretSquareLeft />
+                    </C.DataSeta>
+                    <C.TituloMes>
+                        {formatarMesAno(dataSelecionada)}
+                    </C.TituloMes>
+                    <C.DataSeta onClick={() => handleMesChange('posterior')}>
+                        <FaCaretSquareRight />
+                    </C.DataSeta>
+                </C.DataValor>
+            </C.AreaData>
 
             <C.AreaTitulo>
                 {titulo}

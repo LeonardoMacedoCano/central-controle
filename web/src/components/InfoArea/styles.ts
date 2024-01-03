@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-    background-color: #FFF;
-    box-shadow: 0px 0px 5px #CCC;
+    background-color: ${props => props.theme.colors.white};
+    box-shadow: 0px 0px 5px ${props => props.theme.colors.gray};
     border-radius: 10px;
     padding: 20px;
     display: flex;
@@ -10,23 +10,39 @@ export const Container = styled.div`
     justify-content: space-between;
 `;
 
-export const AreaMes = styled.div`
+export const AreaData = styled.div`
     width: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+`;
+
+export const DataDescricao = styled.div`
+    text-align: center;
+    font-weight: bold;
+    color: ${props => props.theme.colors.gray};
+    margin-bottom: 5px;
+`;
+
+export const DataValor = styled.div`
+    text-align: center;
+    font-weight: bold;
+    color: ${props => props.theme.colors.black};
+    width: 100%;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
 `;
 
-export const SetaMes = styled.div`
+export const DataSeta = styled.div`
     width: 30px;
     height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
+    font-size: 30px;
     cursor: pointer;
-    color: ${props => props.theme.colors.white};
-    background-color: ${props => props.theme.colors.tertiary};
+    color: ${props => props.theme.colors.tertiary};
+    background-color: ${props => props.theme.colors.white};
     border-radius: 5px;
 `;
 
@@ -45,7 +61,6 @@ export const AreaTitulo = styled.h1`
 `;
 
 export const AreaInfo = styled.div`
-    flex: 3;
     width: 25%;
     display: flex;
     align-items: center;
@@ -56,12 +71,17 @@ export const AreaInfo = styled.div`
 export const InfoDescricao = styled.div`
     text-align: center;
     font-weight: bold;
-    color: #888;
+    color: ${props => props.theme.colors.gray};
     margin-bottom: 5px;
 `;
 
 export const InfoValor = styled.div`
     text-align: center;
     font-weight: bold;
-    color: #000;
+    color: ${props => props.theme.colors.black};
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `;

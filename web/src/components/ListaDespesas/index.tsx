@@ -21,6 +21,7 @@ const ListaDespesas: React.FC = () => {
   const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
   const [categoriaMap, setCategoriaMap] = useState<Record<number, string>>({});
   const [dataSelecionada, setDataSelecionada] = useState(() => getMesAnoAtual());
+  const somaDespesas = despesas.reduce((total, despesa) => total + despesa.valor, 0);
   const [formFields, setFormFields] = useState<FormFields>({
     data: '',
     categoria: '',
@@ -150,8 +151,8 @@ const ListaDespesas: React.FC = () => {
         dataSelecionada={dataSelecionada}
         onMesChange={handleMesChange}
         titulo={'Despesas'}
-        infoDescricao={'Descricao'}
-        infoValor={'Valor'}
+        infoDescricao={'Total Despesas'}
+        infoValor={`${somaDespesas.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}
       />
 
       <InputArea

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    background-color: #FFF;
-    box-shadow: 0px 0px 5px #CCC;
+    background-color: ${props => props.theme.colors.white};
+    box-shadow: 0px 0px 5px ${props => props.theme.colors.gray};
     border-radius: 10px;
     padding: 20px;
     margin-top: 20px;
@@ -21,14 +21,14 @@ export const Input = styled.input`
     width: 100%;
     height: 30px;
     padding: 0 5px;
-    border: 1px solid lightblue;
+    border: 1px solid ${props => props.theme.colors.tertiary};
     border-radius: 5px;
 `;
 export const Select = styled.select`
     width: 100%;
     height: 30px;
     padding: 0 5px;
-    border: 1px solid lightblue;
+    border: 1px solid ${props => props.theme.colors.tertiary};
     border-radius: 5px;
 `;
 export const ButtonAdd = styled.button`
@@ -37,7 +37,7 @@ export const ButtonAdd = styled.button`
   width: 100%;
   height: 30px;
   padding: 0 5px;
-  border: 1px solid lightblue;
+  border: 1px solid ${props => props.theme.colors.white};
   border-radius: 5px;
 `;
 export const ButtonEdit = styled.button`
@@ -46,7 +46,7 @@ export const ButtonEdit = styled.button`
   width: 75%;
   height: 30px;
   padding: 0 5px;
-  border: 1px solid lightblue;
+  border: 1px solid ${props => props.theme.colors.white};
   border-radius: 5px;
 `;
 export const ButtonDelete = styled.button`
@@ -55,6 +55,6 @@ export const ButtonDelete = styled.button`
   width: 25%;
   height: 30px;
   padding: 0 5px;
-  border: 1px solid lightblue;
+  border: 1px solid ${props => props.theme.colors.white};
   border-radius: 5px;
 `;
