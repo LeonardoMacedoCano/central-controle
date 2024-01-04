@@ -40,8 +40,12 @@ const ListaDespesas: React.FC = () => {
     const buscarDados = async () => {
       try {
         if (token !== null && typeof token === 'string') {
+          const [anoStr, mesStr] = dataSelecionada.split('-');
+          const ano = parseInt(anoStr);
+          const mes = parseInt(mesStr);
+
           const [despesasResult, categoriasResult] = await Promise.all([
-            api.listarDespesas(token),
+            api.listarDespesas(token, ano, mes),
             api.listarTodasCategoriasDespesas(token),
           ]);
 
@@ -141,15 +145,16 @@ const ListaDespesas: React.FC = () => {
     }
   };
 
-  const handleMesChange = (newMonth: string) => {
-    setDataSelecionada(newMonth);
+  const handleDataChange = (data: string) => {
+    setDataSelecionada(data);
   }
     
   return (
     <C.Container>
       <InfoArea
         dataSelecionada={dataSelecionada}
-        onMesChange={handleMesChange}
+        onDataChange={handleDataChange}
+        dataDescricao={'Data'}
         titulo={'Despesas'}
         infoDescricao={'Total Despesas'}
         infoValor={`${somaDespesas.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}

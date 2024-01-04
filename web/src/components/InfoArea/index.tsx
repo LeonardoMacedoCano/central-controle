@@ -4,7 +4,8 @@ import { FaCaretSquareRight, FaCaretSquareLeft } from "react-icons/fa";
 
 type Props = {
     dataSelecionada: string;
-    onMesChange: (newMonth: string) => void;
+    onDataChange: (data: string) => void;
+    dataDescricao: string;
     titulo: string;
     infoDescricao: string;
     infoValor: string;
@@ -12,40 +13,41 @@ type Props = {
 
 export const InfoArea = ({
     dataSelecionada,
-    onMesChange,
+    onDataChange,
+    dataDescricao,
     titulo,
     infoDescricao,
     infoValor,
 }: Props) => {
   
-    const handleMesChange = (direction: 'anterior' | 'posterior') => {
+    const handleDataChange = (direction: 'anterior' | 'posterior') => {
         const [ano, mes] = dataSelecionada.split('-');
-        const newDate = new Date(parseInt(ano), parseInt(mes) - 1, 1);
+        const novaData = new Date(parseInt(ano), parseInt(mes) - 1, 1);
 
         if (direction === 'anterior') {
-            newDate.setMonth(newDate.getMonth() - 1);
+            novaData.setMonth(novaData.getMonth() - 1);
         } else {
-            newDate.setMonth(newDate.getMonth() + 1);
+            novaData.setMonth(novaData.getMonth() + 1);
         }
 
-        onMesChange(`${newDate.getFullYear()}-${newDate.getMonth() + 1}`);
+        onDataChange(`${novaData.getFullYear()}-${novaData.getMonth() + 1}`);
     };
 
     return (
         <C.Container>
             <C.AreaData>
                 <C.DataDescricao>
-                    Data
+                    {dataDescricao}
                 </C.DataDescricao>
 
                 <C.DataValor>
-                    <C.DataSeta onClick={() => handleMesChange('anterior')}>
+                    <C.DataSeta onClick={() => handleDataChange('anterior')}>
                         <FaCaretSquareLeft />
                     </C.DataSeta>
                     <C.TituloMes>
                         {formatarMesAno(dataSelecionada)}
                     </C.TituloMes>
-                    <C.DataSeta onClick={() => handleMesChange('posterior')}>
+                    <C.DataSeta onClick={() => handleDataChange('posterior')}>
                         <FaCaretSquareRight />
                     </C.DataSeta>
                 </C.DataValor>

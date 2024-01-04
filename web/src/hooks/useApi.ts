@@ -33,9 +33,9 @@ export const useApi = () => ({
         const response = await api.post('/logout');
         return response.data;
     },
-    listarDespesas: async (token: string): Promise<Despesa[]> => {
+    listarDespesas: async (token: string, ano: number, mes: number): Promise<Despesa[]> => {
         try {
-            const response = await api.get('/despesa/listar', {
+            const response = await api.get(`/despesa/listar?ano=${ano}&mes=${mes}`, {
                 headers: {
                 Authorization: `Bearer ${token}`,
                 },
