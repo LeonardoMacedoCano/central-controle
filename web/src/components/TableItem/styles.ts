@@ -6,5 +6,5 @@ export const TableLine = styled.tr<{ isSelected?: boolean }>`
 `;
 
 export const TableColumn = styled.td`
-    padding: 10px 0;
+  padding: 10px;
 `;

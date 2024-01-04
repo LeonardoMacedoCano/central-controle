@@ -53,10 +53,11 @@ export const TituloMes = styled.div`
 
 export const AreaTitulo = styled.h1`
     width: 50%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: ${props => props.theme.colors.black};
+    color: ${props => props.theme.colors.tertiary};
     font-size: 28px;
 `;
 
