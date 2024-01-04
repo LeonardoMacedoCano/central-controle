@@ -13,8 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -69,8 +72,21 @@ public class DespesaService {
         }
     }
 
-    public List<DespesaResponseDTO> listarDespesasDoUsuario(Long idUsuario) {
-        List<Despesa> despesas = despesaRepository.findByUsuarioId(idUsuario);
+    public List<DespesaResponseDTO> listarDespesasDoUsuario(Long idUsuario, Integer ano, Integer mes) {
+        List<Despesa> despesas;
+
+        if (ano != null && mes != null) {
+            LocalDate primeiroDiaDoMes = LocalDate.of(ano, mes, 1);
+            LocalDate ultimoDiaDoMes = primeiroDiaDoMes.with(TemporalAdjusters.lastDayOfMonth());
+
+            Date dataInicio = Date.from(primeiroDiaDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date dataFim = Date.from(ultimoDiaDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            despesas = despesaRepository.findByUsuarioIdAndDataBetween(idUsuario, dataInicio, dataFim);
+        } else {
+            despesas = despesaRepository.findByUsuarioId(idUsuario);
+        }
+
         return despesas.stream()
                 .map(this::converterParaDespesaResponseDTO)
                 .filter(Objects::nonNull)

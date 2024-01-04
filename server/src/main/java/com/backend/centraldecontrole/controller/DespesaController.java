@@ -35,9 +35,13 @@ public class DespesaController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<DespesaResponseDTO>> listarDespesasDoUsuario(HttpServletRequest request) {
+    public ResponseEntity<List<DespesaResponseDTO>> listarDespesasDoUsuario(
+            HttpServletRequest request,
+            @RequestParam(name = "ano", required = false) Integer ano,
+            @RequestParam(name = "mes", required = false) Integer mes
+    ) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
-        List<DespesaResponseDTO> despesasDTO = despesaService.listarDespesasDoUsuario(usuario.getId());
+        List<DespesaResponseDTO> despesasDTO = despesaService.listarDespesasDoUsuario(usuario.getId(), ano, mes);
 
         return ResponseEntity.ok(despesasDTO);
     }
