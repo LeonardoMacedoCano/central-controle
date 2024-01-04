@@ -71,16 +71,20 @@ class DespesaServiceTest {
     @Test
     public void testListarDespesasDoUsuario() {
         Usuario usuario = new Usuario("usuario teste", "senha123", new Date());
-
         CategoriaDespesa categoriaDespesa = new CategoriaDespesa("Categoria teste");
 
         Despesa despesa1 = new Despesa(usuario, categoriaDespesa, "despesa 1", 1.00, new Date());
         Despesa despesa2 = new Despesa(usuario, categoriaDespesa, "despesa 2", 2.00, new Date());
+
+        int anoFiltro = 2024;
+        int mesFiltro = 1;
+
         List<Despesa> listaDespesas = Arrays.asList(despesa1, despesa2);
 
-        when(despesaRepository.findByUsuarioId(usuario.getId())).thenReturn(listaDespesas);
+        when(despesaRepository.findByUsuarioIdAndDataBetween(eq(usuario.getId()), any(Date.class), any(Date.class)))
+                .thenReturn(listaDespesas);
 
-        List<DespesaResponseDTO> resultado = despesaService.listarDespesasDoUsuario(usuario.getId());
+        List<DespesaResponseDTO> resultado = despesaService.listarDespesasDoUsuario(usuario.getId(), anoFiltro, mesFiltro);
 
         assertNotNull(resultado);
         assertEquals(2, resultado.size());
@@ -93,6 +97,7 @@ class DespesaServiceTest {
         assertEquals(despesa2.getId(), despesaResponseDTO2.id());
         assertEquals(despesa2.getDescricao(), despesaResponseDTO2.descricao());
     }
+
 
     @Test
     public void testEditarDespesa() {
