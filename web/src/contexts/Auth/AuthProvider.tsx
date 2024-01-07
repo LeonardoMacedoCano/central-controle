@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     const signout = async () => {
         setUsuario(null);
         setToken('');
-        await api.logout();
     }
 
     const setToken = (token: string) => {

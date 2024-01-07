@@ -22,8 +22,8 @@ interface SidebarProps {
 const Sidebar: FC<SidebarProps> = ({ sidebar, setSidebar }) => {
   const auth = useContext(AuthContext);
 
-  const handleLogout = async () => {
-    await auth.signout();
+  const handleLogout = () => {
+    auth.signout();
   }
 
   const closeSidebar = () => {
@@ -52,11 +52,9 @@ const Sidebar: FC<SidebarProps> = ({ sidebar, setSidebar }) => {
         <LinkContainer to="/">
           <SidebarItem Icon={FaRegSun} Text="Configuração" />
         </LinkContainer>
-        {auth.usuario && 
-          <LinkContainer to="/" onClick={handleLogout}>
-            <SidebarItem Icon={FaPlug} Text="Sair" />
-          </LinkContainer>
-        }
+        <LinkContainer to="/" onClick={handleLogout}>
+          <SidebarItem Icon={FaPlug} Text="Sair" />
+        </LinkContainer>
       </Content>
     </Container>
   );

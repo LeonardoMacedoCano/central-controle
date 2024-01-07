@@ -28,11 +28,6 @@ export const useApi = () => ({
             throw error;
         }
     },
-    logout: async () => {
-        return { status: true };
-        const response = await api.post('/logout');
-        return response.data;
-    },
     listarDespesas: async (token: string, ano: number, mes: number): Promise<Despesa[]> => {
         try {
             const response = await api.get(`/despesa/listar?ano=${ano}&mes=${mes}`, {
