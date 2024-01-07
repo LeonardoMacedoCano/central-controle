@@ -25,7 +25,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({BadCredentialsException.class, JWTVerificationException.class})
     protected ResponseEntity<Object> handleInvalidCredentials(RuntimeException ex) {
-        return buildResponseEntity(HttpStatus.UNAUTHORIZED, MensagemConstantes.USUARIO_NOME_OU_SENHA_INCORRETOS);
+        return buildResponseEntity(HttpStatus.UNAUTHORIZED, MensagemConstantes.CREDENCIAIS_INVALIDAS);
     }
 
     @ExceptionHandler({CustomException.UsuarioJaCadastradoException.class})
