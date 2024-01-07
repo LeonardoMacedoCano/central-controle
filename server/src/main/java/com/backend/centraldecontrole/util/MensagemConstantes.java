@@ -1,8 +1,12 @@
 package com.backend.centraldecontrole.util;
 
 public class MensagemConstantes {
-    public static final String TOKEN_EXPIRADO_OU_NAO_ENCONTRADO = "Token expirado ou não encontrado";
+    public static final String ERRO_GENERICO = "Ocorreu um erro interno no servidor";
 
+    public static final String ERRO_GERAR_TOKEN = "Erro ao gerar Token";
+    public static final String TOKEN_EXPIRADO_OU_INVALIDO = "Token expirado ou inválido";
+
+    public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado!";
     public static final String USUARIO_JA_CADASTRADO = "Usuário já cadastrado!";
     public static final String USUARIO_NOME_OU_SENHA_INCORRETOS = "Nome de usuário ou senha incorretos";
 
