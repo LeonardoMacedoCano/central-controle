@@ -2,12 +2,12 @@ package com.backend.centraldecontrole.service;
 
 import com.backend.centraldecontrole.model.Usuario;
 import com.backend.centraldecontrole.repository.UsuarioRepository;
+import com.backend.centraldecontrole.util.CustomException;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.backend.centraldecontrole.dto.UsuarioRequestDTO;
 import org.mockito.Mockito;
 
@@ -38,17 +38,16 @@ public class AuthorizationServiceTest {
         assertEquals(username, userDetails.getUsername());
     }
 
-
     @Test
     public void testCadastrarUsuario_UsuarioNaoCadastrado() {
         when(usuarioRepository.findByUsername(anyString())).thenReturn(null);
 
         UsuarioRequestDTO usuarioRequestDTO = new UsuarioRequestDTO("novo usuario", "senha123");
-        authorizationService.cadastrarUsuario(usuarioRequestDTO);
+
+        assertDoesNotThrow(() -> authorizationService.cadastrarUsuario(usuarioRequestDTO));
 
         Mockito.verify(usuarioRepository).save(Mockito.any(Usuario.class));
     }
-
 
     @Test
     public void testCadastrarUsuario_UsuarioJaCadastrado() {
@@ -56,6 +55,8 @@ public class AuthorizationServiceTest {
 
         UsuarioRequestDTO usuarioRequestDTO = new UsuarioRequestDTO("usuario ja cadastrado", "senha123");
 
-        assertThrows(UsernameNotFoundException.class, () -> authorizationService.cadastrarUsuario(usuarioRequestDTO));
+        assertThrows(CustomException.UsuarioJaCadastradoException.class, () -> authorizationService.cadastrarUsuario(usuarioRequestDTO));
+
+        Mockito.verify(usuarioRepository, Mockito.never()).save(Mockito.any(Usuario.class));
     }
 }
