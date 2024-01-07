@@ -48,4 +48,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
+    @ExceptionHandler({CustomException.CategoriaDespesaNaoEncontradaComIdException.class})
+    protected ResponseEntity<Object> handleCategoriaDespesaNaoEncontradaComIdException(CustomException.CategoriaDespesaNaoEncontradaComIdException ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({CustomException.DespesaNaoEncontradaComIdException.class})
+    protected ResponseEntity<Object> handleDespesaNaoEncontradaComIdException(CustomException.DespesaNaoEncontradaComIdException ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
 }

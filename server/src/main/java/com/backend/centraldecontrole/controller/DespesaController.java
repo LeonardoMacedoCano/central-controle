@@ -42,7 +42,6 @@ public class DespesaController {
     ) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
         List<DespesaResponseDTO> despesasDTO = despesaService.listarDespesasDoUsuario(usuario.getId(), ano, mes);
-
         return ResponseEntity.ok(despesasDTO);
     }
 }

@@ -7,8 +7,8 @@ import com.backend.centraldecontrole.model.Despesa;
 import com.backend.centraldecontrole.model.Usuario;
 import com.backend.centraldecontrole.repository.CategoriaDespesaRepository;
 import com.backend.centraldecontrole.repository.DespesaRepository;
+import com.backend.centraldecontrole.util.CustomException;
 import com.backend.centraldecontrole.util.MensagemConstantes;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,33 +32,29 @@ public class DespesaService {
 
     public ResponseEntity<String> adicionarDespesa(DespesaRequestDTO data, Usuario usuario) {
         return getCategoriaPorId(data.idCategoria())
-                .map(categoria -> {
-                    Despesa novaDespesa = new Despesa(usuario, categoria, data.descricao(), data.valor(), data.data());
-                    salvarDespesa(novaDespesa);
-                    return ResponseEntity.ok(MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO);
-                })
-                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID + data.idCategoria()));
+            .map(categoria -> {
+                Despesa novaDespesa = new Despesa(usuario, categoria, data.descricao(), data.valor(), data.data());
+                salvarDespesa(novaDespesa);
+                return ResponseEntity.ok(MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO);
+            })
+            .orElseThrow(() -> new CustomException.CategoriaDespesaNaoEncontradaComIdException(data.idCategoria()));
     }
+
 
     public ResponseEntity<String> editarDespesa(Long idDespesa, DespesaRequestDTO data, Usuario usuario) {
         return despesaRepository.findById(idDespesa)
             .map(despesaExistente -> getCategoriaPorId(data.idCategoria())
-                    .map(categoria -> {
-                        despesaExistente.setCategoria(categoria);
-                        despesaExistente.setDescricao(data.descricao());
-                        despesaExistente.setValor(data.valor());
-                        despesaExistente.setData(data.data());
-                        despesaExistente.setUsuario(usuario);
-
-                        salvarDespesa(despesaExistente);
-
-                        return ResponseEntity.ok(MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO);
-                    })
-                    .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID + data.idCategoria())))
-            .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(MensagemConstantes.DESPESA_NAO_ENCONTRADA_COM_ID + idDespesa));
+                .map(categoria -> {
+                    despesaExistente.setCategoria(categoria);
+                    despesaExistente.setDescricao(data.descricao());
+                    despesaExistente.setValor(data.valor());
+                    despesaExistente.setData(data.data());
+                    despesaExistente.setUsuario(usuario);
+                    salvarDespesa(despesaExistente);
+                    return ResponseEntity.ok(MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO);
+                })
+                .orElseThrow(() -> new CustomException.CategoriaDespesaNaoEncontradaComIdException(data.idCategoria())))
+            .orElseThrow(() -> new CustomException.DespesaNaoEncontradaComIdException(idDespesa));
     }
 
     public ResponseEntity<String> excluirDespesa(Long idDespesa) {
@@ -68,11 +64,15 @@ public class DespesaService {
             despesaRepository.delete(despesaOptional.get());
             return ResponseEntity.ok(MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(MensagemConstantes.DESPESA_NAO_ENCONTRADA_COM_ID + idDespesa);
+            throw new CustomException.DespesaNaoEncontradaComIdException(idDespesa);
         }
     }
 
     public List<DespesaResponseDTO> listarDespesasDoUsuario(Long idUsuario, Integer ano, Integer mes) {
+        if (idUsuario == null) {
+            throw new CustomException.UsuarioNaoEncontradoException();
+        }
+
         List<Despesa> despesas;
 
         if (ano != null && mes != null) {
@@ -88,9 +88,9 @@ public class DespesaService {
         }
 
         return despesas.stream()
-                .map(this::converterParaDespesaResponseDTO)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+            .map(this::converterParaDespesaResponseDTO)
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
     }
 
     public void salvarDespesa(Despesa despesa) {
@@ -109,11 +109,11 @@ public class DespesaService {
         LocalDateTime dataLocalDateTime = despesa.getData().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 
         return new DespesaResponseDTO(
-                despesa.getId(),
-                despesa.getCategoria().getId(),
-                despesa.getDescricao(),
-                despesa.getValor(),
-                dataLocalDateTime
+            despesa.getId(),
+            despesa.getCategoria().getId(),
+            despesa.getDescricao(),
+            despesa.getValor(),
+            dataLocalDateTime
         );
     }
 }
