@@ -15,7 +15,11 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.backend.centraldecontrole.util.CustomException;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Arrays;
@@ -23,6 +27,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -37,7 +42,7 @@ class DespesaServiceTest {
     private DespesaService despesaService;
 
     @Test
-    void adicionarDespesa_CategoriaEncontrada_RetornaOk() {
+    void testAdicionarDespesa() {
         DespesaRequestDTO requestDTO = new DespesaRequestDTO(1L, "Descrição da despesa", 100.0, new Date());
         Usuario usuario = new Usuario();
 
@@ -53,36 +58,38 @@ class DespesaServiceTest {
     }
 
     @Test
-    void adicionarDespesa_CategoriaNaoEncontrada_RetornaBadRequest() {
-        Long IdDespesa = 1L;
-        DespesaRequestDTO requestDTO = new DespesaRequestDTO(IdDespesa, "Descrição da despesa", 100.0, new Date());
+    void testAdicionarDespesa_CategoriaNaoEncontrada() {
+        Long idCategoriaNaoExistente = 999L;
+        DespesaRequestDTO data = new DespesaRequestDTO(idCategoriaNaoExistente, "Descrição", 100.0, null);
         Usuario usuario = new Usuario();
 
-        when(categoriaDespesaRepository.findById(1L)).thenReturn(Optional.empty());
+        CustomException.CategoriaDespesaNaoEncontradaComIdException exception = assertThrows(
+                CustomException.CategoriaDespesaNaoEncontradaComIdException.class,
+                () -> despesaService.adicionarDespesa(data, usuario)
+        );
 
-        ResponseEntity<String> response = despesaService.adicionarDespesa(requestDTO, usuario);
-
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID + IdDespesa, response.getBody());
-
-        verify(despesaRepository, never()).save(any());
+        assertEquals(String.format(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID, idCategoriaNaoExistente), exception.getMessage());
     }
 
     @Test
     public void testListarDespesasDoUsuario() {
+        int anoFiltro = 2024;
+        int mesFiltro = 1;
+        LocalDate primeiroDiaDoMes = LocalDate.of(anoFiltro, mesFiltro, 1);
+        LocalDate ultimoDiaDoMes = primeiroDiaDoMes.with(TemporalAdjusters.lastDayOfMonth());
+        Date dataInicio = Date.from(primeiroDiaDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date dataFim = Date.from(ultimoDiaDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
         Usuario usuario = new Usuario("usuario teste", "senha123", new Date());
+        usuario.setId(1L);
         CategoriaDespesa categoriaDespesa = new CategoriaDespesa("Categoria teste");
 
         Despesa despesa1 = new Despesa(usuario, categoriaDespesa, "despesa 1", 1.00, new Date());
         Despesa despesa2 = new Despesa(usuario, categoriaDespesa, "despesa 2", 2.00, new Date());
 
-        int anoFiltro = 2024;
-        int mesFiltro = 1;
-
         List<Despesa> listaDespesas = Arrays.asList(despesa1, despesa2);
 
-        when(despesaRepository.findByUsuarioIdAndDataBetween(eq(usuario.getId()), any(Date.class), any(Date.class)))
-                .thenReturn(listaDespesas);
+        when(despesaRepository.findByUsuarioIdAndDataBetween(usuario.getId(), dataInicio, dataFim)).thenReturn(listaDespesas);
 
         List<DespesaResponseDTO> resultado = despesaService.listarDespesasDoUsuario(usuario.getId(), anoFiltro, mesFiltro);
 
@@ -98,6 +105,15 @@ class DespesaServiceTest {
         assertEquals(despesa2.getDescricao(), despesaResponseDTO2.descricao());
     }
 
+    @Test
+    void testListarDespesasDoUsuario_UsuarioNaoEncontrado() {
+        Long idUsuario = null;
+        int anoFiltro = 2024;
+        int mesFiltro = 1;
+
+        assertThrows(CustomException.UsuarioNaoEncontradoException.class,
+                () -> despesaService.listarDespesasDoUsuario(idUsuario, anoFiltro, mesFiltro));
+    }
 
     @Test
     public void testEditarDespesa() {
@@ -125,6 +141,49 @@ class DespesaServiceTest {
         Despesa despesaEditada = despesaCaptor.getValue();
         assertEquals(categoria, despesaEditada.getCategoria(), "A categoria da despesa deve ser a mesma da categoria mockada");
     }
+    @Test
+    void testEditarDespesa_CategoriaNaoEncontrada() {
+        Long idDespesa = 1L;
+        Long idCategoriaNaoExistente = 999L;
+        DespesaRequestDTO requestDTO = new DespesaRequestDTO(idCategoriaNaoExistente, "Descrição da despesa", 100.0, new Date());
+        Usuario usuario = new Usuario();
+
+        when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(new Despesa()));
+
+        when(categoriaDespesaRepository.findById(1L)).thenReturn(Optional.empty());
+
+        CustomException.CategoriaDespesaNaoEncontradaComIdException exception = assertThrows(
+                CustomException.CategoriaDespesaNaoEncontradaComIdException.class,
+                () -> despesaService.editarDespesa(idDespesa, requestDTO, usuario)
+        );
+
+        assertEquals(String.format(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID, idCategoriaNaoExistente), exception.getMessage());
+
+        verify(despesaRepository, times(1)).findById(idDespesa);
+        verify(categoriaDespesaRepository, times(1)).findById(idCategoriaNaoExistente);
+        verify(despesaRepository, never()).save(any());
+    }
+
+    @Test
+    void testEditarDespesa_DespesaNaoEncontrada() {
+        Long idDespesaNaoExistente = 999L;
+        Long idCategoria = 1L;
+        DespesaRequestDTO requestDTO = new DespesaRequestDTO(idCategoria, "Descrição da despesa", 100.0, new Date());
+        Usuario usuario = new Usuario();
+
+        when(despesaRepository.findById(idDespesaNaoExistente)).thenReturn(Optional.empty());
+
+        CustomException.DespesaNaoEncontradaComIdException exception = assertThrows(
+                CustomException.DespesaNaoEncontradaComIdException.class,
+                () -> despesaService.editarDespesa(idDespesaNaoExistente, requestDTO, usuario)
+        );
+
+        assertEquals(String.format(MensagemConstantes.DESPESA_NAO_ENCONTRADA_COM_ID, idDespesaNaoExistente), exception.getMessage());
+
+        verify(despesaRepository, times(1)).findById(idDespesaNaoExistente);
+        verify(categoriaDespesaRepository, never()).findById(any());
+        verify(despesaRepository, never()).save(any());
+    }
 
     @Test
     public void testExcluirDespesa() {
@@ -143,5 +202,21 @@ class DespesaServiceTest {
 
         verify(despesaRepository, times(1)).findById(idDespesa);
         verify(despesaRepository, times(1)).delete(despesaExistente);
+    }
+
+    @Test
+    void testExcluirDespesa_DespesaNaoEncontrada() {
+        Long idDespesaNaoExistente = 999L;
+
+        when(despesaRepository.findById(idDespesaNaoExistente)).thenReturn(Optional.empty());
+
+        CustomException.DespesaNaoEncontradaComIdException exception = assertThrows(
+                CustomException.DespesaNaoEncontradaComIdException.class,
+                () -> despesaService.excluirDespesa(idDespesaNaoExistente)
+        );
+
+        assertEquals(String.format(MensagemConstantes.DESPESA_NAO_ENCONTRADA_COM_ID, idDespesaNaoExistente), exception.getMessage());
+
+        verify(despesaRepository, never()).delete(any());
     }
 }
