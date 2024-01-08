@@ -37,4 +37,16 @@ public class CustomException extends RuntimeException {
         }
     }
 
+    public static class CategoriaTarefaNaoEncontradaComIdException extends RuntimeException {
+        public CategoriaTarefaNaoEncontradaComIdException(Long IDCategoriaTarefa) {
+            super(String.format(MensagemConstantes.CATEGORIA_TAREFA_NAO_ENCONTRADA_COM_ID, IDCategoriaTarefa));
+        }
+    }
+
+    public static class TarefaNaoEncontradaComIdException extends RuntimeException {
+        public TarefaNaoEncontradaComIdException(Long IDTarefa) {
+            super(String.format(MensagemConstantes.TAREFA_NAO_ENCONTRADA_COM_ID, IDTarefa));
+        }
+    }
+
 }
