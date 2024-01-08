@@ -141,6 +141,7 @@ class DespesaServiceTest {
         Despesa despesaEditada = despesaCaptor.getValue();
         assertEquals(categoria, despesaEditada.getCategoria(), "A categoria da despesa deve ser a mesma da categoria mockada");
     }
+
     @Test
     void testEditarDespesa_CategoriaNaoEncontrada() {
         Long idDespesa = 1L;
