@@ -9,7 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import java.util.Map;
 
 @ControllerAdvice
@@ -55,6 +54,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({CustomException.DespesaNaoEncontradaComIdException.class})
     protected ResponseEntity<Object> handleDespesaNaoEncontradaComIdException(CustomException.DespesaNaoEncontradaComIdException ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({CustomException.CategoriaTarefaNaoEncontradaComIdException.class})
+    protected ResponseEntity<Object> handleCategoriaTarefaNaoEncontradaComIdException(CustomException.CategoriaTarefaNaoEncontradaComIdException ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({CustomException.TarefaNaoEncontradaComIdException.class})
+    protected ResponseEntity<Object> handleTarefaNaoEncontradaComIdException(CustomException.TarefaNaoEncontradaComIdException ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 }
