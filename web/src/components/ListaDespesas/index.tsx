@@ -46,7 +46,7 @@ const ListaDespesas: React.FC = () => {
 
           const [despesasResult, categoriasResult] = await Promise.all([
             api.listarDespesas(token, ano, mes),
-            api.listarTodasCategoriasDespesas(token),
+            api.listarTodasCategoriasDespesa(token),
           ]);
 
           setDespesas(despesasResult);
