@@ -8,7 +8,7 @@ export const Container = styled.div`
 
 export const Body = styled.div`
     margin: auto;
-    max-width: 950px;
+    max-width: 1000px;
     padding-top: 50px;
     padding: 25px 0 10px 0;
 `;
