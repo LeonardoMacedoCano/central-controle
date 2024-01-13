@@ -8,7 +8,7 @@ type TarefaColunasFormatReturnType = {
   descricao: (value: string | number | boolean | Date) => React.ReactNode;
   dataInclusao: (value: string | number | boolean | Date) => React.ReactNode;
   dataPrazo: (value: string | number | boolean | Date) => React.ReactNode;
-  Finalizado: (value: string | number | boolean | Date) => React.ReactNode;
+  finalizado: (value: string | number | boolean | Date) => React.ReactNode;
   idCategoria: (value: string | number | boolean | Date) => React.ReactNode;
 };
 
@@ -24,7 +24,7 @@ export const TarefaColunasFormat = ({ categoriaMap }: TarefaColunasFormatArgs): 
     } else if (typeof value === 'number') {
       return String(value);
     } else if (typeof value === 'boolean') {
-      return value;
+      return String(value);
     } else if (value instanceof Date) {
       return value.toLocaleDateString();
     }
@@ -42,7 +42,13 @@ export const TarefaColunasFormat = ({ categoriaMap }: TarefaColunasFormatArgs): 
     }
     return null;
   },
-  Finalizado: (value: string | number | boolean | Date): React.ReactNode => Boolean(value),
+  finalizado: (value: string | number | boolean | Date): React.ReactNode => {
+    if (typeof value === 'boolean') {
+      return value ? 'Sim' : 'Não';
+    } else {
+      return String(value);
+    }
+  },
   idCategoria: (value: string | number | boolean | Date): React.ReactNode => {
     if (isDate(value)) {
       return categoriaMap[value.valueOf()] || 'Categoria Desconhecida';

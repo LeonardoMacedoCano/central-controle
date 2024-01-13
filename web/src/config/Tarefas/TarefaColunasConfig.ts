@@ -3,7 +3,7 @@ export const TarefaColunasConfig = {
     idCategoria: { label: 'Categoria', width: 150 },
     titulo: { label: 'Titulo' },
     descricao: { label: 'Descrição' },
-    dataInclusao: { label: 'Data Inclusão', width: 100 },
-    dataPrazo: { label: 'Data Prazo', width: 100 },
-    Finalizado: { label: 'Finalizado', width: 50 },
+    dataInclusao: { label: 'Dt Inclusão', width: 100 },
+    dataPrazo: { label: 'Dt Prazo', width: 100 },
+    finalizado: { label: 'Finalizado', width: 50 },
   };

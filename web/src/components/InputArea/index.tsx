@@ -98,9 +98,9 @@ export const InputArea: React.FC<Props<FormFields>> = ({
                 value={fieldValue as string}
                 onChange={(e) => handleInputChange(key as keyof FormFields, e.target.value)}
               >
-                <option value="">False</option>
+                <option key={'false'} value={'false'}>Não</option>
                 <option key={'true'} value={'true'}>
-                  True
+                  Sim
                 </option>
               </C.Select>
             ) : (  
