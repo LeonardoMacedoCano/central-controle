@@ -1,8 +1,16 @@
 import { InputFieldType } from './InputFieldType';
-import { FormFields } from './FormFields';
+import { FormFieldsDespesa, FormFieldsTarefa } from './FormFields';
 
-export type InputField = {
+type InputFieldDespesa = {
   label: string;
   type: InputFieldType;
-  key: keyof FormFields;
+  key: keyof FormFieldsDespesa;
 };
+
+type InputFieldTarefa = {
+  label: string;
+  type: InputFieldType;
+  key: keyof FormFieldsTarefa;
+};
+
+export type InputField = InputFieldDespesa | InputFieldTarefa;
