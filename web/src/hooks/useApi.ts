@@ -131,7 +131,7 @@ export const useApi = () => ({
                 descricao: data.descricao,
                 dataInclusao: data.dataInclusao,
                 dataPrazo: data.dataPrazo,
-                finalizado: data.finalizado,
+                finalizado: false,
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -181,7 +181,7 @@ export const useApi = () => ({
     },
     listarTodasCategoriasTarefa: async (token: string): Promise<Categoria[]> => {
         try {
-            const response = await api.get('/categoriadespesa/getTodasCategoriasTarefa', {
+            const response = await api.get('/categoriatarefa/getTodasCategoriasTarefa', {
                 headers: {
                 Authorization: `Bearer ${token}`,
                 },
