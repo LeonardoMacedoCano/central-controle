@@ -7,7 +7,7 @@ import { InputArea } from '../../components/InputArea';
 import { InfoArea } from '../../components/InfoArea';
 import { Despesa } from '../../types/Despesa';
 import { Categoria } from '../../types/Categoria';
-import { FormFields } from '../../types/FormFields';
+import { FormFieldsDespesa, ValoresIniciaisDespesa } from '../../types/FormFields';
 import { DespesaColunasConfig } from '../../config/Despesas/DespesaColunasConfig';
 import { DespesaColunasFormat } from '../../config/Despesas/DespesaColunasFormat';
 import { DespesaCampos } from '../../config/Despesas/DespesaCampos';
@@ -22,12 +22,7 @@ const ListaDespesas: React.FC = () => {
   const [categoriaMap, setCategoriaMap] = useState<Record<number, string>>({});
   const [dataSelecionada, setDataSelecionada] = useState(() => getMesAnoAtual());
   const somaDespesas = despesas.reduce((total, despesa) => total + despesa.valor, 0);
-  const [formFields, setFormFields] = useState<FormFields>({
-    data: '',
-    categoria: '',
-    descricao: '',
-    valor: 0,
-  });
+  const [formFields, setFormFields] = useState<FormFieldsDespesa>(ValoresIniciaisDespesa);
 
   const auth = useContext(AuthContext);
   const api = useApi();
@@ -80,7 +75,7 @@ const ListaDespesas: React.FC = () => {
     return novoMapa;
   }
 
-  const convertToDespesa = (data: FormFields): Despesa => {
+  const convertToDespesa = (data: FormFieldsDespesa): Despesa => {
     const mapaInvertido = inverterCategoriaMap(categoriaMap);
 
     const despesa: Despesa = {
@@ -108,7 +103,7 @@ const ListaDespesas: React.FC = () => {
     }));
   }; 
 
-  const handleAddDespesa = async (data: FormFields) => {
+  const handleAddDespesa = async (data: FormFieldsDespesa) => {
     try {
       const novaDespesa = convertToDespesa(data);
     
@@ -120,7 +115,7 @@ const ListaDespesas: React.FC = () => {
     }
   };
   
-  const handleEditDespesa = async (data: FormFields) => {
+  const handleEditDespesa = async (data: FormFieldsDespesa) => {
     try {
       const despesa = convertToDespesa(data);
     
@@ -162,8 +157,8 @@ const ListaDespesas: React.FC = () => {
 
       <InputArea
         campos={DespesaCampos}
-        onAdd={handleAddDespesa}
-        onEdit={handleEditDespesa}
+        onAdd={(data) => handleAddDespesa(data as FormFieldsDespesa)}
+        onEdit={(data) => handleEditDespesa(data as FormFieldsDespesa)}
         onDelete={handleDeleteDespesa}
         itemSelecionado={idDespesaSelecionada}
         opcoesCategoria={categoriaDespesas}

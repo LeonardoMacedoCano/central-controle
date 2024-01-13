@@ -6,7 +6,7 @@ import { FaSortUp, FaSortDown } from "react-icons/fa";
 type Props<T extends Record<string, any>> = {
   lista: T[];
   colunasConfig?: Partial<Record<keyof T, { label: string; width?: number }>>;
-  colunasFormat?: Partial<Record<keyof T, (value: T[keyof T]) => React.ReactNode>>;
+  colunasFormat?: Partial<Record<keyof T, (value: string | number | boolean | Date) => React.ReactNode>>;
   onEditClick?: (itemId: number | null) => void; 
   itemIdSelecionado?: number | null;
 };

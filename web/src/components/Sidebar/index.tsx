@@ -40,7 +40,7 @@ const Sidebar: FC<SidebarProps> = ({ sidebar, setSidebar }) => {
         <LinkContainer to="/controledespesas">
           <SidebarItem Icon={FaDollarSign} Text="Controle de despesas" />
         </LinkContainer>
-        <LinkContainer to="/">
+        <LinkContainer to="/controletarefas">
           <SidebarItem Icon={FaCheckCircle} Text="Controle de tarefas" />
         </LinkContainer>
         <LinkContainer to="/">
