@@ -37,7 +37,7 @@ public class TarefaServiceTest {
 
     @Test
     void testAdicionarTarefa() {
-        TarefaRequestDTO requestDTO = new TarefaRequestDTO(1L, "Titulo", "Descricao", new Date(), new Date(), Boolean.FALSE);
+        TarefaRequestDTO requestDTO = new TarefaRequestDTO(1L, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         Usuario usuario = new Usuario();
 
         CategoriaTarefa categoriaTarefa = new CategoriaTarefa();
@@ -54,7 +54,7 @@ public class TarefaServiceTest {
     @Test
     void testAdicionarTarefa_CategoriaNaoEncontrada() {
         Long idCategoriaNaoExistente = 999L;
-        TarefaRequestDTO data = new TarefaRequestDTO(idCategoriaNaoExistente, "Titulo", "Descricao", new Date(), new Date(), Boolean.FALSE);
+        TarefaRequestDTO data = new TarefaRequestDTO(idCategoriaNaoExistente, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         Usuario usuario = new Usuario();
 
         CustomException.CategoriaTarefaNaoEncontradaComIdException exception = assertThrows(
@@ -78,12 +78,12 @@ public class TarefaServiceTest {
         usuario.setId(1L);
         CategoriaTarefa categoriaTarefa = new CategoriaTarefa("Categoria teste");
 
-        Tarefa tarefa1 = new Tarefa(usuario, categoriaTarefa, "titulo 1", "tarefa 1", new Date(), new Date(), false);
-        Tarefa tarefa2 = new Tarefa(usuario, categoriaTarefa, "titulo 2", "tarefa 2", new Date(), new Date(), false);
+        Tarefa tarefa1 = new Tarefa(usuario, categoriaTarefa, "titulo 1", "tarefa 1", new Date(), false);
+        Tarefa tarefa2 = new Tarefa(usuario, categoriaTarefa, "titulo 2", "tarefa 2", new Date(), false);
 
         List<Tarefa> listaTarefas = Arrays.asList(tarefa1, tarefa2);
 
-        when(tarefaRepository.findByUsuarioIdAndDataInclusaoBetween(usuario.getId(), dataInicio, dataFim)).thenReturn(listaTarefas);
+        when(tarefaRepository.findByUsuarioIdAndDataPrazoBetween(usuario.getId(), dataInicio, dataFim)).thenReturn(listaTarefas);
 
         List<TarefaResponseDTO> resultado = tarefaService.listarTarefasDoUsuario(usuario.getId(), anoFiltro, mesFiltro);
 
@@ -112,13 +112,13 @@ public class TarefaServiceTest {
     @Test
     public void testEditarTarefa() {
         Long idTarefa = 1L;
-        TarefaRequestDTO tarefaRequestDTO = new TarefaRequestDTO(1L, "Titulo", "Descricao", new Date(), new Date(), Boolean.FALSE);
+        TarefaRequestDTO tarefaRequestDTO = new TarefaRequestDTO(1L, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         Usuario usuario = new Usuario("username", "senha", new Date());
 
         CategoriaTarefa categoria = new CategoriaTarefa("categoria teste");
         when(categoriaTarefaRepository.findById(eq(tarefaRequestDTO.idCategoria()))).thenReturn(Optional.of(categoria));
 
-        Tarefa tarefaExistente = new Tarefa(usuario, categoria, "Titulo", "Descricao", new Date(), new Date(), Boolean.FALSE);
+        Tarefa tarefaExistente = new Tarefa(usuario, categoria, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         when(tarefaRepository.findById(idTarefa)).thenReturn(Optional.of(tarefaExistente));
 
         ResponseEntity<String> response = tarefaService.editarTarefa(idTarefa, tarefaRequestDTO, usuario);
@@ -140,7 +140,7 @@ public class TarefaServiceTest {
     void testEditarTarefa_CategoriaNaoEncontrada() {
         Long idTarefa = 1L;
         Long idCategoriaNaoExistente = 999L;
-        TarefaRequestDTO requestDTO = new TarefaRequestDTO(idCategoriaNaoExistente, "Titulo", "Descricao", new Date(), new Date(), Boolean.FALSE);
+        TarefaRequestDTO requestDTO = new TarefaRequestDTO(idCategoriaNaoExistente, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         Usuario usuario = new Usuario();
 
         when(tarefaRepository.findById(idTarefa)).thenReturn(Optional.of(new Tarefa()));
@@ -163,7 +163,7 @@ public class TarefaServiceTest {
     void testEditarTarefa_TarefaNaoEncontrada() {
         Long idTarefaNaoExistente = 999L;
         Long idCategoria = 1L;
-        TarefaRequestDTO requestDTO = new TarefaRequestDTO(idCategoria, "Titulo", "Descricao", new Date(), new Date(), Boolean.FALSE);
+        TarefaRequestDTO requestDTO = new TarefaRequestDTO(idCategoria, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         Usuario usuario = new Usuario();
 
         when(tarefaRepository.findById(idTarefaNaoExistente)).thenReturn(Optional.empty());

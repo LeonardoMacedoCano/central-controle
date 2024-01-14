@@ -9,8 +9,6 @@ public record TarefaResponseDTO(
         String titulo,
         String descricao,
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-        LocalDateTime dataInclusao,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
         LocalDateTime dataPrazo,
         Boolean finalizado) {
 }

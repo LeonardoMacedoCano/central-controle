@@ -1,6 +1,7 @@
 package com.backend.centraldecontrole.model;
 
 import com.backend.centraldecontrole.util.BooleanToCharConverter;
+import com.backend.centraldecontrole.util.DateUtil;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,12 +43,12 @@ public class Tarefa {
     @Column(nullable = false)
     private boolean finalizado;
 
-    public Tarefa(Usuario usuario, CategoriaTarefa categoria, String titulo, String descricao, Date dataInclusao, Date dataPrazo, Boolean finalizado) {
+    public Tarefa(Usuario usuario, CategoriaTarefa categoria, String titulo, String descricao, Date dataPrazo, Boolean finalizado) {
         this.usuario = usuario;
         this.categoria = categoria;
         this.titulo = titulo;
         this.descricao = descricao;
-        this.dataInclusao = dataInclusao;
+        this.dataInclusao = DateUtil.getDataAtual();
         this.dataPrazo = dataPrazo;
         this.finalizado = finalizado;
     }

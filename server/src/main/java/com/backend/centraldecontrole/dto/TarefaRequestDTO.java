@@ -10,8 +10,6 @@ public record TarefaRequestDTO(
         String titulo,
         String descricao,
         @JsonDeserialize(using = CustomDateDeserializer.class)
-        Date dataInclusao,
-        @JsonDeserialize(using = CustomDateDeserializer.class)
         Date dataPrazo,
         Boolean finalizado
 ) {

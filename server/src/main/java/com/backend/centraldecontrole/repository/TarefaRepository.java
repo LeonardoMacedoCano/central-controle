@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface TarefaRepository extends JpaRepository<Tarefa, Long> {
     List<Tarefa> findByUsuarioId(Long idUsuario);
-    List<Tarefa> findByUsuarioIdAndDataInclusaoBetween(Long idUsuario, Date startOfMonth, Date endOfMonth);
+    List<Tarefa> findByUsuarioIdAndDataPrazoBetween(Long idUsuario, Date startOfMonth, Date endOfMonth);
 }

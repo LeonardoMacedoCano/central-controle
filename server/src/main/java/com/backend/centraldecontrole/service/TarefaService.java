@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
@@ -30,7 +29,7 @@ public class TarefaService {
     public ResponseEntity<String> adicionarTarefa(TarefaRequestDTO data, Usuario usuario) {
         return getCategoriaPorId(data.idCategoria())
                 .map(categoria -> {
-                    Tarefa novaTarefa = new Tarefa(usuario, categoria, data.titulo(), data.descricao(), data.dataInclusao(), data.dataPrazo(), data.finalizado());
+                    Tarefa novaTarefa = new Tarefa(usuario, categoria, data.titulo(), data.descricao(), data.dataPrazo(), data.finalizado());
                     salvarTarefa(novaTarefa);
                     return ResponseEntity.ok(MensagemConstantes.TAREFA_ADICIONADA_COM_SUCESSO);
                 })
@@ -45,7 +44,6 @@ public class TarefaService {
                             tarefaExistente.setCategoria(categoria);
                             tarefaExistente.setTitulo(data.titulo());
                             tarefaExistente.setDescricao(data.descricao());
-                            tarefaExistente.setDataInclusao(data.dataInclusao());
                             tarefaExistente.setDataPrazo(data.dataPrazo());
                             tarefaExistente.setFinalizado(data.finalizado());
                             salvarTarefa(tarefaExistente);
@@ -80,7 +78,7 @@ public class TarefaService {
             Date dataInicio = Date.from(primeiroDiaDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date dataFim = Date.from(ultimoDiaDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            tarefas = tarefaRepository.findByUsuarioIdAndDataInclusaoBetween(idUsuario, dataInicio, dataFim);
+            tarefas = tarefaRepository.findByUsuarioIdAndDataPrazoBetween(idUsuario, dataInicio, dataFim);
         } else {
             tarefas = tarefaRepository.findByUsuarioId(idUsuario);
         }
@@ -104,16 +102,12 @@ public class TarefaService {
             return null;
         }
 
-        LocalDateTime dataInclusao = tarefa.getDataInclusao().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        LocalDateTime dataPrazo = tarefa.getDataPrazo().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-
         return new TarefaResponseDTO(
                 tarefa.getId(),
                 tarefa.getCategoria().getId(),
                 tarefa.getTitulo(),
                 tarefa.getDescricao(),
-                dataInclusao,
-                dataPrazo,
+                tarefa.getDataPrazo().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(),
                 tarefa.isFinalizado()
         );
     }
