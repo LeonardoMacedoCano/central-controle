@@ -29,7 +29,6 @@ export const useApi = () => {
         },
         login: async (username: string, senha: string) => {
             try {
-                console.log('aaa');
                 const response = await api.post('/auth/login', {
                     username: username,
                     senha: senha,
