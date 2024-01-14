@@ -82,13 +82,18 @@ const ListaTarefas: React.FC = () => {
       idCategoria: mapaInvertido[data.categoria] || 0,
       titulo: data.titulo,
       descricao: data.descricao,
-      dataInclusao: new Date(data.dataInclusao),
       dataPrazo: new Date(data.dataPrazo),
       finalizado: data.finalizado,
     };
 
     return tarefa;
   }; 
+
+  const getInfoValor = (): string => {
+    const tarefasNaoFinalizadas = tarefas.filter((tarefa) => !tarefa.finalizado);
+    const valorFormatado = tarefasNaoFinalizadas.length.toString().padStart(2, '0');
+    return valorFormatado;
+  };
 
   const handleEditClick = (idTarefa: number | null) => {
     setIdTarefaSelecionada(idTarefa);
@@ -100,7 +105,6 @@ const ListaTarefas: React.FC = () => {
       categoria: categoriaMap[tarefaSelecionada?.idCategoria || 0] || '', 
       titulo: tarefaSelecionada?.titulo || '',
       descricao: tarefaSelecionada?.descricao || '',
-      dataInclusao: formatarDataParaString(tarefaSelecionada?.dataInclusao || undefined),
       dataPrazo: formatarDataParaString(tarefaSelecionada?.dataPrazo || undefined),
       finalizado: tarefaSelecionada?.finalizado?.valueOf() || false,
     }));
@@ -154,8 +158,8 @@ const ListaTarefas: React.FC = () => {
         onDataChange={handleDataChange}
         dataDescricao={'Data'}
         titulo={'Tarefas'}
-        infoDescricao={''}
-        infoValor={''}
+        infoDescricao={'Tarefas à finalizar'}
+        infoValor={getInfoValor()}
       />
 
       <InputArea

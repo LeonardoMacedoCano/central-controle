@@ -3,7 +3,6 @@ export type Tarefa = {
     idCategoria: number;
     titulo: string;
     descricao: string;
-    dataInclusao: Date;
     dataPrazo: Date;
     finalizado: Boolean;
   }

@@ -129,9 +129,8 @@ export const useApi = () => ({
                 idCategoria: data.idCategoria,
                 titulo: data.titulo,
                 descricao: data.descricao,
-                dataInclusao: data.dataInclusao,
                 dataPrazo: data.dataPrazo,
-                finalizado: false,
+                finalizado: data.finalizado,
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -150,7 +149,6 @@ export const useApi = () => ({
                 idCategoria: data.idCategoria,
                 titulo: data.titulo,
                 descricao: data.descricao,
-                dataInclusao: data.dataInclusao,
                 dataPrazo: data.dataPrazo,
                 finalizado: data.finalizado,
             }, {

@@ -6,7 +6,6 @@ type TarefaColunasFormatReturnType = {
   id: (value: string | number | boolean | Date) => React.ReactNode;
   titulo: (value: string | number | boolean | Date) => React.ReactNode;
   descricao: (value: string | number | boolean | Date) => React.ReactNode;
-  dataInclusao: (value: string | number | boolean | Date) => React.ReactNode;
   dataPrazo: (value: string | number | boolean | Date) => React.ReactNode;
   finalizado: (value: string | number | boolean | Date) => React.ReactNode;
   idCategoria: (value: string | number | boolean | Date) => React.ReactNode;
@@ -18,29 +17,12 @@ export const TarefaColunasFormat = ({ categoriaMap }: TarefaColunasFormatArgs): 
   id: (value: string | number | boolean | Date): React.ReactNode => Number(value),
   titulo: (value: string | number | boolean | Date): React.ReactNode => String(value),
   descricao: (value: string | number | boolean | Date): React.ReactNode => String(value),
-  dataInclusao: (value: string | number | boolean | Date): React.ReactNode => {
-    if (typeof value === 'string') {
-      return new Date(value).toLocaleDateString();
-    } else if (typeof value === 'number') {
-      return String(value);
-    } else if (typeof value === 'boolean') {
-      return String(value);
-    } else if (value instanceof Date) {
-      return value.toLocaleDateString();
-    }
-    return null;
-  },
   dataPrazo: (value: string | number | boolean | Date): React.ReactNode => {
     if (typeof value === 'string') {
       return new Date(value).toLocaleDateString();
-    } else if (typeof value === 'number') {
+    } else {
       return String(value);
-    } else if (typeof value === 'boolean') {
-      return value ? 'Sim' : 'Não';
-    } else if (value instanceof Date) {
-      return value.toLocaleDateString();
     }
-    return null;
   },
   finalizado: (value: string | number | boolean | Date): React.ReactNode => {
     if (typeof value === 'boolean') {
