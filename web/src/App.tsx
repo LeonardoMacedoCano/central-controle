@@ -9,29 +9,33 @@ import GlobalStyles from './styles/GlobalStyles';
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './contexts/Auth/AuthProvider.tsx'
 import { RequireAuth } from './contexts/Auth/RequireAuth';
+import { ProvedorMensagens } from './contexts/Mensagens/index.tsx';
 
 import dark from './styles/themes/dark';
-import light from './styles/themes/light';
+//import light from './styles/themes/light';
 
 const App: React.FC = () => {
+  
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <ThemeProvider theme={dark}>
-          <GlobalStyles />
-          {<RequireAuth>
-            <>
-              <MainHeader />
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/controledespesas" element={<ControleDespesas />} />
-                <Route path="/controletarefas" element={<ControleTarefas />} />
-              </Routes>
-            </>
-          </RequireAuth>}
-        </ThemeProvider>
-      </BrowserRouter>
-    </AuthProvider>
+    <ProvedorMensagens>
+      <AuthProvider>
+        <BrowserRouter>
+          <ThemeProvider theme={dark}>
+            <GlobalStyles />
+            {<RequireAuth>
+              <>
+                <MainHeader />
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/controledespesas" element={<ControleDespesas />} />
+                  <Route path="/controletarefas" element={<ControleTarefas />} />
+                </Routes>
+              </>
+            </RequireAuth>}
+          </ThemeProvider>
+        </BrowserRouter>
+      </AuthProvider>
+    </ProvedorMensagens>
   )
 }
 
