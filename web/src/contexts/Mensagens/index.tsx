@@ -41,7 +41,7 @@ export const ProvedorMensagens: React.FC<PropriedadesProvedorMensagens> = ({ chi
   );
 };
 
-export const useMessages  = () => {
+export const usarMensagens  = () => {
   const contexto = useContext(ContextoMensagens);
 
   if (!contexto) {

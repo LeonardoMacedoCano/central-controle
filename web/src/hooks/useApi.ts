@@ -1,20 +1,20 @@
 import axios from 'axios';
 import { Despesa } from '../types/Despesa';
 import { Tarefa } from '../types/Tarefa';
-import { useMessages } from '../contexts/Mensagens';
+import { usarMensagens } from '../contexts/Mensagens';
 
 const api = axios.create({
     baseURL: 'http://localhost:8080'
 });
 
 export const useApi = () => {
-    const messages = useMessages();
+    const mensagens = usarMensagens();
 
     const getMensagemErro = (error: any, mensagemPadrao: string) => {
         if (error.response && error.response.data && error.response.data.error) {
-            messages.exibirErro(error.response.data.error);
+            mensagens.exibirErro(error.response.data.error);
         } else {
-            messages.exibirErro(mensagemPadrao);
+            mensagens.exibirErro(mensagemPadrao);
         }
     }
 

@@ -1,13 +1,13 @@
 import { ChangeEvent, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/Auth/AuthContext";
+import { usarMensagens } from '../../contexts/Mensagens';
 import { MdAccountCircle, MdLock } from 'react-icons/md';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
 import * as styles from './styles';
 
 export const Login = () => {
     const auth = useContext(AuthContext);
-    const navigate = useNavigate();
+    const mensagens = usarMensagens();
 
     const [username, setUsername] = useState('');
     const [senha, setSenha] = useState('');
@@ -21,6 +21,12 @@ export const Login = () => {
         setSenha(event.target.value);
     }
 
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleLogin();
+        }
+    };
+
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
         setShow(!show);
@@ -30,9 +36,7 @@ export const Login = () => {
         if (username && senha) {
             const isLogged = await auth.login(username, senha);
             if (isLogged) {
-                navigate('/');
-            } else {
-                alert("Não deu certo.");
+                mensagens.exibirSucesso('Login bem-sucedido!')
             }
         }
     }
@@ -58,6 +62,7 @@ export const Login = () => {
                         type={show ? 'text' : 'password'}
                         value={senha}
                         onChange={handlePasswordInput}
+                        onKeyDown={handleKeyDown}
                     />
                     <styles.IconeOlho>
                         {show ? (
