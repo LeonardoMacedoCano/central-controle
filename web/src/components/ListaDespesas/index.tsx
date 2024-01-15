@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import * as C from './styles';
-import { useApi } from '../../hooks/useApi';
+import useApi from '../../hooks/useApi';
 import { AuthContext } from '../../contexts/Auth/AuthContext';
 import { TableArea } from '../../components/TableArea';
 import { InputArea } from '../../components/InputArea';
@@ -33,36 +33,36 @@ const ListaDespesas: React.FC = () => {
 
   useEffect(() => {
     const buscarDados = async () => {
-      try {
-        if (token !== null && typeof token === 'string') {
-          const [anoStr, mesStr] = dataSelecionada.split('-');
-          const ano = parseInt(anoStr);
-          const mes = parseInt(mesStr);
+      if (carregando && token !== null && typeof token === 'string') {
+        console.log('a')
+        const [anoStr, mesStr] = dataSelecionada.split('-');
+        const ano = parseInt(anoStr);
+        const mes = parseInt(mesStr);
 
-          const [despesasResult, categoriasResult] = await Promise.all([
-            api.listarDespesas(token, ano, mes),
-            api.listarTodasCategoriasDespesa(token),
-          ]);
+        const [despesasResult, categoriasResult] = await Promise.all([
+          api.listarDespesas(token, ano, mes),
+          api.listarTodasCategoriasDespesa(token),
+        ]);
 
+        if (despesasResult && categoriasResult) {
           setDespesas(despesasResult);
           setCategoriaDespesas(categoriasResult);
-
-          const categoriaMap = categoriaDespesas.reduce((map: Record<number, string>, categoria) => {
-            map[categoria.id] = categoria.descricao;
-            return map;
-          }, {});
-
-          setCategoriaMap(categoriaMap);
+          setCarregando(false);
         }
-      } catch (error: any) {
-        console.error('Erro ao carregar as despesas ou categorias de despesas:', error.message);
-      } finally {
-        setCarregando(false);
       }
     };
-
+  
     buscarDados();
-  }, [api, token, categoriaDespesas]);
+  }, [token, carregando]);
+  
+  useEffect(() => {
+    const categoriaMap = categoriaDespesas.reduce((map: Record<number, string>, categoria) => {
+      map[categoria.id] = categoria.descricao;
+      return map;
+    }, {});
+  
+    setCategoriaMap(categoriaMap);
+  }, [categoriaDespesas]);
 
   function inverterCategoriaMap(categoriaMap: Record<number, string>): Record<string, number> {
     const novoMapa: Record<string, number> = {};
@@ -104,44 +104,35 @@ const ListaDespesas: React.FC = () => {
   }; 
 
   const handleAddDespesa = async (data: FormFieldsDespesa) => {
-    try {
-      const novaDespesa = convertToDespesa(data);
-    
-      if (token !== null && typeof token === 'string') {
-        await api.addDespesa(token, novaDespesa);
-      }
-    } catch (error) {
-      console.error('Erro ao adicionar despesa');
+    const novaDespesa = convertToDespesa(data);
+  
+    if (token !== null && typeof token === 'string') {
+      await api.addDespesa(token, novaDespesa);
+      setCarregando(true);
     }
   };
   
   const handleEditDespesa = async (data: FormFieldsDespesa) => {
-    try {
-      const despesa = convertToDespesa(data);
-    
-      if (token !== null && typeof token === 'string') {
-        await api.editarDespesa(token, despesa);
-      }
-      setIdDespesaSelecionada(null);
-    } catch (error) {
-      console.error('Erro ao editar despesa');
+    const despesa = convertToDespesa(data);
+  
+    if (token !== null && typeof token === 'string') {
+      await api.editarDespesa(token, despesa);
+      setCarregando(true);
     }
+    setIdDespesaSelecionada(null);
   };
   
   const handleDeleteDespesa = async () => {
-    try {
-      if (idDespesaSelecionada !== null && token !== null && typeof token === 'string') {
-        await api.excluirDespesa(token, idDespesaSelecionada);
-      }
-
-      setIdDespesaSelecionada(null);
-    } catch (error) {
-      console.error('Erro ao excluir despesa');
+    if (idDespesaSelecionada !== null && token !== null && typeof token === 'string') {
+      await api.excluirDespesa(token, idDespesaSelecionada);
+      setCarregando(true);
     }
+    setIdDespesaSelecionada(null);
   };
 
   const handleDataChange = (data: string) => {
     setDataSelecionada(data);
+    setCarregando(true);
   }
     
   return (

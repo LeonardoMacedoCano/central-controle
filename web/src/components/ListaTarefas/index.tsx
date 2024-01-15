@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import * as C from './styles';
-import { useApi } from '../../hooks/useApi';
+import useApi from '../../hooks/useApi';
 import { AuthContext } from '../../contexts/Auth/AuthContext';
 import { TableArea } from '../../components/TableArea';
 import { InputArea } from '../../components/InputArea';
@@ -32,36 +32,36 @@ const ListaTarefas: React.FC = () => {
 
   useEffect(() => {
     const buscarDados = async () => {
-      try {
-        if (token !== null && typeof token === 'string') {
-          const [anoStr, mesStr] = dataSelecionada.split('-');
-          const ano = parseInt(anoStr);
-          const mes = parseInt(mesStr);
+      if (carregando && token !== null && typeof token === 'string') {
+        console.log('a')
+        const [anoStr, mesStr] = dataSelecionada.split('-');
+        const ano = parseInt(anoStr);
+        const mes = parseInt(mesStr);
 
-          const [tarefasResult, categoriasResult] = await Promise.all([
-            api.listarTarefas(token, ano, mes),
-            api.listarTodasCategoriasTarefa(token),
-          ]);
+        const [tarefasResult, categoriasResult] = await Promise.all([
+          api.listarTarefas(token, ano, mes),
+          api.listarTodasCategoriasTarefa(token),
+        ]);
 
+        if (tarefasResult && categoriasResult) {
           setTarefas(tarefasResult);
           setCategoriaTarefas(categoriasResult);
-
-          const categoriaMap = categoriaTarefas.reduce((map: Record<number, string>, categoria) => {
-            map[categoria.id] = categoria.descricao;
-            return map;
-          }, {});
-
-          setCategoriaMap(categoriaMap);
+          setCarregando(false);
         }
-      } catch (error: any) {
-        console.error('Erro ao carregar as tarefas ou categorias de tarefa:', error.message);
-      } finally {
-        setCarregando(false);
       }
     };
 
     buscarDados();
-  }, [api, token, categoriaTarefas]);
+  }, [token, carregando]);
+
+  useEffect(() => {
+    const categoriaMap = categoriaTarefas.reduce((map: Record<number, string>, categoria) => {
+      map[categoria.id] = categoria.descricao;
+      return map;
+    }, {});
+  
+    setCategoriaMap(categoriaMap);
+  }, [categoriaTarefas]);
 
   function inverterCategoriaMap(categoriaMap: Record<number, string>): Record<string, number> {
     const novoMapa: Record<string, number> = {};
@@ -111,44 +111,36 @@ const ListaTarefas: React.FC = () => {
   }; 
 
   const handleAddTarefa = async (data: FormFieldsTarefa) => {
-    try {
-      const novaTarefa = convertToTarefa(data);
-    
-      if (token !== null && typeof token === 'string') {
-        await api.addTarefa(token, novaTarefa);
-      }
-    } catch (error) {
-      console.error('Erro ao adicionar tarefa');
+    const novaTarefa = convertToTarefa(data);
+  
+    if (token !== null && typeof token === 'string') {
+      await api.addTarefa(token, novaTarefa);
+      setCarregando(true);
     }
   };
   
   const handleEditTarefa = async (data: FormFieldsTarefa) => {
-    try {
-      const tarefa = convertToTarefa(data);
-    
-      if (token !== null && typeof token === 'string') {
-        await api.editarTarefa(token, tarefa);
-      }
-      setIdTarefaSelecionada(null);
-    } catch (error) {
-      console.error('Erro ao editar tarefa');
+    const tarefa = convertToTarefa(data);
+  
+    if (token !== null && typeof token === 'string') {
+      await api.editarTarefa(token, tarefa);
+      setCarregando(true);
     }
+    setIdTarefaSelecionada(null);
   };
   
   const handleDeleteTarefa = async () => {
-    try {
-      if (idTarefaSelecionada !== null && token !== null && typeof token === 'string') {
-        await api.excluirTarefa(token, idTarefaSelecionada);
-      }
-
-      setIdTarefaSelecionada(null);
-    } catch (error) {
-      console.error('Erro ao excluir tarefa');
+    if (idTarefaSelecionada !== null && token !== null && typeof token === 'string') {
+      await api.excluirTarefa(token, idTarefaSelecionada);
+      setCarregando(true);
     }
+
+    setIdTarefaSelecionada(null);
   };
 
   const handleDataChange = (data: string) => {
     setDataSelecionada(data);
+    setCarregando(true);
   }
     
   return (

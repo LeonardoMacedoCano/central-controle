@@ -4,191 +4,105 @@ import { Tarefa } from '../types/Tarefa';
 import { usarMensagens } from '../contexts/Mensagens';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080'
+    baseURL: 'http://localhost:8080',
 });
 
-export const useApi = () => {
+const useApi = () => {
     const mensagens = usarMensagens();
 
-    const getMensagemErro = (error: any, mensagemPadrao: string) => {
+    const handleError = (error: any, mensagemPadrao: string) => {
         if (error.response && error.response.data && error.response.data.error) {
             mensagens.exibirErro(error.response.data.error);
         } else {
             mensagens.exibirErro(mensagemPadrao);
         }
-    }
+    };
 
-    return {
-        validateToken: async (token: string) => {
-            try {
-                const response = await api.get('auth/validateToken?token=' + token);
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao validar token.');
-            }
-        },
-        login: async (username: string, senha: string) => {
-            try {
-                const response = await api.post('/auth/login', {
-                    username: username,
-                    senha: senha,
-                });
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao logar.');
-            }
-        },
-        listarDespesas: async (token: string, ano: number, mes: number) => {
-            try {
-                const response = await api.get(`/despesa/listar?ano=${ano}&mes=${mes}`, {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                });
-            
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao listar as despesas.');
-            }
-        },
-        addDespesa: async (token: string, data: Despesa) => {
-            try {
-                const response = await api.post('/despesa/add', {
-                    idCategoria: data.idCategoria,
-                    descricao: data.descricao,
-                    valor: data.valor,
-                    data: data.data,
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-        
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao adicionar despesa.');
-            }
-        },
-        editarDespesa: async (token: string, data: Despesa) => {
-            try {
-                const response = await api.put(`/despesa/editar/${data.id}`, {
-                    idCategoria: data.idCategoria,
-                    descricao: data.descricao,
-                    valor: data.valor,
-                    data: data.data,
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-        
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao editar despesa.');
-            }
-        },
-        excluirDespesa: async (token: string, id: number) => {
-            try {
-                const response = await api.delete(`/despesa/excluir/${id}`, {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                });
-            
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao deletar a despesa.');
-            }
-        },
-        listarTodasCategoriasDespesa: async (token: string) => {
-            try {
-                const response = await api.get('/categoriadespesa/getTodasCategoriasDespesa', {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                });
-            
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao listar as categorias de despesa.');
-            }
-        },
-        listarTarefas: async (token: string, ano: number, mes: number) => {
-            try {
-                const response = await api.get(`/tarefa/listar?ano=${ano}&mes=${mes}`, {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                });
-            
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao listar as tarefas.');
-            }
-        },
-        addTarefa: async (token: string, data: Tarefa) => {
-            try {
-                const response = await api.post('/tarefa/add', {
-                    idCategoria: data.idCategoria,
-                    titulo: data.titulo,
-                    descricao: data.descricao,
-                    dataPrazo: data.dataPrazo,
-                    finalizado: data.finalizado,
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-        
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao adicionar tarefa.');
-            }
-        },
-        editarTarefa: async (token: string, data: Tarefa) => {
-            try {
-                const response = await api.put(`/tarefa/editar/${data.id}`, {
-                    idCategoria: data.idCategoria,
-                    titulo: data.titulo,
-                    descricao: data.descricao,
-                    dataPrazo: data.dataPrazo,
-                    finalizado: data.finalizado,
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-        
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao editar tarefa.');
-            }
-        },
-        excluirTarefa: async (token: string, id: number) => {
-            try {
-                const response = await api.delete(`/tarefa/excluir/${id}`, {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                });
-            
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao deletar a tarefa.');
-            }
-        },
-        listarTodasCategoriasTarefa: async (token: string) => {
-            try {
-                const response = await api.get('/categoriatarefa/getTodasCategoriasTarefa', {
-                    headers: {
-                    Authorization: `Bearer ${token}`,
-                    },
-                });
-            
-                return response.data;
-            } catch (error: any) {
-                getMensagemErro(error, 'Erro ao listar as categorias de tarefa.');
-            }
-        },
-    }
+    const request = async (
+        method: 'get' | 'post' | 'put' | 'delete',
+        url: string,
+        token?: string,
+        data?: Record<string, any>
+      ) => {
+        try {
+          let headers: Record<string, string> = {};
+      
+          if (token && token !== '') {
+            headers = {
+              Authorization: `Bearer ${token}`,
+            };
+          }
+      
+          if (method === 'get') {
+            const response = await api.get(url, { headers });
+            return response.data;
+          } else if (method === 'post') {
+            const response = await api.post(url, data, { headers });
+            return response.data;
+          } else if (method === 'put') {
+            const response = await api.put(url, data, { headers });
+            return response.data;
+          } else if (method === 'delete') {
+            const response = await api.delete(url, { headers });
+            return response.data;
+          } else {
+            throw `Método ${method} não configurado.`;
+          }
+        } catch (error: any) {
+          handleError(error, `Erro na requisição ${method.toUpperCase()} para ${url}`);
+          return undefined;
+        }
+      };
+      
+
+  return {
+    validateToken: async (token: string) => 
+        request('get', `auth/validateToken?token=${token}`),
+    login: async (username: string, senha: string) =>
+        request('post', 'auth/login', '', { username, senha }),
+    listarDespesas: async (token: string, ano: number, mes: number) =>
+        request('get', `/despesa/listar?ano=${ano}&mes=${mes}`, token),
+    addDespesa: async (token: string, data: Despesa) =>
+        request('post', '/despesa/add', token, {
+            idCategoria: data.idCategoria,
+            descricao: data.descricao,
+            valor: data.valor,
+            data: data.data,
+        }),
+    editarDespesa: async (token: string, data: Despesa) =>
+        request('put', `/despesa/editar/${data.id}`, token, {
+            idCategoria: data.idCategoria,
+            descricao: data.descricao,
+            valor: data.valor,
+            data: data.data,
+        }),
+    excluirDespesa: async (token: string, id: number) =>
+        request('delete', `/despesa/excluir/${id}`, token),
+    listarTodasCategoriasDespesa: async (token: string) =>
+        request('get', '/categoriadespesa/getTodasCategoriasDespesa', token),
+    listarTarefas: async (token: string, ano: number, mes: number) =>
+        request('get', `/tarefa/listar?ano=${ano}&mes=${mes}`, token),
+    addTarefa: async (token: string, data: Tarefa) =>
+        request('post', '/tarefa/add', token, {
+            idCategoria: data.idCategoria,
+            titulo: data.titulo,
+            descricao: data.descricao,
+            dataPrazo: data.dataPrazo,
+            finalizado: data.finalizado,
+        }),
+    editarTarefa: async (token: string, data: Tarefa) =>
+        request('put', `/tarefa/editar/${data.id}`, token, {
+            idCategoria: data.idCategoria,
+            titulo: data.titulo,
+            descricao: data.descricao,
+            dataPrazo: data.dataPrazo,
+            finalizado: data.finalizado,
+        }),
+    excluirTarefa: async (token: string, id: number) =>
+        request('delete', `/tarefa/excluir/${id}`, token),
+    listarTodasCategoriasTarefa: async (token: string) =>
+        request('get', '/categoriatarefa/getTodasCategoriasTarefa', token),
+  };
 };
+
+export default useApi;

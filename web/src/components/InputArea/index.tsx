@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as C from './styles';
 import { FaTrashAlt } from 'react-icons/fa';
+import { usarMensagens } from '../../contexts/Mensagens';
 import { Categoria } from '../../types/Categoria';
 import { InputField } from '../../types/InputField';
 import { 
@@ -29,6 +30,7 @@ export const InputArea: React.FC<Props<FormFields>> = ({
   opcoesCategoria,
   valoresIniciais,
 }) => {
+  const mensagens = usarMensagens();
   const [formFields, setFormFields] = useState<FormFields>(ValoresIniciaisForm);
 
   useEffect(() => {
@@ -67,7 +69,7 @@ export const InputArea: React.FC<Props<FormFields>> = ({
       .filter((error) => error !== '');
   
     if (errors.length > 0) {
-      alert(errors.join('\n'));
+      mensagens.exibirErro(errors.join('\n'));
     } else {
       itemSelecionado === null ? onAdd(formFields) : onEdit(formFields);
       clearFields();
