@@ -8,6 +8,7 @@ import com.backend.centraldecontrole.model.Usuario;
 import com.backend.centraldecontrole.repository.CategoriaDespesaRepository;
 import com.backend.centraldecontrole.repository.DespesaRepository;
 import com.backend.centraldecontrole.util.CustomException;
+import com.backend.centraldecontrole.util.CustomSuccess;
 import com.backend.centraldecontrole.util.MensagemConstantes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,18 +31,18 @@ public class DespesaService {
     @Autowired
     private CategoriaDespesaRepository categoriaDespesaRepository;
 
-    public ResponseEntity<String> adicionarDespesa(DespesaRequestDTO data, Usuario usuario) {
+    public ResponseEntity<Object> adicionarDespesa(DespesaRequestDTO data, Usuario usuario) {
         return getCategoriaPorId(data.idCategoria())
             .map(categoria -> {
                 Despesa novaDespesa = new Despesa(usuario, categoria, data.descricao(), data.valor(), data.data());
                 salvarDespesa(novaDespesa);
-                return ResponseEntity.ok(MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO);
+                return CustomSuccess.buildResponseEntity(MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO);
             })
             .orElseThrow(() -> new CustomException.CategoriaDespesaNaoEncontradaComIdException(data.idCategoria()));
     }
 
 
-    public ResponseEntity<String> editarDespesa(Long idDespesa, DespesaRequestDTO data, Usuario usuario) {
+    public ResponseEntity<Object> editarDespesa(Long idDespesa, DespesaRequestDTO data, Usuario usuario) {
         return despesaRepository.findById(idDespesa)
             .map(despesaExistente -> getCategoriaPorId(data.idCategoria())
                 .map(categoria -> {
@@ -51,18 +52,18 @@ public class DespesaService {
                     despesaExistente.setData(data.data());
                     despesaExistente.setUsuario(usuario);
                     salvarDespesa(despesaExistente);
-                    return ResponseEntity.ok(MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO);
+                    return CustomSuccess.buildResponseEntity(MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO);
                 })
                 .orElseThrow(() -> new CustomException.CategoriaDespesaNaoEncontradaComIdException(data.idCategoria())))
             .orElseThrow(() -> new CustomException.DespesaNaoEncontradaComIdException(idDespesa));
     }
 
-    public ResponseEntity<String> excluirDespesa(Long idDespesa) {
+    public ResponseEntity<Object> excluirDespesa(Long idDespesa) {
         Optional<Despesa> despesaOptional = despesaRepository.findById(idDespesa);
 
         if (despesaOptional.isPresent()) {
             despesaRepository.delete(despesaOptional.get());
-            return ResponseEntity.ok(MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO);
+            return CustomSuccess.buildResponseEntity(MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO);
         } else {
             throw new CustomException.DespesaNaoEncontradaComIdException(idDespesa);
         }

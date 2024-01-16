@@ -6,6 +6,7 @@ import com.backend.centraldecontrole.model.*;
 import com.backend.centraldecontrole.repository.CategoriaTarefaRepository;
 import com.backend.centraldecontrole.repository.TarefaRepository;
 import com.backend.centraldecontrole.util.CustomException;
+import com.backend.centraldecontrole.util.CustomSuccess;
 import com.backend.centraldecontrole.util.MensagemConstantes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,17 +27,17 @@ public class TarefaService {
     @Autowired
     private CategoriaTarefaRepository categoriaTarefaRepository;
 
-    public ResponseEntity<String> adicionarTarefa(TarefaRequestDTO data, Usuario usuario) {
+    public ResponseEntity<Object> adicionarTarefa(TarefaRequestDTO data, Usuario usuario) {
         return getCategoriaPorId(data.idCategoria())
                 .map(categoria -> {
                     Tarefa novaTarefa = new Tarefa(usuario, categoria, data.titulo(), data.descricao(), data.dataPrazo(), data.finalizado());
                     salvarTarefa(novaTarefa);
-                    return ResponseEntity.ok(MensagemConstantes.TAREFA_ADICIONADA_COM_SUCESSO);
+                    return CustomSuccess.buildResponseEntity(MensagemConstantes.TAREFA_ADICIONADA_COM_SUCESSO);
                 })
                 .orElseThrow(() -> new CustomException.CategoriaTarefaNaoEncontradaComIdException(data.idCategoria()));
     }
 
-    public ResponseEntity<String> editarTarefa(Long idTarefa, TarefaRequestDTO data, Usuario usuario) {
+    public ResponseEntity<Object> editarTarefa(Long idTarefa, TarefaRequestDTO data, Usuario usuario) {
         return tarefaRepository.findById(idTarefa)
                 .map(tarefaExistente -> getCategoriaPorId(data.idCategoria())
                         .map(categoria -> {
@@ -47,18 +48,18 @@ public class TarefaService {
                             tarefaExistente.setDataPrazo(data.dataPrazo());
                             tarefaExistente.setFinalizado(data.finalizado());
                             salvarTarefa(tarefaExistente);
-                            return ResponseEntity.ok(MensagemConstantes.TAREFA_EDITADA_COM_SUCESSO);
+                            return CustomSuccess.buildResponseEntity(MensagemConstantes.TAREFA_EDITADA_COM_SUCESSO);
                         })
                         .orElseThrow(() -> new CustomException.CategoriaTarefaNaoEncontradaComIdException(data.idCategoria())))
                 .orElseThrow(() -> new CustomException.TarefaNaoEncontradaComIdException(idTarefa));
     }
 
-    public ResponseEntity<String> excluirTarefa(Long idTarefa) {
+    public ResponseEntity<Object> excluirTarefa(Long idTarefa) {
         Optional<Tarefa> tarefaOptional = tarefaRepository.findById(idTarefa);
 
         if (tarefaOptional.isPresent()) {
             tarefaRepository.delete(tarefaOptional.get());
-            return ResponseEntity.ok(MensagemConstantes.TAREFA_EXCLUIDA_COM_SUCESSO);
+            return CustomSuccess.buildResponseEntity(MensagemConstantes.TAREFA_EXCLUIDA_COM_SUCESSO);
         } else {
             throw new CustomException.TarefaNaoEncontradaComIdException(idTarefa);
         }

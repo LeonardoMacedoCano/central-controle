@@ -18,19 +18,19 @@ public class DespesaController {
     private DespesaService despesaService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> adicionarDespesa(@RequestBody DespesaRequestDTO data, HttpServletRequest request) {
+    public ResponseEntity<Object> adicionarDespesa(@RequestBody DespesaRequestDTO data, HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
         return despesaService.adicionarDespesa(data, usuario);
     }
 
     @PutMapping("/editar/{idDespesa}")
-    public ResponseEntity<String> editarDespesa(@PathVariable Long idDespesa, @RequestBody DespesaRequestDTO data, HttpServletRequest request) {
+    public ResponseEntity<Object> editarDespesa(@PathVariable Long idDespesa, @RequestBody DespesaRequestDTO data, HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
         return despesaService.editarDespesa(idDespesa, data, usuario);
     }
 
     @DeleteMapping("/excluir/{idDespesa}")
-    public ResponseEntity<String> excluirDespesa(@PathVariable Long idDespesa) {
+    public ResponseEntity<Object> excluirDespesa(@PathVariable Long idDespesa) {
         return despesaService.excluirDespesa(idDespesa);
     }
 
