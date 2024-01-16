@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
 
     const login = async (username: string, senha: string) => {
         const data = await api.login(username, senha);
-        if (data.usuario) {
+        if (data?.usuario) {
             setUsuario(data.usuario);
             setToken(data.usuario.token);
             return true;

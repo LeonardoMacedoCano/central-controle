@@ -22,12 +22,19 @@ export const ProvedorMensagens: React.FC<PropriedadesProvedorMensagens> = ({ chi
   const [mensagemErro, setMensagemErro] = useState<string | null>(null);
   const [mensagemSucesso, setMensagemSucesso] = useState<string | null>(null);
 
+  function limparMensagens() {
+    setMensagemErro(null); 
+    setMensagemSucesso(null);
+  }
+
   const exibirErro = (mensagem: string) => {
+    limparMensagens();
     setMensagemErro(mensagem);
     setTimeout(() => setMensagemErro(null), 5000);
   };
 
   const exibirSucesso = (mensagem: string) => {
+    limparMensagens();
     setMensagemSucesso(mensagem);
     setTimeout(() => setMensagemSucesso(null), 5000);
   };
