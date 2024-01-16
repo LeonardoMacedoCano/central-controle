@@ -34,7 +34,6 @@ const ListaDespesas: React.FC = () => {
   useEffect(() => {
     const buscarDados = async () => {
       if (carregando && token !== null && typeof token === 'string') {
-        console.log('a')
         const [anoStr, mesStr] = dataSelecionada.split('-');
         const ano = parseInt(anoStr);
         const mes = parseInt(mesStr);
