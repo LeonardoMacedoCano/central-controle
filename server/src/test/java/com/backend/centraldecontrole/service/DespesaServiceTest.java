@@ -20,10 +20,7 @@ import com.backend.centraldecontrole.util.CustomException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Date;
-import java.util.Optional;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -49,10 +46,10 @@ class DespesaServiceTest {
         CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
         when(categoriaDespesaRepository.findById(1L)).thenReturn(Optional.of(categoriaDespesa));
 
-        ResponseEntity<String> response = despesaService.adicionarDespesa(requestDTO, usuario);
+        ResponseEntity<Object> response = despesaService.adicionarDespesa(requestDTO, usuario);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO, response.getBody());
+        assertEquals(Map.of("success", MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO), response.getBody());
 
         verify(despesaRepository, times(1)).save(any());
     }
@@ -127,10 +124,10 @@ class DespesaServiceTest {
         Despesa despesaExistente = new Despesa(usuario, categoria, "teste", 10.00, new Date());
         when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
 
-        ResponseEntity<String> response = despesaService.editarDespesa(idDespesa, despesaRequestDTO, usuario);
+        ResponseEntity<Object> response = despesaService.editarDespesa(idDespesa, despesaRequestDTO, usuario);
 
         assertEquals(HttpStatus.OK, response.getStatusCode(), "O status HTTP deve ser OK");
-        assertEquals(MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO, response.getBody());
+        assertEquals(Map.of("success", MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO), response.getBody());
 
         verify(despesaRepository, times(1)).findById(idDespesa);
         verify(categoriaDespesaRepository, times(1)).findById(eq(despesaRequestDTO.idCategoria()));
@@ -196,10 +193,10 @@ class DespesaServiceTest {
         Despesa despesaExistente = new Despesa(usuario, categoria, "teste", 10.00, new Date());
         when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
 
-        ResponseEntity<String> response = despesaService.excluirDespesa(idDespesa);
+        ResponseEntity<Object> response = despesaService.excluirDespesa(idDespesa);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO, response.getBody());
+        assertEquals(Map.of("success",  MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO), response.getBody());
 
         verify(despesaRepository, times(1)).findById(idDespesa);
         verify(despesaRepository, times(1)).delete(despesaExistente);

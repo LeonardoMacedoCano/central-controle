@@ -17,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -43,10 +40,10 @@ public class TarefaServiceTest {
         CategoriaTarefa categoriaTarefa = new CategoriaTarefa();
         when(categoriaTarefaRepository.findById(1L)).thenReturn(Optional.of(categoriaTarefa));
 
-        ResponseEntity<String> response = tarefaService.adicionarTarefa(requestDTO, usuario);
+        ResponseEntity<Object> response = tarefaService.adicionarTarefa(requestDTO, usuario);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(MensagemConstantes.TAREFA_ADICIONADA_COM_SUCESSO, response.getBody());
+        assertEquals(Map.of("success", MensagemConstantes.TAREFA_ADICIONADA_COM_SUCESSO), response.getBody());
 
         verify(tarefaRepository, times(1)).save(any());
     }
@@ -121,10 +118,10 @@ public class TarefaServiceTest {
         Tarefa tarefaExistente = new Tarefa(usuario, categoria, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         when(tarefaRepository.findById(idTarefa)).thenReturn(Optional.of(tarefaExistente));
 
-        ResponseEntity<String> response = tarefaService.editarTarefa(idTarefa, tarefaRequestDTO, usuario);
+        ResponseEntity<Object> response = tarefaService.editarTarefa(idTarefa, tarefaRequestDTO, usuario);
 
         assertEquals(HttpStatus.OK, response.getStatusCode(), "O status HTTP deve ser OK");
-        assertEquals(MensagemConstantes.TAREFA_EDITADA_COM_SUCESSO, response.getBody());
+        assertEquals(Map.of("success", MensagemConstantes.TAREFA_EDITADA_COM_SUCESSO), response.getBody());
 
         verify(tarefaRepository, times(1)).findById(idTarefa);
         verify(categoriaTarefaRepository, times(1)).findById(eq(tarefaRequestDTO.idCategoria()));
