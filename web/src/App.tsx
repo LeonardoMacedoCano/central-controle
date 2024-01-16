@@ -17,11 +17,11 @@ import dark from './styles/themes/dark';
 const App: React.FC = () => {
   
   return (
-    <ProvedorMensagens>
-      <AuthProvider>
-        <BrowserRouter>
-          <ThemeProvider theme={dark}>
-            <GlobalStyles />
+    <ThemeProvider theme={dark}>
+      <ProvedorMensagens>
+        <AuthProvider>
+          <BrowserRouter>
+            <GlobalStyles />   
             {<RequireAuth>
               <>
                 <MainHeader />
@@ -32,10 +32,10 @@ const App: React.FC = () => {
                 </Routes>
               </>
             </RequireAuth>}
-          </ThemeProvider>
-        </BrowserRouter>
-      </AuthProvider>
-    </ProvedorMensagens>
+          </BrowserRouter>
+        </AuthProvider>
+      </ProvedorMensagens>
+    </ThemeProvider>
   )
 }
 

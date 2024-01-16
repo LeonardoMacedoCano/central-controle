@@ -10,12 +10,18 @@ const api = axios.create({
 const useApi = () => {
     const mensagens = usarMensagens();
 
-    const handleError = (error: any, mensagemPadrao: string) => {
+    const handleMensagemErro = (error: any, mensagemPadrao: string) => {
         if (error.response && error.response.data && error.response.data.error) {
             mensagens.exibirErro(error.response.data.error);
         } else {
             mensagens.exibirErro(mensagemPadrao);
         }
+    };
+
+    const handleMensagemSucesso = (response: any) => {
+      if (response && response.data && response.data.success) {
+          mensagens.exibirSucesso(response.data.success);
+      }
     };
 
     const request = async (
@@ -35,21 +41,25 @@ const useApi = () => {
       
           if (method === 'get') {
             const response = await api.get(url, { headers });
+            handleMensagemSucesso(response);
             return response.data;
           } else if (method === 'post') {
             const response = await api.post(url, data, { headers });
+            handleMensagemSucesso(response);
             return response.data;
           } else if (method === 'put') {
             const response = await api.put(url, data, { headers });
+            handleMensagemSucesso(response);
             return response.data;
           } else if (method === 'delete') {
             const response = await api.delete(url, { headers });
+            handleMensagemSucesso(response);
             return response.data;
           } else {
             throw `Método ${method} não configurado.`;
           }
         } catch (error: any) {
-          handleError(error, `Erro na requisição ${method.toUpperCase()} para ${url}`);
+          handleMensagemErro(error, `Erro na requisição ${method.toUpperCase()} para ${url}`);
           return undefined;
         }
       };

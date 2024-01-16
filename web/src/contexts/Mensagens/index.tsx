@@ -13,9 +13,9 @@ interface PropriedadesProvedorMensagens {
 }
 
 const ExibicaoMensagens: React.FC<{ tipo: 'erro' | 'sucesso'; mensagem: string }> = ({ tipo, mensagem }) => {
-  const classeNome = tipo === 'erro' ? styles.mensagemErro : styles.mensagemSucesso;
+  const ComponenteMensagem = tipo === 'erro' ? styles.MensagemErro : styles.MensagemSucesso;
 
-  return mensagem ? <div style={classeNome}>{mensagem}</div> : null;
+  return mensagem ? <ComponenteMensagem>{mensagem}</ComponenteMensagem> : null;
 };
 
 export const ProvedorMensagens: React.FC<PropriedadesProvedorMensagens> = ({ children }) => {
@@ -23,7 +23,7 @@ export const ProvedorMensagens: React.FC<PropriedadesProvedorMensagens> = ({ chi
   const [mensagemSucesso, setMensagemSucesso] = useState<string | null>(null);
 
   function limparMensagens() {
-    setMensagemErro(null); 
+    setMensagemErro(null);
     setMensagemSucesso(null);
   }
 
@@ -48,7 +48,7 @@ export const ProvedorMensagens: React.FC<PropriedadesProvedorMensagens> = ({ chi
   );
 };
 
-export const usarMensagens  = () => {
+export const usarMensagens = () => {
   const contexto = useContext(ContextoMensagens);
 
   if (!contexto) {
