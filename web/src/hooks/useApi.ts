@@ -1,117 +1,107 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Despesa } from '../types/Despesa';
 import { Tarefa } from '../types/Tarefa';
 import { usarMensagens } from '../contexts/Mensagens';
 
+interface ApiResponse {
+  success?: string;
+  error?: string;
+}
+
 const api = axios.create({
-    baseURL: 'http://localhost:8080',
+  baseURL: 'http://localhost:8080',
 });
 
 const useApi = () => {
-    const mensagens = usarMensagens();
+  const mensagens = usarMensagens();
 
-    const handleMensagemErro = (error: any, mensagemPadrao: string) => {
-        if (error.response && error.response.data && error.response.data.error) {
-            mensagens.exibirErro(error.response.data.error);
-        } else {
-            mensagens.exibirErro(mensagemPadrao);
-        }
-    };
+  const handleMensagemErro = (error: any, mensagemPadrao: string) => {
+    const errorMessage = error.response?.data?.error || mensagemPadrao;
+    mensagens.exibirErro(errorMessage);
+  };
 
-    const handleMensagemSucesso = (response: any) => {
-      if (response && response.data && response.data.success) {
-          mensagens.exibirSucesso(response.data.success);
+  const handleMensagemSucesso = (response: AxiosResponse<ApiResponse>) => {
+    const successMessage = response?.data?.success;
+    if (successMessage) {
+      mensagens.exibirSucesso(successMessage);
+    }
+  };
+
+  const request = async <T>(
+    method: 'get' | 'post' | 'put' | 'delete',
+    url: string,
+    token?: string,
+    data?: Record<string, any>
+  ): Promise<T | undefined> => {
+    try {
+      const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
+      let response: AxiosResponse<ApiResponse>;
+
+      switch (method) {
+        case 'get':
+          response = await api.get(url, { headers });
+          break;
+        case 'post':
+          response = await api.post(url, data, { headers });
+          break;
+        case 'put':
+          response = await api.put(url, data, { headers });
+          break;
+        case 'delete':
+          response = await api.delete(url, { headers });
+          break;
+        default:
+          throw `Método ${method} não configurado.`;
       }
-    };
 
-    const request = async (
-        method: 'get' | 'post' | 'put' | 'delete',
-        url: string,
-        token?: string,
-        data?: Record<string, any>
-      ) => {
-        try {
-          let headers: Record<string, string> = {};
-      
-          if (token && token !== '') {
-            headers = {
-              Authorization: `Bearer ${token}`,
-            };
-          }
-      
-          if (method === 'get') {
-            const response = await api.get(url, { headers });
-            handleMensagemSucesso(response);
-            return response.data;
-          } else if (method === 'post') {
-            const response = await api.post(url, data, { headers });
-            handleMensagemSucesso(response);
-            return response.data;
-          } else if (method === 'put') {
-            const response = await api.put(url, data, { headers });
-            handleMensagemSucesso(response);
-            return response.data;
-          } else if (method === 'delete') {
-            const response = await api.delete(url, { headers });
-            handleMensagemSucesso(response);
-            return response.data;
-          } else {
-            throw `Método ${method} não configurado.`;
-          }
-        } catch (error: any) {
-          handleMensagemErro(error, `Erro na requisição ${method.toUpperCase()} para ${url}`);
-          return undefined;
-        }
-      };
-      
+      handleMensagemSucesso(response);
+      return response.data as T;
+    } catch (error: any) {
+      handleMensagemErro(error, `Erro na requisição ${method.toUpperCase()} para ${url}`);
+      return undefined;
+    }
+  };
+
+  const despesaPayload = (data: Despesa) => ({
+    idCategoria: data.idCategoria,
+    descricao: data.descricao,
+    valor: data.valor,
+    data: data.data,
+  });
+
+  const tarefaPayload = (data: Tarefa) => ({
+    idCategoria: data.idCategoria,
+    titulo: data.titulo,
+    descricao: data.descricao,
+    dataPrazo: data.dataPrazo,
+    finalizado: data.finalizado,
+  });
 
   return {
     validateToken: async (token: string) => 
-        request('get', `auth/validateToken?token=${token}`),
-    login: async (username: string, senha: string) =>
-        request('post', 'auth/login', '', { username, senha }),
+      request<boolean>('get', `auth/validateToken?token=${token}`),
+    login: async (username: string, senha: string) => 
+      request<boolean>('post', 'auth/login', '', { username, senha }),
     listarDespesas: async (token: string, ano: number, mes: number) =>
-        request('get', `/despesa/listar?ano=${ano}&mes=${mes}`, token),
+      request<Despesa[]>('get', `/despesa/listar?ano=${ano}&mes=${mes}`, token),
     addDespesa: async (token: string, data: Despesa) =>
-        request('post', '/despesa/add', token, {
-            idCategoria: data.idCategoria,
-            descricao: data.descricao,
-            valor: data.valor,
-            data: data.data,
-        }),
+      request<Despesa>('post', '/despesa/add', token, despesaPayload(data)),
     editarDespesa: async (token: string, data: Despesa) =>
-        request('put', `/despesa/editar/${data.id}`, token, {
-            idCategoria: data.idCategoria,
-            descricao: data.descricao,
-            valor: data.valor,
-            data: data.data,
-        }),
+      request<Despesa>('put', `/despesa/editar/${data.id}`, token, despesaPayload(data)),
     excluirDespesa: async (token: string, id: number) =>
-        request('delete', `/despesa/excluir/${id}`, token),
+      request<boolean>('delete', `/despesa/excluir/${id}`, token),
     listarTodasCategoriasDespesa: async (token: string) =>
-        request('get', '/categoriadespesa/getTodasCategoriasDespesa', token),
+      request<string[]>('get', '/categoriadespesa/getTodasCategoriasDespesa', token),
     listarTarefas: async (token: string, ano: number, mes: number) =>
-        request('get', `/tarefa/listar?ano=${ano}&mes=${mes}`, token),
+      request<Tarefa[]>('get', `/tarefa/listar?ano=${ano}&mes=${mes}`, token),
     addTarefa: async (token: string, data: Tarefa) =>
-        request('post', '/tarefa/add', token, {
-            idCategoria: data.idCategoria,
-            titulo: data.titulo,
-            descricao: data.descricao,
-            dataPrazo: data.dataPrazo,
-            finalizado: data.finalizado,
-        }),
+      request<Tarefa>('post', '/tarefa/add', token, tarefaPayload(data)),
     editarTarefa: async (token: string, data: Tarefa) =>
-        request('put', `/tarefa/editar/${data.id}`, token, {
-            idCategoria: data.idCategoria,
-            titulo: data.titulo,
-            descricao: data.descricao,
-            dataPrazo: data.dataPrazo,
-            finalizado: data.finalizado,
-        }),
+      request<Tarefa>('put', `/tarefa/editar/${data.id}`, token, tarefaPayload(data)),
     excluirTarefa: async (token: string, id: number) =>
-        request('delete', `/tarefa/excluir/${id}`, token),
+      request<boolean>('delete', `/tarefa/excluir/${id}`, token),
     listarTodasCategoriasTarefa: async (token: string) =>
-        request('get', '/categoriatarefa/getTodasCategoriasTarefa', token),
+      request<string[]>('get', '/categoriatarefa/getTodasCategoriasTarefa', token),
   };
 };
 
