@@ -35,4 +35,8 @@ public class AuthorizationService implements UserDetailsService {
     public boolean usuarioJaCadastrado(String username) {
         return loadUserByUsername(username) != null;
     }
+
+    public boolean usuarioAtivo(String username) {
+        return loadUserByUsername(username).isEnabled();
+    }
 }

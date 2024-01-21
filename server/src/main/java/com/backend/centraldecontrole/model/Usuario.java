@@ -1,5 +1,6 @@
 package com.backend.centraldecontrole.model;
 
+import com.backend.centraldecontrole.util.BooleanToCharConverter;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,10 +32,15 @@ public class Usuario implements UserDetails {
     @Column(name = "datainclusao", nullable = false)
     private Date dataInclusao;
 
+    @Convert(converter = BooleanToCharConverter.class)
+    @Column(nullable = false)
+    private boolean ativo;
+
     public Usuario(String username, String senha, Date dataInclusao) {
         this.username = username;
         this.senha = senha;
         this.dataInclusao = dataInclusao;
+        this.ativo = true;
     }
 
     @Override
@@ -69,6 +75,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return ativo;
     }
 }

@@ -32,6 +32,8 @@ public class AuthenticationController {
     public ResponseEntity<Object> login(@RequestBody UsuarioRequestDTO data) {
         if (!authorizationService.usuarioJaCadastrado(data.username())) {
             throw new CustomException.UsuarioNaoEncontradoException();
+        } else if (!authorizationService.usuarioAtivo(data.username())) {
+            throw new CustomException.UsuarioDesativadoException();
         }
 
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.senha());

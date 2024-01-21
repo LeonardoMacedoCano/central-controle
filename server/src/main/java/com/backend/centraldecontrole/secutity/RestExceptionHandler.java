@@ -37,6 +37,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
+    @ExceptionHandler({CustomException.UsuarioDesativadoException.class})
+    protected ResponseEntity<Object> handleUsuarioDesativadoException(CustomException.UsuarioDesativadoException ex) {
+        return buildResponseEntity(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
     @ExceptionHandler({CustomException.GerarTokenException.class})
     protected ResponseEntity<Object> handleGerarTokenException(CustomException.GerarTokenException ex) {
         return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());

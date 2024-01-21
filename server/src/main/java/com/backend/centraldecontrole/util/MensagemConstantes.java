@@ -9,6 +9,7 @@ public class MensagemConstantes {
     public static final String USUARIO_NAO_ENCONTRADO = "Usuário não encontrado.";
     public static final String USUARIO_JA_CADASTRADO = "Usuário já cadastrado.";
     public static final String CREDENCIAIS_INVALIDAS = "Credenciais inválidas.";
+    public static final String USUARIO_DESATIVADO = "Usuário desativado.";
 
     public static final String DESPESA_NAO_ENCONTRADA_COM_ID = "Despesa não encontrada com o id: %d.";
     public static final String DESPESA_ADICIONADA_COM_SUCESSO = "Despesa adicionada com sucesso.";

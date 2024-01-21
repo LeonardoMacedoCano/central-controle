@@ -13,6 +13,12 @@ public class CustomException extends RuntimeException {
         }
     }
 
+    public static class UsuarioDesativadoException extends RuntimeException {
+        public UsuarioDesativadoException() {
+            super(MensagemConstantes.USUARIO_DESATIVADO);
+        }
+    }
+
     public static class GerarTokenException extends RuntimeException {
         public GerarTokenException() {
             super(MensagemConstantes.ERRO_GERAR_TOKEN);
