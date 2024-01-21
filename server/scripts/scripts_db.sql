@@ -2,8 +2,12 @@ CREATE TABLE usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    datainclusao DATETIME NOT NULL
+    datainclusao DATETIME NOT NULL,
+	ativo CHAR(1) DEFAULT 'S'
 );
+
+INSERT INTO usuario (id, username, senha, datainclusao, ativo)
+VALUES(1, 'user1', '$2a$10$2FQaqTlAqTPZz0n5eAbqpeap8Ac1vhW.hQhbidlpXBy08k5OAgM3a', '2024-01-01', 'S');
 
 CREATE TABLE categoriadespesa (
     id INT AUTO_INCREMENT PRIMARY KEY,
