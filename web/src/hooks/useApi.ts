@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Despesa } from '../types/Despesa';
 import { Tarefa } from '../types/Tarefa';
+import { Categoria } from '../types/Categoria';
 import { usarMensagens } from '../contexts/Mensagens';
 
 interface ApiResponse {
@@ -91,7 +92,7 @@ const useApi = () => {
     excluirDespesa: async (token: string, id: number) =>
       request<boolean>('delete', `/despesa/excluir/${id}`, token),
     listarTodasCategoriasDespesa: async (token: string) =>
-      request<string[]>('get', '/categoriadespesa/getTodasCategoriasDespesa', token),
+      request<Categoria[]>('get', '/categoriadespesa/getTodasCategoriasDespesa', token),
     listarTarefas: async (token: string, ano: number, mes: number) =>
       request<Tarefa[]>('get', `/tarefa/listar?ano=${ano}&mes=${mes}`, token),
     addTarefa: async (token: string, data: Tarefa) =>
@@ -101,7 +102,7 @@ const useApi = () => {
     excluirTarefa: async (token: string, id: number) =>
       request<boolean>('delete', `/tarefa/excluir/${id}`, token),
     listarTodasCategoriasTarefa: async (token: string) =>
-      request<string[]>('get', '/categoriatarefa/getTodasCategoriasTarefa', token),
+      request<Categoria[]>('get', '/categoriatarefa/getTodasCategoriasTarefa', token),
   };
 };
 
