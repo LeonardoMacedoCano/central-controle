@@ -3,13 +3,8 @@ import * as C from './styles';
 import { FaTrashAlt } from 'react-icons/fa';
 import { usarMensagens } from '../../contexts/Mensagens';
 import { Categoria } from '../../types/Categoria';
-import { InputField } from '../../types/InputField';
-import { 
-  FormFields, 
-  ValoresIniciaisForm, 
-  isFormFieldsDespesa, 
-  isFormFieldsTarefa, 
-} from '../../types/FormFields';
+import { InputField, ValidarCampo } from '../../types/InputField';
+import { FormFields, ValoresIniciaisForm } from '../../types/FormFields';
 
 type Props<T> = {
   campos: InputField[];
@@ -51,31 +46,21 @@ export const InputArea: React.FC<Props<FormFields>> = ({
       onDelete();
     }
   };
-  
+
   const handleAddOrEditEvent = () => {
-    const errors: string[] = campos
-      .filter(({ key }) => !formFields[key as keyof FormFields])
-      .map(({ label, key }) => {
-        if (key === 'valor' && isFormFieldsDespesa(formFields) && 'valor' in formFields && (formFields.valor as number) === 0) {
-          return `${label} vazio!`;
-        } else if (key === 'data' && isFormFieldsTarefa(formFields) && 'data' in formFields) {
-          const dateValue = formFields.data as string;
-          if (isNaN(new Date(dateValue).getTime())) {
-            return 'Data inválida!';
-          }
-        }
-        return '';
-      })
-      .filter((error) => error !== '');
-  
-    if (errors.length > 0) {
-      mensagens.exibirErro(errors.join('\n'));
+    const camposInvalidos = campos
+      .filter(({ key, required, type }) => !ValidarCampo(type, formFields[key as keyof FormFields], required))
+      .map(({ label }) => label);
+
+    if (camposInvalidos.length > 0) {
+      const errorMessage = `Campo${camposInvalidos.length > 1 ? 's' : ''} ${camposInvalidos.length > 1 ? `${camposInvalidos.slice(0, -1).join(', ')} e ${camposInvalidos.slice(-1)}` : camposInvalidos[0]} ${camposInvalidos.length > 1 ? 'estão' : 'está'} inválido${camposInvalidos.length > 1 ? 's' : ''}!`;
+      mensagens.exibirErro(errorMessage);
     } else {
       itemSelecionado === null ? onAdd(formFields) : onEdit(formFields);
       clearFields();
     }
   };
-  
+
   return (
     <C.Container>
       {campos.map(({ label, type, key }) => {
