@@ -37,11 +37,3 @@ export const ValoresIniciaisForm = (): FormFields => ({
   ...ValoresIniciaisDespesa(),
   ...ValoresIniciaisTarefa(),
 });
-
-export const isFormFieldsDespesa = (fields: FormFields): fields is FormFieldsDespesa => {
-  return 'valor' in fields;
-};
-
-export const isFormFieldsTarefa = (fields: FormFields): fields is FormFieldsTarefa => {
-  return 'titulo' in fields && 'finalizado' in fields;
-};
