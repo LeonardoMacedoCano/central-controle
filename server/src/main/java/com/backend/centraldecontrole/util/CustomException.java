@@ -55,4 +55,16 @@ public class CustomException extends RuntimeException {
         }
     }
 
+    public static class CategoriaIdeiaNaoEncontradaComIdException extends RuntimeException {
+        public CategoriaIdeiaNaoEncontradaComIdException(Long IDCategoriaIdeia) {
+            super(String.format(MensagemConstantes.CATEGORIA_IDEIA_NAO_ENCONTRADA_COM_ID, IDCategoriaIdeia));
+        }
+    }
+
+    public static class IdeiaNaoEncontradaComIdException extends RuntimeException {
+        public IdeiaNaoEncontradaComIdException(Long IDIdeia) {
+            super(String.format(MensagemConstantes.IDEIA_NAO_ENCONTRADA_COM_ID, IDIdeia));
+        }
+    }
+
 }

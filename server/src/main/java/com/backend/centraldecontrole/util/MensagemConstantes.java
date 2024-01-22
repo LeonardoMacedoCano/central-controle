@@ -24,4 +24,11 @@ public class MensagemConstantes {
     public static final String TAREFA_EXCLUIDA_COM_SUCESSO = "Tarefa excluída com sucesso.";
 
     public static final String CATEGORIA_TAREFA_NAO_ENCONTRADA_COM_ID = "Categoria de tarefa não encontrada com o id: %d.";
+
+    public static final String IDEIA_NAO_ENCONTRADA_COM_ID = "Ideia não encontrada com o id: %d.";
+    public static final String IDEIA_ADICIONADA_COM_SUCESSO = "Ideia adicionada com sucesso.";
+    public static final String IDEIA_EDITADA_COM_SUCESSO = "Ideia editada com sucesso.";
+    public static final String IDEIA_EXCLUIDA_COM_SUCESSO = "Ideia excluída com sucesso.";
+
+    public static final String CATEGORIA_IDEIA_NAO_ENCONTRADA_COM_ID = "Categoria de ideia não encontrada com o id: %d.";
 }

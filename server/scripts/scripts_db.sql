@@ -42,3 +42,21 @@ CREATE TABLE tarefa (
     FOREIGN KEY (idusuario) REFERENCES usuario(id),
     FOREIGN KEY (idcategoria) REFERENCES categoriatarefa(id)
 );
+
+CREATE TABLE categoriaideia (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(255)
+);
+
+CREATE TABLE ideia (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idusuario INT,
+    idcategoria INT,
+    titulo VARCHAR(255),
+    descricao VARCHAR(255),
+    datainclusao DATETIME,
+    dataprazo DATETIME,
+    finalizado CHAR,
+    FOREIGN KEY (idusuario) REFERENCES usuario(id),
+    FOREIGN KEY (idcategoria) REFERENCES categoriaideia(id)
+);
