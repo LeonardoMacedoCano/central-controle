@@ -43,7 +43,7 @@ const Sidebar: FC<SidebarProps> = ({ sidebar, setSidebar }) => {
         <LinkContainer to="/controletarefas">
           <SidebarItem Icon={FaCheckCircle} Text="Controle de tarefas" />
         </LinkContainer>
-        <LinkContainer to="/">
+        <LinkContainer to="/controleideias">
           <SidebarItem Icon={FaCommentMedical} Text="Controle de ideias" />
         </LinkContainer>
         <LinkContainer to="/">

@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { Home } from './pages/Home';
 import ControleDespesas from './pages/ControleDespesas';
 import ControleTarefas from './pages/ControleTarefas';
+import ControleIdeias from './pages/ControleIdeias';
 import MainHeader from './components/MainHeader';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './styles/GlobalStyles';
@@ -29,6 +30,7 @@ const App: React.FC = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/controledespesas" element={<ControleDespesas />} />
                   <Route path="/controletarefas" element={<ControleTarefas />} />
+                  <Route path="/controleideias" element={<ControleIdeias />} />
                 </Routes>
               </>
             </RequireAuth>}
