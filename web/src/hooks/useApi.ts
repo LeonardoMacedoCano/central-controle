@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { Despesa } from '../types/Despesa';
 import { Tarefa } from '../types/Tarefa';
+import { Ideia } from '../types/Ideia';
 import { Categoria } from '../types/Categoria';
 import { usarMensagens } from '../contexts/Mensagens';
 
@@ -78,6 +79,14 @@ const useApi = () => {
     finalizado: data.finalizado,
   });
 
+  const ideiaPayload = (data: Tarefa) => ({
+    idCategoria: data.idCategoria,
+    titulo: data.titulo,
+    descricao: data.descricao,
+    dataPrazo: data.dataPrazo,
+    finalizado: data.finalizado,
+  });
+
   return {
     validateToken: async (token: string) => 
       request<boolean>('get', `auth/validateToken?token=${token}`),
@@ -103,6 +112,16 @@ const useApi = () => {
       request<boolean>('delete', `/tarefa/excluir/${id}`, token),
     listarTodasCategoriasTarefa: async (token: string) =>
       request<Categoria[]>('get', '/categoriatarefa/getTodasCategoriasTarefa', token),
+    listarIdeias: async (token: string, ano: number, mes: number) =>
+      request<Ideia[]>('get', `/ideia/listar?ano=${ano}&mes=${mes}`, token),
+    addIdeia: async (token: string, data: Ideia) =>
+      request<Ideia>('post', '/ideia/add', token, ideiaPayload(data)),
+    editarIdeia: async (token: string, data: Ideia) =>
+      request<Ideia>('put', `/ideia/editar/${data.id}`, token, ideiaPayload(data)),
+    excluirIdeia: async (token: string, id: number) =>
+      request<boolean>('delete', `/ideia/excluir/${id}`, token),
+    listarTodasCategoriasIdeia: async (token: string) =>
+      request<Categoria[]>('get', '/categoriaideia/getTodasCategoriasIdeia', token),
   };
 };
 
