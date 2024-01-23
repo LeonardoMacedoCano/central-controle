@@ -22,7 +22,7 @@ const validarNumber = (value: any): boolean => typeof value === 'number';
 const validarDate = (value: any): boolean => !isNaN(new Date(value).getTime());
 const validarText = (value: any): boolean => typeof value === 'string';
 const validarSelect = (value: any): boolean => typeof value === 'string' && value.trim() !== '';
-const validarBoolean = (value: any): boolean => typeof value === 'boolean';
+const validarBoolean = (value: any): boolean => typeof value === 'boolean' || (typeof value === 'string' && ['true', 'false'].includes(value.toLowerCase()));
 
 export const ValidarCampo = (type: InputFieldType, value: any, required: boolean): boolean => {
   switch (type) {
