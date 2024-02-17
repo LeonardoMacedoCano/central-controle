@@ -1,0 +1,42 @@
+package br.com.lcano.centraldecontrole.service;
+
+import br.com.lcano.centraldecontrole.dto.UsuarioRequestDTO;
+import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
+import br.com.lcano.centraldecontrole.util.CustomException;
+import br.com.lcano.centraldecontrole.util.DateUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class AuthorizationService implements UserDetailsService {
+    @Autowired
+    UsuarioRepository usuarioRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return usuarioRepository.findByUsername(username);
+    }
+
+    public void cadastrarUsuario(UsuarioRequestDTO data) {
+        if (usuarioJaCadastrado(data.username())) {
+            throw new CustomException.UsuarioJaCadastradoException();
+        }
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
+        Usuario novoUsuario = new Usuario(data.username(), encryptedPassword, DateUtil.getDataAtual());
+        this.usuarioRepository.save(novoUsuario);
+    }
+
+    public boolean usuarioJaCadastrado(String username) {
+        return loadUserByUsername(username) != null;
+    }
+
+    public boolean usuarioAtivo(String username) {
+        return loadUserByUsername(username).isEnabled();
+    }
+}

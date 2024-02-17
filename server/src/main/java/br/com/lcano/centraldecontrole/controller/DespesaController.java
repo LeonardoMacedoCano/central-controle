@@ -1,0 +1,47 @@
+package br.com.lcano.centraldecontrole.controller;
+
+import br.com.lcano.centraldecontrole.dto.DespesaRequestDTO;
+import br.com.lcano.centraldecontrole.dto.DespesaResponseDTO;
+import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.service.DespesaService;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("despesa")
+public class DespesaController {
+    @Autowired
+    private DespesaService despesaService;
+
+    @PostMapping("/add")
+    public ResponseEntity<Object> adicionarDespesa(@RequestBody DespesaRequestDTO data, HttpServletRequest request) {
+        Usuario usuario = (Usuario) request.getAttribute("usuario");
+        return despesaService.adicionarDespesa(data, usuario);
+    }
+
+    @PutMapping("/editar/{idDespesa}")
+    public ResponseEntity<Object> editarDespesa(@PathVariable Long idDespesa, @RequestBody DespesaRequestDTO data, HttpServletRequest request) {
+        Usuario usuario = (Usuario) request.getAttribute("usuario");
+        return despesaService.editarDespesa(idDespesa, data, usuario);
+    }
+
+    @DeleteMapping("/excluir/{idDespesa}")
+    public ResponseEntity<Object> excluirDespesa(@PathVariable Long idDespesa) {
+        return despesaService.excluirDespesa(idDespesa);
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<DespesaResponseDTO>> listarDespesasDoUsuario(
+            HttpServletRequest request,
+            @RequestParam(name = "ano", required = false) Integer ano,
+            @RequestParam(name = "mes", required = false) Integer mes
+    ) {
+        Usuario usuario = (Usuario) request.getAttribute("usuario");
+        List<DespesaResponseDTO> despesasDTO = despesaService.listarDespesasDoUsuario(usuario.getId(), ano, mes);
+        return ResponseEntity.ok(despesasDTO);
+    }
+}
