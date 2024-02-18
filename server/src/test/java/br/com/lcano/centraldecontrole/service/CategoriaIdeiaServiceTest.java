@@ -1,7 +1,7 @@
 package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.CategoriaIdeiaResponseDTO;
-import br.com.lcano.centraldecontrole.model.CategoriaIdeia;
+import br.com.lcano.centraldecontrole.domain.CategoriaIdeia;
 import br.com.lcano.centraldecontrole.repository.CategoriaIdeiaRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

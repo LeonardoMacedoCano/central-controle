@@ -9,7 +9,11 @@ import java.util.List;
 @Service
 public class CategoriaIdeiaService {
     @Autowired
-    private CategoriaIdeiaRepository categoriaIdeiaRepository;
+    private final CategoriaIdeiaRepository categoriaIdeiaRepository;
+
+    public CategoriaIdeiaService(CategoriaIdeiaRepository categoriaIdeiaRepository) {
+        this.categoriaIdeiaRepository = categoriaIdeiaRepository;
+    }
 
     public List<CategoriaIdeiaResponseDTO> getTodasCategoriasIdeia() {
         return categoriaIdeiaRepository.findAll().stream().map(CategoriaIdeiaResponseDTO::new).toList();

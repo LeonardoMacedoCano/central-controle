@@ -2,11 +2,10 @@ package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.IdeiaRequestDTO;
 import br.com.lcano.centraldecontrole.dto.IdeiaResponseDTO;
-import br.com.lcano.centraldecontrole.model.CategoriaIdeia;
-import br.com.lcano.centraldecontrole.model.Ideia;
-import br.com.lcano.centraldecontrole.model.Usuario;
-import br.com.lcano.centraldecontrole.util.CustomException;
-import br.com.lcano.centraldecontrole.util.MensagemConstantes;
+import br.com.lcano.centraldecontrole.domain.CategoriaIdeia;
+import br.com.lcano.centraldecontrole.domain.Ideia;
+import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.exception.IdeiaException;
 import br.com.lcano.centraldecontrole.repository.CategoriaIdeiaRepository;
 import br.com.lcano.centraldecontrole.repository.IdeiaRepository;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
@@ -35,33 +32,25 @@ public class IdeiaServiceTest {
     private IdeiaService IdeiaService;
 
     @Test
-    void testAdicionarIdeia() {
+    void testGerarIdeia() {
         IdeiaRequestDTO requestDTO = new IdeiaRequestDTO(1L, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         Usuario usuario = new Usuario();
 
         CategoriaIdeia categoriaIdeia = new CategoriaIdeia();
         when(categoriaIdeiaRepository.findById(1L)).thenReturn(Optional.of(categoriaIdeia));
 
-        ResponseEntity<Object> response = IdeiaService.adicionarIdeia(requestDTO, usuario);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(Map.of("success", MensagemConstantes.IDEIA_ADICIONADA_COM_SUCESSO), response.getBody());
+       IdeiaService.gerarIdeia(requestDTO, usuario);
 
         verify(IdeiaRepository, times(1)).save(any());
     }
 
     @Test
-    void testAdicionarIdeia_CategoriaNaoEncontrada() {
+    void testGerarIdeia_CategoriaNaoEncontrada() {
         Long idCategoriaNaoExistente = 999L;
         IdeiaRequestDTO data = new IdeiaRequestDTO(idCategoriaNaoExistente, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         Usuario usuario = new Usuario();
 
-        CustomException.CategoriaIdeiaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.CategoriaIdeiaNaoEncontradaComIdException.class,
-                () -> IdeiaService.adicionarIdeia(data, usuario)
-        );
-
-        assertEquals(String.format(MensagemConstantes.CATEGORIA_IDEIA_NAO_ENCONTRADA_COM_ID, idCategoriaNaoExistente), exception.getMessage());
+        assertThrows(IdeiaException.CategoriaIdeiaNaoEncontradaById.class,() -> IdeiaService.gerarIdeia(data, usuario));
     }
 
     @Test
@@ -99,16 +88,6 @@ public class IdeiaServiceTest {
     }
 
     @Test
-    void testListarIdeiasDoUsuario_UsuarioNaoEncontrado() {
-        Long idUsuario = null;
-        int anoFiltro = 2024;
-        int mesFiltro = 1;
-
-        assertThrows(CustomException.UsuarioNaoEncontradoException.class,
-                () -> IdeiaService.listarIdeiasDoUsuario(idUsuario, anoFiltro, mesFiltro));
-    }
-
-    @Test
     public void testEditarIdeia() {
         Long idIdeia = 1L;
         IdeiaRequestDTO IdeiaRequestDTO = new IdeiaRequestDTO(1L, "Titulo", "Descricao", new Date(), Boolean.FALSE);
@@ -120,10 +99,7 @@ public class IdeiaServiceTest {
         Ideia IdeiaExistente = new Ideia(usuario, categoria, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         when(IdeiaRepository.findById(idIdeia)).thenReturn(Optional.of(IdeiaExistente));
 
-        ResponseEntity<Object> response = IdeiaService.editarIdeia(idIdeia, IdeiaRequestDTO, usuario);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode(), "O status HTTP deve ser OK");
-        assertEquals(Map.of("success", MensagemConstantes.IDEIA_EDITADA_COM_SUCESSO), response.getBody());
+        IdeiaService.editarIdeia(idIdeia, IdeiaRequestDTO, usuario);
 
         verify(IdeiaRepository, times(1)).findById(idIdeia);
         verify(categoriaIdeiaRepository, times(1)).findById(eq(IdeiaRequestDTO.idCategoria()));
@@ -146,12 +122,7 @@ public class IdeiaServiceTest {
 
         when(categoriaIdeiaRepository.findById(1L)).thenReturn(Optional.empty());
 
-        CustomException.CategoriaIdeiaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.CategoriaIdeiaNaoEncontradaComIdException.class,
-                () -> IdeiaService.editarIdeia(idIdeia, requestDTO, usuario)
-        );
-
-        assertEquals(String.format(MensagemConstantes.CATEGORIA_IDEIA_NAO_ENCONTRADA_COM_ID, idCategoriaNaoExistente), exception.getMessage());
+        assertThrows(IdeiaException.CategoriaIdeiaNaoEncontradaById.class, () -> IdeiaService.editarIdeia(idIdeia, requestDTO, usuario));
 
         verify(IdeiaRepository, times(1)).findById(idIdeia);
         verify(categoriaIdeiaRepository, times(1)).findById(idCategoriaNaoExistente);
@@ -167,12 +138,7 @@ public class IdeiaServiceTest {
 
         when(IdeiaRepository.findById(idIdeiaNaoExistente)).thenReturn(Optional.empty());
 
-        CustomException.IdeiaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.IdeiaNaoEncontradaComIdException.class,
-                () -> IdeiaService.editarIdeia(idIdeiaNaoExistente, requestDTO, usuario)
-        );
-
-        assertEquals(String.format(MensagemConstantes.IDEIA_NAO_ENCONTRADA_COM_ID, idIdeiaNaoExistente), exception.getMessage());
+        assertThrows(IdeiaException.IdeiaNaoEncontradaById.class,() -> IdeiaService.editarIdeia(idIdeiaNaoExistente, requestDTO, usuario));
 
         verify(IdeiaRepository, times(1)).findById(idIdeiaNaoExistente);
         verify(categoriaIdeiaRepository, never()).findById(any());

@@ -1,19 +1,18 @@
-package br.com.lcano.centraldecontrole.model;
+package br.com.lcano.centraldecontrole.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.Date;
 
 @Table(name = "despesa")
-@Entity(name = "despesa")
-@Getter
-@Setter
+@Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
+@ToString(of = "id")
 public class Despesa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

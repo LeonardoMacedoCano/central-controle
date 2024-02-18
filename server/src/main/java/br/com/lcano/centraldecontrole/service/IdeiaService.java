@@ -2,16 +2,14 @@ package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.IdeiaRequestDTO;
 import br.com.lcano.centraldecontrole.dto.IdeiaResponseDTO;
-import br.com.lcano.centraldecontrole.model.CategoriaIdeia;
-import br.com.lcano.centraldecontrole.model.Ideia;
-import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.domain.CategoriaIdeia;
+import br.com.lcano.centraldecontrole.domain.Ideia;
+import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.exception.IdeiaException;
 import br.com.lcano.centraldecontrole.repository.CategoriaIdeiaRepository;
 import br.com.lcano.centraldecontrole.repository.IdeiaRepository;
-import br.com.lcano.centraldecontrole.util.CustomException;
-import br.com.lcano.centraldecontrole.util.CustomSuccess;
-import br.com.lcano.centraldecontrole.util.MensagemConstantes;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -25,53 +23,54 @@ import java.util.stream.Collectors;
 @Service
 public class IdeiaService {
     @Autowired
-    private IdeiaRepository ideiaRepository;
+    private final IdeiaRepository ideiaRepository;
     @Autowired
-    private CategoriaIdeiaRepository categoriaIdeiaRepository;
+    private final CategoriaIdeiaRepository categoriaIdeiaRepository;
 
-    public ResponseEntity<Object> adicionarIdeia(IdeiaRequestDTO data, Usuario usuario) {
-        return getCategoriaPorId(data.idCategoria())
-                .map(categoria -> {
-                    Ideia novaIdeia = new Ideia(usuario, categoria, data.titulo(), data.descricao(), data.dataPrazo(), data.finalizado());
-                    salvarIdeia(novaIdeia);
-                    return CustomSuccess.buildResponseEntity(MensagemConstantes.IDEIA_ADICIONADA_COM_SUCESSO);
-                })
-                .orElseThrow(() -> new CustomException.CategoriaIdeiaNaoEncontradaComIdException(data.idCategoria()));
+    public IdeiaService(IdeiaRepository ideiaRepository, CategoriaIdeiaRepository categoriaIdeiaRepository) {
+        this.ideiaRepository = ideiaRepository;
+        this.categoriaIdeiaRepository = categoriaIdeiaRepository;
     }
 
-    public ResponseEntity<Object> editarIdeia(Long idIdeia, IdeiaRequestDTO data, Usuario usuario) {
-        return ideiaRepository.findById(idIdeia)
-                .map(IdeiaExistente -> getCategoriaPorId(data.idCategoria())
-                        .map(categoria -> {
-                            IdeiaExistente.setUsuario(usuario);
-                            IdeiaExistente.setCategoria(categoria);
-                            IdeiaExistente.setTitulo(data.titulo());
-                            IdeiaExistente.setDescricao(data.descricao());
-                            IdeiaExistente.setDataPrazo(data.dataPrazo());
-                            IdeiaExistente.setFinalizado(data.finalizado());
-                            salvarIdeia(IdeiaExistente);
-                            return CustomSuccess.buildResponseEntity(MensagemConstantes.IDEIA_EDITADA_COM_SUCESSO);
-                        })
-                        .orElseThrow(() -> new CustomException.CategoriaIdeiaNaoEncontradaComIdException(data.idCategoria())))
-                .orElseThrow(() -> new CustomException.IdeiaNaoEncontradaComIdException(idIdeia));
+    @Transactional
+    public void gerarIdeia(IdeiaRequestDTO data, Usuario usuario) {
+        CategoriaIdeia categoria = getCategoriaPorId(data.idCategoria())
+            .orElseThrow(() -> new IdeiaException.CategoriaIdeiaNaoEncontradaById(data.idCategoria()));
+
+        Ideia novaIdeia = new Ideia(usuario, categoria, data.titulo(), data.descricao(), data.dataPrazo(), data.finalizado());
+        salvarIdeia(novaIdeia);
     }
 
-    public ResponseEntity<Object> excluirIdeia(Long idIdeia) {
-        Optional<Ideia> IdeiaOptional = ideiaRepository.findById(idIdeia);
+    @Transactional
+    public void editarIdeia(Long idIdeia, IdeiaRequestDTO data, Usuario usuario) {
+        Ideia ideiaExistente = ideiaRepository.findById(idIdeia)
+            .orElseThrow(() -> new IdeiaException.IdeiaNaoEncontradaById(idIdeia));
 
-        if (IdeiaOptional.isPresent()) {
-            ideiaRepository.delete(IdeiaOptional.get());
-            return CustomSuccess.buildResponseEntity(MensagemConstantes.IDEIA_EXCLUIDA_COM_SUCESSO);
-        } else {
-            throw new CustomException.IdeiaNaoEncontradaComIdException(idIdeia);
-        }
+        CategoriaIdeia categoria = getCategoriaPorId(data.idCategoria())
+            .orElseThrow(() -> new IdeiaException.CategoriaIdeiaNaoEncontradaById(data.idCategoria()));
+
+        ideiaExistente.setUsuario(usuario);
+        ideiaExistente.setCategoria(categoria);
+        ideiaExistente.setTitulo(data.titulo());
+        ideiaExistente.setDescricao(data.descricao());
+        ideiaExistente.setDataPrazo(data.dataPrazo());
+        ideiaExistente.setFinalizado(data.finalizado());
+
+        salvarIdeia(ideiaExistente);
+    }
+
+    @Transactional
+    public void excluirIdeia(Long idIdeia) {
+        ideiaRepository.findById(idIdeia)
+            .ifPresentOrElse(
+                    ideiaRepository::delete,
+                () -> {
+                    throw new IdeiaException.IdeiaNaoEncontradaById(idIdeia);
+                }
+            );
     }
 
     public List<IdeiaResponseDTO> listarIdeiasDoUsuario(Long idUsuario, Integer ano, Integer mes) {
-        if (idUsuario == null) {
-            throw new CustomException.UsuarioNaoEncontradoException();
-        }
-
         List<Ideia> Ideias;
 
         if (ano != null && mes != null) {

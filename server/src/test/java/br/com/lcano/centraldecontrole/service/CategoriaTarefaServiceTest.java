@@ -1,7 +1,7 @@
 package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.CategoriaTarefaResponseDTO;
-import br.com.lcano.centraldecontrole.model.CategoriaTarefa;
+import br.com.lcano.centraldecontrole.domain.CategoriaTarefa;
 import br.com.lcano.centraldecontrole.repository.CategoriaTarefaRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.repository;
 
-import br.com.lcano.centraldecontrole.model.Ideia;
+import br.com.lcano.centraldecontrole.domain.Ideia;
 import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Date;
 import java.util.List;

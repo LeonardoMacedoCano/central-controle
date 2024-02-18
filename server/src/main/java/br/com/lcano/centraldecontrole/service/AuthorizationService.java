@@ -1,9 +1,9 @@
 package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.UsuarioRequestDTO;
-import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
-import br.com.lcano.centraldecontrole.util.CustomException;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +24,7 @@ public class AuthorizationService implements UserDetailsService {
 
     public void cadastrarUsuario(UsuarioRequestDTO data) {
         if (usuarioJaCadastrado(data.username())) {
-            throw new CustomException.UsuarioJaCadastradoException();
+            throw new UsuarioException.UsuarioJaCadastrado();
         }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());

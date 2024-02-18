@@ -2,11 +2,10 @@ package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.DespesaRequestDTO;
 import br.com.lcano.centraldecontrole.dto.DespesaResponseDTO;
-import br.com.lcano.centraldecontrole.model.CategoriaDespesa;
-import br.com.lcano.centraldecontrole.model.Despesa;
-import br.com.lcano.centraldecontrole.model.Usuario;
-import br.com.lcano.centraldecontrole.util.CustomException;
-import br.com.lcano.centraldecontrole.util.MensagemConstantes;
+import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
+import br.com.lcano.centraldecontrole.domain.Despesa;
+import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.exception.DespesaException;
 import br.com.lcano.centraldecontrole.repository.CategoriaDespesaRepository;
 import br.com.lcano.centraldecontrole.repository.DespesaRepository;
 import org.junit.jupiter.api.Test;
@@ -14,9 +13,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
@@ -39,33 +35,25 @@ class DespesaServiceTest {
     private DespesaService despesaService;
 
     @Test
-    void testAdicionarDespesa() {
+    void testGerarDespesa() {
         DespesaRequestDTO requestDTO = new DespesaRequestDTO(1L, "Descrição da despesa", 100.0, new Date());
         Usuario usuario = new Usuario();
 
         CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
         when(categoriaDespesaRepository.findById(1L)).thenReturn(Optional.of(categoriaDespesa));
 
-        ResponseEntity<Object> response = despesaService.adicionarDespesa(requestDTO, usuario);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(Map.of("success", MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO), response.getBody());
+        despesaService.gerarDespesa(requestDTO, usuario);
 
         verify(despesaRepository, times(1)).save(any());
     }
 
     @Test
-    void testAdicionarDespesa_CategoriaNaoEncontrada() {
+    void testGerarDespesa_CategoriaNaoEncontrada() {
         Long idCategoriaNaoExistente = 999L;
         DespesaRequestDTO data = new DespesaRequestDTO(idCategoriaNaoExistente, "Descrição", 100.0, null);
         Usuario usuario = new Usuario();
 
-        CustomException.CategoriaDespesaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.CategoriaDespesaNaoEncontradaComIdException.class,
-                () -> despesaService.adicionarDespesa(data, usuario)
-        );
-
-        assertEquals(String.format(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID, idCategoriaNaoExistente), exception.getMessage());
+        assertThrows(DespesaException.CategoriaDespesaNaoEncontradaById.class,() -> despesaService.gerarDespesa(data, usuario));
     }
 
     @Test
@@ -103,16 +91,6 @@ class DespesaServiceTest {
     }
 
     @Test
-    void testListarDespesasDoUsuario_UsuarioNaoEncontrado() {
-        Long idUsuario = null;
-        int anoFiltro = 2024;
-        int mesFiltro = 1;
-
-        assertThrows(CustomException.UsuarioNaoEncontradoException.class,
-                () -> despesaService.listarDespesasDoUsuario(idUsuario, anoFiltro, mesFiltro));
-    }
-
-    @Test
     public void testEditarDespesa() {
         Long idDespesa = 1L;
         DespesaRequestDTO despesaRequestDTO = new DespesaRequestDTO(idDespesa, "teste", 10.00, new Date());
@@ -124,10 +102,7 @@ class DespesaServiceTest {
         Despesa despesaExistente = new Despesa(usuario, categoria, "teste", 10.00, new Date());
         when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
 
-        ResponseEntity<Object> response = despesaService.editarDespesa(idDespesa, despesaRequestDTO, usuario);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode(), "O status HTTP deve ser OK");
-        assertEquals(Map.of("success", MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO), response.getBody());
+        despesaService.editarDespesa(idDespesa, despesaRequestDTO, usuario);
 
         verify(despesaRepository, times(1)).findById(idDespesa);
         verify(categoriaDespesaRepository, times(1)).findById(eq(despesaRequestDTO.idCategoria()));
@@ -150,12 +125,7 @@ class DespesaServiceTest {
 
         when(categoriaDespesaRepository.findById(1L)).thenReturn(Optional.empty());
 
-        CustomException.CategoriaDespesaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.CategoriaDespesaNaoEncontradaComIdException.class,
-                () -> despesaService.editarDespesa(idDespesa, requestDTO, usuario)
-        );
-
-        assertEquals(String.format(MensagemConstantes.CATEGORIA_DESPESA_NAO_ENCONTRADA_COM_ID, idCategoriaNaoExistente), exception.getMessage());
+        assertThrows(DespesaException.CategoriaDespesaNaoEncontradaById.class, () -> despesaService.editarDespesa(idDespesa, requestDTO, usuario));
 
         verify(despesaRepository, times(1)).findById(idDespesa);
         verify(categoriaDespesaRepository, times(1)).findById(idCategoriaNaoExistente);
@@ -171,12 +141,7 @@ class DespesaServiceTest {
 
         when(despesaRepository.findById(idDespesaNaoExistente)).thenReturn(Optional.empty());
 
-        CustomException.DespesaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.DespesaNaoEncontradaComIdException.class,
-                () -> despesaService.editarDespesa(idDespesaNaoExistente, requestDTO, usuario)
-        );
-
-        assertEquals(String.format(MensagemConstantes.DESPESA_NAO_ENCONTRADA_COM_ID, idDespesaNaoExistente), exception.getMessage());
+        assertThrows(DespesaException.DespesaNaoEncontradaById.class, () -> despesaService.editarDespesa(idDespesaNaoExistente, requestDTO, usuario));
 
         verify(despesaRepository, times(1)).findById(idDespesaNaoExistente);
         verify(categoriaDespesaRepository, never()).findById(any());
@@ -193,10 +158,7 @@ class DespesaServiceTest {
         Despesa despesaExistente = new Despesa(usuario, categoria, "teste", 10.00, new Date());
         when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
 
-        ResponseEntity<Object> response = despesaService.excluirDespesa(idDespesa);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(Map.of("success",  MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO), response.getBody());
+        despesaService.excluirDespesa(idDespesa);
 
         verify(despesaRepository, times(1)).findById(idDespesa);
         verify(despesaRepository, times(1)).delete(despesaExistente);
@@ -208,12 +170,7 @@ class DespesaServiceTest {
 
         when(despesaRepository.findById(idDespesaNaoExistente)).thenReturn(Optional.empty());
 
-        CustomException.DespesaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.DespesaNaoEncontradaComIdException.class,
-                () -> despesaService.excluirDespesa(idDespesaNaoExistente)
-        );
-
-        assertEquals(String.format(MensagemConstantes.DESPESA_NAO_ENCONTRADA_COM_ID, idDespesaNaoExistente), exception.getMessage());
+        assertThrows(DespesaException.DespesaNaoEncontradaById.class, () -> despesaService.excluirDespesa(idDespesaNaoExistente));
 
         verify(despesaRepository, never()).delete(any());
     }

@@ -2,18 +2,15 @@ package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.DespesaRequestDTO;
 import br.com.lcano.centraldecontrole.dto.DespesaResponseDTO;
-import br.com.lcano.centraldecontrole.model.CategoriaDespesa;
-import br.com.lcano.centraldecontrole.model.Despesa;
-import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
+import br.com.lcano.centraldecontrole.domain.Despesa;
+import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.exception.DespesaException;
 import br.com.lcano.centraldecontrole.repository.CategoriaDespesaRepository;
 import br.com.lcano.centraldecontrole.repository.DespesaRepository;
-import br.com.lcano.centraldecontrole.util.CustomException;
-import br.com.lcano.centraldecontrole.util.CustomSuccess;
-import br.com.lcano.centraldecontrole.util.MensagemConstantes;
-import org.springframework.http.ResponseEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -27,53 +24,52 @@ import java.util.stream.Collectors;
 @Service
 public class DespesaService {
     @Autowired
-    private DespesaRepository despesaRepository;
+    private final DespesaRepository despesaRepository;
     @Autowired
-    private CategoriaDespesaRepository categoriaDespesaRepository;
+    private final CategoriaDespesaRepository categoriaDespesaRepository;
 
-    public ResponseEntity<Object> adicionarDespesa(DespesaRequestDTO data, Usuario usuario) {
-        return getCategoriaPorId(data.idCategoria())
-            .map(categoria -> {
-                Despesa novaDespesa = new Despesa(usuario, categoria, data.descricao(), data.valor(), data.data());
-                salvarDespesa(novaDespesa);
-                return CustomSuccess.buildResponseEntity(MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO);
-            })
-            .orElseThrow(() -> new CustomException.CategoriaDespesaNaoEncontradaComIdException(data.idCategoria()));
+    public DespesaService(DespesaRepository despesaRepository, CategoriaDespesaRepository categoriaDespesaRepository) {
+        this.despesaRepository = despesaRepository;
+        this.categoriaDespesaRepository = categoriaDespesaRepository;
     }
 
+    @Transactional
+    public void gerarDespesa(DespesaRequestDTO data, Usuario usuario) {
+        CategoriaDespesa categoria = getCategoriaPorId(data.idCategoria())
+            .orElseThrow(() -> new DespesaException.CategoriaDespesaNaoEncontradaById(data.idCategoria()));
 
-    public ResponseEntity<Object> editarDespesa(Long idDespesa, DespesaRequestDTO data, Usuario usuario) {
-        return despesaRepository.findById(idDespesa)
-            .map(despesaExistente -> getCategoriaPorId(data.idCategoria())
-                .map(categoria -> {
-                    despesaExistente.setCategoria(categoria);
-                    despesaExistente.setDescricao(data.descricao());
-                    despesaExistente.setValor(data.valor());
-                    despesaExistente.setData(data.data());
-                    despesaExistente.setUsuario(usuario);
-                    salvarDespesa(despesaExistente);
-                    return CustomSuccess.buildResponseEntity(MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO);
-                })
-                .orElseThrow(() -> new CustomException.CategoriaDespesaNaoEncontradaComIdException(data.idCategoria())))
-            .orElseThrow(() -> new CustomException.DespesaNaoEncontradaComIdException(idDespesa));
+        Despesa novaDespesa = new Despesa(usuario, categoria, data.descricao(), data.valor(), data.data());
+        salvarDespesa(novaDespesa);
     }
 
-    public ResponseEntity<Object> excluirDespesa(Long idDespesa) {
-        Optional<Despesa> despesaOptional = despesaRepository.findById(idDespesa);
+    @Transactional
+    public void editarDespesa(Long idDespesa, DespesaRequestDTO data, Usuario usuario) {
+        Despesa despesaExistente = despesaRepository.findById(idDespesa)
+            .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaById(idDespesa));
 
-        if (despesaOptional.isPresent()) {
-            despesaRepository.delete(despesaOptional.get());
-            return CustomSuccess.buildResponseEntity(MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO);
-        } else {
-            throw new CustomException.DespesaNaoEncontradaComIdException(idDespesa);
-        }
+        CategoriaDespesa categoria = getCategoriaPorId(data.idCategoria())
+            .orElseThrow(() -> new DespesaException.CategoriaDespesaNaoEncontradaById(data.idCategoria()));
+
+        despesaExistente.setCategoria(categoria);
+        despesaExistente.setDescricao(data.descricao());
+        despesaExistente.setValor(data.valor());
+        despesaExistente.setData(data.data());
+        despesaExistente.setUsuario(usuario);
+
+        salvarDespesa(despesaExistente);
+    }
+
+    @Transactional
+    public void excluirDespesa(Long idDespesa) {
+        despesaRepository.findById(idDespesa)
+            .ifPresentOrElse(
+                    despesaRepository::delete,
+                () -> {
+                    throw new DespesaException.DespesaNaoEncontradaById(idDespesa);
+            });
     }
 
     public List<DespesaResponseDTO> listarDespesasDoUsuario(Long idUsuario, Integer ano, Integer mes) {
-        if (idUsuario == null) {
-            throw new CustomException.UsuarioNaoEncontradoException();
-        }
-
         List<Despesa> despesas;
 
         if (ano != null && mes != null) {

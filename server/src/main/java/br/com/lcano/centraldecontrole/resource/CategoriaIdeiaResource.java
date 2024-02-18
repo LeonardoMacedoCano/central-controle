@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.controller;
+package br.com.lcano.centraldecontrole.resource;
 
 import br.com.lcano.centraldecontrole.dto.CategoriaIdeiaResponseDTO;
 import br.com.lcano.centraldecontrole.service.CategoriaIdeiaService;
@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("categoriaideia")
-public class CategoriaIdeiaController {
+@RequestMapping("/api/categoriaideia")
+public class CategoriaIdeiaResource {
     @Autowired
-    private CategoriaIdeiaService categoriaIdeiaService;
+    private final CategoriaIdeiaService categoriaIdeiaService;
 
-    @GetMapping("/getTodasCategoriasIdeia")
+    public CategoriaIdeiaResource(CategoriaIdeiaService categoriaIdeiaService) {
+        this.categoriaIdeiaService = categoriaIdeiaService;
+    }
+
+    @GetMapping
     public ResponseEntity<List<CategoriaIdeiaResponseDTO>> getTodasCategoriasIdeia() {
         List<CategoriaIdeiaResponseDTO> categoriasIdeia = categoriaIdeiaService.getTodasCategoriasIdeia();
         return ResponseEntity.ok(categoriasIdeia);

@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.repository;
 
-import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.domain.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;

@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.secutity;
 
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
+import br.com.lcano.centraldecontrole.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -11,16 +12,21 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
     @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+
+    public TokenInterceptor(TokenService tokenService, UsuarioRepository usuarioRepository) {
+        this.tokenService = tokenService;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Override
     public boolean preHandle(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler) throws Exception {
         String path = request.getRequestURI().substring(request.getContextPath().length());
 
-        if (path.startsWith("/auth") && (path.length() == 5 || path.charAt(5) == '/')) {
+        if (path.startsWith("/api/auth") && (path.length() == 9 || path.charAt(9) == '/')) {
             return true;
         }
 

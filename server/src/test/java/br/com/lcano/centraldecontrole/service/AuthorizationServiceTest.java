@@ -1,8 +1,8 @@
 package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.UsuarioRequestDTO;
-import br.com.lcano.centraldecontrole.model.Usuario;
-import br.com.lcano.centraldecontrole.util.CustomException;
+import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -55,7 +55,7 @@ public class AuthorizationServiceTest {
 
         UsuarioRequestDTO usuarioRequestDTO = new UsuarioRequestDTO("usuario ja cadastrado", "senha123");
 
-        assertThrows(CustomException.UsuarioJaCadastradoException.class, () -> authorizationService.cadastrarUsuario(usuarioRequestDTO));
+        assertThrows(UsuarioException.UsuarioJaCadastrado.class, () -> authorizationService.cadastrarUsuario(usuarioRequestDTO));
 
         Mockito.verify(usuarioRepository, Mockito.never()).save(Mockito.any(Usuario.class));
     }

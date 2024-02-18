@@ -1,8 +1,10 @@
 package br.com.lcano.centraldecontrole.secutity;
 
+import br.com.lcano.centraldecontrole.exception.DespesaException;
+import br.com.lcano.centraldecontrole.exception.IdeiaException;
+import br.com.lcano.centraldecontrole.exception.TarefaException;
+import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import br.com.lcano.centraldecontrole.util.CustomException;
-import br.com.lcano.centraldecontrole.util.MensagemConstantes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,62 +15,74 @@ import java.util.Map;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final String MSG_ERRO_GENERICO = "Ocorreu um erro interno no servidor.";
+
     private ResponseEntity<Object> buildResponseEntity(HttpStatus status, String mensagem) {
         return ResponseEntity.status(status).body(Map.of("error", mensagem));
     }
 
     @ExceptionHandler({Exception.class})
     protected ResponseEntity<Object> handleGenericException(Exception ex) {
-        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, MensagemConstantes.ERRO_GENERICO);
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, MSG_ERRO_GENERICO);
     }
 
     @ExceptionHandler({BadCredentialsException.class, JWTVerificationException.class})
     protected ResponseEntity<Object> handleInvalidCredentials(RuntimeException ex) {
-        return buildResponseEntity(HttpStatus.UNAUTHORIZED, MensagemConstantes.CREDENCIAIS_INVALIDAS);
+        return buildResponseEntity(HttpStatus.UNAUTHORIZED, UsuarioException.MSG_CREDENCIAIS_INVALIDAS);
     }
 
-    @ExceptionHandler({CustomException.UsuarioJaCadastradoException.class})
-    protected ResponseEntity<Object> handleUsuarioJaCadastrado(CustomException.UsuarioJaCadastradoException ex) {
+    @ExceptionHandler({UsuarioException.UsuarioJaCadastrado.class})
+    protected ResponseEntity<Object> handleUsuarioJaCadastrado(UsuarioException.UsuarioJaCadastrado ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler({CustomException.UsuarioNaoEncontradoException.class})
-    protected ResponseEntity<Object> handleUsuarioNaoEncontradoException(CustomException.UsuarioNaoEncontradoException ex) {
+    @ExceptionHandler({UsuarioException.UsuarioNaoEncontrado.class})
+    protected ResponseEntity<Object> handleUsuarioNaoEncontrado(UsuarioException.UsuarioNaoEncontrado ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({CustomException.UsuarioDesativadoException.class})
-    protected ResponseEntity<Object> handleUsuarioDesativadoException(CustomException.UsuarioDesativadoException ex) {
+    @ExceptionHandler({UsuarioException.UsuarioDesativado.class})
+    protected ResponseEntity<Object> handleUsuarioDesativado(UsuarioException.UsuarioDesativado ex) {
         return buildResponseEntity(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
-    @ExceptionHandler({CustomException.GerarTokenException.class})
-    protected ResponseEntity<Object> handleGerarTokenException(CustomException.GerarTokenException ex) {
+    @ExceptionHandler({UsuarioException.ErroGerarToken.class})
+    protected ResponseEntity<Object> handleErroGerarToken(UsuarioException.ErroGerarToken ex) {
         return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
-    @ExceptionHandler({CustomException.TokenExpiradoOuInvalidoException.class})
-    protected ResponseEntity<Object> handleTokenExpiradoOuInvalidoException(CustomException.TokenExpiradoOuInvalidoException ex) {
+    @ExceptionHandler({UsuarioException.TokenExpiradoOuInvalido.class})
+    protected ResponseEntity<Object> handleTokenExpiradoOuInvalido(UsuarioException.TokenExpiradoOuInvalido ex) {
         return buildResponseEntity(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
-    @ExceptionHandler({CustomException.CategoriaDespesaNaoEncontradaComIdException.class})
-    protected ResponseEntity<Object> handleCategoriaDespesaNaoEncontradaComIdException(CustomException.CategoriaDespesaNaoEncontradaComIdException ex) {
+    @ExceptionHandler({DespesaException.CategoriaDespesaNaoEncontradaById.class})
+    protected ResponseEntity<Object> handleCategoriaDespesaNaoEncontradaById(DespesaException.CategoriaDespesaNaoEncontradaById ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({CustomException.DespesaNaoEncontradaComIdException.class})
-    protected ResponseEntity<Object> handleDespesaNaoEncontradaComIdException(CustomException.DespesaNaoEncontradaComIdException ex) {
+    @ExceptionHandler({DespesaException.DespesaNaoEncontradaById.class})
+    protected ResponseEntity<Object> handleDespesaNaoEncontradaById(DespesaException.DespesaNaoEncontradaById ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({CustomException.CategoriaTarefaNaoEncontradaComIdException.class})
-    protected ResponseEntity<Object> handleCategoriaTarefaNaoEncontradaComIdException(CustomException.CategoriaTarefaNaoEncontradaComIdException ex) {
+    @ExceptionHandler({TarefaException.CategoriaTarefaNaoEncontradaById.class})
+    protected ResponseEntity<Object> handleCategoriaTarefaNaoEncontradaById(TarefaException.CategoriaTarefaNaoEncontradaById ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({CustomException.TarefaNaoEncontradaComIdException.class})
-    protected ResponseEntity<Object> handleTarefaNaoEncontradaComIdException(CustomException.TarefaNaoEncontradaComIdException ex) {
+    @ExceptionHandler({TarefaException.TarefaNaoEncontradaById.class})
+    protected ResponseEntity<Object> handleTarefaNaoEncontradaById(TarefaException.TarefaNaoEncontradaById ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({IdeiaException.CategoriaIdeiaNaoEncontradaById.class})
+    protected ResponseEntity<Object> handleCategoriaIdeiaNaoEncontradaById(IdeiaException.CategoriaIdeiaNaoEncontradaById ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({IdeiaException.IdeiaNaoEncontradaById.class})
+    protected ResponseEntity<Object> handleIdeiaNaoEncontradaById(IdeiaException.IdeiaNaoEncontradaById ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 }

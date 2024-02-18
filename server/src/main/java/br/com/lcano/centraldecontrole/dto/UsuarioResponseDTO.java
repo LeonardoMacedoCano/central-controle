@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.dto;
 
-import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.domain.Usuario;
 
 import java.util.Date;
 

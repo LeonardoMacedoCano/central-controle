@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.repository;
 
-import br.com.lcano.centraldecontrole.model.Despesa;
+import br.com.lcano.centraldecontrole.domain.Despesa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

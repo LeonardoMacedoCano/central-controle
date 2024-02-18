@@ -1,7 +1,7 @@
 package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.CategoriaDespesaResponseDTO;
-import br.com.lcano.centraldecontrole.model.CategoriaDespesa;
+import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
 import br.com.lcano.centraldecontrole.repository.CategoriaDespesaRepository;
 import java.util.Arrays;
 import java.util.List;

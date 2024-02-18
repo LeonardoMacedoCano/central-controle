@@ -1,40 +1,48 @@
-package br.com.lcano.centraldecontrole.controller;
+package br.com.lcano.centraldecontrole.resource;
 
 import br.com.lcano.centraldecontrole.dto.DespesaRequestDTO;
 import br.com.lcano.centraldecontrole.dto.DespesaResponseDTO;
-import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.service.DespesaService;
+import br.com.lcano.centraldecontrole.util.CustomSuccess;
+import br.com.lcano.centraldecontrole.util.MensagemConstantes;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
-@RequestMapping("despesa")
-public class DespesaController {
+@RequestMapping("/api/despesa")
+public class DespesaResource {
     @Autowired
-    private DespesaService despesaService;
+    private final DespesaService despesaService;
 
-    @PostMapping("/add")
-    public ResponseEntity<Object> adicionarDespesa(@RequestBody DespesaRequestDTO data, HttpServletRequest request) {
-        Usuario usuario = (Usuario) request.getAttribute("usuario");
-        return despesaService.adicionarDespesa(data, usuario);
+    public DespesaResource(DespesaService despesaService) {
+        this.despesaService = despesaService;
     }
 
-    @PutMapping("/editar/{idDespesa}")
+    @PostMapping
+    public ResponseEntity<Object> gerarDespesa(@RequestBody DespesaRequestDTO data, HttpServletRequest request) {
+        Usuario usuario = (Usuario) request.getAttribute("usuario");
+        despesaService.gerarDespesa(data, usuario);
+        return CustomSuccess.buildResponseEntity(MensagemConstantes.DESPESA_ADICIONADA_COM_SUCESSO);
+    }
+
+    @PutMapping("/{idDespesa}")
     public ResponseEntity<Object> editarDespesa(@PathVariable Long idDespesa, @RequestBody DespesaRequestDTO data, HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
-        return despesaService.editarDespesa(idDespesa, data, usuario);
+        despesaService.editarDespesa(idDespesa, data, usuario);
+        return CustomSuccess.buildResponseEntity(MensagemConstantes.DESPESA_EDITADA_COM_SUCESSO);
     }
 
-    @DeleteMapping("/excluir/{idDespesa}")
+    @DeleteMapping("/{idDespesa}")
     public ResponseEntity<Object> excluirDespesa(@PathVariable Long idDespesa) {
-        return despesaService.excluirDespesa(idDespesa);
+        despesaService.excluirDespesa(idDespesa);
+        return CustomSuccess.buildResponseEntity(MensagemConstantes.DESPESA_EXCLUIDA_COM_SUCESSO);
     }
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity<List<DespesaResponseDTO>> listarDespesasDoUsuario(
             HttpServletRequest request,
             @RequestParam(name = "ano", required = false) Integer ano,

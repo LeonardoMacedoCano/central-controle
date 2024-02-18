@@ -1,20 +1,19 @@
-package br.com.lcano.centraldecontrole.model;
+package br.com.lcano.centraldecontrole.domain;
 
 import br.com.lcano.centraldecontrole.util.BooleanToCharConverter;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.Date;
 
-@Table(name = "tarefa")
-@Entity(name = "tarefa")
-@Getter
-@Setter
+@Table(name = "ideia")
+@Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Tarefa {
+@ToString(of = "id")
+public class Ideia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +24,7 @@ public class Tarefa {
 
     @ManyToOne
     @JoinColumn(name = "idcategoria", nullable = false)
-    private CategoriaTarefa categoria;
+    private CategoriaIdeia categoria;
 
     @Column(nullable = false)
     private String titulo;
@@ -43,7 +42,7 @@ public class Tarefa {
     @Column(nullable = false)
     private boolean finalizado;
 
-    public Tarefa(Usuario usuario, CategoriaTarefa categoria, String titulo, String descricao, Date dataPrazo, Boolean finalizado) {
+    public Ideia(Usuario usuario, CategoriaIdeia categoria, String titulo, String descricao, Date dataPrazo, Boolean finalizado) {
         this.usuario = usuario;
         this.categoria = categoria;
         this.titulo = titulo;

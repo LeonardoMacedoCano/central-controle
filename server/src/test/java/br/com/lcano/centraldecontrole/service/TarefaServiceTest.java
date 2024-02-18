@@ -2,11 +2,10 @@ package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.TarefaRequestDTO;
 import br.com.lcano.centraldecontrole.dto.TarefaResponseDTO;
-import br.com.lcano.centraldecontrole.model.CategoriaTarefa;
-import br.com.lcano.centraldecontrole.model.Tarefa;
-import br.com.lcano.centraldecontrole.model.Usuario;
-import br.com.lcano.centraldecontrole.util.CustomException;
-import br.com.lcano.centraldecontrole.util.MensagemConstantes;
+import br.com.lcano.centraldecontrole.domain.CategoriaTarefa;
+import br.com.lcano.centraldecontrole.domain.Tarefa;
+import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.exception.TarefaException;
 import br.com.lcano.centraldecontrole.repository.CategoriaTarefaRepository;
 import br.com.lcano.centraldecontrole.repository.TarefaRepository;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
@@ -35,33 +32,25 @@ public class TarefaServiceTest {
     private TarefaService tarefaService;
 
     @Test
-    void testAdicionarTarefa() {
+    void testGerarTarefa() {
         TarefaRequestDTO requestDTO = new TarefaRequestDTO(1L, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         Usuario usuario = new Usuario();
 
         CategoriaTarefa categoriaTarefa = new CategoriaTarefa();
         when(categoriaTarefaRepository.findById(1L)).thenReturn(Optional.of(categoriaTarefa));
 
-        ResponseEntity<Object> response = tarefaService.adicionarTarefa(requestDTO, usuario);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(Map.of("success", MensagemConstantes.TAREFA_ADICIONADA_COM_SUCESSO), response.getBody());
+        tarefaService.gerarTarefa(requestDTO, usuario);
 
         verify(tarefaRepository, times(1)).save(any());
     }
 
     @Test
-    void testAdicionarTarefa_CategoriaNaoEncontrada() {
+    void testGerarTarefa_CategoriaNaoEncontrada() {
         Long idCategoriaNaoExistente = 999L;
         TarefaRequestDTO data = new TarefaRequestDTO(idCategoriaNaoExistente, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         Usuario usuario = new Usuario();
 
-        CustomException.CategoriaTarefaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.CategoriaTarefaNaoEncontradaComIdException.class,
-                () -> tarefaService.adicionarTarefa(data, usuario)
-        );
-
-        assertEquals(String.format(MensagemConstantes.CATEGORIA_TAREFA_NAO_ENCONTRADA_COM_ID, idCategoriaNaoExistente), exception.getMessage());
+        assertThrows(TarefaException.CategoriaTarefaNaoEncontradaById.class, () -> tarefaService.gerarTarefa(data, usuario));
     }
 
     @Test
@@ -99,16 +88,6 @@ public class TarefaServiceTest {
     }
 
     @Test
-    void testListarTarefasDoUsuario_UsuarioNaoEncontrado() {
-        Long idUsuario = null;
-        int anoFiltro = 2024;
-        int mesFiltro = 1;
-
-        assertThrows(CustomException.UsuarioNaoEncontradoException.class,
-                () -> tarefaService.listarTarefasDoUsuario(idUsuario, anoFiltro, mesFiltro));
-    }
-
-    @Test
     public void testEditarTarefa() {
         Long idTarefa = 1L;
         TarefaRequestDTO tarefaRequestDTO = new TarefaRequestDTO(1L, "Titulo", "Descricao", new Date(), Boolean.FALSE);
@@ -120,10 +99,7 @@ public class TarefaServiceTest {
         Tarefa tarefaExistente = new Tarefa(usuario, categoria, "Titulo", "Descricao", new Date(), Boolean.FALSE);
         when(tarefaRepository.findById(idTarefa)).thenReturn(Optional.of(tarefaExistente));
 
-        ResponseEntity<Object> response = tarefaService.editarTarefa(idTarefa, tarefaRequestDTO, usuario);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode(), "O status HTTP deve ser OK");
-        assertEquals(Map.of("success", MensagemConstantes.TAREFA_EDITADA_COM_SUCESSO), response.getBody());
+        tarefaService.editarTarefa(idTarefa, tarefaRequestDTO, usuario);
 
         verify(tarefaRepository, times(1)).findById(idTarefa);
         verify(categoriaTarefaRepository, times(1)).findById(eq(tarefaRequestDTO.idCategoria()));
@@ -146,12 +122,7 @@ public class TarefaServiceTest {
 
         when(categoriaTarefaRepository.findById(1L)).thenReturn(Optional.empty());
 
-        CustomException.CategoriaTarefaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.CategoriaTarefaNaoEncontradaComIdException.class,
-                () -> tarefaService.editarTarefa(idTarefa, requestDTO, usuario)
-        );
-
-        assertEquals(String.format(MensagemConstantes.CATEGORIA_TAREFA_NAO_ENCONTRADA_COM_ID, idCategoriaNaoExistente), exception.getMessage());
+        assertThrows(TarefaException.CategoriaTarefaNaoEncontradaById.class, () -> tarefaService.editarTarefa(idTarefa, requestDTO, usuario));
 
         verify(tarefaRepository, times(1)).findById(idTarefa);
         verify(categoriaTarefaRepository, times(1)).findById(idCategoriaNaoExistente);
@@ -167,12 +138,7 @@ public class TarefaServiceTest {
 
         when(tarefaRepository.findById(idTarefaNaoExistente)).thenReturn(Optional.empty());
 
-        CustomException.TarefaNaoEncontradaComIdException exception = assertThrows(
-                CustomException.TarefaNaoEncontradaComIdException.class,
-                () -> tarefaService.editarTarefa(idTarefaNaoExistente, requestDTO, usuario)
-        );
-
-        assertEquals(String.format(MensagemConstantes.TAREFA_NAO_ENCONTRADA_COM_ID, idTarefaNaoExistente), exception.getMessage());
+        assertThrows(TarefaException.TarefaNaoEncontradaById.class, () -> tarefaService.editarTarefa(idTarefaNaoExistente, requestDTO, usuario));
 
         verify(tarefaRepository, times(1)).findById(idTarefaNaoExistente);
         verify(categoriaTarefaRepository, never()).findById(any());

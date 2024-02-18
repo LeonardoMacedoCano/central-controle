@@ -1,16 +1,16 @@
-package br.com.lcano.centraldecontrole.model;
+package br.com.lcano.centraldecontrole.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
 
-@Table(name = "categoriatarefa")
-@Entity(name = "categoriatarefa")
-@Getter
-@Setter
+@Table(name = "categoriaideia")
+@Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class CategoriaTarefa {
+@ToString(of = "id")
+public class CategoriaIdeia {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +18,7 @@ public class CategoriaTarefa {
     @Column(nullable = false)
     private String descricao;
 
-    public CategoriaTarefa(String descricao) {
+    public CategoriaIdeia(String descricao) {
         this.descricao = descricao;
     }
 }

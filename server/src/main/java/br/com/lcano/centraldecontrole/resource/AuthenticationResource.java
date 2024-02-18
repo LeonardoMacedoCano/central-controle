@@ -1,24 +1,23 @@
-package br.com.lcano.centraldecontrole.controller;
+package br.com.lcano.centraldecontrole.resource;
 
-import br.com.lcano.centraldecontrole.secutity.TokenService;
+import br.com.lcano.centraldecontrole.exception.UsuarioException;
+import br.com.lcano.centraldecontrole.service.TokenService;
 import br.com.lcano.centraldecontrole.dto.LoginResponseDTO;
 import br.com.lcano.centraldecontrole.dto.UsuarioRequestDTO;
-import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
 import br.com.lcano.centraldecontrole.service.AuthorizationService;
-import br.com.lcano.centraldecontrole.util.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 @RestController
-@RequestMapping("auth")
-public class AuthenticationController {
+@RequestMapping("/api/auth")
+public class AuthenticationResource {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -31,9 +30,9 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody UsuarioRequestDTO data) {
         if (!authorizationService.usuarioJaCadastrado(data.username())) {
-            throw new CustomException.UsuarioNaoEncontradoException();
+            throw new UsuarioException.UsuarioNaoEncontrado();
         } else if (!authorizationService.usuarioAtivo(data.username())) {
-            throw new CustomException.UsuarioDesativadoException();
+            throw new UsuarioException.UsuarioDesativado();
         }
 
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.senha());

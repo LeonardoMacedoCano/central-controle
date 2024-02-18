@@ -1,7 +1,7 @@
 package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.UsuarioResponseDTO;
-import br.com.lcano.centraldecontrole.model.Usuario;
+import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
