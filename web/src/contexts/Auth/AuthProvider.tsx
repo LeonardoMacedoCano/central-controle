@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import  useApi  from "../../hooks/useApi";
+import useAuthApi from "../../hooks/useAuthApi";
 import { AuthContext } from "./AuthContext";
 import { Usuario } from "../../types/Usuario";
 
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     const [usuario, setUsuario] = useState<Usuario | null>(null);
-    const api = useApi();
+    const api = useAuthApi();
 
     useEffect(() => {
         const validateToken = async () => {

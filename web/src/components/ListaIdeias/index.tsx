@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import * as C from './styles';
-import useApi from '../../hooks/useApi';
+import useIdeiaApi from '../../hooks/useIdeiaApi';
 import { AuthContext } from '../../contexts/Auth/AuthContext';
 import { TableArea } from '../../components/TableArea';
 import { InputArea } from '../../components/InputArea';
@@ -24,7 +24,7 @@ const ListaIdeias: React.FC = () => {
   const [formFields, setFormFields] = useState<FormFieldsIdeia>(ValoresIniciaisIdeia);
   
   const auth = useContext(AuthContext);
-  const api = useApi();
+  const api = useIdeiaApi();
 
   useEffect(() => {
     setToken(auth.usuario?.token || null);
@@ -39,7 +39,7 @@ const ListaIdeias: React.FC = () => {
 
         const [ideiasResult, categoriasResult] = await Promise.all([
           api.listarIdeias(token, ano, mes),
-          api.listarTodasCategoriasIdeia(token),
+          api.listarCategoriasIdeia(token),
         ]);
 
         if (ideiasResult && categoriasResult) {
