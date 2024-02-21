@@ -24,8 +24,8 @@ public class CategoriaIdeiaServiceTest {
 
     @Test
     void testGetTodasCategoriasIdeia() {
-        CategoriaIdeia categoria1 = new CategoriaIdeia(1L, "Categoria1");
-        CategoriaIdeia categoria2 = new CategoriaIdeia(2L, "Categoria2");
+        CategoriaIdeia categoria1 = new CategoriaIdeia("Categoria1");
+        CategoriaIdeia categoria2 = new CategoriaIdeia("Categoria2");
 
         List<CategoriaIdeia> listaCategoriaIdeia = Arrays.asList(categoria1, categoria2);
 
@@ -37,11 +37,9 @@ public class CategoriaIdeiaServiceTest {
         assertEquals(2, resultado.size());
 
         CategoriaIdeiaResponseDTO CategoriaIdeiaResponseDTO1 = resultado.get(0);
-        assertEquals(categoria1.getId(), CategoriaIdeiaResponseDTO1.id());
         assertEquals(categoria1.getDescricao(), CategoriaIdeiaResponseDTO1.descricao());
 
         CategoriaIdeiaResponseDTO CategoriaIdeiaResponseDTO2 = resultado.get(1);
-        assertEquals(categoria2.getId(), CategoriaIdeiaResponseDTO2.id());
         assertEquals(categoria2.getDescricao(), CategoriaIdeiaResponseDTO2.descricao());
     }
 }

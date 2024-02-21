@@ -1,24 +1,16 @@
 package br.com.lcano.centraldecontrole.domain;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Table(name = "categoriadespesa")
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@EqualsAndHashCode(of = "id")
-@ToString(of = "id")
-public class CategoriaDespesa {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false)
-    private String descricao;
+public class CategoriaDespesa extends Categoria {
+    public CategoriaDespesa() {
+        super();
+    }
 
     public CategoriaDespesa(String descricao) {
-        this.descricao = descricao;
+        super(descricao);
     }
 }
