@@ -22,12 +22,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({Exception.class})
-    protected ResponseEntity<Object> handleGenericException(Exception ex) {
+    protected ResponseEntity<Object> handleGenericException() {
         return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, MSG_ERRO_GENERICO);
     }
 
     @ExceptionHandler({BadCredentialsException.class, JWTVerificationException.class})
-    protected ResponseEntity<Object> handleInvalidCredentials(RuntimeException ex) {
+    protected ResponseEntity<Object> handleInvalidCredentials() {
         return buildResponseEntity(HttpStatus.UNAUTHORIZED, UsuarioException.MSG_CREDENCIAIS_INVALIDAS);
     }
 
