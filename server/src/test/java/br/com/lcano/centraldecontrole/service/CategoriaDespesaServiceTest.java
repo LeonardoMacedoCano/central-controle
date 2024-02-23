@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.dto.CategoriaDespesaResponseDTO;
+import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
 import br.com.lcano.centraldecontrole.repository.CategoriaDespesaRepository;
 import java.util.Arrays;
@@ -30,15 +30,15 @@ public class CategoriaDespesaServiceTest {
 
         when(categoriaDespesaRepository.findAll()).thenReturn(listaCategoriaDespesa);
 
-        List<CategoriaDespesaResponseDTO> resultado = categoriaDespesaService.getTodasCategoriasDespesa();
+        List<CategoriaDTO> resultado = categoriaDespesaService.getTodasCategoriasDespesa();
 
         assertNotNull(resultado);
         assertEquals(2, resultado.size());
 
-        CategoriaDespesaResponseDTO CategoriaDespesaResponseDTO1 = resultado.get(0);
-        assertEquals(categoria1.getDescricao(), CategoriaDespesaResponseDTO1.descricao());
+        CategoriaDTO CategoriaDespesaResponseDTO1 = resultado.get(0);
+        assertEquals(categoria1.getDescricao(), CategoriaDespesaResponseDTO1.getDescricao());
 
-        CategoriaDespesaResponseDTO CategoriaDespesaResponseDTO2 = resultado.get(1);
-        assertEquals(categoria2.getDescricao(), CategoriaDespesaResponseDTO2.descricao());
+        CategoriaDTO CategoriaDespesaResponseDTO2 = resultado.get(1);
+        assertEquals(categoria2.getDescricao(), CategoriaDespesaResponseDTO2.getDescricao());
     }
 }

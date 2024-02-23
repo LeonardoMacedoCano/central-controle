@@ -1,13 +1,12 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.dto.CategoriaIdeiaResponseDTO;
+import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.domain.CategoriaIdeia;
 import br.com.lcano.centraldecontrole.repository.CategoriaIdeiaRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -31,15 +30,15 @@ public class CategoriaIdeiaServiceTest {
 
         when(categoriaIdeiaRepository.findAll()).thenReturn(listaCategoriaIdeia);
 
-        List<CategoriaIdeiaResponseDTO> resultado = categoriaIdeiaService.getTodasCategoriasIdeia();
+        List<CategoriaDTO> resultado = categoriaIdeiaService.getTodasCategoriasIdeia();
 
         assertNotNull(resultado);
         assertEquals(2, resultado.size());
 
-        CategoriaIdeiaResponseDTO CategoriaIdeiaResponseDTO1 = resultado.get(0);
-        assertEquals(categoria1.getDescricao(), CategoriaIdeiaResponseDTO1.descricao());
+        CategoriaDTO CategoriaIdeiaResponseDTO1 = resultado.get(0);
+        assertEquals(categoria1.getDescricao(), CategoriaIdeiaResponseDTO1.getDescricao());
 
-        CategoriaIdeiaResponseDTO CategoriaIdeiaResponseDTO2 = resultado.get(1);
-        assertEquals(categoria2.getDescricao(), CategoriaIdeiaResponseDTO2.descricao());
+        CategoriaDTO CategoriaIdeiaResponseDTO2 = resultado.get(1);
+        assertEquals(categoria2.getDescricao(), CategoriaIdeiaResponseDTO2.getDescricao());
     }
 }

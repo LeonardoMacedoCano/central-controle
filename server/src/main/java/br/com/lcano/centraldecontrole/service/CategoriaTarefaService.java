@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.dto.CategoriaTarefaResponseDTO;
+import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.repository.CategoriaTarefaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class CategoriaTarefaService {
         this.categoriaTarefaRepository = categoriaTarefaRepository;
     }
 
-    public List<CategoriaTarefaResponseDTO> getTodasCategoriasTarefa() {
-        return categoriaTarefaRepository.findAll().stream().map(CategoriaTarefaResponseDTO::new).toList();
+    public List<CategoriaDTO> getTodasCategoriasTarefa() {
+        return categoriaTarefaRepository.findAll().stream().map(CategoriaDTO::converterParaDTO).toList();
     }
 }

@@ -1,7 +1,7 @@
 package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
-import br.com.lcano.centraldecontrole.dto.CategoriaDespesaResponseDTO;
+import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.exception.DespesaException;
 import br.com.lcano.centraldecontrole.repository.CategoriaDespesaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,8 @@ public class CategoriaDespesaService {
         this.categoriaDespesaRepository = categoriaDespesaRepository;
     }
 
-    public List<CategoriaDespesaResponseDTO> getTodasCategoriasDespesa() {
-        return categoriaDespesaRepository.findAll().stream().map(CategoriaDespesaResponseDTO::new).toList();
+    public List<CategoriaDTO> getTodasCategoriasDespesa() {
+        return categoriaDespesaRepository.findAll().stream().map(CategoriaDTO::converterParaDTO).toList();
     }
 
     public CategoriaDespesa getCategoriaDespesaById(Long id) {

@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.dto.CategoriaTarefaResponseDTO;
+import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.domain.CategoriaTarefa;
 import br.com.lcano.centraldecontrole.repository.CategoriaTarefaRepository;
 import org.junit.jupiter.api.Test;
@@ -31,15 +31,15 @@ public class CategoriaTarefaServiceTest {
 
         when(categoriaTarefaRepository.findAll()).thenReturn(listaCategoriaTarefa);
 
-        List<CategoriaTarefaResponseDTO> resultado = categoriaTarefaService.getTodasCategoriasTarefa();
+        List<CategoriaDTO> resultado = categoriaTarefaService.getTodasCategoriasTarefa();
 
         assertNotNull(resultado);
         assertEquals(2, resultado.size());
 
-        CategoriaTarefaResponseDTO CategoriaTarefaResponseDTO1 = resultado.get(0);
-        assertEquals(categoria1.getDescricao(), CategoriaTarefaResponseDTO1.descricao());
+        CategoriaDTO CategoriaTarefaResponseDTO1 = resultado.get(0);
+        assertEquals(categoria1.getDescricao(), CategoriaTarefaResponseDTO1.getDescricao());
 
-        CategoriaTarefaResponseDTO CategoriaTarefaResponseDTO2 = resultado.get(1);
-        assertEquals(categoria2.getDescricao(), CategoriaTarefaResponseDTO2.descricao());
+        CategoriaDTO CategoriaTarefaResponseDTO2 = resultado.get(1);
+        assertEquals(categoria2.getDescricao(), CategoriaTarefaResponseDTO2.getDescricao());
     }
 }

@@ -5,7 +5,6 @@ import br.com.lcano.centraldecontrole.dto.TarefaResponseDTO;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.service.TarefaService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
-import br.com.lcano.centraldecontrole.util.MensagemConstantes;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,20 +25,20 @@ public class TarefaResource {
     public ResponseEntity<Object> gerarTarefa(@RequestBody TarefaRequestDTO data, HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
         tarefaService.gerarTarefa(data, usuario);
-        return CustomSuccess.buildResponseEntity(MensagemConstantes.TAREFA_ADICIONADA_COM_SUCESSO);
+        return CustomSuccess.buildResponseEntity("Tarefa adicionada com sucesso.");
     }
 
     @PutMapping("/{idTarefa}")
     public ResponseEntity<Object> editarTarefa(@PathVariable Long idTarefa, @RequestBody TarefaRequestDTO data, HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
         tarefaService.editarTarefa(idTarefa, data, usuario);
-        return CustomSuccess.buildResponseEntity(MensagemConstantes.TAREFA_EDITADA_COM_SUCESSO);
+        return CustomSuccess.buildResponseEntity("Tarefa editada com sucesso.");
     }
 
     @DeleteMapping("/{idTarefa}")
     public ResponseEntity<Object> excluirTarefa(@PathVariable Long idTarefa) {
         tarefaService.excluirTarefa(idTarefa);
-        return CustomSuccess.buildResponseEntity(MensagemConstantes.TAREFA_EXCLUIDA_COM_SUCESSO);
+        return CustomSuccess.buildResponseEntity("Tarefa excluída com sucesso.");
     }
 
     @GetMapping

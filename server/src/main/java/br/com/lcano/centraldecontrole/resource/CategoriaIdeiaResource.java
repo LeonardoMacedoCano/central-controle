@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.resource;
 
-import br.com.lcano.centraldecontrole.dto.CategoriaIdeiaResponseDTO;
+import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.service.CategoriaIdeiaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +20,8 @@ public class CategoriaIdeiaResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoriaIdeiaResponseDTO>> getTodasCategoriasIdeia() {
-        List<CategoriaIdeiaResponseDTO> categoriasIdeia = categoriaIdeiaService.getTodasCategoriasIdeia();
+    public ResponseEntity<List<CategoriaDTO>> getTodasCategoriasIdeia() {
+        List<CategoriaDTO> categoriasIdeia = categoriaIdeiaService.getTodasCategoriasIdeia();
         return ResponseEntity.ok(categoriasIdeia);
     }
 }
