@@ -18,11 +18,21 @@ CREATE TABLE despesa (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idusuario INT NOT NULL,
     idcategoria INT NOT NULL,
+    datalancamento DATE NOT NULL,
     descricao VARCHAR(255) NOT NULL,
-    valor FLOAT NOT NULL,
-    data DATETIME NOT NULL,
     FOREIGN KEY (idusuario) REFERENCES usuario(id),
     FOREIGN KEY (idcategoria) REFERENCES categoriadespesa(id)
+);
+
+CREATE TABLE parcela (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    iddespesa INT NOT NULL,
+    numero INT NOT NULL,
+    datavencimento DATE NOT NULL,
+    valor FLOAT NOT NULL,
+    pago CHAR(1) DEFAULT 'N',
+    FOREIGN KEY (iddespesa) REFERENCES despesa(id),
+    UNIQUE KEY (iddespesa, numero)
 );
 
 CREATE TABLE categoriatarefa (

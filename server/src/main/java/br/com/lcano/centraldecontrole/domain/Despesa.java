@@ -4,7 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "despesa")
 @Entity
@@ -13,7 +17,10 @@ import java.util.Date;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(of = "id")
-public class Despesa {
+public class Despesa implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,17 +36,9 @@ public class Despesa {
     @Column(nullable = false)
     private String descricao;
 
-    @Column(nullable = false)
-    private Double valor;
+    @Column(name = "datalancamento", nullable = false)
+    private Date dataLancamento;
 
-    @Column(nullable = false)
-    private Date data;
-
-    public Despesa(Usuario usuario, CategoriaDespesa categoria, String descricao, Double valor, Date data) {
-        this.usuario = usuario;
-        this.categoria = categoria;
-        this.descricao = descricao;
-        this.valor = valor;
-        this.data = data;
-    }
+    @OneToMany(mappedBy = "despesa", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<DespesaParcela> parcelas = new ArrayList<>();
 }
