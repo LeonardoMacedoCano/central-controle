@@ -15,15 +15,15 @@ import java.util.Map;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-    private static final String MSG_ERRO_GENERICO = "Ocorreu um erro interno no servidor.";
+    private static final String MSG_ERRO_GENERICO = "Ocorreu um erro interno no servidor: ";
 
     private ResponseEntity<Object> buildResponseEntity(HttpStatus status, String mensagem) {
         return ResponseEntity.status(status).body(Map.of("error", mensagem));
     }
 
     @ExceptionHandler({Exception.class})
-    protected ResponseEntity<Object> handleGenericException() {
-        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, MSG_ERRO_GENERICO);
+    protected ResponseEntity<Object> handleGenericException(Exception ex) {
+        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, MSG_ERRO_GENERICO + ex);
     }
 
     @ExceptionHandler({BadCredentialsException.class, JWTVerificationException.class})

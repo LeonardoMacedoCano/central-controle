@@ -2,18 +2,19 @@ package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
 import br.com.lcano.centraldecontrole.domain.Despesa;
+import br.com.lcano.centraldecontrole.domain.DespesaParcela;
 import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.dto.DespesaDTO;
+import br.com.lcano.centraldecontrole.dto.DespesaParcelaDTO;
 import br.com.lcano.centraldecontrole.exception.DespesaException;
 import br.com.lcano.centraldecontrole.repository.CategoriaDespesaRepository;
 import br.com.lcano.centraldecontrole.repository.DespesaRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,154 +26,188 @@ import static org.mockito.Mockito.*;
 class DespesaServiceTest {
     @Mock
     private DespesaRepository despesaRepository;
-
     @Mock
     private CategoriaDespesaRepository categoriaDespesaRepository;
-
+    @Mock
+    private CategoriaDespesaService categoriaDespesaService;
+    @Mock
+    private DespesaParcelaService despesaParcelaService;
     @InjectMocks
     private DespesaService despesaService;
 
-    /*
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        despesaService = new DespesaService(despesaRepository, categoriaDespesaRepository, categoriaDespesaService, despesaParcelaService);
+    }
+
     @Test
-    void testGerarDespesa() {
-        DespesaRequestDTO requestDTO = new DespesaRequestDTO(1L, "Descrição da despesa", 100.0, new Date());
+    public void testGetCategoriaById_CategoriaExiste() {
+        Long idCategoria = 1L;
+        CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
+
+        when(categoriaDespesaRepository.findById(idCategoria)).thenReturn(Optional.of(categoriaDespesa));
+
+        CategoriaDespesa result = despesaService.getCategoriaById(idCategoria);
+
+        assertEquals(categoriaDespesa, result);
+    }
+
+    @Test
+    public void testGetCategoriaById_CategoriaNaoExiste() {
+        Long idCategoria = 1L;
+
+        when(categoriaDespesaRepository.findById(idCategoria)).thenReturn(Optional.empty());
+
+        assertThrows(DespesaException.CategoriaDespesaNaoEncontradaById.class, () -> despesaService.getCategoriaById(idCategoria));
+    }
+
+    @Test
+    public void testGetDespesaById_DespesaExiste() {
+        Long idDespesa = 1L;
+        Despesa despesa = new Despesa();
+
+        when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesa));
+
+        Despesa result = despesaService.getDespesaById(idDespesa);
+
+        assertEquals(despesa, result);
+    }
+
+    @Test
+    public void testGetDespesaById_DespesaNaoExiste() {
+        Long idDespesa = 1L;
+
+        when(despesaRepository.findById(idDespesa)).thenReturn(Optional.empty());
+
+        assertThrows(DespesaException.DespesaNaoEncontradaById.class, () -> despesaService.getDespesaById(idDespesa));
+    }
+
+    @Test
+    public void testCriarDespesa() {
+        Long idCategoria = 1L;
+        String descricao = "Despesa de teste";
         Usuario usuario = new Usuario();
+        DespesaDTO despesaDTO = new DespesaDTO();
+        despesaDTO.setIdCategoria(idCategoria);
+        despesaDTO.setDescricao(descricao);
+
+        when(categoriaDespesaService.getCategoriaDespesaById(idCategoria)).thenReturn(new CategoriaDespesa());
+
+        Despesa despesa = despesaService.criarDespesa(despesaDTO, usuario);
+
+        assertNotNull(despesa);
+        assertEquals(usuario, despesa.getUsuario());
+        assertNotNull(despesa.getCategoria());
+        assertEquals(descricao, despesa.getDescricao());
+    }
+
+    @Test
+    public void testListarDespesasDoUsuarioPorVencimento() {
+        Long idUsuario = 1L;
+        Integer ano = 2024;
+        Integer mes = 2;
+
+        Usuario usuario = new Usuario("teste", "123", new Date());
+
+        CategoriaDespesa categoriaDespesa = new CategoriaDespesa("teste");
+
+        Despesa despesa1 = new Despesa(1L, usuario, categoriaDespesa, "teste1", new Date(), new ArrayList<>());
+        Despesa despesa2 = new Despesa(2L, usuario, categoriaDespesa, "teste2", new Date(), new ArrayList<>());
+
+        DespesaParcela despesaParcela1 = new DespesaParcela();
+        DespesaParcela despesaParcela2 = new DespesaParcela();
+        despesa1.setParcelas(Arrays.asList(despesaParcela1, despesaParcela2));
+
+        List<Despesa> despesas = Arrays.asList(despesa1, despesa2);
+        when(despesaRepository.findByUsuarioId(idUsuario)).thenReturn(despesas);
+        when(despesaParcelaService.listarParcelasPorVencimento(despesa1, ano, mes)).thenReturn(Arrays.asList(despesaParcela1, despesaParcela2));
+
+        List<DespesaDTO> despesasDTO = despesaService.listarDespesasDoUsuarioPorVencimento(idUsuario, ano, mes);
+
+        assertEquals(1, despesasDTO.size());
+        verify(despesaParcelaService, times(2)).listarParcelasPorVencimento(any(Despesa.class), eq(ano), eq(mes));
+    }
+
+
+    @Test
+    public void testGerarDespesa() {
+        Long idCategoria = 1L;
+
+        List<DespesaParcelaDTO> parcelasDTO = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            DespesaParcelaDTO parcelaDTO = new DespesaParcelaDTO();
+            parcelaDTO.setNumero(i);
+            parcelaDTO.setDataVencimento(new Date());
+            parcelaDTO.setValor(10.0);
+            parcelasDTO.add(parcelaDTO);
+        }
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1L);
+        usuario.setUsername("teste");
+        usuario.setAtivo(true);
 
         CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
-        when(categoriaDespesaRepository.findById(1L)).thenReturn(Optional.of(categoriaDespesa));
+        categoriaDespesa.setId(idCategoria);
+        when(categoriaDespesaService.getCategoriaDespesaById(idCategoria)).thenReturn(categoriaDespesa);
 
-        despesaService.gerarDespesa(requestDTO, usuario);
+        DespesaDTO despesaDTO = new DespesaDTO();
+        despesaDTO.setIdCategoria(idCategoria);
+        despesaDTO.setDescricao("teste");
+        despesaDTO.setParcelasDTO(parcelasDTO);
 
-        verify(despesaRepository, times(1)).save(any());
-    }
+        Despesa novaDespesa = new Despesa();
+        novaDespesa.setUsuario(usuario);
+        novaDespesa.setCategoria(categoriaDespesa);
+        novaDespesa.setDescricao(despesaDTO.getDescricao());
+        List<DespesaParcela> parcelas = despesaParcelaService.criarParcelas(novaDespesa, parcelasDTO);
+        novaDespesa.getParcelas().addAll(parcelas);
 
-    @Test
-    void testGerarDespesa_CategoriaNaoEncontrada() {
-        Long idCategoriaNaoExistente = 999L;
-        DespesaRequestDTO data = new DespesaRequestDTO(idCategoriaNaoExistente, "Descrição", 100.0, null);
-        Usuario usuario = new Usuario();
+        when(despesaParcelaService.criarParcelas(any(Despesa.class), anyList())).thenReturn(parcelas);
 
-        assertThrows(DespesaException.CategoriaDespesaNaoEncontradaById.class,() -> despesaService.gerarDespesa(data, usuario));
-    }
+        despesaService.gerarDespesa(despesaDTO, usuario);
 
-    @Test
-    public void testListarDespesasDoUsuario() {
-        int anoFiltro = 2024;
-        int mesFiltro = 1;
-        LocalDate primeiroDiaDoMes = LocalDate.of(anoFiltro, mesFiltro, 1);
-        LocalDate ultimoDiaDoMes = primeiroDiaDoMes.with(TemporalAdjusters.lastDayOfMonth());
-        Date dataInicio = Date.from(primeiroDiaDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date dataFim = Date.from(ultimoDiaDoMes.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        Usuario usuario = new Usuario("usuario teste", "senha123", new Date());
-        usuario.setId(1L);
-        CategoriaDespesa categoriaDespesa = new CategoriaDespesa("Categoria teste");
-
-        Despesa despesa1 = new Despesa(usuario, categoriaDespesa, "despesa 1", 1.00, new Date());
-        Despesa despesa2 = new Despesa(usuario, categoriaDespesa, "despesa 2", 2.00, new Date());
-
-        List<Despesa> listaDespesas = Arrays.asList(despesa1, despesa2);
-
-        when(despesaRepository.findByUsuarioIdAndDataBetween(usuario.getId(), dataInicio, dataFim)).thenReturn(listaDespesas);
-
-        List<DespesaResponseDTO> resultado = despesaService.listarDespesasDoUsuario(usuario.getId(), anoFiltro, mesFiltro);
-
-        assertNotNull(resultado);
-        assertEquals(2, resultado.size());
-
-        DespesaResponseDTO despesaResponseDTO1 = resultado.get(0);
-        assertEquals(despesa1.getId(), despesaResponseDTO1.id());
-        assertEquals(despesa1.getDescricao(), despesaResponseDTO1.descricao());
-
-        DespesaResponseDTO despesaResponseDTO2 = resultado.get(1);
-        assertEquals(despesa2.getId(), despesaResponseDTO2.id());
-        assertEquals(despesa2.getDescricao(), despesaResponseDTO2.descricao());
+        verify(despesaRepository, times(1)).save(any(Despesa.class));
     }
 
     @Test
     public void testEditarDespesa() {
         Long idDespesa = 1L;
-        DespesaRequestDTO despesaRequestDTO = new DespesaRequestDTO(idDespesa, "teste", 10.00, new Date());
-        Usuario usuario = new Usuario("username", "senha", new Date());
+        Long idCategoria = 2L;
+        String descricao = "Descrição da despesa";
+        Usuario usuario = new Usuario();
+        DespesaDTO despesaDTO = new DespesaDTO();
+        despesaDTO.setIdCategoria(idCategoria);
+        despesaDTO.setDescricao(descricao);
 
-        CategoriaDespesa categoria = new CategoriaDespesa("categoria teste");
-        when(categoriaDespesaRepository.findById(eq(despesaRequestDTO.idCategoria()))).thenReturn(Optional.of(categoria));
-
-        Despesa despesaExistente = new Despesa(usuario, categoria, "teste", 10.00, new Date());
+        Despesa despesaExistente = new Despesa();
         when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
 
-        despesaService.editarDespesa(idDespesa, despesaRequestDTO, usuario);
+        CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
+        categoriaDespesa.setId(idCategoria);
+        when(categoriaDespesaRepository.findById(idCategoria)).thenReturn(Optional.of(categoriaDespesa));
 
-        verify(despesaRepository, times(1)).findById(idDespesa);
-        verify(categoriaDespesaRepository, times(1)).findById(eq(despesaRequestDTO.idCategoria()));
+        despesaService.editarDespesa(idDespesa, despesaDTO, usuario);
 
-        ArgumentCaptor<Despesa> despesaCaptor = ArgumentCaptor.forClass(Despesa.class);
-        verify(despesaRepository, times(1)).save(despesaCaptor.capture());
+        verify(despesaRepository).findById(idDespesa);
+        verify(despesaRepository).save(despesaExistente);
 
-        Despesa despesaEditada = despesaCaptor.getValue();
-        assertEquals(categoria, despesaEditada.getCategoria(), "A categoria da despesa deve ser a mesma da categoria mockada");
-    }
-
-    @Test
-    void testEditarDespesa_CategoriaNaoEncontrada() {
-        Long idDespesa = 1L;
-        Long idCategoriaNaoExistente = 999L;
-        DespesaRequestDTO requestDTO = new DespesaRequestDTO(idCategoriaNaoExistente, "Descrição da despesa", 100.0, new Date());
-        Usuario usuario = new Usuario();
-
-        when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(new Despesa()));
-
-        when(categoriaDespesaRepository.findById(1L)).thenReturn(Optional.empty());
-
-        assertThrows(DespesaException.CategoriaDespesaNaoEncontradaById.class, () -> despesaService.editarDespesa(idDespesa, requestDTO, usuario));
-
-        verify(despesaRepository, times(1)).findById(idDespesa);
-        verify(categoriaDespesaRepository, times(1)).findById(idCategoriaNaoExistente);
-        verify(despesaRepository, never()).save(any());
-    }
-
-    @Test
-    void testEditarDespesa_DespesaNaoEncontrada() {
-        Long idDespesaNaoExistente = 999L;
-        Long idCategoria = 1L;
-        DespesaRequestDTO requestDTO = new DespesaRequestDTO(idCategoria, "Descrição da despesa", 100.0, new Date());
-        Usuario usuario = new Usuario();
-
-        when(despesaRepository.findById(idDespesaNaoExistente)).thenReturn(Optional.empty());
-
-        assertThrows(DespesaException.DespesaNaoEncontradaById.class, () -> despesaService.editarDespesa(idDespesaNaoExistente, requestDTO, usuario));
-
-        verify(despesaRepository, times(1)).findById(idDespesaNaoExistente);
-        verify(categoriaDespesaRepository, never()).findById(any());
-        verify(despesaRepository, never()).save(any());
+        assertEquals(categoriaDespesa, despesaExistente.getCategoria());
+        assertEquals(usuario, despesaExistente.getUsuario());
+        assertEquals(descricao, despesaExistente.getDescricao());
     }
 
     @Test
     public void testExcluirDespesa() {
         Long idDespesa = 1L;
 
-        Usuario usuario = new Usuario("username", "senha", new Date());
-        CategoriaDespesa categoria = new CategoriaDespesa("categoria teste");
-
-        Despesa despesaExistente = new Despesa(usuario, categoria, "teste", 10.00, new Date());
+        Despesa despesaExistente = new Despesa();
         when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
 
         despesaService.excluirDespesa(idDespesa);
 
-        verify(despesaRepository, times(1)).findById(idDespesa);
-        verify(despesaRepository, times(1)).delete(despesaExistente);
+        verify(despesaRepository).findById(idDespesa);
+        verify(despesaRepository).delete(despesaExistente);
     }
-
-    @Test
-    void testExcluirDespesa_DespesaNaoEncontrada() {
-        Long idDespesaNaoExistente = 999L;
-
-        when(despesaRepository.findById(idDespesaNaoExistente)).thenReturn(Optional.empty());
-
-        assertThrows(DespesaException.DespesaNaoEncontradaById.class, () -> despesaService.excluirDespesa(idDespesaNaoExistente));
-
-        verify(despesaRepository, never()).delete(any());
-    }
-
-     */
 }

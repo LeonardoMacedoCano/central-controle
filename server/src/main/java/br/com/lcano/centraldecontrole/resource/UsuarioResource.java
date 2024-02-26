@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.resource;
 
-import br.com.lcano.centraldecontrole.dto.UsuarioResponseDTO;
+import br.com.lcano.centraldecontrole.dto.UsuarioDTO;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,8 @@ public class UsuarioResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioResponseDTO>> getTodosUsuarios() {
-        List<UsuarioResponseDTO> usuarios = usuarioService.getTodosUsuarios();
+    public ResponseEntity<List<UsuarioDTO>> getTodosUsuarios() {
+        List<UsuarioDTO> usuarios = usuarioService.getTodosUsuarios();
         return ResponseEntity.ok(usuarios);
     }
 }

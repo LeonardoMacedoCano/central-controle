@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.dto.UsuarioRequestDTO;
+import br.com.lcano.centraldecontrole.dto.UsuarioDTO;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.mockito.Mockito;
-
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -42,9 +41,9 @@ public class AuthorizationServiceTest {
     public void testCadastrarUsuario_UsuarioNaoCadastrado() {
         when(usuarioRepository.findByUsername(anyString())).thenReturn(null);
 
-        UsuarioRequestDTO usuarioRequestDTO = new UsuarioRequestDTO("novo usuario", "senha123");
+        UsuarioDTO usuarioDTO = new UsuarioDTO("novo usuario", "senha123");
 
-        assertDoesNotThrow(() -> authorizationService.cadastrarUsuario(usuarioRequestDTO));
+        assertDoesNotThrow(() -> authorizationService.cadastrarUsuario(usuarioDTO));
 
         Mockito.verify(usuarioRepository).save(Mockito.any(Usuario.class));
     }
@@ -53,9 +52,9 @@ public class AuthorizationServiceTest {
     public void testCadastrarUsuario_UsuarioJaCadastrado() {
         when(usuarioRepository.findByUsername(anyString())).thenReturn(new Usuario());
 
-        UsuarioRequestDTO usuarioRequestDTO = new UsuarioRequestDTO("usuario ja cadastrado", "senha123");
+        UsuarioDTO usuarioDTO = new UsuarioDTO("usuario ja cadastrado", "senha123");
 
-        assertThrows(UsuarioException.UsuarioJaCadastrado.class, () -> authorizationService.cadastrarUsuario(usuarioRequestDTO));
+        assertThrows(UsuarioException.UsuarioJaCadastrado.class, () -> authorizationService.cadastrarUsuario(usuarioDTO));
 
         Mockito.verify(usuarioRepository, Mockito.never()).save(Mockito.any(Usuario.class));
     }

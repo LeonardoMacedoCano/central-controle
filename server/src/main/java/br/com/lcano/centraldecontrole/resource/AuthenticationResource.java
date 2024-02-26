@@ -1,9 +1,9 @@
 package br.com.lcano.centraldecontrole.resource;
 
+import br.com.lcano.centraldecontrole.dto.UsuarioDTO;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.service.TokenService;
-import br.com.lcano.centraldecontrole.dto.LoginResponseDTO;
-import br.com.lcano.centraldecontrole.dto.UsuarioRequestDTO;
+import br.com.lcano.centraldecontrole.dto.LoginDTO;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
 import br.com.lcano.centraldecontrole.service.AuthorizationService;
@@ -13,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -28,54 +27,33 @@ public class AuthenticationResource {
     UsuarioRepository usuarioRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody UsuarioRequestDTO data) {
-        if (!authorizationService.usuarioJaCadastrado(data.username())) {
+    public ResponseEntity<LoginDTO> login(@RequestBody UsuarioDTO data) {
+        if (!authorizationService.usuarioJaCadastrado(data.getUsername())) {
             throw new UsuarioException.UsuarioNaoEncontrado();
-        } else if (!authorizationService.usuarioAtivo(data.username())) {
+        } else if (!authorizationService.usuarioAtivo(data.getUsername())) {
             throw new UsuarioException.UsuarioDesativado();
         }
 
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.senha());
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.getUsername(), data.getSenha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
         var token = tokenService.gerarToken((Usuario) auth.getPrincipal());
+        LoginDTO responseDTO = new LoginDTO(data.getUsername(), token);
 
-        var loginResponse = new LoginResponseDTO(
-            ((Usuario) auth.getPrincipal()).getUsername(),
-            token
-        );
-
-        var usuarioDTO = loginResponse.usuario();
-
-        var responseBody = Map.of(
-            "usuario", Map.of(
-                "username", usuarioDTO.username(),
-                "token", usuarioDTO.token()
-            )
-        );
-
-        return ResponseEntity.ok().body(responseBody);
+        return ResponseEntity.ok().body(responseDTO);
     }
 
     @PostMapping("/register")
-    public ResponseEntity cadastrarUsuario(@RequestBody UsuarioRequestDTO data){
+    public ResponseEntity cadastrarUsuario(@RequestBody UsuarioDTO data){
         authorizationService.cadastrarUsuario(data);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/validateToken")
-    public ResponseEntity<Object> validateToken(@RequestParam String token) {
+    public ResponseEntity<LoginDTO> validateToken(@RequestParam String token) {
         var usernameToken = tokenService.validateToken(token);
         UserDetails usuario = usuarioRepository.findByUsername(usernameToken);
-        var loginResponse = new LoginResponseDTO(usuario.getUsername(), token);
-        var usuarioDTO = loginResponse.usuario();
+        LoginDTO responseDTO = new LoginDTO(usuario.getUsername(), token);
 
-        var responseBody = Map.of(
-            "usuario", Map.of(
-                "username", usuarioDTO.username(),
-                "token", usuarioDTO.token()
-            )
-        );
-
-        return ResponseEntity.ok().body(responseBody);
+        return ResponseEntity.ok().body(responseDTO);
     }
 }

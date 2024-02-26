@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.dto.UsuarioRequestDTO;
+import br.com.lcano.centraldecontrole.dto.UsuarioDTO;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
@@ -22,13 +22,13 @@ public class AuthorizationService implements UserDetailsService {
         return usuarioRepository.findByUsername(username);
     }
 
-    public void cadastrarUsuario(UsuarioRequestDTO data) {
-        if (usuarioJaCadastrado(data.username())) {
+    public void cadastrarUsuario(UsuarioDTO data) {
+        if (usuarioJaCadastrado(data.getUsername())) {
             throw new UsuarioException.UsuarioJaCadastrado();
         }
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.senha());
-        Usuario novoUsuario = new Usuario(data.username(), encryptedPassword, DateUtil.getDataAtual());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.getSenha());
+        Usuario novoUsuario = new Usuario(data.getUsername(), encryptedPassword, DateUtil.getDataAtual());
         this.usuarioRepository.save(novoUsuario);
     }
 

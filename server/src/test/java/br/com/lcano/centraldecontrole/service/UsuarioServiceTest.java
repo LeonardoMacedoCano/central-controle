@@ -1,13 +1,12 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.dto.UsuarioResponseDTO;
+import br.com.lcano.centraldecontrole.dto.UsuarioDTO;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -34,21 +33,21 @@ public class UsuarioServiceTest {
 
         when(usuarioRepository.findAll()).thenReturn(listaUsuario);
 
-        List<UsuarioResponseDTO> resultado = usuarioService.getTodosUsuarios();
+        List<UsuarioDTO> resultado = usuarioService.getTodosUsuarios();
 
         assertNotNull(resultado);
         assertEquals(2, resultado.size());
 
-        UsuarioResponseDTO usuarioResponseDTO1 = resultado.get(0);
-        assertEquals(usuario1.getId(), usuarioResponseDTO1.id());
-        assertEquals(usuario1.getUsername(), usuarioResponseDTO1.username());
-        assertEquals(usuario1.getSenha(), usuarioResponseDTO1.senha());
-        assertEquals(usuario1.getDataInclusao(), usuarioResponseDTO1.dataInclusao());
+        UsuarioDTO usuarioDTO1 = resultado.get(0);
+        assertEquals(usuario1.getId(), usuarioDTO1.getId());
+        assertEquals(usuario1.getUsername(), usuarioDTO1.getUsername());
+        assertEquals(usuario1.getSenha(), usuarioDTO1.getSenha());
+        assertEquals(usuario1.getDataInclusao(), usuarioDTO1.getDataInclusao());
 
-        UsuarioResponseDTO usuarioResponseDTO2 = resultado.get(1);
-        assertEquals(usuario2.getId(), usuarioResponseDTO2.id());
-        assertEquals(usuario2.getUsername(), usuarioResponseDTO2.username());
-        assertEquals(usuario2.getSenha(), usuarioResponseDTO2.senha());
-        assertEquals(usuario2.getDataInclusao(), usuarioResponseDTO2.dataInclusao());
+        UsuarioDTO usuarioDTO2 = resultado.get(1);
+        assertEquals(usuario2.getId(), usuarioDTO2.getId());
+        assertEquals(usuario2.getUsername(), usuarioDTO2.getUsername());
+        assertEquals(usuario2.getSenha(), usuarioDTO2.getSenha());
+        assertEquals(usuario2.getDataInclusao(), usuarioDTO2.getDataInclusao());
     }
 }
