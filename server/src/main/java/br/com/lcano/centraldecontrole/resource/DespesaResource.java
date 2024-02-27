@@ -6,9 +6,10 @@ import br.com.lcano.centraldecontrole.service.DespesaService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/despesa")
@@ -41,13 +42,14 @@ public class DespesaResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<DespesaDTO>> listarDespesasDoUsuarioPorVencimento(
+    public ResponseEntity<Page<DespesaDTO>> listarDespesasDoUsuarioPorVencimento(
             HttpServletRequest request,
             @RequestParam(name = "ano") Integer ano,
-            @RequestParam(name = "mes") Integer mes
+            @RequestParam(name = "mes") Integer mes,
+            Pageable pageable
     ) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
-        List<DespesaDTO> despesasDTO = despesaService.listarDespesasDoUsuarioPorVencimento(usuario.getId(), ano, mes);
+        Page<DespesaDTO> despesasDTO = despesaService.listarDespesasDoUsuarioPorVencimento(usuario.getId(), ano, mes, pageable);
         return ResponseEntity.ok(despesasDTO);
     }
 

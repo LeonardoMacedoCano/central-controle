@@ -9,8 +9,13 @@ import br.com.lcano.centraldecontrole.repository.CategoriaDespesaRepository;
 import br.com.lcano.centraldecontrole.repository.DespesaRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,7 +60,7 @@ public class DespesaService {
         return novaDespesa;
     }
 
-    public List<DespesaDTO> listarDespesasDoUsuarioPorVencimento(Long idUsuario, Integer ano, Integer mes) {
+    public Page<DespesaDTO> listarDespesasDoUsuarioPorVencimento(Long idUsuario, Integer ano, Integer mes, Pageable pageable) {
         List<Despesa> despesas = despesaRepository.findByUsuarioId(idUsuario);
 
         despesas.forEach(despesa -> despesa.setParcelas(despesaParcelaService.listarParcelasPorVencimento(despesa, ano, mes)));
@@ -64,9 +69,24 @@ public class DespesaService {
                 .filter(despesa -> !despesa.getParcelas().isEmpty())
                 .toList();
 
-        return despesasComParcelas.stream()
+        List<DespesaDTO> despesasDTO = despesasComParcelas.stream()
                 .map(DespesaDTO::converterParaDTO)
                 .collect(Collectors.toList());
+
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+
+        List<DespesaDTO> paginaDespesasDTO;
+
+        if (despesasDTO.size() < startItem) {
+            paginaDespesasDTO = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, despesasDTO.size());
+            paginaDespesasDTO = despesasDTO.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<>(paginaDespesasDTO, pageable, despesasDTO.size());
     }
 
     @Transactional

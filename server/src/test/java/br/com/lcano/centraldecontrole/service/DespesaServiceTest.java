@@ -15,6 +15,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -122,13 +126,18 @@ class DespesaServiceTest {
         List<Despesa> despesas = Arrays.asList(despesa1, despesa2);
         when(despesaRepository.findByUsuarioId(idUsuario)).thenReturn(despesas);
         when(despesaParcelaService.listarParcelasPorVencimento(despesa1, ano, mes)).thenReturn(Arrays.asList(despesaParcela1, despesaParcela2));
+        when(despesaParcelaService.listarParcelasPorVencimento(despesa2, ano, mes)).thenReturn(new ArrayList<>());
 
-        List<DespesaDTO> despesasDTO = despesaService.listarDespesasDoUsuarioPorVencimento(idUsuario, ano, mes);
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<DespesaDTO> despesasDTOPage = despesaService.listarDespesasDoUsuarioPorVencimento(idUsuario, ano, mes, pageable);
 
-        assertEquals(1, despesasDTO.size());
-        verify(despesaParcelaService, times(2)).listarParcelasPorVencimento(any(Despesa.class), eq(ano), eq(mes));
+        assertEquals(1, despesasDTOPage.getContent().size());
+        assertEquals(1, despesasDTOPage.getTotalPages());
+        assertEquals(1, despesasDTOPage.getTotalElements());
+
+        verify(despesaParcelaService, times(1)).listarParcelasPorVencimento(despesa1, ano, mes);
+        verify(despesaParcelaService, times(1)).listarParcelasPorVencimento(despesa2, ano, mes);
     }
-
 
     @Test
     public void testGerarDespesa() {
