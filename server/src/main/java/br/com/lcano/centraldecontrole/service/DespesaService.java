@@ -54,7 +54,7 @@ public class DespesaService {
     public Despesa criarDespesa(DespesaDTO data, Usuario usuario) {
         Despesa novaDespesa = new Despesa();
         novaDespesa.setUsuario(usuario);
-        novaDespesa.setCategoria(categoriaDespesaService.getCategoriaDespesaById(data.getIdCategoria()));
+        novaDespesa.setCategoria(categoriaDespesaService.getCategoriaDespesaById(data.getCategoria().getId()));
         novaDespesa.setDataLancamento(DateUtil.getDataAtual());
         novaDespesa.setDescricao(data.getDescricao());
         return novaDespesa;
@@ -100,7 +100,7 @@ public class DespesaService {
     @Transactional
     public void editarDespesa(Long idDespesa, DespesaDTO data, Usuario usuario) {
         Despesa despesaExistente = getDespesaById(idDespesa);
-        despesaExistente.setCategoria(getCategoriaById(data.getIdCategoria()));
+        despesaExistente.setCategoria(getCategoriaById(data.getCategoria().getId()));
         despesaExistente.setUsuario(usuario);
         despesaExistente.setDescricao(data.getDescricao());
 

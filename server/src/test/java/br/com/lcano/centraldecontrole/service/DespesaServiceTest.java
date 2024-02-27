@@ -4,6 +4,7 @@ import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
 import br.com.lcano.centraldecontrole.domain.Despesa;
 import br.com.lcano.centraldecontrole.domain.DespesaParcela;
 import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.DespesaDTO;
 import br.com.lcano.centraldecontrole.dto.DespesaParcelaDTO;
 import br.com.lcano.centraldecontrole.exception.DespesaException;
@@ -91,12 +92,16 @@ class DespesaServiceTest {
     public void testCriarDespesa() {
         Long idCategoria = 1L;
         String descricao = "Despesa de teste";
+
         Usuario usuario = new Usuario();
+        CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
+        categoriaDespesa.setId(idCategoria);
+
         DespesaDTO despesaDTO = new DespesaDTO();
-        despesaDTO.setIdCategoria(idCategoria);
+        despesaDTO.setCategoria(CategoriaDTO.converterParaDTO(categoriaDespesa));
         despesaDTO.setDescricao(descricao);
 
-        when(categoriaDespesaService.getCategoriaDespesaById(idCategoria)).thenReturn(new CategoriaDespesa());
+        when(categoriaDespesaService.getCategoriaDespesaById(idCategoria)).thenReturn(categoriaDespesa);
 
         Despesa despesa = despesaService.criarDespesa(despesaDTO, usuario);
 
@@ -162,7 +167,7 @@ class DespesaServiceTest {
         when(categoriaDespesaService.getCategoriaDespesaById(idCategoria)).thenReturn(categoriaDespesa);
 
         DespesaDTO despesaDTO = new DespesaDTO();
-        despesaDTO.setIdCategoria(idCategoria);
+        despesaDTO.setCategoria(CategoriaDTO.converterParaDTO(categoriaDespesa));
         despesaDTO.setDescricao("teste");
         despesaDTO.setParcelasDTO(parcelasDTO);
 
@@ -185,16 +190,19 @@ class DespesaServiceTest {
         Long idDespesa = 1L;
         Long idCategoria = 2L;
         String descricao = "Descrição da despesa";
+
         Usuario usuario = new Usuario();
+
+        CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
+        categoriaDespesa.setId(idCategoria);
+
         DespesaDTO despesaDTO = new DespesaDTO();
-        despesaDTO.setIdCategoria(idCategoria);
+        despesaDTO.setCategoria(CategoriaDTO.converterParaDTO(categoriaDespesa));
         despesaDTO.setDescricao(descricao);
 
         Despesa despesaExistente = new Despesa();
         when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
 
-        CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
-        categoriaDespesa.setId(idCategoria);
         when(categoriaDespesaRepository.findById(idCategoria)).thenReturn(Optional.of(categoriaDespesa));
 
         despesaService.editarDespesa(idDespesa, despesaDTO, usuario);
