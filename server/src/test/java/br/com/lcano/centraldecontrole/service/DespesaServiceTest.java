@@ -7,6 +7,7 @@ import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.DespesaDTO;
 import br.com.lcano.centraldecontrole.dto.DespesaParcelaDTO;
+import br.com.lcano.centraldecontrole.dto.DespesaResumoMensalDTO;
 import br.com.lcano.centraldecontrole.exception.DespesaException;
 import br.com.lcano.centraldecontrole.repository.CategoriaDespesaRepository;
 import br.com.lcano.centraldecontrole.repository.DespesaRepository;
@@ -112,7 +113,7 @@ class DespesaServiceTest {
     }
 
     @Test
-    public void testListarDespesasDoUsuarioPorVencimento() {
+    public void testListarDespesaResumoMensalDTO() {
         Long idUsuario = 1L;
         Integer ano = 2024;
         Integer mes = 2;
@@ -134,7 +135,7 @@ class DespesaServiceTest {
         when(despesaParcelaService.listarParcelasPorVencimento(despesa2, ano, mes)).thenReturn(new ArrayList<>());
 
         Pageable pageable = PageRequest.of(0, 10);
-        Page<DespesaDTO> despesasDTOPage = despesaService.listarDespesasDoUsuarioPorVencimento(idUsuario, ano, mes, pageable);
+        Page<DespesaResumoMensalDTO> despesasDTOPage = despesaService.listarDespesaResumoMensalDTO(idUsuario, ano, mes, pageable);
 
         assertEquals(1, despesasDTOPage.getContent().size());
         assertEquals(1, despesasDTOPage.getTotalPages());

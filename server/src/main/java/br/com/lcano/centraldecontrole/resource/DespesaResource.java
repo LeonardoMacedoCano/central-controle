@@ -2,6 +2,7 @@ package br.com.lcano.centraldecontrole.resource;
 
 import br.com.lcano.centraldecontrole.dto.DespesaDTO;
 import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.dto.DespesaResumoMensalDTO;
 import br.com.lcano.centraldecontrole.service.DespesaService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,14 +43,14 @@ public class DespesaResource {
     }
 
     @GetMapping
-    public ResponseEntity<Page<DespesaDTO>> listarDespesasDoUsuarioPorVencimento(
+    public ResponseEntity<Page<DespesaResumoMensalDTO>> listarDespesaResumoMensalDTO(
             HttpServletRequest request,
             @RequestParam(name = "ano") Integer ano,
             @RequestParam(name = "mes") Integer mes,
             Pageable pageable
     ) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
-        Page<DespesaDTO> despesasDTO = despesaService.listarDespesasDoUsuarioPorVencimento(usuario.getId(), ano, mes, pageable);
+        Page<DespesaResumoMensalDTO> despesasDTO = despesaService.listarDespesaResumoMensalDTO(usuario.getId(), ano, mes, pageable);
         return ResponseEntity.ok(despesasDTO);
     }
 

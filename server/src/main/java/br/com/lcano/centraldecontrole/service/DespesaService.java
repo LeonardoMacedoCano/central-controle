@@ -4,6 +4,7 @@ import br.com.lcano.centraldecontrole.dto.DespesaDTO;
 import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
 import br.com.lcano.centraldecontrole.domain.Despesa;
 import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.dto.DespesaResumoMensalDTO;
 import br.com.lcano.centraldecontrole.exception.DespesaException;
 import br.com.lcano.centraldecontrole.repository.CategoriaDespesaRepository;
 import br.com.lcano.centraldecontrole.repository.DespesaRepository;
@@ -60,7 +61,7 @@ public class DespesaService {
         return novaDespesa;
     }
 
-    public Page<DespesaDTO> listarDespesasDoUsuarioPorVencimento(Long idUsuario, Integer ano, Integer mes, Pageable pageable) {
+    public Page<DespesaResumoMensalDTO> listarDespesaResumoMensalDTO(Long idUsuario, Integer ano, Integer mes, Pageable pageable) {
         List<Despesa> despesas = despesaRepository.findByUsuarioId(idUsuario);
 
         despesas.forEach(despesa -> despesa.setParcelas(despesaParcelaService.listarParcelasPorVencimento(despesa, ano, mes)));
@@ -69,24 +70,24 @@ public class DespesaService {
                 .filter(despesa -> !despesa.getParcelas().isEmpty())
                 .toList();
 
-        List<DespesaDTO> despesasDTO = despesasComParcelas.stream()
-                .map(DespesaDTO::converterParaDTO)
+        List<DespesaResumoMensalDTO> despesaResumoMensalDTOList = despesasComParcelas.stream()
+                .map(DespesaResumoMensalDTO::converterParaDTO)
                 .collect(Collectors.toList());
 
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
         int startItem = currentPage * pageSize;
 
-        List<DespesaDTO> paginaDespesasDTO;
+        List<DespesaResumoMensalDTO> paginaDespesasResumoMensalDTO;
 
-        if (despesasDTO.size() < startItem) {
-            paginaDespesasDTO = Collections.emptyList();
+        if (despesaResumoMensalDTOList.size() < startItem) {
+            paginaDespesasResumoMensalDTO = Collections.emptyList();
         } else {
-            int toIndex = Math.min(startItem + pageSize, despesasDTO.size());
-            paginaDespesasDTO = despesasDTO.subList(startItem, toIndex);
+            int toIndex = Math.min(startItem + pageSize, despesaResumoMensalDTOList.size());
+            paginaDespesasResumoMensalDTO = despesaResumoMensalDTOList.subList(startItem, toIndex);
         }
 
-        return new PageImpl<>(paginaDespesasDTO, pageable, despesasDTO.size());
+        return new PageImpl<>(paginaDespesasResumoMensalDTO, pageable, despesaResumoMensalDTOList.size());
     }
 
     @Transactional
