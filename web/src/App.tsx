@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Home } from './pages/Home';
-import ControleDespesas from './pages/ControleDespesas';
+import ConsultaDespesaResumoMensal from './pages/ControleDespesas/ConsultaDespesaResumoMensal.tsx';
 import ControleTarefas from './pages/ControleTarefas';
 import ControleIdeias from './pages/ControleIdeias';
 import MainHeader from './components/MainHeader';
@@ -28,7 +28,7 @@ const App: React.FC = () => {
                 <MainHeader />
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/controledespesas" element={<ControleDespesas />} />
+                  <Route path="/controledespesas" element={<ConsultaDespesaResumoMensal />} />
                   <Route path="/controletarefas" element={<ControleTarefas />} />
                   <Route path="/controleideias" element={<ControleIdeias />} />
                 </Routes>

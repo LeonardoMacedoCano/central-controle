@@ -2,25 +2,31 @@ import useApi from './useApi';
 import { Despesa } from '../types/Despesa';
 import { Categoria } from '../types/Categoria';
 import { usarMensagens } from '../contexts/Mensagens';
+import { DespesaResumoMensal } from '../types/DespesaResumoMensal';
 
 interface DespesaApi {
   listarCategoriasDespesa: (token: string) => Promise<Categoria[] | undefined>;
-  listarDespesas: (token: string, ano: number, mes: number) => Promise<Despesa[] | undefined>;
+  listarDespesaResumoMensal: (token: string, page: number, size: number, ano: number, mes: number) => Promise<{ content: DespesaResumoMensal[] }| undefined>;
+  /*
+  listarDespesas: (token: string, page: number, size: number, ano: number, mes: number) => Promise<{ content: Despesa[] }| undefined>;
   addDespesa: (token: string, data: Despesa) => Promise<Despesa | undefined>;
   editarDespesa: (token: string, data: Despesa) => Promise<Despesa | undefined>;
   excluirDespesa: (token: string, id: number) => Promise<boolean | undefined>;
+  */
 }
 
 const useDespesaApi = (): DespesaApi => {
   const { request } = useApi();
   const mensagens = usarMensagens();
 
+  /*
   const despesaPayload = (data: Despesa) => ({
     idCategoria: data.idCategoria,
     descricao: data.descricao,
     valor: data.valor,
     data: data.data,
   });
+  */
 
   const listarCategoriasDespesa = async (token: string) => {
     try {
@@ -30,9 +36,19 @@ const useDespesaApi = (): DespesaApi => {
     }
   };
 
-  const listarDespesas = async (token: string, ano: number, mes: number) => {
+  const listarDespesaResumoMensal = async (token: string, page: number, size: number, ano: number, mes: number) => {
     try {
-      return await request<Despesa[]>(`get`, `despesa?ano=${ano}&mes=${mes}`, token);
+      return await request<{ content: DespesaResumoMensal[] }>(`get`, `despesa?page=${page}&size=${size}&ano=${ano}&mes=${mes}`, token);
+    } catch (error) {
+      return undefined;
+    }
+  };
+
+  /*
+
+  const listarDespesas = async (token: string, page: number, size: number, ano: number, mes: number) => {
+    try {
+      return await request<{ content: Despesa[] }>(`get`, `despesa?page=${page}&size=${size}&ano=${ano}&mes=${mes}`, token);
     } catch (error) {
       return undefined;
     }
@@ -61,13 +77,15 @@ const useDespesaApi = (): DespesaApi => {
       return undefined;
     }
   };
+  */
 
   return {
     listarCategoriasDespesa,
-    listarDespesas,
-    addDespesa,
-    editarDespesa,
-    excluirDespesa,
+    listarDespesaResumoMensal,
+    //listarDespesas,
+    //addDespesa,
+    //editarDespesa,
+    //excluirDespesa,
   };
 };
 

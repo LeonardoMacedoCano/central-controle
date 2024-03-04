@@ -1,12 +1,11 @@
 import React from 'react';
 import * as C from './styles';
-import ListaTarefas from '../../components/ListaTarefas';
 
 const ControleTarefas: React.FC = () => {
   return (
     <C.Container>
       <C.Body>
-        <ListaTarefas />
+        ControleTarefas
       </C.Body>
     </C.Container>
   );

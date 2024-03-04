@@ -1,7 +1,7 @@
 export type Parcela = {
-    id: number;
-    numero: number;
-    dataVencimento: Date;
-    valor: number;
-    pago: boolean;
-  }
+  id: number;
+  numero: number;
+  dataVencimento: Date;
+  valor: number;
+  pago: boolean;
+}
