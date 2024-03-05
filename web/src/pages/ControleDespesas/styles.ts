@@ -5,10 +5,3 @@ export const Container = styled.div`
   margin: 0;
   padding: 0;
 `;
-
-export const Body = styled.div`
-  margin: auto;
-  max-width: 1000px;
-  padding-top: 50px;
-  padding: 25px 0 10px 0;
-`;

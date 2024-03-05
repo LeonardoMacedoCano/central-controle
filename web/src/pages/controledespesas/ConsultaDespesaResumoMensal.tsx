@@ -6,6 +6,7 @@ import { getMesAnoAtual } from '../../utils/DateUtils';
 import useDespesaApi from '../../hooks/useDespesaApi';
 import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
+import Panel from '../../components/panel/Panel';
 
 const ConsultaDespesaResumoMensal: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -16,7 +17,6 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
   const auth = useContext(AuthContext);
   const api = useDespesaApi();
 
-
   useEffect(() => {
     setToken(auth.usuario?.token || null);
   }, [auth.usuario?.token]);
@@ -26,7 +26,7 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
       if (token !== null && typeof token === 'string') {
         const [anoStr, mesStr] = dataSelecionada.split('-');
         const ano = parseInt(anoStr);
-        const mes = 2;//parseInt(mesStr);
+        const mes = parseInt(mesStr);
 
         const result = await api.listarDespesaResumoMensal(token, 0, 10, ano, mes);
 
@@ -53,8 +53,7 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
 
   return (
     <C.Container>
-      <C.Body>
-
+      <Panel maxWidth='1000px' title='Despesas'>
         <Table
           values={despesasResumoMensal}
           messageEmpty="Nenhuma despesa encontrada."
@@ -67,8 +66,7 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
           <Column<DespesaResumoMensal> fieldName="valorTotal" header="Valor" value={(item) => item.valorTotal} />
           <Column<DespesaResumoMensal> fieldName="situacao" header="Situação" value={(item) => item.situacao} />
         </Table>
-
-      </C.Body>
+      </Panel>
     </C.Container>
   );
 };
