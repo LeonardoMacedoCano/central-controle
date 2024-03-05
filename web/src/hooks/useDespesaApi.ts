@@ -1,7 +1,7 @@
 import useApi from './useApi';
 import { Despesa } from '../types/Despesa';
 import { Categoria } from '../types/Categoria';
-import { usarMensagens } from '../contexts/Mensagens';
+import { usarMensagens } from '../contexts/mensagens';
 import { DespesaResumoMensal } from '../types/DespesaResumoMensal';
 
 interface DespesaApi {

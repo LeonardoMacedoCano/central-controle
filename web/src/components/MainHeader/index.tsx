@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Title  } from './styles';
 import { FaBars } from 'react-icons/fa';
-import Sidebar from '../Sidebar';
+import Sidebar from '../sidebar';
 
 const MainHeader: React.FC = () => {
   const [sidebar, setSidebar] = useState(false);

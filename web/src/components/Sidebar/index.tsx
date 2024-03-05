@@ -1,8 +1,8 @@
 import { FC, } from 'react';
 import { Container, Content, LinkContainer } from './styles';
 import { useContext } from 'react';
-import { AuthContext } from '../../contexts/Auth/AuthContext';
-import SidebarItem from '../SidebarItem';
+import { AuthContext } from '../../contexts/auth/AuthContext';
+import SidebarItem from '../sidebaritem';
 import {
   FaTimes,
   FaHome,

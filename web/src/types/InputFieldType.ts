@@ -1,1 +1,0 @@
-export type InputFieldType = 'number' | 'date' | 'text' | 'select' | 'boolean';

@@ -1,7 +1,7 @@
 import useApi from './useApi';
 import { Ideia } from '../types/Ideia';
 import { Categoria } from '../types/Categoria';
-import { usarMensagens } from '../contexts/Mensagens';
+import { usarMensagens } from '../contexts/mensagens';
 
 interface IdeiaApi {
   listarCategoriasIdeia: (token: string) => Promise<Categoria[] | undefined>;

@@ -1,7 +1,7 @@
 import useApi from './useApi';
 import { Tarefa } from '../types/Tarefa';
 import { Categoria } from '../types/Categoria';
-import { usarMensagens } from '../contexts/Mensagens';
+import { usarMensagens } from '../contexts/mensagens';
 
 interface TarefaApi {
   listarCategoriasTarefa: (token: string) => Promise<Categoria[] | undefined>;

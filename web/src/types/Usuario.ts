@@ -1,4 +1,4 @@
 export type Usuario = {
-    username: string;
-    token: string;
+  username: string;
+  token: string;
 }
