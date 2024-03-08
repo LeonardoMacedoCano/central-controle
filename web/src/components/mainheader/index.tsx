@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { Container, Title  } from './styles';
+import * as C from './styles';
 import { FaBars } from 'react-icons/fa';
 import Sidebar from '../sidebar';
 
 const MainHeader: React.FC = () => {
-  const [sidebar, setSidebar] = useState(false);
+  const [isActiveSidebar, setActiveSidebar] = useState(false);
 
-  const showSidebar = () => setSidebar(!sidebar);
+  const showSidebar = () => setActiveSidebar(!isActiveSidebar);
 
   return (
-    <Container>
+    <C.MainHeader>
       <FaBars onClick={showSidebar} />
-      <Title>Central de Controle</Title>
-      {sidebar && <Sidebar sidebar={sidebar} setSidebar={setSidebar} />}
-    </Container>
+      <C.Title>Central de Controle</C.Title>
+      {isActiveSidebar && <Sidebar isActive={isActiveSidebar} setActive={setActiveSidebar} />}
+    </C.MainHeader>
   );
 };
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
+export const SidebarItem = styled.div`
   display: flex;
   align-items: center;
   background-color: ${props => props.theme.colors.primary};

@@ -1,5 +1,5 @@
 import { FC, } from 'react';
-import { Container, Content, LinkContainer } from './styles';
+import * as C from './styles';
 import { useContext } from 'react';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import SidebarItem from '../sidebaritem';
@@ -15,11 +15,11 @@ import {
 } from 'react-icons/fa';
 
 interface SidebarProps {
-  sidebar: boolean;
-  setSidebar: (isActive: boolean) => void;
+  isActive: boolean;
+  setActive: (isActive: boolean) => void;
 }
 
-const Sidebar: FC<SidebarProps> = ({ sidebar, setSidebar }) => {
+const Sidebar: FC<SidebarProps> = ({ isActive, setActive }) => {
   const auth = useContext(AuthContext);
 
   const handleLogout = () => {
@@ -27,36 +27,36 @@ const Sidebar: FC<SidebarProps> = ({ sidebar, setSidebar }) => {
   }
 
   const closeSidebar = () => {
-    setSidebar(false);
+    setActive(false);
   };
 
   return (
-    <Container sidebar={sidebar}>
+    <C.Sidebar isActive={isActive}>
       <FaTimes onClick={closeSidebar} />
-      <Content onClick={closeSidebar}>
-        <LinkContainer to="/">
+      <C.Content onClick={closeSidebar}>
+        <C.Link to="/">
           <SidebarItem Icon={FaHome} Text="Home" />
-        </LinkContainer>
-        <LinkContainer to="/controledespesas">
+        </C.Link>
+        <C.Link to="/controledespesas">
           <SidebarItem Icon={FaDollarSign} Text="Controle de despesas" />
-        </LinkContainer>
-        <LinkContainer to="/controletarefas">
+        </C.Link>
+        <C.Link to="/controletarefas">
           <SidebarItem Icon={FaCheckCircle} Text="Controle de tarefas" />
-        </LinkContainer>
-        <LinkContainer to="/controleideias">
+        </C.Link>
+        <C.Link to="/controleideias">
           <SidebarItem Icon={FaCommentMedical} Text="Controle de ideias" />
-        </LinkContainer>
-        <LinkContainer to="/">
+        </C.Link>
+        <C.Link to="/">
           <SidebarItem Icon={FaRegCalendarAlt} Text="Calendario" />
-        </LinkContainer>
-        <LinkContainer to="/">
+        </C.Link>
+        <C.Link to="/">
           <SidebarItem Icon={FaRegSun} Text="Configuração" />
-        </LinkContainer>
-        <LinkContainer to="/" onClick={handleLogout}>
+        </C.Link>
+        <C.Link to="/" onClick={handleLogout}>
           <SidebarItem Icon={FaPlug} Text="Sair" />
-        </LinkContainer>
-      </Content>
-    </Container>
+        </C.Link>
+      </C.Content>
+    </C.Sidebar>
   );
 };
 

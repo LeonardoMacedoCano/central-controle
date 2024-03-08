@@ -9,7 +9,7 @@ export const formatarDataParaString = (data: Date | undefined): string => {
   return `${ano}-${mes}-${dia}`;
 };
 
-export const getMesAnoAtual = (): string => {
+export const getStringDataAtual = (): string => {
   const now = new Date();
   return formatarDataParaString(now);
 };

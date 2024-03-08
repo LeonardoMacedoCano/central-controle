@@ -1,5 +1,5 @@
 import React, {ReactNode } from 'react';
-import { Container } from './styles';
+import * as C from './styles';
 
 interface SidebarItemProps {
   Icon: React.FC;
@@ -8,10 +8,10 @@ interface SidebarItemProps {
 
 const SidebarItem: React.FC<SidebarItemProps> = ({ Icon, Text }) => {
   return (
-    <Container>
+    <C.SidebarItem>
       <Icon />
       {Text}
-    </Container>
+    </C.SidebarItem>
   );
 };
 

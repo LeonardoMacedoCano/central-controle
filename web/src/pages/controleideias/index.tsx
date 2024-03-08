@@ -1,13 +1,11 @@
 import React from 'react';
-import * as C from './styles';
+import Container from '../../components/container/Container';
 
 const ControleIdeias: React.FC = () => {
   return (
-    <C.Container>
-      <C.Body>
-        ControleIdeias
-      </C.Body>
-    </C.Container>
+    <Container>
+      ControleIdeias
+    </Container>
   );
 };
 

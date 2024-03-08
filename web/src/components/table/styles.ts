@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const TableContainer = styled.div`
   width: 100%;
   background-color: ${props => props.theme.colors.white};
-  padding: 10px 20px 10px 20px;
+  padding: 5px;
   box-shadow: 0px 0px 5px ${props => props.theme.colors.gray};
   border-radius: 10px;
   margin-top: 20px;

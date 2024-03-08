@@ -1,16 +1,16 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../contexts/auth/AuthContext';
-import * as C from './styles';
 import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
-import { getMesAnoAtual } from '../../utils/DateUtils';
+import { getStringDataAtual } from '../../utils/DateUtils';
 import useDespesaApi from '../../hooks/useDespesaApi';
 import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
 import Panel from '../../components/panel/Panel';
+import Container from '../../components/container/Container';
 
 const ConsultaDespesaResumoMensal: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
-  const [dataSelecionada, setDataSelecionada] = useState(() => getMesAnoAtual());
+  const [dataSelecionada, setDataSelecionada] = useState(() => getStringDataAtual());
   const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
   const [despesasResumoMensal, setDespesasResumoMensal] = useState<DespesaResumoMensal[]>([]);
 
@@ -52,7 +52,7 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
   };
 
   return (
-    <C.Container>
+    <Container>
       <Panel maxWidth='1000px' title='Despesas'>
         <Table
           values={despesasResumoMensal}
@@ -67,7 +67,7 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
           <Column<DespesaResumoMensal> fieldName="situacao" header="Situação" value={(item) => item.situacao} />
         </Table>
       </Panel>
-    </C.Container>
+    </Container>
   );
 };
   

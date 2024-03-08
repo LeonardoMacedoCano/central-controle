@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { Link as RouterLink } from 'react-router-dom';
 
-interface ContainerProps {
-  sidebar: boolean;
+interface SidebarProps {
+  isActive: boolean;
 }
 
-export const Container = styled.div<ContainerProps>`
+export const Sidebar = styled.div<SidebarProps>`
   background-color: ${props => props.theme.colors.secondary};
   border-right: 1px solid ${props => props.theme.colors.gray};
   position: fixed;
@@ -13,7 +13,7 @@ export const Container = styled.div<ContainerProps>`
   top: 0px;
   left: 0px;
   width: 315px;
-  left: ${(props) => (props.sidebar ? '0' : '-100%')};
+  left: ${(props) => (props.isActive ? '0' : '-100%')};
   animation: showSidebar 0.4s;
 
   > svg {
@@ -42,7 +42,7 @@ export const Content = styled.div`
   margin-top: 100px;
 `;
 
-export const LinkContainer = styled(RouterLink)`
+export const Link = styled(RouterLink)`
   text-decoration: none;
   color: inherit;
 `;
