@@ -15,21 +15,6 @@ interface Indexable {
   [key: string]: any;
 }
 
-function getFieldByString(obj: any, fieldString: string): any {
-  const fields = fieldString.split('.');
-  let value = obj;
-
-  for (const field of fields) {
-    if (value && typeof value === 'object') {
-      value = value[field];
-    } else {
-      value = undefined;
-      break;
-    }
-  }
-  return value;
-}
-
 class Table<T extends Indexable> extends React.Component<Props<T>> {
   renderTableSeparatorRow() {
     const { children } = this.props;
@@ -68,9 +53,9 @@ class Table<T extends Indexable> extends React.Component<Props<T>> {
             key={keyExtractor(item, index)}
             onClick={() => onClickRow(item, index)}
           >
-            {children.map((child, index) => (
-              <C.TableColumn key={index}>
-                {typeof child.props.fieldName === 'string' && getFieldByString(item, child.props.fieldName)}
+            {children.map((child, childIndex) => (
+              <C.TableColumn key={childIndex}>
+                {child.props.value ? child.props.value(item, index) : item[child.props.fieldName]}
               </C.TableColumn>
             ))}
           </C.TableRow>
@@ -82,7 +67,7 @@ class Table<T extends Indexable> extends React.Component<Props<T>> {
   render() {
     const { values, messageEmpty } = this.props;
     return (
-      <C.TableContainer>
+      <>
         {values.length === 0 ? (
           <C.EmptyMessage>{messageEmpty}</C.EmptyMessage>
         ) : (
@@ -91,7 +76,7 @@ class Table<T extends Indexable> extends React.Component<Props<T>> {
             {this.renderTableBody()}
           </C.Table>
         )}
-      </C.TableContainer>
+      </>
     );
   }
 }

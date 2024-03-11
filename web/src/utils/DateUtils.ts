@@ -1,3 +1,7 @@
+export const getDataAtual = (): Date => {
+  return new Date();
+};
+
 export const formatarDataParaString = (data: Date | undefined): string => {
   if (!data) return '';
 
@@ -6,23 +10,23 @@ export const formatarDataParaString = (data: Date | undefined): string => {
   const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
   const ano = dataObj.getFullYear().toString();
 
-  return `${ano}-${mes}-${dia}`;
+  return `${dia}/${mes}/${ano}`;
 };
 
-export const getStringDataAtual = (): string => {
-  const now = new Date();
-  return formatarDataParaString(now);
+export const formatarDataParaAnoMes = (data: Date | undefined): string => {
+  if (!data) return '';
+
+  const dataObj = new Date(data);
+  const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
+  const ano = dataObj.getFullYear().toString();
+
+  return `${ano}-${mes}`;
 };
 
-export const formatarMesAno = (mesAno: string): string => {
-  const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+export const formataraMesAnoParaData = (mesAno: string): Date => {
   const [anoStr, mesStr] = mesAno.split('-');
   const ano = parseInt(anoStr);
-  const mes = parseInt(mesStr);
+  const mesIndex = parseInt(mesStr) -1;
 
-  if (isNaN(ano) || isNaN(mes) || mes < 1 || mes > 12) {
-    return 'Mês inválido';
-  }
-  
-  return `${meses[mes - 1]} / ${ano}`;
+  return new Date(ano, mesIndex);
 };

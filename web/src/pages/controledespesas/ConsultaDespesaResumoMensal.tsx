@@ -1,16 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
-import { getStringDataAtual } from '../../utils/DateUtils';
+import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
 import useDespesaApi from '../../hooks/useDespesaApi';
 import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
 import Panel from '../../components/panel/Panel';
 import Container from '../../components/container/Container';
+import FieldValue from '../../components/fieldvalue/FieldValue';
+import { formatarValorParaReal } from '../../utils/ValorUtils';
 
 const ConsultaDespesaResumoMensal: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
-  const [dataSelecionada, setDataSelecionada] = useState(() => getStringDataAtual());
+  const [dataSelecionada, setDataSelecionada] = useState(() => getDataAtual());
   const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
   const [despesasResumoMensal, setDespesasResumoMensal] = useState<DespesaResumoMensal[]>([]);
 
@@ -24,7 +26,7 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
   useEffect(() => {
     const carregarDespesaResumoMensal = async () => {
       if (token !== null && typeof token === 'string') {
-        const [anoStr, mesStr] = dataSelecionada.split('-');
+        const [anoStr, mesStr] = formatarDataParaAnoMes(dataSelecionada).split('-');
         const ano = parseInt(anoStr);
         const mes = parseInt(mesStr);
 
@@ -47,23 +49,44 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
     }
   };
   
-  const rowSelected = (item: DespesaResumoMensal) => {
+  const handleRowSelected = (item: DespesaResumoMensal) => {
     return idDespesaSelecionada === item.id;
+  };
+
+  const handleUpdateVencimento = (value: string | number | boolean | Date) => {
+    if (typeof value === 'string') {
+      setDataSelecionada(formataraMesAnoParaData(value)); 
+    }
   };
 
   return (
     <Container>
+      <Panel maxWidth='1000px' title='Resumo Mensal'>
+        <FieldValue 
+          description='Data' 
+          type='month' 
+          value={(dataSelecionada)} 
+          editable={true}
+          width='180px'
+          onUpdate={handleUpdateVencimento} />
+        <FieldValue 
+          description='Valor Total' 
+          type='string' 
+          value={formatarValorParaReal(100)}
+          width='180px' />
+      </Panel>
+
       <Panel maxWidth='1000px' title='Despesas'>
         <Table
           values={despesasResumoMensal}
           messageEmpty="Nenhuma despesa encontrada."
           keyExtractor={(item) => item.id.toString()}
           onClickRow={handleClickRow}
-          rowSelected={rowSelected}
+          rowSelected={handleRowSelected}
         >
           <Column<DespesaResumoMensal> fieldName="categoria.descricao" header="Categoria" value={(item) => item.categoria.descricao} />
           <Column<DespesaResumoMensal> fieldName="descricao" header="Descrição" value={(item) => item.descricao} />
-          <Column<DespesaResumoMensal> fieldName="valorTotal" header="Valor" value={(item) => item.valorTotal} />
+          <Column<DespesaResumoMensal> fieldName="valorTotal" header="Valor" value={(item) => formatarValorParaReal(item.valorTotal)} />
           <Column<DespesaResumoMensal> fieldName="situacao" header="Situação" value={(item) => item.situacao} />
         </Table>
       </Panel>
