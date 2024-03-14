@@ -3,7 +3,7 @@ import { AuthContext } from "../../contexts/auth/AuthContext";
 import { usarMensagens } from '../../contexts/mensagens';
 import { MdAccountCircle, MdLock } from 'react-icons/md';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
-import * as styles from './styles';
+import * as C from './styles';
 
 export const Login = () => {
   const auth = useContext(AuthContext);
@@ -11,7 +11,7 @@ export const Login = () => {
 
   const [username, setUsername] = useState('');
   const [senha, setSenha] = useState('');
-  const [show, setShow] = useState(false);
+  const [showSenha, setShowSenha] = useState(false);
 
   const handleUsernameInput = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -29,7 +29,7 @@ export const Login = () => {
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setShow(!show);
+    setShowSenha(!showSenha);
   };
 
   const handleLogin = async () => {
@@ -42,43 +42,43 @@ export const Login = () => {
   }
         
   return (
-    <styles.Container>
-      <styles.CaixaCentral>
-        <styles.Titulo>
+    <C.Container>
+      <C.Body>
+        <C.Titulo>
           Central de Controle
-        </styles.Titulo>
-        <styles.CampoUsername>
-          <MdAccountCircle  style={styles.IconeUsername} />
-          <styles.InputCampoUsername
+        </C.Titulo>
+        <C.CampoUsername>
+          <MdAccountCircle  style={C.IconeUsername} />
+          <C.InputCampoUsername
             type="text"
             placeholder="Digite seu usuário"
             value={username}
             onChange={handleUsernameInput}
           />
-        </styles.CampoUsername>
+        </C.CampoUsername>
 
-        <styles.CampoSenha>
-          <MdLock style={styles.IconeSenha} />
-          <styles.InputCampoSenha
+        <C.CampoSenha>
+          <MdLock style={C.IconeSenha} />
+          <C.InputCampoSenha
             placeholder="Digite sua senha"
-            type={show ? 'text' : 'password'}
+            type={showSenha ? 'text' : 'password'}
             value={senha}
             onChange={handlePasswordInput}
             onKeyDown={handleKeyDown}
           />
-          <styles.IconeOlho>
-            {show ? (
+          <C.IconeOlho>
+            {showSenha ? (
               <HiEye size={20} onClick={handleClick} />
             ) : (
               <HiEyeOff size={20} onClick={handleClick} />
             )}
-          </styles.IconeOlho>
-        </styles.CampoSenha>
+          </C.IconeOlho>
+        </C.CampoSenha>
 
-        <styles.BotaoEntrar onClick={handleLogin} type="submit">
+        <C.BotaoEntrar onClick={handleLogin} type="submit">
           Entrar
-        </styles.BotaoEntrar>
-      </styles.CaixaCentral>
-    </styles.Container>           
+        </C.BotaoEntrar>
+      </C.Body>
+    </C.Container>           
   )
 }
