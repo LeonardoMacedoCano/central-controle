@@ -1,22 +1,19 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { ProvedorMensagens } from './contexts/mensagens/index.tsx';
+import { AuthProvider } from './contexts/auth/AuthProvider.tsx';
+import GlobalStyles from './styles/GlobalStyles';
+import { RequireAuth } from './contexts/auth/RequireAuth.tsx';
+import AppHeader from './components/menu/AppHeader.tsx';
 import { Home } from './pages/home/index.tsx';
 import ConsultaDespesaResumoMensal from './pages/controledespesas/ConsultaDespesaResumoMensal.tsx';
 import ControleTarefas from './pages/controletarefas/index.tsx';
 import ControleIdeias from './pages/controleideias/index.tsx';
-import MainHeader from './components/mainheader/index.tsx';
-import { ThemeProvider } from 'styled-components';
-import GlobalStyles from './styles/GlobalStyles';
-import { BrowserRouter } from 'react-router-dom'
-import { AuthProvider } from './contexts/auth/AuthProvider.tsx'
-import { RequireAuth } from './contexts/auth/RequireAuth.tsx';
-import { ProvedorMensagens } from './contexts/mensagens/index.tsx';
-
 import dark from './styles/themes/dark';
 //import light from './styles/themes/light';
 
 const App: React.FC = () => {
-  
   return (
     <ThemeProvider theme={dark}>
       <ProvedorMensagens>
@@ -25,7 +22,7 @@ const App: React.FC = () => {
             <GlobalStyles />   
             {<RequireAuth>
               <>
-                <MainHeader />
+                <AppHeader/>
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/controledespesas" element={<ConsultaDespesaResumoMensal />} />
@@ -38,7 +35,7 @@ const App: React.FC = () => {
         </AuthProvider>
       </ProvedorMensagens>
     </ThemeProvider>
-  )
+  );
 }
 
 export default App
