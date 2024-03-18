@@ -18,13 +18,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 public class AuthenticationResource {
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
     @Autowired
-    private AuthorizationService authorizationService;
+    private final AuthorizationService authorizationService;
     @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
     @Autowired
-    UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+
+    public AuthenticationResource(AuthenticationManager authenticationManager,
+                                  AuthorizationService authorizationService,
+                                  TokenService tokenService,
+                                  UsuarioRepository usuarioRepository) {
+        this.authenticationManager = authenticationManager;
+        this.authorizationService = authorizationService;
+        this.tokenService = tokenService;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<LoginDTO> login(@RequestBody UsuarioDTO data) {

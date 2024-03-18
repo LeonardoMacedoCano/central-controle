@@ -20,7 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,9 +47,17 @@ class DespesaServiceTest {
     }
 
     @Test
+    void testSalvarDespesa() {
+        Despesa despesa = new Despesa();
+        despesaService.salvarDespesa(despesa);
+        verify(despesaRepository, times(1)).save(despesa);
+    }
+
+    @Test
     public void testGetCategoriaById_CategoriaExiste() {
         Long idCategoria = 1L;
-        CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
+        CategoriaDespesa categoriaDespesa = new CategoriaDespesa("Teste");
+        categoriaDespesa.setId(idCategoria);
 
         when(categoriaDespesaRepository.findById(idCategoria)).thenReturn(Optional.of(categoriaDespesa));
 
@@ -72,6 +79,7 @@ class DespesaServiceTest {
     public void testGetDespesaById_DespesaExiste() {
         Long idDespesa = 1L;
         Despesa despesa = new Despesa();
+        despesa.setId(idDespesa);
 
         when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesa));
 
@@ -92,7 +100,6 @@ class DespesaServiceTest {
     @Test
     public void testCriarDespesa() {
         Long idCategoria = 1L;
-        String descricao = "Despesa de teste";
 
         Usuario usuario = new Usuario();
         CategoriaDespesa categoriaDespesa = new CategoriaDespesa();
@@ -100,7 +107,7 @@ class DespesaServiceTest {
 
         DespesaDTO despesaDTO = new DespesaDTO();
         despesaDTO.setCategoria(CategoriaDTO.converterParaDTO(categoriaDespesa));
-        despesaDTO.setDescricao(descricao);
+        despesaDTO.setDescricao("Despesa de teste");
 
         when(categoriaDespesaService.getCategoriaDespesaById(idCategoria)).thenReturn(categoriaDespesa);
 
@@ -109,7 +116,7 @@ class DespesaServiceTest {
         assertNotNull(despesa);
         assertEquals(usuario, despesa.getUsuario());
         assertNotNull(despesa.getCategoria());
-        assertEquals(descricao, despesa.getDescricao());
+        assertEquals(despesaDTO.getDescricao(), despesa.getDescricao());
     }
 
     @Test

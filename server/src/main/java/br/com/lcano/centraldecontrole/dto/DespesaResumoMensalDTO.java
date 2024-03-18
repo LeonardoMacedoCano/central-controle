@@ -26,13 +26,13 @@ public class DespesaResumoMensalDTO {
         return dto;
     }
 
-    private static Double calcularValorTotal(List<DespesaParcelaDTO> parcelas) {
+    static Double calcularValorTotal(List<DespesaParcelaDTO> parcelas) {
         return parcelas.stream()
                 .mapToDouble(DespesaParcelaDTO::getValor)
                 .sum();
     }
 
-    private static String calcularSituacao(List<DespesaParcelaDTO> parcelas) {
+    static String calcularSituacao(List<DespesaParcelaDTO> parcelas) {
         boolean todasPagas = parcelas.stream()
                 .allMatch(DespesaParcelaDTO::getPago);
         boolean todasNaoPagas = parcelas.stream()
