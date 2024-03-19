@@ -46,4 +46,12 @@ public class DespesaParcelaService {
             DateUtil.toDate(DateUtil.getUltimoDiaDoMes(ano, mes))
         );
     }
+
+    public double calcularValorTotalParcelasMensal(Integer ano, Integer mes) {
+        List<DespesaParcela> parcelas = despesaParcelaRepository.findByDataVencimentoBetween(
+            DateUtil.toDate(DateUtil.getPrimeiroDiaDoMes(ano, mes)),
+            DateUtil.toDate(DateUtil.getUltimoDiaDoMes(ano, mes)));
+
+        return parcelas.stream().mapToDouble(DespesaParcela::getValor).sum();
+    }
 }

@@ -120,4 +120,24 @@ public class DespesaParcelaServiceTest {
         assertEquals(parcelasMock.size(), parcelas.size());
         assertEquals(parcelasMock, parcelas);
     }
+
+    @Test
+    public void testCalcularValorTotalParcelasMensal() {
+        Usuario usuario = new Usuario("teste", "123", new Date());
+        CategoriaDespesa categoriaDespesa = new CategoriaDespesa("teste");
+
+        Despesa despesa = new Despesa(1L, usuario, categoriaDespesa, "teste1", new Date(), new ArrayList<>());
+
+        List<DespesaParcela> parcelasMock = Arrays.asList(
+                new DespesaParcela(1L, 1, new Date(), 5.00, false, despesa),
+                new DespesaParcela(2L, 2, new Date(), 10.00, false, despesa),
+                new DespesaParcela(3L, 3, new Date(), 15.00, false, despesa));
+
+        when(despesaParcelaRepository.findByDataVencimentoBetween(
+                any(Date.class), any(Date.class))).thenReturn(parcelasMock);
+
+        double total = despesaParcelaService.calcularValorTotalParcelasMensal(2024, 3);
+
+        assertEquals(30.0, total);
+    }
 }

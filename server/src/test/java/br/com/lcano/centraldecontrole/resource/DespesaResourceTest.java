@@ -4,7 +4,6 @@ import br.com.lcano.centraldecontrole.dto.DespesaDTO;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.dto.DespesaResumoMensalDTO;
 import br.com.lcano.centraldecontrole.service.DespesaService;
-import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

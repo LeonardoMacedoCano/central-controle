@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface DespesaParcelaRepository extends JpaRepository<DespesaParcela, Long> {
     List<DespesaParcela> findByDespesaAndDataVencimentoBetween(Despesa despesa, Date dataInicio, Date dataFim);
+
+    List<DespesaParcela> findByDataVencimentoBetween(Date dataInicio, Date dataFim);
 }
