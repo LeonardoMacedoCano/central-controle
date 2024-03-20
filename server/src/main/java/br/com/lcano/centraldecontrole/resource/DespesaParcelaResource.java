@@ -19,7 +19,7 @@ public class DespesaParcelaResource {
     }
 
     @GetMapping("/valor-total-mensal")
-    public ResponseEntity<Double> getValorTotalParcelasPorMes(@RequestParam("mes") int mes, @RequestParam("ano") int ano) {
+    public ResponseEntity<Double> getValorTotalParcelasMensal(@RequestParam("mes") int mes, @RequestParam("ano") int ano) {
         double valorTotal = despesaParcelaService.calcularValorTotalParcelasMensal(ano, mes);
         return ResponseEntity.ok(valorTotal);
     }

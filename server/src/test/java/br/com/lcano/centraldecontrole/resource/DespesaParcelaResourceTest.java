@@ -24,14 +24,14 @@ public class DespesaParcelaResourceTest {
     }
 
     @Test
-    void testGetValorTotalParcelasPorMes() {
+    void testGetValorTotalParcelasMensal() {
         int ano = 2024;
         int mes = 3;
         double valorTotalEsperado = 500.0;
 
         when(despesaParcelaService.calcularValorTotalParcelasMensal(ano, mes)).thenReturn(valorTotalEsperado);
 
-        ResponseEntity<Double> responseEntity = despesaParcelaResource.getValorTotalParcelasPorMes(mes, ano);
+        ResponseEntity<Double> responseEntity = despesaParcelaResource.getValorTotalParcelasMensal(mes, ano);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(valorTotalEsperado, responseEntity.getBody());

@@ -3,6 +3,7 @@ import { AuthContext } from '../../contexts/auth/AuthContext';
 import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
 import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
 import useDespesaApi from '../../hooks/useDespesaApi';
+import useParcelaApi from '../../hooks/useParcelaApi';
 import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
 import Panel from '../../components/panel/Panel';
@@ -15,9 +16,11 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
   const [dataSelecionada, setDataSelecionada] = useState(() => getDataAtual());
   const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
   const [despesasResumoMensal, setDespesasResumoMensal] = useState<DespesaResumoMensal[]>([]);
+  const [valorTotal, setValorTotal] = useState<number>(0); 
 
   const auth = useContext(AuthContext);
-  const api = useDespesaApi();
+  const apiDespesa = useDespesaApi();
+  const apiParcela = useParcelaApi();
 
   useEffect(() => {
     setToken(auth.usuario?.token || null);
@@ -30,10 +33,18 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
         const ano = parseInt(anoStr);
         const mes = parseInt(mesStr);
 
-        const result = await api.listarDespesaResumoMensal(token, 0, 10, ano, mes);
+        const resultDespesas = await apiDespesa.listarDespesaResumoMensal(token, 0, 10, ano, mes);
 
-        if (result) {
-          setDespesasResumoMensal(result.content);
+        if (resultDespesas) {
+          setDespesasResumoMensal(resultDespesas.content);
+        }
+
+        const resultValorTotal = await apiParcela.getValorTotalParcelasMensal(token, ano, mes);
+
+        if (resultValorTotal) {
+          setValorTotal(resultValorTotal.valueOf());
+        } else {
+          setValorTotal(0);
         }
       }
     };
@@ -72,7 +83,7 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
         <FieldValue 
           description='Valor Total' 
           type='string' 
-          value={formatarValorParaReal(100)}
+          value={formatarValorParaReal(valorTotal)}
           width='180px' />
       </Panel>
 

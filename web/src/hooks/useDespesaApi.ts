@@ -1,13 +1,13 @@
 import useApi from './useApi';
-import { Despesa } from '../types/Despesa';
-import { Categoria } from '../types/Categoria';
-import { usarMensagens } from '../contexts/mensagens';
+//import { usarMensagens } from '../contexts/mensagens';
 import { DespesaResumoMensal } from '../types/DespesaResumoMensal';
+//import { Despesa } from '../types/Despesa';
+//import { Categoria } from '../types/Categoria';
 
 interface DespesaApi {
-  listarCategoriasDespesa: (token: string) => Promise<Categoria[] | undefined>;
   listarDespesaResumoMensal: (token: string, page: number, size: number, ano: number, mes: number) => Promise<{ content: DespesaResumoMensal[] }| undefined>;
   /*
+  listarCategoriasDespesa: (token: string) => Promise<Categoria[] | undefined>;
   listarDespesas: (token: string, page: number, size: number, ano: number, mes: number) => Promise<{ content: Despesa[] }| undefined>;
   addDespesa: (token: string, data: Despesa) => Promise<Despesa | undefined>;
   editarDespesa: (token: string, data: Despesa) => Promise<Despesa | undefined>;
@@ -17,24 +17,7 @@ interface DespesaApi {
 
 const useDespesaApi = (): DespesaApi => {
   const { request } = useApi();
-  const mensagens = usarMensagens();
-
-  /*
-  const despesaPayload = (data: Despesa) => ({
-    idCategoria: data.idCategoria,
-    descricao: data.descricao,
-    valor: data.valor,
-    data: data.data,
-  });
-  */
-
-  const listarCategoriasDespesa = async (token: string) => {
-    try {
-      return await request<Categoria[]>('get', 'categoriadespesa', token);
-    } catch (error) {
-      return undefined;
-    }
-  };
+  //const mensagens = usarMensagens();
 
   const listarDespesaResumoMensal = async (token: string, page: number, size: number, ano: number, mes: number) => {
     try {
@@ -45,6 +28,20 @@ const useDespesaApi = (): DespesaApi => {
   };
 
   /*
+  const despesaPayload = (data: Despesa) => ({
+    idCategoria: data.idCategoria,
+    descricao: data.descricao,
+    valor: data.valor,
+    data: data.data,
+  });
+
+  const listarCategoriasDespesa = async (token: string) => {
+    try {
+      return await request<Categoria[]>('get', 'categoriadespesa', token);
+    } catch (error) {
+      return undefined;
+    }
+  };
 
   const listarDespesas = async (token: string, page: number, size: number, ano: number, mes: number) => {
     try {
@@ -80,8 +77,8 @@ const useDespesaApi = (): DespesaApi => {
   */
 
   return {
-    listarCategoriasDespesa,
-    listarDespesaResumoMensal,
+    listarDespesaResumoMensal
+    //listarCategoriasDespesa,
     //listarDespesas,
     //addDespesa,
     //editarDespesa,
