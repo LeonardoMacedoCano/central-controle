@@ -1,11 +1,11 @@
-import useApi from './useApi';
+import DefaultService from './DefaultService';
 
 interface ParcelaApi {
   getValorTotalParcelasMensal: (token: string, ano: number, mes: number) => Promise<Number | undefined>;
 }
 
-const useParcelaApi = (): ParcelaApi => {
-  const { request } = useApi();
+const ParcelaService = (): ParcelaApi => {
+  const { request } = DefaultService();
 
   const getValorTotalParcelasMensal = async (token: string, ano: number, mes: number) => {
     try {
@@ -16,8 +16,8 @@ const useParcelaApi = (): ParcelaApi => {
   };
 
   return {
-    getValorTotalParcelasMensal  
+    getValorTotalParcelasMensal
   };
 };
 
-export default useParcelaApi;
+export default ParcelaService;

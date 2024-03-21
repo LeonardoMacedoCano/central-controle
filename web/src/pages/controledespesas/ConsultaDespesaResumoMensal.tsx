@@ -1,9 +1,9 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../contexts/auth/AuthContext';
+import DespesaService from '../../service/DespesaService';
+import ParcelaService from '../../service/ParcelaService';
 import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
 import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
-import useDespesaApi from '../../hooks/useDespesaApi';
-import useParcelaApi from '../../hooks/useParcelaApi';
 import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
 import Panel from '../../components/panel/Panel';
@@ -19,8 +19,8 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
   const [valorTotal, setValorTotal] = useState<number>(0); 
 
   const auth = useContext(AuthContext);
-  const apiDespesa = useDespesaApi();
-  const apiParcela = useParcelaApi();
+  const despesaService = DespesaService();
+  const parcelaService = ParcelaService();
 
   useEffect(() => {
     setToken(auth.usuario?.token || null);
@@ -33,13 +33,13 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
         const ano = parseInt(anoStr);
         const mes = parseInt(mesStr);
 
-        const resultDespesas = await apiDespesa.listarDespesaResumoMensal(token, 0, 10, ano, mes);
+        const resultDespesas = await despesaService.listarDespesaResumoMensal(token, 0, 10, ano, mes);
 
         if (resultDespesas) {
           setDespesasResumoMensal(resultDespesas.content);
         }
 
-        const resultValorTotal = await apiParcela.getValorTotalParcelasMensal(token, ano, mes);
+        const resultValorTotal = await parcelaService.getValorTotalParcelasMensal(token, ano, mes);
 
         if (resultValorTotal) {
           setValorTotal(resultValorTotal.valueOf());

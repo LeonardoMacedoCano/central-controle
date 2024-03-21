@@ -1,13 +1,13 @@
+import DefaultService from './DefaultService';
 import { Usuario } from '../types/Usuario';
-import useApi from './useApi';
 
 interface AuthApi {
   validateToken: (token: string) => Promise<{ usuario: Usuario } | undefined>;
   login: (username: string, senha: string) => Promise<{ usuario: Usuario } | undefined>;
 }
 
-const useAuthApi = (): AuthApi => {
-  const { request } = useApi();
+const AuthService = (): AuthApi => {
+  const { request } = DefaultService();
 
   const validateToken = async (token: string) => {
     try {
@@ -19,7 +19,7 @@ const useAuthApi = (): AuthApi => {
 
   const login = async (username: string, senha: string) => {
     try {
-      return await request<{ usuario: Usuario }>('post', 'auth/login', undefined, { username, senha });
+      return await request<{ usuario: Usuario }>('post', 'auth/login', undefined, undefined, { username, senha });
     } catch (error) {
       return undefined;
     }
@@ -31,4 +31,4 @@ const useAuthApi = (): AuthApi => {
   };
 };
 
-export default useAuthApi;
+export default AuthService;

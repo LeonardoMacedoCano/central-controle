@@ -1,7 +1,7 @@
 import React, { ReactNode, createContext, useContext, useState } from 'react';
 import * as styles from './styles';
 
-interface TipoContextoMensagens {
+export interface TipoContextoMensagens {
   exibirErro: (mensagem: string) => void;
   exibirSucesso: (mensagem: string) => void;
 }
