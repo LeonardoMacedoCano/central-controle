@@ -7,7 +7,7 @@ import GlobalStyles from './styles/GlobalStyles';
 import { RequireAuth } from './contexts/auth/RequireAuth.tsx';
 import AppHeader from './components/menu/AppHeader.tsx';
 import { Home } from './pages/home/index.tsx';
-import ConsultaDespesaResumoMensal from './pages/controledespesas/ConsultaDespesaResumoMensal.tsx';
+import DespesaResumoMensalPage from './pages/controledespesas/DespesaResumoMensalPage.tsx';
 import ControleTarefas from './pages/controletarefas/index.tsx';
 import ControleIdeias from './pages/controleideias/index.tsx';
 import dark from './styles/themes/dark';
@@ -25,7 +25,7 @@ const App: React.FC = () => {
                 <AppHeader/>
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/controledespesas" element={<ConsultaDespesaResumoMensal />} />
+                  <Route path="/controledespesas" element={<DespesaResumoMensalPage />} />
                   <Route path="/controletarefas" element={<ControleTarefas />} />
                   <Route path="/controleideias" element={<ControleIdeias />} />
                 </Routes>

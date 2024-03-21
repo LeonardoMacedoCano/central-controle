@@ -10,12 +10,13 @@ import Panel from '../../components/panel/Panel';
 import Container from '../../components/container/Container';
 import FieldValue from '../../components/fieldvalue/FieldValue';
 import { formatarValorParaReal } from '../../utils/ValorUtils';
+import { PagedResponse } from '../../types/PagedResponse';
 
-const ConsultaDespesaResumoMensal: React.FC = () => {
+const DespesaResumoMensalPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
   const [dataSelecionada, setDataSelecionada] = useState(() => getDataAtual());
   const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
-  const [despesasResumoMensal, setDespesasResumoMensal] = useState<DespesaResumoMensal[]>([]);
+  const [despesasPage, setDespesasPage] = useState<PagedResponse<DespesaResumoMensal>>();
   const [valorTotal, setValorTotal] = useState<number>(0); 
 
   const auth = useContext(AuthContext);
@@ -36,7 +37,7 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
         const resultDespesas = await despesaService.listarDespesaResumoMensal(token, 0, 10, ano, mes);
 
         if (resultDespesas) {
-          setDespesasResumoMensal(resultDespesas.content);
+          setDespesasPage(resultDespesas);
         }
 
         const resultValorTotal = await parcelaService.getValorTotalParcelasMensal(token, ano, mes);
@@ -89,7 +90,7 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
 
       <Panel maxWidth='1000px' title='Despesas'>
         <Table
-          values={despesasResumoMensal}
+          values={despesasPage ? despesasPage.content : []}
           messageEmpty="Nenhuma despesa encontrada."
           keyExtractor={(item) => item.id.toString()}
           onClickRow={handleClickRow}
@@ -105,4 +106,4 @@ const ConsultaDespesaResumoMensal: React.FC = () => {
   );
 };
   
-export default ConsultaDespesaResumoMensal;
+export default DespesaResumoMensalPage;
