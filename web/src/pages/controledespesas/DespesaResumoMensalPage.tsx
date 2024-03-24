@@ -11,6 +11,7 @@ import Container from '../../components/container/Container';
 import FieldValue from '../../components/fieldvalue/FieldValue';
 import { formatarValorParaReal } from '../../utils/ValorUtils';
 import { PagedResponse } from '../../types/PagedResponse';
+import SearchPagination from '../../components/pagination/SearchPagination';
 
 const DespesaResumoMensalPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -18,6 +19,8 @@ const DespesaResumoMensalPage: React.FC = () => {
   const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
   const [despesasPage, setDespesasPage] = useState<PagedResponse<DespesaResumoMensal>>();
   const [valorTotal, setValorTotal] = useState<number>(0); 
+  const [indexPagina, setIndexPagina] = useState<number>(0); 
+  const [registrosPorPagina, setRegistrosPorPagina] = useState<number>(2);  
 
   const auth = useContext(AuthContext);
   const despesaService = DespesaService();
@@ -34,7 +37,7 @@ const DespesaResumoMensalPage: React.FC = () => {
         const ano = parseInt(anoStr);
         const mes = parseInt(mesStr);
 
-        const resultDespesas = await despesaService.listarDespesaResumoMensal(token, 0, 10, ano, mes);
+        const resultDespesas = await despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes);
 
         if (resultDespesas) {
           setDespesasPage(resultDespesas);
@@ -51,7 +54,7 @@ const DespesaResumoMensalPage: React.FC = () => {
     };
 
     carregarDespesaResumoMensal();
-  }, [token, dataSelecionada])
+  }, [token, dataSelecionada, indexPagina, registrosPorPagina])
 
   const handleClickRow = (item: DespesaResumoMensal) => {
     if (idDespesaSelecionada === item.id) {
@@ -66,9 +69,15 @@ const DespesaResumoMensalPage: React.FC = () => {
   };
 
   const handleUpdateVencimento = (value: string | number | boolean | Date) => {
+    console.log(value)
     if (typeof value === 'string') {
       setDataSelecionada(formataraMesAnoParaData(value)); 
     }
+  };
+
+  const carregarPagina = (indexPagina: number, registrosPorPagina: number) => {
+    setIndexPagina(indexPagina);
+    setRegistrosPorPagina(registrosPorPagina);
   };
 
   return (
@@ -79,16 +88,27 @@ const DespesaResumoMensalPage: React.FC = () => {
           type='month' 
           value={(dataSelecionada)} 
           editable={true}
-          width='180px'
+          width='165px'
+          inputWidth='160px'
           onUpdate={handleUpdateVencimento} />
         <FieldValue 
           description='Valor Total' 
           type='string' 
           value={formatarValorParaReal(valorTotal)}
-          width='180px' />
+          width='165px'
+          inputWidth='160px' />
       </Panel>
 
-      <Panel maxWidth='1000px' title='Despesas'>
+      <Panel 
+        maxWidth='1000px' 
+        title='Despesas'
+        footer={
+          despesasPage && despesasPage?.totalElements > 0 && 
+          (<SearchPagination
+            page={despesasPage}
+            carregarPagina={carregarPagina}
+          />
+        )}>
         <Table
           values={despesasPage ? despesasPage.content : []}
           messageEmpty="Nenhuma despesa encontrada."

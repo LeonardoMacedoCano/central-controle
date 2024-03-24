@@ -3,4 +3,8 @@ export function formatarValorParaReal(valor: number): string {
     style: 'currency', 
     currency: 'BRL' 
   }).format(valor);
-}
+};
+
+export const formatarNumeroComZerosAEsquerda = (numero: number, digitos: number): string => {
+  return numero.toString().padStart(digitos, '0');
+};
