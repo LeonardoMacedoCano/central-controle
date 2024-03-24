@@ -3,19 +3,22 @@ import styled from 'styled-components';
 interface FieldValueProps {
   width?: string;
   maxWidth?: string;
-  margin?: string;
-}
+  maxHeight?: string;
+  inline?: boolean;
+};
 
 export const FieldValue = styled.div<FieldValueProps>`
   width: ${props => props.width || '100%'};
   max-width: ${props => props.maxWidth || 'none'};
-  margin: ${props => props.margin || '5px'};
+  max-height: ${props => props.maxHeight || 'none'};
+  margin: '5px';
   border: 1px solid ${props => props.theme.colors.tertiary};
   border-radius: 5px;
-  height: 45px;
+  height: ${props => props.inline ? 'auto' : '45px'};
   padding: 1px;
   display: flex;
-  flex-direction: column;
+  flex-direction: ${props => props.inline ? 'row' : 'column'};
+  align-items: ${props => props.inline ? 'center' : 'stretch'};
 `;
 
 export const Label = styled.span`
@@ -26,8 +29,13 @@ export const Label = styled.span`
   padding: 0 5px;
 `;
 
-export const Input = styled.input`
+interface InputProps {
+  inputWidth?: string;
+};
+
+export const Input = styled.input<InputProps>`
   color: ${props => props.theme.colors.tertiary};
+  width: ${props => props.inputWidth || '100%'};
   font-size: 15px;
   height: 100%;
   outline: none;

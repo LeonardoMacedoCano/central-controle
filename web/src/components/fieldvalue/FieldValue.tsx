@@ -3,20 +3,42 @@ import * as C from './styles';
 import { formatarDataParaAnoMes, formatarDataParaString } from '../../utils/DateUtils';
 
 type FieldValueProps = {
-  description: string;
   type: 'string' | 'number' | 'boolean' | 'date' | 'month';
   value: string | number | boolean | Date;
+  description?: string;
   editable?: boolean;
   width?: string;
   maxWidth?: string;
+  maxHeight?: string;
+  minValue?: number;
+  maxValue?: number;
+  inputWidth?: string;
+  inline?: boolean;
   onUpdate?: (value: string | number | boolean | Date) => void;
 };
 
 class FieldValue extends React.Component<FieldValueProps> {
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { onUpdate } = this.props;
+    const { onUpdate, type, minValue, maxValue } = this.props;
+
     if (onUpdate) {
-      onUpdate(event.target.value);
+      let formattedValue: string | number | boolean | Date = event.target.value;
+
+      if (type === 'number') {
+        formattedValue = parseFloat(event.target.value);
+
+        if (minValue && formattedValue < minValue ) {
+          formattedValue = minValue;   
+        } else if (maxValue && formattedValue > maxValue ) {
+          formattedValue = maxValue;   
+        }
+      } else if (type === 'boolean') {
+        formattedValue = event.target.value === 'true';
+      } else if (type === 'date') {
+        formattedValue = new Date(event.target.value);
+      }
+
+      onUpdate(formattedValue);
     }
   };
 
@@ -32,17 +54,20 @@ class FieldValue extends React.Component<FieldValueProps> {
   };
 
   render() {
-    const { description, type, value, editable, width, maxWidth } = this.props;
+    const { description, type, value, editable, width, maxWidth, maxHeight, inline, inputWidth } = this.props;
     return (
-      <C.FieldValue width={width} maxWidth={maxWidth}>
-        <C.Label>
-          {description}
-        </C.Label>
+      <C.FieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline}>
+        {description && 
+          <C.Label>
+            {description}
+          </C.Label>
+        }
         <C.Input
           type={editable ? type : 'string'} 
           readOnly={!editable}
           value={this.formatValue(value)}
           onChange={this.handleInputChange}
+          inputWidth={inputWidth}
         />
       </C.FieldValue>
     );
