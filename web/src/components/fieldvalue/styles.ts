@@ -12,8 +12,6 @@ export const FieldValue = styled.div<FieldValueProps>`
   max-width: ${props => props.maxWidth || 'none'};
   max-height: ${props => props.maxHeight || 'none'};
   margin: '5px';
-  border: 1px solid ${props => props.theme.colors.tertiary};
-  border-radius: 5px;
   height: ${props => props.inline ? 'auto' : '45px'};
   padding: 1px;
   display: flex;

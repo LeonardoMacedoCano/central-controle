@@ -12,6 +12,7 @@ import FieldValue from '../../components/fieldvalue/FieldValue';
 import { formatarValorParaReal } from '../../utils/ValorUtils';
 import { PagedResponse } from '../../types/PagedResponse';
 import SearchPagination from '../../components/pagination/SearchPagination';
+import FlexBox, { FlexBoxElement } from '../../components/flexbox/FlexBox';
 
 const DespesaResumoMensalPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -83,22 +84,38 @@ const DespesaResumoMensalPage: React.FC = () => {
   return (
     <Container>
       <Panel maxWidth='1000px' title='Resumo Mensal'>
-        <FieldValue 
-          description='Data' 
-          type='month' 
-          value={(dataSelecionada)} 
-          editable={true}
-          width='165px'
-          inputWidth='160px'
-          onUpdate={handleUpdateVencimento} />
-        <FieldValue 
-          description='Valor Total' 
-          type='string' 
-          value={formatarValorParaReal(valorTotal)}
-          width='165px'
-          inputWidth='160px' />
+        <FlexBox width='100%' height='100%' justifyContent='space-between'>
+          <FlexBoxElement 
+            borderRight  
+            flex={1} 
+            width='165px' 
+          >
+            <FieldValue 
+              description='Data' 
+              type='month' 
+              value={dataSelecionada} 
+              editable={true}
+              width='165px'
+              inputWidth='160px'
+              onUpdate={handleUpdateVencimento} 
+            />
+          </FlexBoxElement>
+          <FlexBoxElement 
+            borderLeft 
+            flex={1} 
+            width='165px'
+            alignRight 
+          >
+            <FieldValue 
+              description='Valor Total' 
+              type='string' 
+              value={formatarValorParaReal(valorTotal)}
+              width='165px'
+              inputWidth='160px' 
+            />
+          </FlexBoxElement>
+        </FlexBox>
       </Panel>
-
       <Panel 
         maxWidth='1000px' 
         title='Despesas'

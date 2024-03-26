@@ -8,35 +8,11 @@ export const SearchPagination = styled.div`
   align-items: center;
 `;
 
-export const ItemsContainer = styled.div`
+export const ItemContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-`;
-
-export const ItemsContainerLeft = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-export const ItemsContainerCenter = styled.ul`
-  display: flex;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-`;
-
-export const ItemsContainerRight = styled.ul`
-  display: flex;
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  align-items: center;
-  justify-content: flex-end;
 `;
 
 export const Item = styled.li<{ disabled?: boolean}>`

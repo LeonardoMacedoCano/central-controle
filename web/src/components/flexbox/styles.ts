@@ -29,8 +29,8 @@ export const FlexBoxItem = styled.div<FlexBoxItemProps>`
   height: ${props => props.height || 'auto'};
   ${props => props.alignRight && 'margin-left: auto;'}
   ${props => props.alignCenter && 'margin: 0 auto;'}
-  border-top: ${props => props.borderTop ? '1px solid black' : 'none'};
-  border-bottom: ${props => props.borderBottom ? '1px solid black' : 'none'};
-  border-left: ${props => props.borderLeft ? '1px solid black' : 'none'};
-  border-right: ${props => props.borderRight ? '1px solid black' : 'none'};
+  border-top: ${props => props.borderTop ? `1px solid ${props.theme.colors.tertiary}` : 'none'};
+  border-bottom: ${props => props.borderBottom ? `1px solid ${props.theme.colors.tertiary}` : 'none'};
+  border-left: ${props => props.borderLeft ? `1px solid ${props.theme.colors.tertiary}` : 'none'};
+  border-right: ${props => props.borderRight ? `1px solid ${props.theme.colors.tertiary}` : 'none'};
 `;

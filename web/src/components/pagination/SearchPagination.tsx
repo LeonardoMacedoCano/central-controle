@@ -4,6 +4,7 @@ import { PagedResponse } from '../../types/PagedResponse';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import FieldValue from '../fieldvalue/FieldValue';
 import { formatarNumeroComZerosAEsquerda } from '../../utils/ValorUtils';
+import FlexBox, { FlexBoxElement } from '../../components/flexbox/FlexBox';
 
 interface SearchPaginationProps {
   page: PagedResponse<any>;
@@ -80,8 +81,12 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
 
     return (
       <C.SearchPagination>
-        <C.ItemsContainer>
-          <C.ItemsContainerLeft>
+        <FlexBox width='100%' height='100%' justifyContent='space-between'>
+          <FlexBoxElement 
+            borderRight  
+            flex={1} 
+            width='165px' 
+          >
             <FieldValue 
               description='Itens por pág: '
               type='number'
@@ -95,34 +100,45 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
               editable={true}
               onUpdate={this.handleUpdateRegistrosPorPagina}
             />
-          </C.ItemsContainerLeft>
-          <C.ItemsContainerCenter>
-            <C.Item onClick={this.carregarPrimeiraPagina} disabled={isPrimeiraPagina}>
-              <FaAngleDoubleLeft />
-            </C.Item>  
-            <C.Item onClick={this.carregarPaginaAnterior} disabled={isPrimeiraPagina}>
-              <FaAngleLeft />
-            </C.Item>
-            {numeroPaginaAtual} / {numeroUltimaPagina}
-            <C.Item onClick={this.carregarProximaPagina} disabled={isUltimaPagina}>
-              <FaAngleRight />
-            </C.Item>
-            <C.Item onClick={this.carregarUltimaPagina} disabled={isUltimaPagina}>
-              <FaAngleDoubleRight />
-            </C.Item>
-          </C.ItemsContainerCenter>
-          <C.ItemsContainerRight>
+          </FlexBoxElement>
+          <FlexBoxElement 
+            flex={1} 
+            width='100%'
+            alignCenter
+          >
+            <C.ItemContainer>
+              <C.Item onClick={this.carregarPrimeiraPagina} disabled={isPrimeiraPagina}>
+                <FaAngleDoubleLeft />
+              </C.Item>  
+              <C.Item onClick={this.carregarPaginaAnterior} disabled={isPrimeiraPagina}>
+                <FaAngleLeft />
+              </C.Item>
+              {numeroPaginaAtual} / {numeroUltimaPagina}
+              <C.Item onClick={this.carregarProximaPagina} disabled={isUltimaPagina}>
+                <FaAngleRight />
+              </C.Item>
+              <C.Item onClick={this.carregarUltimaPagina} disabled={isUltimaPagina}>
+                <FaAngleDoubleRight />
+              </C.Item>
+            </C.ItemContainer>
+          </FlexBoxElement>
+          <FlexBoxElement 
+            borderLeft
+            flex={1} 
+            width='160px'
+            alignRight
+          >
             <FieldValue 
               description='Total de itens: '
               type='number'
               value={formatarNumeroComZerosAEsquerda(totalRegistros, 3)}
               inline={true}
               maxHeight='25px'
-              width='160px'
+              width='165px'
               inputWidth='50px'
             />
-          </C.ItemsContainerRight>
-        </C.ItemsContainer>
+          </FlexBoxElement>
+        </FlexBox>
       </C.SearchPagination> 
     );  
   }
