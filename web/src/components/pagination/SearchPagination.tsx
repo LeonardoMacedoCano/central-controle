@@ -4,7 +4,7 @@ import { PagedResponse } from '../../types/PagedResponse';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import FieldValue from '../fieldvalue/FieldValue';
 import { formatarNumeroComZerosAEsquerda } from '../../utils/ValorUtils';
-import FlexBox, { FlexBoxElement } from '../../components/flexbox/FlexBox';
+import FlexBox from '../../components/flexbox/FlexBox';
 
 interface SearchPaginationProps {
   page: PagedResponse<any>;
@@ -82,7 +82,7 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
     return (
       <C.SearchPagination>
         <FlexBox width='100%' height='100%' justifyContent='space-between'>
-          <FlexBoxElement 
+          <FlexBox.Item 
             borderRight  
             flex={1} 
             width='165px' 
@@ -100,8 +100,8 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
               editable={true}
               onUpdate={this.handleUpdateRegistrosPorPagina}
             />
-          </FlexBoxElement>
-          <FlexBoxElement 
+          </FlexBox.Item>
+          <FlexBox.Item 
             flex={1} 
             width='100%'
             alignCenter
@@ -121,8 +121,8 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
                 <FaAngleDoubleRight />
               </C.Item>
             </C.ItemContainer>
-          </FlexBoxElement>
-          <FlexBoxElement 
+          </FlexBox.Item>
+          <FlexBox.Item 
             borderLeft
             flex={1} 
             width='160px'
@@ -137,7 +137,7 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
               width='165px'
               inputWidth='50px'
             />
-          </FlexBoxElement>
+          </FlexBox.Item>
         </FlexBox>
       </C.SearchPagination> 
     );  

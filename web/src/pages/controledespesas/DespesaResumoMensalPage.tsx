@@ -12,7 +12,7 @@ import FieldValue from '../../components/fieldvalue/FieldValue';
 import { formatarValorParaReal } from '../../utils/ValorUtils';
 import { PagedResponse } from '../../types/PagedResponse';
 import SearchPagination from '../../components/pagination/SearchPagination';
-import FlexBox, { FlexBoxElement } from '../../components/flexbox/FlexBox';
+import FlexBox from '../../components/flexbox/FlexBox';
 
 const DespesaResumoMensalPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -85,7 +85,7 @@ const DespesaResumoMensalPage: React.FC = () => {
     <Container>
       <Panel maxWidth='1000px' title='Resumo Mensal'>
         <FlexBox width='100%' height='100%' justifyContent='space-between'>
-          <FlexBoxElement 
+          <FlexBox.Item 
             borderRight  
             flex={1} 
             width='165px' 
@@ -99,8 +99,8 @@ const DespesaResumoMensalPage: React.FC = () => {
               inputWidth='160px'
               onUpdate={handleUpdateVencimento} 
             />
-          </FlexBoxElement>
-          <FlexBoxElement 
+          </FlexBox.Item>
+          <FlexBox.Item 
             borderLeft 
             flex={1} 
             width='165px'
@@ -113,7 +113,7 @@ const DespesaResumoMensalPage: React.FC = () => {
               width='165px'
               inputWidth='160px' 
             />
-          </FlexBoxElement>
+          </FlexBox.Item>
         </FlexBox>
       </Panel>
       <Panel 
