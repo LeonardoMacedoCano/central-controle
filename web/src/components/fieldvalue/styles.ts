@@ -11,9 +11,8 @@ export const FieldValue = styled.div<FieldValueProps>`
   width: ${props => props.width || '100%'};
   max-width: ${props => props.maxWidth || 'none'};
   max-height: ${props => props.maxHeight || 'none'};
-  margin: '5px';
-  height: ${props => props.inline ? 'auto' : '45px'};
-  padding: 1px;
+  height: 100%;
+  padding: 5px;
   display: flex;
   flex-direction: ${props => props.inline ? 'row' : 'column'};
   align-items: ${props => props.inline ? 'center' : 'stretch'};
@@ -24,11 +23,13 @@ export const Label = styled.span`
   font-weight: bold;
   font-size: 15px;
   height: 100%;
-  padding: 0 5px;
+  display: flex;
+  align-items: center;
 `;
 
 interface InputProps {
   inputWidth?: string;
+  inline?: boolean;
 };
 
 export const Input = styled.input<InputProps>`
@@ -37,6 +38,6 @@ export const Input = styled.input<InputProps>`
   font-size: 15px;
   height: 100%;
   outline: none;
-  padding: 0 5px;
-  border: none;
+  background-color: transparent;
+  margin-left: ${props => props.inline ? '5px' : 'none'};
 `;

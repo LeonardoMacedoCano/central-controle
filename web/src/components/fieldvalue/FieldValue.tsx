@@ -68,6 +68,7 @@ class FieldValue extends React.Component<FieldValueProps> {
           value={this.formatValue(value)}
           onChange={this.handleInputChange}
           inputWidth={inputWidth}
+          inline={inline}
         />
       </C.FieldValue>
     );

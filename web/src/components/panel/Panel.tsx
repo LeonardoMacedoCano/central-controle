@@ -17,17 +17,18 @@ class Panel extends React.Component<PanelProps> {
         {title && (
           <C.Title>
             <h2>{title}</h2>
-            <C.TitleLine />
           </C.Title>
         )}
-        <C.Body>
-          {children}
-        </C.Body>
-        {footer && (
-          <C.Footer>
-            {footer}
-          </C.Footer>
-        )}
+        <C.PanelContainer>
+          <C.Body>
+            {children}
+          </C.Body>
+          {footer && (
+            <C.Footer>
+              {footer}
+            </C.Footer>
+          )}
+        </C.PanelContainer>
       </C.Panel>
     );
   }

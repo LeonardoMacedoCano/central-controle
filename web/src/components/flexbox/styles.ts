@@ -3,8 +3,13 @@ import styled from 'styled-components';
 interface FlexBoxContainerProps {
   width?: string;
   height?: string;
-  justifyContent?: string;
 }
+
+export const FlexBoxContainer = styled.div<FlexBoxContainerProps>`
+  width: ${props => props.width || '100%'};
+  height: ${props => props.height || '100%'};
+  display: flex;
+`;
 
 interface FlexBoxItemProps {
   width?: string;
@@ -17,16 +22,9 @@ interface FlexBoxItemProps {
   alignCenter?: boolean;
 }
 
-export const FlexBoxContainer = styled.div<FlexBoxContainerProps>`
-  display: flex;
-  width: ${props => props.width || '100%'};
-  height: ${props => props.height || 'auto'};
-  justify-content: ${props => props.justifyContent || 'flex-start'};
-`;
-
 export const FlexBoxItem = styled.div<FlexBoxItemProps>`
-  width: ${props => props.width || 'auto'};
-  height: ${props => props.height || 'auto'};
+  width: ${props => props.width || '100%'};
+  height: ${props => props.height || '100%'};
   ${props => props.alignRight && 'margin-left: auto;'}
   ${props => props.alignCenter && 'margin: 0 auto;'}
   border-top: ${props => props.borderTop ? `1px solid ${props.theme.colors.tertiary}` : 'none'};

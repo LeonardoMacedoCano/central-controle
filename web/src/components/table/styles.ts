@@ -47,6 +47,10 @@ export const TableRow = styled.tr<{ isSelected?: boolean }>`
   &:nth-child(odd) {
     background-color: #e4e4e4;
   }
+
+  &:last-child {
+    border-bottom: 2px solid ${({ theme }) => theme.colors.tertiary};
+  }
 `;
 
 export const TableColumn = styled.td<{ isSelected?: boolean }>`

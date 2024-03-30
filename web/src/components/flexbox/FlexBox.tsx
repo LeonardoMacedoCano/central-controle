@@ -5,7 +5,6 @@ interface FlexBoxProps {
   children: React.ReactNode;
   width?: string;
   height?: string;
-  justifyContent?: string;
 }
 
 interface FlexBoxChildProps {
@@ -30,9 +29,9 @@ class FlexBox extends React.Component<FlexBoxProps> {
   };
 
   render() {
-    const { children, width, height, justifyContent } = this.props;
+    const { children, ...rest } = this.props;
     return (
-      <C.FlexBoxContainer width={width} height={height} justifyContent={justifyContent}>
+      <C.FlexBoxContainer {...rest}>
         {children}
       </C.FlexBoxContainer>
     );

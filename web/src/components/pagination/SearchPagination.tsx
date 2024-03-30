@@ -8,6 +8,8 @@ import FlexBox from '../../components/flexbox/FlexBox';
 
 interface SearchPaginationProps {
   page: PagedResponse<any>;
+  height?: string;
+  width?: string;
   carregarPagina: (indexPagina: number, registrosPorPagina: number) => void;
 };
 
@@ -70,7 +72,7 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
   };
   
   render() {
-    const { page } = this.props;
+    const { page, height, width } = this.props;
     const { indexPaginaAtual, registrosPorPagina } = this.state;
 
     const numeroPaginaAtual = indexPaginaAtual + 1;
@@ -80,19 +82,19 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
     const totalRegistros = page.totalElements;
 
     return (
-      <C.SearchPagination>
-        <FlexBox width='100%' height='100%' justifyContent='space-between'>
+      <C.SearchPagination height={height} width={width}>
+        <FlexBox>
           <FlexBox.Item 
             borderRight  
             flex={1} 
-            width='165px' 
+            width='160px' 
           >
             <FieldValue 
               description='Itens por pág: '
               type='number'
               value={formatarNumeroComZerosAEsquerda(registrosPorPagina, 3)}
               inline={true}
-              maxHeight='25px'
+              maxHeight={height}
               width='160px'
               inputWidth='50px'
               minValue={1}
@@ -103,7 +105,6 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
           </FlexBox.Item>
           <FlexBox.Item 
             flex={1} 
-            width='100%'
             alignCenter
           >
             <C.ItemContainer>
@@ -133,8 +134,8 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
               type='number'
               value={formatarNumeroComZerosAEsquerda(totalRegistros, 3)}
               inline={true}
-              maxHeight='25px'
-              width='165px'
+              maxHeight={height}
+              width='160px'
               inputWidth='50px'
             />
           </FlexBox.Item>

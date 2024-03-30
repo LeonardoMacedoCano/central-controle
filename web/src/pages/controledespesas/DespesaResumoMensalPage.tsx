@@ -34,36 +34,24 @@ const DespesaResumoMensalPage: React.FC = () => {
 
   useEffect(() => {
     const carregarDespesaResumoMensal = async () => {
-      if (token !== null && typeof token === 'string') {
-        const [anoStr, mesStr] = formatarDataParaAnoMes(dataSelecionada).split('-');
-        const ano = parseInt(anoStr);
-        const mes = parseInt(mesStr);
+      if (!token) return;
 
-        const resultDespesas = await despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes);
+      const [anoStr, mesStr] = formatarDataParaAnoMes(dataSelecionada).split('-');
+      const ano = parseInt(anoStr, 10);
+      const mes = parseInt(mesStr, 10);
 
-        if (resultDespesas) {
-          setDespesasPage(resultDespesas);
-        }
+      const resultDespesas = await despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes);
+      setDespesasPage(resultDespesas || undefined);
 
-        const resultValorTotal = await parcelaService.getValorTotalParcelasMensal(token, ano, mes);
-
-        if (resultValorTotal) {
-          setValorTotal(resultValorTotal.valueOf());
-        } else {
-          setValorTotal(0);
-        }
-      }
+      const resultValorTotal = await parcelaService.getValorTotalParcelasMensal(token, ano, mes);
+      setValorTotal(resultValorTotal?.valueOf() || 0);
     };
 
     carregarDespesaResumoMensal();
   }, [token, dataSelecionada, indexPagina, registrosPorPagina])
 
   const handleClickRow = (item: DespesaResumoMensal) => {
-    if (idDespesaSelecionada === item.id) {
-      setIdDespesaSelecionada(null);
-    } else {
-      setIdDespesaSelecionada(item.id);
-    }
+    setIdDespesaSelecionada(prevId => prevId === item.id ? null : item.id);
   };
   
   const handleRowSelected = (item: DespesaResumoMensal) => {
@@ -71,7 +59,6 @@ const DespesaResumoMensalPage: React.FC = () => {
   };
 
   const handleUpdateVencimento = (value: string | number | boolean | Date) => {
-    console.log(value)
     if (typeof value === 'string') {
       setDataSelecionada(formataraMesAnoParaData(value)); 
     }
@@ -97,34 +84,34 @@ const DespesaResumoMensalPage: React.FC = () => {
   return (
     <Container>
       <Panel maxWidth='1000px' title='Resumo Mensal'>
-        <FlexBox width='100%' height='100%' justifyContent='space-between'>
+        <FlexBox>
           <FlexBox.Item 
             borderRight  
             flex={1} 
-            width='165px' 
+            width='160px' 
           >
             <FieldValue 
               description='Data' 
               type='month' 
               value={dataSelecionada} 
               editable={true}
-              width='165px'
-              inputWidth='160px'
+              width='150px'
+              inputWidth='150px'
               onUpdate={handleUpdateVencimento} 
             />
           </FlexBox.Item>
           <FlexBox.Item 
             borderLeft 
             flex={1} 
-            width='165px'
+            width='160px'
             alignRight 
           >
             <FieldValue 
               description='Valor Total' 
               type='string' 
               value={formatarValorParaReal(valorTotal)}
-              width='165px'
-              inputWidth='160px' 
+              width='150px'
+              inputWidth='150px' 
             />
           </FlexBox.Item>
         </FlexBox>
@@ -147,16 +134,40 @@ const DespesaResumoMensalPage: React.FC = () => {
           rowSelected={handleRowSelected}
           customHeader={
             <>
-              <Button variant='table-add' onClick={handleAdd} disabled={(idDespesaSelecionada !== null && idDespesaSelecionada > 0)} />
-              <Button variant='table-edit' onClick={handleEdit} disabled={(idDespesaSelecionada === null || idDespesaSelecionada === 0)} />
-              <Button variant='table-delete' onClick={handleDelete} disabled={(idDespesaSelecionada === null || idDespesaSelecionada === 0)} />
+              <Button 
+                variant='table-add' 
+                onClick={handleAdd} 
+                disabled={idDespesaSelecionada !== null && idDespesaSelecionada > 0} 
+              />
+              <Button 
+                variant='table-edit' 
+                onClick={handleEdit} 
+                disabled={!idDespesaSelecionada} 
+              />
+              <Button 
+                variant='table-delete' 
+                onClick={handleDelete} 
+                disabled={!idDespesaSelecionada} 
+              />
             </>
           }
         >
-          <Column<DespesaResumoMensal> fieldName="categoria.descricao" header="Categoria" value={(item) => item.categoria.descricao} />
-          <Column<DespesaResumoMensal> fieldName="descricao" header="Descrição" value={(item) => item.descricao} />
-          <Column<DespesaResumoMensal> fieldName="valorTotal" header="Valor" value={(item) => formatarValorParaReal(item.valorTotal)} />
-          <Column<DespesaResumoMensal> fieldName="situacao" header="Situação" value={(item) => item.situacao} />
+          <Column<DespesaResumoMensal> 
+            fieldName="categoria.descricao" 
+            header="Categoria" 
+            value={(item) => item.categoria.descricao} />
+          <Column<DespesaResumoMensal> 
+            fieldName="descricao" 
+            header="Descrição" 
+            value={(item) => item.descricao} />
+          <Column<DespesaResumoMensal> 
+            fieldName="valorTotal" 
+            header="Valor" 
+            value={(item) => formatarValorParaReal(item.valorTotal)} />
+          <Column<DespesaResumoMensal> 
+            fieldName="situacao" 
+            header="Situação" 
+            value={(item) => item.situacao} />
         </Table>
       </Panel>
     </Container>

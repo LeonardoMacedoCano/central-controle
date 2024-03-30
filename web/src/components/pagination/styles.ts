@@ -1,23 +1,29 @@
 import styled from 'styled-components';
 
-export const SearchPagination = styled.div`
-  width: 100%;
-  padding: 10px 0;
+interface SearchPaginationProps {
+  height?: string;
+  width?: string;
+}
+
+export const SearchPagination = styled.div<SearchPaginationProps>`
+  width: ${props => props.width || '100%'};
+  height: ${props => props.height || '100%'};
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
 export const ItemContainer = styled.div`
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
 `;
 
 export const Item = styled.li<{ disabled?: boolean}>`
-  width: 25px;
-  height: 25px;
+  width: 35px;
+  height: 100%;
   font-size: 20px;
   color: ${props => props.theme.colors.black};
   display: flex;
