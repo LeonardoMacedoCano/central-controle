@@ -4,8 +4,8 @@ interface StyledButtonProps {
   variant?: 'table-add' | 'table-edit' | 'table-delete' | 'success' | 'info' | 'warning';
   width?: string;
   height?: string;
-  style?: React.CSSProperties;
   disabled?: boolean;
+  style?: React.CSSProperties;
 }
 
 const convertReactStyleToCSSObject = (style: React.CSSProperties): CSSObject => {
@@ -14,7 +14,7 @@ const convertReactStyleToCSSObject = (style: React.CSSProperties): CSSObject => 
   );
 };
 
-const commonButtonStyles = css`
+const commonButtonTableStyles = css`
   height: 30px;
   width: 30px;
   border-radius: 50%;
@@ -44,19 +44,19 @@ export const StyledButton = styled.button<StyledButtonProps>`
     switch (variant) {
       case 'table-add':
         return css`
-          ${commonButtonStyles};
+          ${commonButtonTableStyles};
           background-color: ${theme.colors.success};
         `;
       case 'table-edit':
         return css`
-          ${commonButtonStyles};
+          ${commonButtonTableStyles};
           background-color: ${theme.colors.info};
         `;
       case 'table-delete':
-        return css`
-          ${commonButtonStyles};
-          background-color: ${theme.colors.warning};
-        `;
+      return css`
+        ${commonButtonTableStyles};
+        background-color: ${theme.colors.warning};
+      `;
       case 'success':
         return css`
           background-color: ${theme.colors.success};

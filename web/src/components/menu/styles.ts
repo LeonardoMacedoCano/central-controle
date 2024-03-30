@@ -60,6 +60,7 @@ export const AppSidebar = styled.div<AppSidebarProps>`
   width: 315px;
   left: ${(props) => (props.isActive ? '0' : '-100%')};
   animation: showSidebar 0.4s;
+  z-index: 1000;
 
   > svg {
     position: fixed;

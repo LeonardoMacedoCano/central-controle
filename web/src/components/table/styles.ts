@@ -26,6 +26,7 @@ export const TableHeadRow = styled.tr`
 export const TableHeadColumn = styled.th`
   padding: 0 10px;
   text-align: left;
+  background-color: #f8f8f8;
   border-right: 1px solid ${({ theme }) => theme.colors.tertiary};
   &:last-child {
     border-right: none;
@@ -41,7 +42,11 @@ export const TableColumnTitle = styled.div`
 `;
 
 export const TableRow = styled.tr<{ isSelected?: boolean }>`
-  position: relative;
+  background-color: #f8f8f8;
+  
+  &:nth-child(odd) {
+    background-color: #e4e4e4;
+  }
 `;
 
 export const TableColumn = styled.td<{ isSelected?: boolean }>`
