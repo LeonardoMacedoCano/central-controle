@@ -13,6 +13,7 @@ import { formatarValorParaReal } from '../../utils/ValorUtils';
 import { PagedResponse } from '../../types/PagedResponse';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
+import Button from '../../components/button/Button';
 
 const DespesaResumoMensalPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -81,6 +82,18 @@ const DespesaResumoMensalPage: React.FC = () => {
     setRegistrosPorPagina(registrosPorPagina);
   };
 
+  const handleAdd = () => {
+    console.log('Botão Add clicado');
+  };
+  
+  const handleEdit = () => {
+    console.log('Botão Editar clicado');
+  };
+  
+  const handleDelete = () => {
+    console.log('Botão Deletar clicado');
+  };
+
   return (
     <Container>
       <Panel maxWidth='1000px' title='Resumo Mensal'>
@@ -132,6 +145,13 @@ const DespesaResumoMensalPage: React.FC = () => {
           keyExtractor={(item) => item.id.toString()}
           onClickRow={handleClickRow}
           rowSelected={handleRowSelected}
+          customHeader={
+            <>
+              <Button variant='table-add' onClick={handleAdd} disabled={(idDespesaSelecionada !== null && idDespesaSelecionada > 0)} />
+              <Button variant='table-edit' onClick={handleEdit} disabled={(idDespesaSelecionada === null || idDespesaSelecionada === 0)} />
+              <Button variant='table-delete' onClick={handleDelete} disabled={(idDespesaSelecionada === null || idDespesaSelecionada === 0)} />
+            </>
+          }
         >
           <Column<DespesaResumoMensal> fieldName="categoria.descricao" header="Categoria" value={(item) => item.categoria.descricao} />
           <Column<DespesaResumoMensal> fieldName="descricao" header="Descrição" value={(item) => item.descricao} />

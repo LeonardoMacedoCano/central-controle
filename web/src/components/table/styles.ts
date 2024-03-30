@@ -1,41 +1,69 @@
 import styled from 'styled-components';
 
-export const Table = styled.table`
+export const TableContainer = styled.div`
+  width: 100%;
+  overflow-x: auto;
+`;
+
+export const CustomHeader = styled.div`
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.tertiary};
+`;
+
+export const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
 `;
 
-export const TableHeadColumn = styled.th<{ width?: number }>`
-  width: ${props => props.width ? `${props.width}px` : 'auto'};
-  padding: 10px;
+export const TableHeadRow = styled.tr`
+  width: 100%;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.tertiary};
+`;
+
+export const TableHeadColumn = styled.th`
+  padding: 0 10px;
   text-align: left;
-`;
-
-export const TableSeparatorRow = styled.tr`
-  height: 1px;
-  background-color: ${props => props.theme.colors.tertiary}; 
-`;
-
-export const TableSeparatorCell = styled.td`
-  border: none;
-  height: 1px;
-  padding: 0;
-  margin: 0;
+  border-right: 1px solid ${({ theme }) => theme.colors.tertiary};
+  &:last-child {
+    border-right: none;
+  }
 `;
 
 export const TableColumnTitle = styled.div`
+  height: 35px;
+  text-align: left;
   display: flex;
   align-items: center;
-  height: 20px;
+  box-sizing: border-box;
 `;
 
 export const TableRow = styled.tr<{ isSelected?: boolean }>`
-  background-color: ${props => (props.isSelected ? props.theme.colors.tertiary : 'transparent')};
-  color: ${props => (props.isSelected ? props.theme.colors.white : props.theme.colors.black)};
+  position: relative;
 `;
 
-export const TableColumn = styled.td`
-  padding: 10px;
+export const TableColumn = styled.td<{ isSelected?: boolean }>`
+  height: 35px;
+  padding: 0 10px;
+  text-align: left;
+  border-right: 1px solid ${({ theme }) => theme.colors.tertiary};
+  position: relative;
+  
+  &:first-child::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 5px;
+    background-color: ${({ theme, isSelected }) => (isSelected ? theme.colors.tertiary : 'transparent')};
+  }
+
+  &:last-child {
+    border-right: none;
+  }
 `;
 
 export const EmptyMessage = styled.div`

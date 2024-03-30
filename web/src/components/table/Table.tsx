@@ -9,6 +9,7 @@ interface Props<T> {
   keyExtractor(item: T, index?: number): string | number;
   onClickRow(item: T, index?: number): void;
   rowSelected?(item: T): boolean;
+  customHeader?: React.ReactNode;
 }
 
 interface Indexable {
@@ -16,20 +17,11 @@ interface Indexable {
 }
 
 class Table<T extends Indexable> extends React.Component<Props<T>> {
-  renderTableSeparatorRow() {
-    const { children } = this.props;
-    return (
-      <C.TableSeparatorRow>
-        {children.map((_, index) => <C.TableSeparatorCell key={index} />)}
-      </C.TableSeparatorRow>
-    );
-  }
-    
   renderTableHead() {
     const { children } = this.props;
     return (
       <thead>
-        <tr>
+        <C.TableHeadRow>
           {children.map((child, index) => (
             <C.TableHeadColumn key={index}>
               <C.TableColumnTitle>
@@ -37,8 +29,7 @@ class Table<T extends Indexable> extends React.Component<Props<T>> {
               </C.TableColumnTitle>
             </C.TableHeadColumn>
           ))}
-        </tr>
-        {this.renderTableSeparatorRow()}
+        </C.TableHeadRow>
       </thead>
     );
   }
@@ -49,12 +40,13 @@ class Table<T extends Indexable> extends React.Component<Props<T>> {
       <tbody>
         {values.map((item, index) => (
           <C.TableRow
-            isSelected={rowSelected ? rowSelected(item) : false}
             key={keyExtractor(item, index)}
             onClick={() => onClickRow(item, index)}
           >
             {children.map((child, childIndex) => (
-              <C.TableColumn key={childIndex}>
+              <C.TableColumn 
+                key={childIndex}
+                isSelected={rowSelected ? rowSelected(item) : false}>
                 {child.props.value ? child.props.value(item, index) : item[child.props.fieldName]}
               </C.TableColumn>
             ))}
@@ -65,18 +57,23 @@ class Table<T extends Indexable> extends React.Component<Props<T>> {
   }
 
   render() {
-    const { values, messageEmpty } = this.props;
+    const { values, messageEmpty, customHeader } = this.props;
     return (
-      <>
+      <C.TableContainer>
+        {customHeader && (
+          <C.CustomHeader>
+            {customHeader}
+          </C.CustomHeader>
+        )}
         {values.length === 0 ? (
           <C.EmptyMessage>{messageEmpty}</C.EmptyMessage>
         ) : (
-          <C.Table>
+          <C.StyledTable>
             {this.renderTableHead()}
             {this.renderTableBody()}
-          </C.Table>
+          </C.StyledTable>
         )}
-      </>
+      </C.TableContainer>
     );
   }
 }

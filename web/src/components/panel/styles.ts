@@ -16,7 +16,6 @@ export const Panel = styled.div<PanelProps>`
 export const Title = styled.div`
   h2 {
     font-weight: bold;
-    margin-bottom: 5px;
     color: ${({ theme }) => theme.colors.white};
   }
 `;
@@ -30,7 +29,6 @@ export const TitleLine = styled.div`
 const BaseBox = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.white};
-  padding: 5px;
   box-shadow: 0px 0px 5px ${({ theme }) => theme.colors.gray};
   border-radius: 5px;
   margin-top: 20px;
