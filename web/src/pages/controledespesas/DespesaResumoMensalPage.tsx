@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import DespesaService from '../../service/DespesaService';
 import ParcelaService from '../../service/ParcelaService';
@@ -22,9 +23,10 @@ const DespesaResumoMensalPage: React.FC = () => {
   const [despesasPage, setDespesasPage] = useState<PagedResponse<DespesaResumoMensal>>();
   const [valorTotal, setValorTotal] = useState<number>(0); 
   const [indexPagina, setIndexPagina] = useState<number>(0); 
-  const [registrosPorPagina, setRegistrosPorPagina] = useState<number>(2);  
+  const [registrosPorPagina, setRegistrosPorPagina] = useState<number>(3);  
 
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
   const despesaService = DespesaService();
   const parcelaService = ParcelaService();
 
@@ -37,8 +39,8 @@ const DespesaResumoMensalPage: React.FC = () => {
       if (!token) return;
 
       const [anoStr, mesStr] = formatarDataParaAnoMes(dataSelecionada).split('-');
-      const ano = parseInt(anoStr, 10);
-      const mes = parseInt(mesStr, 10);
+      const ano = parseInt(anoStr);
+      const mes = parseInt(mesStr);
 
       const resultDespesas = await despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes);
       setDespesasPage(resultDespesas || undefined);
@@ -70,11 +72,11 @@ const DespesaResumoMensalPage: React.FC = () => {
   };
 
   const handleAdd = () => {
-    console.log('Botão Add clicado');
+    navigate('/despesa');
   };
   
   const handleEdit = () => {
-    console.log('Botão Editar clicado');
+    navigate(`/despesa/${idDespesaSelecionada}`);
   };
   
   const handleDelete = () => {

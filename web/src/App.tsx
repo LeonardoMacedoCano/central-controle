@@ -11,6 +11,7 @@ import DespesaResumoMensalPage from './pages/controledespesas/DespesaResumoMensa
 import ControleTarefas from './pages/controletarefas/index.tsx';
 import ControleIdeias from './pages/controleideias/index.tsx';
 import dark from './styles/themes/dark';
+import DespesaPage from './pages/controledespesas/DespesaPage.tsx';
 //import light from './styles/themes/light';
 
 const App: React.FC = () => {
@@ -26,6 +27,7 @@ const App: React.FC = () => {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/controledespesas" element={<DespesaResumoMensalPage />} />
+                  <Route path="/despesa/:idStr?" element={<DespesaPage/>} />
                   <Route path="/controletarefas" element={<ControleTarefas />} />
                   <Route path="/controleideias" element={<ControleIdeias />} />
                 </Routes>
