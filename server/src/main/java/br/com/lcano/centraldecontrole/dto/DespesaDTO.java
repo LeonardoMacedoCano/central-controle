@@ -18,6 +18,8 @@ public class DespesaDTO {
 
     private String descricao;
 
+    private Double valorTotal;
+
     @JsonProperty("parcelas")
     private List<DespesaParcelaDTO> parcelasDTO;
 
@@ -28,6 +30,13 @@ public class DespesaDTO {
         dto.setDataLancamento(despesa.getDataLancamento());
         dto.setDescricao(despesa.getDescricao());
         dto.setParcelasDTO(DespesaParcelaDTO.converterListaParaDTO(despesa.getParcelas()));
+        dto.setValorTotal(calcularValorTotal(dto.parcelasDTO));
         return dto;
+    }
+
+    static Double calcularValorTotal(List<DespesaParcelaDTO> parcelas) {
+        return parcelas.stream()
+                .mapToDouble(DespesaParcelaDTO::getValor)
+                .sum();
     }
 }

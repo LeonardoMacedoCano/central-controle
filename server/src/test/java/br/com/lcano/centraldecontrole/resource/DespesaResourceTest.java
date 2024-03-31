@@ -1,5 +1,8 @@
 package br.com.lcano.centraldecontrole.resource;
 
+import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
+import br.com.lcano.centraldecontrole.domain.Despesa;
+import br.com.lcano.centraldecontrole.domain.DespesaParcela;
 import br.com.lcano.centraldecontrole.dto.DespesaDTO;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.dto.DespesaResumoMensalDTO;
@@ -14,9 +17,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Objects;
+
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -97,5 +99,38 @@ class DespesaResourceTest {
 
         assertIterableEquals(despesasDTO.getContent(), Objects.requireNonNull(response.getBody()).getContent());
         assertEquals(HttpStatus.OK, response.getStatusCode());
+    }
+
+    @Test
+    void testGetDebitoByIdWithParcelas() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+
+        CategoriaDespesa categoria = new CategoriaDespesa();
+        categoria.setId(1L);
+        categoria.setDescricao("Teste");
+
+        Long idDespesa = 1L;
+        Despesa despesa = new Despesa();
+        despesa.setId(idDespesa);
+        despesa.setCategoria(categoria);
+
+        List<DespesaParcela> parcelas = Arrays.asList(
+                new DespesaParcela(1L, 1, new Date(), 5.00, false, despesa),
+                new DespesaParcela(2L, 2, new Date(), 10.00, false, despesa),
+                new DespesaParcela(3L, 3, new Date(), 15.00, false, despesa));
+
+        despesa.setParcelas(parcelas);
+
+        Usuario usuario = new Usuario(1L, "teste", "senha123", new Date(), true);
+
+        when(request.getAttribute("usuario")).thenReturn(usuario);
+        when(despesaService.getDespesaByIdWithParcelas(idDespesa)).thenReturn(despesa);
+
+        ResponseEntity<DespesaDTO> response = despesaResource.getDespesaByIdWithParcelas(idDespesa);
+
+        verify(despesaService, times(1)).getDespesaByIdWithParcelas(idDespesa);
+        assertEquals(parcelas.size(), Objects.requireNonNull(response.getBody()).getParcelasDTO().size());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(idDespesa, Objects.requireNonNull(response.getBody()).getId());
     }
 }

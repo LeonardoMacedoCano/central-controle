@@ -98,6 +98,28 @@ class DespesaServiceTest {
     }
 
     @Test
+    public void testGetDespesaByIdWithParcelas_DespesaExiste() {
+        Long idDespesa = 1L;
+        Despesa despesa = new Despesa();
+        despesa.setId(idDespesa);
+
+        when(despesaRepository.findByIdWithParcelas(idDespesa)).thenReturn(Optional.of(despesa));
+
+        Despesa result = despesaService.getDespesaByIdWithParcelas(idDespesa);
+
+        assertEquals(despesa, result);
+    }
+
+    @Test
+    public void testGetDespesaByIdWithParcelas_DespesaNaoExiste() {
+        Long idDespesa = 1L;
+
+        when(despesaRepository.findByIdWithParcelas(idDespesa)).thenReturn(Optional.empty());
+
+        assertThrows(DespesaException.DespesaNaoEncontradaById.class, () -> despesaService.getDespesaByIdWithParcelas(idDespesa));
+    }
+
+    @Test
     public void testCriarDespesa() {
         Long idCategoria = 1L;
 

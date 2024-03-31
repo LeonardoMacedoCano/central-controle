@@ -52,6 +52,11 @@ public class DespesaService {
             .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaById(id));
     }
 
+    public Despesa getDespesaByIdWithParcelas(Long id) {
+        return despesaRepository.findByIdWithParcelas(id)
+            .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaById(id));
+    }
+
     public Despesa criarDespesa(DespesaDTO data, Usuario usuario) {
         Despesa novaDespesa = new Despesa();
         novaDespesa.setUsuario(usuario);
