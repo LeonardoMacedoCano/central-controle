@@ -1,6 +1,6 @@
 import React from 'react';
 import * as C from './styles';
-import { formatarDataParaAnoMes, formatarDataParaString } from '../../utils/DateUtils';
+import { formatarDataParaAnoMes, formatarDataParaString, formatarStringParaData } from '../../utils/DateUtils';
 
 type FieldValueProps = {
   type: 'string' | 'number' | 'boolean' | 'date' | 'month';
@@ -20,22 +20,22 @@ type FieldValueProps = {
 class FieldValue extends React.Component<FieldValueProps> {
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { onUpdate, type, minValue, maxValue } = this.props;
-
+  
     if (onUpdate) {
       let formattedValue: string | number | boolean | Date = event.target.value;
-
-      if (type === 'number') {
+  
+      if (type === 'number' && typeof formattedValue === 'number') {
         formattedValue = parseFloat(event.target.value);
-
-        if (minValue && formattedValue < minValue ) {
-          formattedValue = minValue;   
-        } else if (maxValue && formattedValue > maxValue ) {
-          formattedValue = maxValue;   
+  
+        if (minValue && formattedValue < minValue) {
+          formattedValue = minValue;
+        } else if (maxValue && formattedValue > maxValue) {
+          formattedValue = maxValue;
         }
-      } else if (type === 'boolean') {
+      } else if (typeof formattedValue === 'boolean' && type === 'boolean') {
         formattedValue = event.target.value === 'true';
       } else if (type === 'date') {
-        formattedValue = new Date(event.target.value);
+        formattedValue = formatarStringParaData(event.target.value);
       }
 
       onUpdate(formattedValue);

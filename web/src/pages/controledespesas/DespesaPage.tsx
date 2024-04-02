@@ -7,6 +7,9 @@ import DespesaService from '../../service/DespesaService';
 import Panel from '../../components/panel/Panel';
 import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
+import { formatarDataParaString } from '../../utils/DateUtils';
+import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
+import DespesaForm from '../../components/form/despesaform/DespesaForm';
 
 const DespesaPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
@@ -34,32 +37,63 @@ const DespesaPage: React.FC = () => {
   }, [token, id])
 
   const handleClickRow = (item: Parcela) => {
-    //
+    console.log(`item: ${item}`);
+  };
+
+  const handleAddDespesa = (novaDespesa: Despesa) => {
+    console.log(`novaDespesa: ${novaDespesa}`);
+  };
+
+  const handleUpdateDespesa = (despesaAtualizada: Despesa) => {
+    setDespesa(despesaAtualizada)
   };
 
   return (
+    <>
+    <Panel
+      maxWidth='1000px' 
+      title='Despesa'
+    >
+      <DespesaForm
+        despesa={despesa || null}
+        onAdd={handleAddDespesa}
+        onUpdate={handleUpdateDespesa}
+      />
+    </Panel>
+
     <Panel
       maxWidth='1000px' 
       title='Parcelas'
     >
       <Table
         values={despesa ? despesa.parcelas : []}
-        messageEmpty="Nenhuma despesa encontrada."
+        messageEmpty="Nenhuma parcela encontrada."
         keyExtractor={(item) => item.id.toString()}
         onClickRow={handleClickRow}
       >
         <Column<Parcela> 
           fieldName="numero" 
-          header="Categoria" 
+          header="Número" 
           value={(item) => item.numero} 
         /> 
         <Column<Parcela> 
+          fieldName="dataVencimento" 
+          header="Data Vencimento" 
+          value={(item) => formatarDataParaString(item.dataVencimento)} 
+        /> 
+        <Column<Parcela> 
           fieldName="valor" 
-          header="Categoria" 
-          value={(item) => item.valor} 
+          header="Valor" 
+          value={(item) => formatarValorParaReal(item.valor)} 
         />  
+        <Column<Parcela> 
+          fieldName="pago" 
+          header="Situação" 
+          value={(item) => formatarDescricaoSituacaoParcela(item.pago)} 
+        /> 
       </Table>
     </Panel>
+  </>
   )
 }
 
