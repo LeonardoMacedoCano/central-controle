@@ -37,5 +37,6 @@ public class DespesaDTOTest {
         assertEquals(despesa.getCategoria().getId(), dto.getCategoria().getId());
         assertEquals(despesa.getCategoria().getDescricao(), dto.getCategoria().getDescricao());
         assertEquals(valorTotalEsperado, dto.getValorTotal());
+        assertEquals("Não pago", dto.getSituacao());
     }
 }
