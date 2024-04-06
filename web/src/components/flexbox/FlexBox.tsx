@@ -5,15 +5,17 @@ interface FlexBoxProps {
   children: React.ReactNode;
   width?: string;
   height?: string;
+  flexDirection?: 'row' | 'column';
 }
 
 interface FlexBoxChildProps {
   children: React.ReactNode;
   width?: string;
   height?: string;
+  borderTop?: boolean;
+  borderBottom?: boolean;
   borderRight?: boolean;
   borderLeft?: boolean;
-  flex?: number;
   alignCenter?: boolean;
   alignRight?: boolean;
 }

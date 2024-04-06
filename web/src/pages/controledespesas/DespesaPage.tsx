@@ -10,11 +10,13 @@ import Column from '../../components/table/Column';
 import { formatarDataParaString } from '../../utils/DateUtils';
 import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
 import DespesaForm from '../../components/form/despesaform/DespesaForm';
+import { Categoria } from '../../types/Categoria';
 
 const DespesaPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
   const [token, setToken] = useState<string | null>(null);
   const [despesa, setDespesa] = useState<Despesa>();
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
   
   const auth = useContext(AuthContext);
   const despesaService = DespesaService();
@@ -31,6 +33,9 @@ const DespesaPage: React.FC = () => {
 
       const resultDespesa = await despesaService.getDespesaByIdWithParcelas(token, id);
       setDespesa(resultDespesa || undefined);
+
+      const resultCategorias = await despesaService.getTodasCategoriasDespesa(token);
+      setCategorias(resultCategorias || []);
     };
 
     carregarDespesa();
@@ -56,6 +61,7 @@ const DespesaPage: React.FC = () => {
     >
       <DespesaForm
         despesa={despesa || null}
+        categorias={categorias}
         onAdd={handleAddDespesa}
         onUpdate={handleUpdateDespesa}
       />

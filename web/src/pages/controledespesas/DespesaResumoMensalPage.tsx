@@ -15,6 +15,7 @@ import { PagedResponse } from '../../types/PagedResponse';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
 import Button from '../../components/button/Button';
+import { Categoria } from '../../types/Categoria';
 
 const DespesaResumoMensalPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -60,7 +61,7 @@ const DespesaResumoMensalPage: React.FC = () => {
     return idDespesaSelecionada === item.id;
   };
 
-  const handleUpdateVencimento = (value: string | number | boolean | Date) => {
+  const handleUpdateVencimento = (value: string | number | boolean | Date | Categoria) => {
     if (typeof value === 'string') {
       setDataSelecionada(formataraMesAnoParaData(value)); 
     }
@@ -89,7 +90,6 @@ const DespesaResumoMensalPage: React.FC = () => {
         <FlexBox>
           <FlexBox.Item 
             borderRight  
-            flex={1} 
             width='160px' 
           >
             <FieldValue 
@@ -104,7 +104,6 @@ const DespesaResumoMensalPage: React.FC = () => {
           </FlexBox.Item>
           <FlexBox.Item 
             borderLeft 
-            flex={1} 
             width='160px'
             alignRight 
           >

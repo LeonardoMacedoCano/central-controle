@@ -40,4 +40,15 @@ export const Input = styled.input<InputProps>`
   outline: none;
   background-color: transparent;
   margin-left: ${props => props.inline ? '5px' : 'none'};
+  cursor: ${props => (props.readOnly ? 'not-allowed' : 'pointer')};
+`;
+
+export const Select = styled.select<InputProps>`
+  color: ${props => props.theme.colors.tertiary};
+  width: ${props => props.inputWidth || '100%'};
+  font-size: 15px;
+  height: 100%;
+  outline: none;
+  background-color: transparent;
+  margin-left: ${props => props.inline ? '5px' : 'none'};
 `;

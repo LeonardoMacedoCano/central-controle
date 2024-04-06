@@ -2,10 +2,12 @@ import DefaultService from './DefaultService';
 import { PagedResponse } from '../types/PagedResponse';
 import { DespesaResumoMensal } from '../types/DespesaResumoMensal';
 import { Despesa } from '../types/Despesa';
+import { Categoria } from '../types/Categoria';
 
 interface DespesaApi {
   listarDespesaResumoMensal: (token: string, page: number, size: number, ano: number, mes: number) => Promise< PagedResponse<DespesaResumoMensal> | undefined >;
   getDespesaByIdWithParcelas: (token: string, id: number) => Promise< Despesa | undefined >;
+  getTodasCategoriasDespesa: (token: string) => Promise< Categoria[] | undefined >;
 }
 
 const DespesaService = (): DespesaApi => {
@@ -27,9 +29,18 @@ const DespesaService = (): DespesaApi => {
     }
   };
 
+  const getTodasCategoriasDespesa = async (token: string) => {
+    try {
+      return await request<Categoria[]>(`get`, 'categoriadespesa', token);
+    } catch (error) {
+      return undefined;
+    }
+  };
+
   return {
     listarDespesaResumoMensal,
-    getDespesaByIdWithParcelas
+    getDespesaByIdWithParcelas,
+    getTodasCategoriasDespesa
   };
 };
 

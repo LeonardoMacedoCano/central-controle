@@ -7,5 +7,6 @@ export type Despesa = {
   dataLancamento: Date;
   descricao: string;
   valorTotal: number;
+  situacao: string;
   parcelas: Parcela[];
 }

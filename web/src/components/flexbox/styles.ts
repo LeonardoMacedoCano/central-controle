@@ -3,12 +3,14 @@ import styled from 'styled-components';
 interface FlexBoxContainerProps {
   width?: string;
   height?: string;
+  flexDirection?: 'row' | 'column';
 }
 
 export const FlexBoxContainer = styled.div<FlexBoxContainerProps>`
   width: ${props => props.width || '100%'};
   height: ${props => props.height || '100%'};
   display: flex;
+  flex-direction: ${props => props.flexDirection || 'row'};
 `;
 
 interface FlexBoxItemProps {
