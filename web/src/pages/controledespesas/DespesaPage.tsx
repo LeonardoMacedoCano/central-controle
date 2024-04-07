@@ -96,7 +96,13 @@ const DespesaPage: React.FC = () => {
   };
 
   const handleSave = () => {
-    console.log('Salvando...');
+    if (token) {
+      if (id > 0) {
+        //to do - editDespesa
+      } else {
+        despesaService.gerarDespesa(token, despesa);
+      }
+    }
   };
 
   return (
@@ -106,7 +112,6 @@ const DespesaPage: React.FC = () => {
         mainButtonHint='Salvar Despesa'
         mainAction={handleSave}
       />
-
 
     <Panel
       maxWidth='1000px' 

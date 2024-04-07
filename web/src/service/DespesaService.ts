@@ -3,15 +3,18 @@ import { PagedResponse } from '../types/PagedResponse';
 import { DespesaResumoMensal } from '../types/DespesaResumoMensal';
 import { Despesa } from '../types/Despesa';
 import { Categoria } from '../types/Categoria';
+import { usarMensagens } from '../contexts/mensagens';
 
 interface DespesaApi {
   listarDespesaResumoMensal: (token: string, page: number, size: number, ano: number, mes: number) => Promise< PagedResponse<DespesaResumoMensal> | undefined >;
   getDespesaByIdWithParcelas: (token: string, id: number) => Promise< Despesa | undefined >;
   getTodasCategoriasDespesa: (token: string) => Promise< Categoria[] | undefined >;
+  gerarDespesa: (token: string, data: Despesa) => Promise< undefined >;
 }
 
 const DespesaService = (): DespesaApi => {
   const { request } = DefaultService();
+  const mensagens = usarMensagens();
 
   const listarDespesaResumoMensal = async (token: string, page: number, size: number, ano: number, mes: number) => {
     try {
@@ -37,10 +40,25 @@ const DespesaService = (): DespesaApi => {
     }
   };
 
+  const despesaPayload = (data: Despesa) => ({
+    categoria: data.categoria,
+    descricao: data.descricao,
+    parcelas: data.parcelas
+  });
+
+  const gerarDespesa = async (token: string, data: Despesa) => {
+    try {
+      await request<Despesa>('post', 'despesa', token, mensagens, despesaPayload(data));
+    } catch (error) {
+      return undefined;
+    }
+  };
+
   return {
     listarDespesaResumoMensal,
     getDespesaByIdWithParcelas,
-    getTodasCategoriasDespesa
+    getTodasCategoriasDespesa,
+    gerarDespesa
   };
 };
 
