@@ -16,7 +16,18 @@ import Button from '../../components/button/Button';
 const DespesaPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
   const [token, setToken] = useState<string | null>(null);
-  const [despesa, setDespesa] = useState<Despesa>();
+  const [despesa, setDespesa] = useState<Despesa>({
+    id: 0,
+    categoria: {
+      id: 0,
+      descricao: ''
+    },
+    dataLancamento: getDataAtual(),
+    descricao: '',
+    valorTotal: 0,
+    situacao: '',
+    parcelas: []
+  });
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [idParcelaSelecionada, setIdParcelaSelecionada] = useState<number | null>(null);
   
@@ -41,7 +52,7 @@ const DespesaPage: React.FC = () => {
           }
           setCategorias(resultCategorias || []);
         } catch (error) {
-          console.error("Erro ao carregar despesa:", error);
+          console.error("Erro ao carregar a despesa:", error);
         }
       }
     };
@@ -81,15 +92,7 @@ const DespesaPage: React.FC = () => {
       title='Despesa'
     >
       <DespesaForm
-        despesa={{
-          id: despesa?.id ?? 0,
-          categoria: despesa?.categoria ?? categorias[0],
-          dataLancamento: despesa?.dataLancamento ?? getDataAtual(),
-          descricao: despesa?.descricao ?? '',
-          valorTotal: despesa?.valorTotal ?? 0,
-          situacao: despesa?.situacao ?? '',
-          parcelas: despesa?.parcelas ?? [],
-        }}
+        despesa={despesa}
         categorias={categorias}
         onUpdate={handleUpdateDespesa}
       />
