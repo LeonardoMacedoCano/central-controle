@@ -9,9 +9,11 @@ import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
 import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
 import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
-import DespesaForm from '../../components/form/despesaform/DespesaForm';
+import DespesaForm from '../../components/form/despesa/DespesaForm';
 import { Categoria } from '../../types/Categoria';
-import Button from '../../components/button/Button';
+import Button from '../../components/button/button/Button';
+import FloatingButton from '../../components/button/Floatingbutton/FloatingButton';
+import { FaSave } from 'react-icons/fa';
 
 const DespesaPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
@@ -26,7 +28,15 @@ const DespesaPage: React.FC = () => {
     descricao: '',
     valorTotal: 0,
     situacao: '',
-    parcelas: []
+    parcelas: [
+      {
+        id: 0,
+        numero: 1,
+        dataVencimento: getDataAtual(),
+        valor: 10.00,
+        pago: false
+      }
+    ]
   });
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [idParcelaSelecionada, setIdParcelaSelecionada] = useState<number | null>(null);
@@ -85,8 +95,19 @@ const DespesaPage: React.FC = () => {
     console.log('handleDeleteParcela');  
   };
 
+  const handleSave = () => {
+    console.log('Salvando...');
+  };
+
   return (
     <>
+      <FloatingButton
+        mainButtonIcon={<FaSave />}
+        mainButtonHint='Salvar Despesa'
+        mainAction={handleSave}
+      />
+
+
     <Panel
       maxWidth='1000px' 
       title='Despesa'

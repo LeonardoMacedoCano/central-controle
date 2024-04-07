@@ -14,7 +14,7 @@ import { formatarValorParaReal } from '../../utils/ValorUtils';
 import { PagedResponse } from '../../types/PagedResponse';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
-import Button from '../../components/button/Button';
+import Button from '../../components/button/button/Button';
 import { Categoria } from '../../types/Categoria';
 
 const DespesaResumoMensalPage: React.FC = () => {
