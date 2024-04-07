@@ -7,16 +7,18 @@ import DespesaService from '../../service/DespesaService';
 import Panel from '../../components/panel/Panel';
 import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
-import { formatarDataParaString } from '../../utils/DateUtils';
+import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
 import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
 import DespesaForm from '../../components/form/despesaform/DespesaForm';
 import { Categoria } from '../../types/Categoria';
+import Button from '../../components/button/Button';
 
 const DespesaPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
   const [token, setToken] = useState<string | null>(null);
   const [despesa, setDespesa] = useState<Despesa>();
   const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [idParcelaSelecionada, setIdParcelaSelecionada] = useState<number | null>(null);
   
   const auth = useContext(AuthContext);
   const despesaService = DespesaService();
@@ -29,28 +31,47 @@ const DespesaPage: React.FC = () => {
 
   useEffect(() => {
     const carregarDespesa = async () => {
-      if (!token || id <= 0) return;
-
-      const resultDespesa = await despesaService.getDespesaByIdWithParcelas(token, id);
-      setDespesa(resultDespesa || undefined);
-
-      const resultCategorias = await despesaService.getTodasCategoriasDespesa(token);
-      setCategorias(resultCategorias || []);
+      if (token) {
+        try {
+          const resultDespesa = (id > 0 ? await despesaService.getDespesaByIdWithParcelas(token, id) : null);
+          const resultCategorias = await despesaService.getTodasCategoriasDespesa(token);
+  
+          if (resultDespesa) {
+            setDespesa(resultDespesa);
+          }
+          setCategorias(resultCategorias || []);
+        } catch (error) {
+          console.error("Erro ao carregar despesa:", error);
+        }
+      }
     };
-
+  
     carregarDespesa();
-  }, [token, id])
+  }, [token, id]);
+  
 
   const handleClickRow = (item: Parcela) => {
-    console.log(`item: ${item}`);
+    setIdParcelaSelecionada(prevId => prevId === item.id ? null : item.id);
   };
 
-  const handleAddDespesa = (novaDespesa: Despesa) => {
-    console.log(`novaDespesa: ${novaDespesa}`);
+  const handleRowSelected = (item: Parcela) => {
+    return idParcelaSelecionada === item.id;
   };
 
   const handleUpdateDespesa = (despesaAtualizada: Despesa) => {
     setDespesa(despesaAtualizada)
+  };
+
+  const handleAddParcela = () => {
+    console.log('handleAddParcela');  
+  };
+  
+  const handleEditParcela = () => {
+    console.log('handleEditParcela');  
+  };
+  
+  const handleDeleteParcela = () => {
+    console.log('handleDeleteParcela');  
   };
 
   return (
@@ -60,9 +81,16 @@ const DespesaPage: React.FC = () => {
       title='Despesa'
     >
       <DespesaForm
-        despesa={despesa || null}
+        despesa={{
+          id: despesa?.id ?? 0,
+          categoria: despesa?.categoria ?? categorias[0],
+          dataLancamento: despesa?.dataLancamento ?? getDataAtual(),
+          descricao: despesa?.descricao ?? '',
+          valorTotal: despesa?.valorTotal ?? 0,
+          situacao: despesa?.situacao ?? '',
+          parcelas: despesa?.parcelas ?? [],
+        }}
         categorias={categorias}
-        onAdd={handleAddDespesa}
         onUpdate={handleUpdateDespesa}
       />
     </Panel>
@@ -76,6 +104,26 @@ const DespesaPage: React.FC = () => {
         messageEmpty="Nenhuma parcela encontrada."
         keyExtractor={(item) => item.id.toString()}
         onClickRow={handleClickRow}
+        rowSelected={handleRowSelected}
+          customHeader={
+            <>
+              <Button 
+                variant='table-add' 
+                onClick={handleAddParcela} 
+                disabled={idParcelaSelecionada !== null && idParcelaSelecionada > 0} 
+              />
+              <Button 
+                variant='table-edit' 
+                onClick={handleEditParcela} 
+                disabled={!idParcelaSelecionada} 
+              />
+              <Button 
+                variant='table-delete' 
+                onClick={handleDeleteParcela} 
+                disabled={!idParcelaSelecionada} 
+              />
+            </>
+          }
       >
         <Column<Parcela> 
           fieldName="numero" 

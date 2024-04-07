@@ -7,28 +7,19 @@ import { formatarValorParaReal } from '../../../utils/ValorUtils';
 import { Categoria } from '../../../types/Categoria';
 
 interface DespesaFormProps {
-  despesa: Despesa | null;
-  categorias: Categoria[] | [];
-  onAdd: (novaDespesa: Despesa) => void;
+  despesa: Despesa;
+  categorias: Categoria[];
   onUpdate: (despesaAtualizada: Despesa) => void;
 }
 
-const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onAdd, onUpdate }) => {
-  const handleUpdateDataLancamento = (value: string | number | boolean | Date | Categoria) => {
-    if (value instanceof Date) {
-      const despesaAtualizada: Despesa = {
-        ...despesa!,
-        dataLancamento: value
-      };
-      onUpdate(despesaAtualizada);
-    }
-  };
+const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate }) => {
 
   const handleUpdateCategoria = (value: string | number | boolean | Date | Categoria) => {
-    if (value instanceof Object && 'id' in value) {
+    const categoriaSelecionada = categorias.find(c => c.id === (value as Categoria).id);
+    if (categoriaSelecionada) {
       const despesaAtualizada: Despesa = {
         ...despesa!,
-        categoria: value
+        categoria: categoriaSelecionada
       };
       onUpdate(despesaAtualizada);
     }
@@ -57,8 +48,7 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onAdd, o
           <FieldValue 
             description='Data Lançamento'
             type='string'
-            value={formatarDataParaString(despesa?.dataLancamento)}
-            onUpdate={handleUpdateDataLancamento}
+            value={formatarDataParaString(despesa.dataLancamento)}
           />
         </FlexBox.Item>
         <FlexBox.Item
@@ -67,7 +57,7 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onAdd, o
           <FieldValue 
             description='Situação'
             type='string'
-            value={despesa?.situacao || ''}
+            value={despesa.situacao}
           />
         </FlexBox.Item>
         <FlexBox.Item
@@ -76,11 +66,10 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onAdd, o
           <FieldValue 
             description='Valor Total'
             type='number'
-            value={formatarValorParaReal(despesa?.valorTotal || 0)}
+            value={formatarValorParaReal(despesa.valorTotal)}
           />
         </FlexBox.Item>
       </FlexBox>
-
       <FlexBox 
         flexDirection="row"
       >
@@ -91,7 +80,7 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onAdd, o
           <FieldValue 
             description='Categoria'
             type='categoria'
-            value={despesa?.categoria || ''}
+            value={despesa.categoria}
             editable={true}
             categorias={categorias}
             onUpdate={handleUpdateCategoria}
@@ -104,13 +93,12 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onAdd, o
           <FieldValue 
             description='Descrição'
             type='string'
-            value={despesa?.descricao || ''}
+            value={despesa.descricao}
             editable={true}
             onUpdate={handleUpdateDescricao}
           />
         </FlexBox.Item>
       </FlexBox>
-      
     </FlexBox>
   )
 }
