@@ -1,11 +1,11 @@
 import React from 'react';
 import * as C from './styles';
-import { formatarDataParaAnoMes, formatarDataParaString, formatarStringParaData } from '../../utils/DateUtils';
+import { formatarDataParaAnoMes, formatarDataParaStringYMD, formatarStringParaData } from '../../utils/DateUtils';
 import { Categoria } from '../../types/Categoria';
 
 type FieldValueProps = {
   type: 'string' | 'number' | 'boolean' | 'date' | 'month' | 'categoria';
-  value: string | number | boolean | Date | Categoria;
+  value: string | number | boolean | Categoria;
   description?: string;
   editable?: boolean;
   width?: string;
@@ -27,9 +27,9 @@ class FieldValue extends React.Component<FieldValueProps> {
     if (onUpdate) {
       let formattedValue: string | number | boolean | Date | Categoria = event.target.value;
   
-      if (type === 'number' && typeof formattedValue === 'number') {
+      if (type === 'number') {
         formattedValue = parseFloat(event.target.value);
-  
+        
         if (minValue && formattedValue < minValue) {
           formattedValue = minValue;
         } else if (maxValue && formattedValue > maxValue) {
@@ -57,12 +57,12 @@ class FieldValue extends React.Component<FieldValueProps> {
   formatValue = (val: string | number | boolean | Date | Categoria) => {
     const { type } = this.props;
 
-    if (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean') {
+    if ((type !== 'date') && (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean')) {
       return String(val);
     } else if (val instanceof Date && type === 'month') {
       return formatarDataParaAnoMes(val);
-    } else if (val instanceof Date) {
-      return formatarDataParaString(val);
+    } else if (typeof val === 'string' && type == 'date') {
+      return formatarDataParaStringYMD(formatarStringParaData(val));
     } else {
       return '';
     }
