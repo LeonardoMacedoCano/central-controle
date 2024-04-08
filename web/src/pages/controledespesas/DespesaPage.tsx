@@ -10,6 +10,7 @@ import Column from '../../components/table/Column';
 import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
 import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
 import DespesaForm from '../../components/form/despesa/DespesaForm';
+import ParcelaForm from '../../components/form/despesa/ParcelaForm';
 import { Categoria } from '../../types/Categoria';
 import Button from '../../components/button/button/Button';
 import FloatingButton from '../../components/button/Floatingbutton/FloatingButton';
@@ -28,18 +29,11 @@ const DespesaPage: React.FC = () => {
     descricao: '',
     valorTotal: 0,
     situacao: '',
-    parcelas: [
-      {
-        id: 0,
-        numero: 1,
-        dataVencimento: getDataAtual(),
-        valor: 10.00,
-        pago: false
-      }
-    ]
+    parcelas: []
   });
   const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [idParcelaSelecionada, setIdParcelaSelecionada] = useState<number | null>(null);
+  const [numeroParcelaSelecionada, setNumeroParcelaSelecionada] = useState<number | null>(null);
+  const [showParcelaForm, setShowParcelaForm] = useState<boolean>(false);
   
   const auth = useContext(AuthContext);
   const despesaService = DespesaService();
@@ -69,33 +63,56 @@ const DespesaPage: React.FC = () => {
   
     carregarDespesa();
   }, [token, id]);
-  
 
   const handleClickRow = (item: Parcela) => {
-    setIdParcelaSelecionada(prevId => prevId === item.id ? null : item.id);
+    setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
   };
 
   const handleRowSelected = (item: Parcela) => {
-    return idParcelaSelecionada === item.id;
+    return numeroParcelaSelecionada === item.numero;
   };
 
   const handleUpdateDespesa = (despesaAtualizada: Despesa) => {
-    setDespesa(despesaAtualizada)
+    setDespesa(despesaAtualizada);
+  };
+
+  const handleUpdateParcela = (parcelaAtualizada: Parcela) => {
+    const index = despesa.parcelas.findIndex(p => p.numero === parcelaAtualizada.numero);
+    const updatedParcelas = [...despesa.parcelas];
+    updatedParcelas[index] = parcelaAtualizada;
+    setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: updatedParcelas }));
   };
 
   const handleAddParcela = () => {
-    console.log('handleAddParcela');  
-  };
+    const novoNumeroParcela = despesa.parcelas.length + 1;
+    const novaParcela: Parcela = {
+      id: 0,
+      numero: novoNumeroParcela,
+      dataVencimento: getDataAtual(),
+      valor: 0,
+      pago: false
+    };
   
+    setDespesa(prevDespesa => ({
+      ...prevDespesa,
+      parcelas: [...prevDespesa.parcelas, novaParcela]
+    }));
+  
+    setNumeroParcelaSelecionada(novoNumeroParcela);
+    setShowParcelaForm(true);
+  };
+
   const handleEditParcela = () => {
-    console.log('handleEditParcela');  
+    setShowParcelaForm(true);
   };
-  
+
   const handleDeleteParcela = () => {
     console.log('handleDeleteParcela');  
   };
 
   const handleSave = () => {
+    setShowParcelaForm(false);
+
     if (token) {
       if (id > 0) {
         //to do - editDespesa
@@ -113,70 +130,84 @@ const DespesaPage: React.FC = () => {
         mainAction={handleSave}
       />
 
-    <Panel
-      maxWidth='1000px' 
-      title='Despesa'
-    >
-      <DespesaForm
-        despesa={despesa}
-        categorias={categorias}
-        onUpdate={handleUpdateDespesa}
-      />
-    </Panel>
+      {showParcelaForm ? (
+        <Panel
+          maxWidth='1000px' 
+          title='Parcela'
+        >
+          <ParcelaForm
+            parcela={despesa.parcelas[despesa.parcelas.length - 1]}
+            onUpdate={handleUpdateParcela}
+          />
+        </Panel>
+      ) : (
+        <>
+          <Panel
+            maxWidth='1000px' 
+            title='Despesa'
+          >
+            <DespesaForm
+              despesa={despesa}
+              categorias={categorias}
+              onUpdate={handleUpdateDespesa}
+            />
+          </Panel>
 
-    <Panel
-      maxWidth='1000px' 
-      title='Parcelas'
-    >
-      <Table
-        values={despesa ? despesa.parcelas : []}
-        messageEmpty="Nenhuma parcela encontrada."
-        keyExtractor={(item) => item.id.toString()}
-        onClickRow={handleClickRow}
-        rowSelected={handleRowSelected}
-          customHeader={
-            <>
-              <Button 
-                variant='table-add' 
-                onClick={handleAddParcela} 
-                disabled={idParcelaSelecionada !== null && idParcelaSelecionada > 0} 
-              />
-              <Button 
-                variant='table-edit' 
-                onClick={handleEditParcela} 
-                disabled={!idParcelaSelecionada} 
-              />
-              <Button 
-                variant='table-delete' 
-                onClick={handleDeleteParcela} 
-                disabled={!idParcelaSelecionada} 
-              />
-            </>
-          }
-      >
-        <Column<Parcela> 
-          fieldName="numero" 
-          header="Número" 
-          value={(item) => item.numero} 
-        /> 
-        <Column<Parcela> 
-          fieldName="dataVencimento" 
-          header="Data Vencimento" 
-          value={(item) => formatarDataParaString(item.dataVencimento)} 
-        /> 
-        <Column<Parcela> 
-          fieldName="valor" 
-          header="Valor" 
-          value={(item) => formatarValorParaReal(item.valor)} 
-        />  
-        <Column<Parcela> 
-          fieldName="pago" 
-          header="Situação" 
-          value={(item) => formatarDescricaoSituacaoParcela(item.pago)} 
-        /> 
-      </Table>
-    </Panel>
-  </>
+          <Panel
+            maxWidth='1000px' 
+            title='Parcelas'
+          >
+            <Table
+              values={despesa ? despesa.parcelas : []}
+              messageEmpty="Nenhuma parcela encontrada."
+              keyExtractor={(item) => item.id.toString()}
+              onClickRow={handleClickRow}
+              rowSelected={handleRowSelected}
+              customHeader={
+                <>
+                  <Button 
+                    variant='table-add' 
+                    onClick={handleAddParcela} 
+                    disabled={numeroParcelaSelecionada !== null && numeroParcelaSelecionada > 0} 
+                  />
+                  <Button 
+                    variant='table-edit' 
+                    onClick={handleEditParcela} 
+                    disabled={!numeroParcelaSelecionada} 
+                  />
+                  <Button 
+                    variant='table-delete' 
+                    onClick={handleDeleteParcela} 
+                    disabled={!numeroParcelaSelecionada} 
+                  />
+                </>
+              }
+            >
+              <Column<Parcela> 
+                fieldName="numero" 
+                header="Número" 
+                value={(item) => item.numero} 
+              /> 
+              <Column<Parcela> 
+                fieldName="dataVencimento" 
+                header="Data Vencimento" 
+                value={(item) => formatarDataParaString(item.dataVencimento)} 
+              /> 
+              <Column<Parcela> 
+                fieldName="valor" 
+                header="Valor" 
+                value={(item) => formatarValorParaReal(item.valor)} 
+              />  
+              <Column<Parcela> 
+                fieldName="pago" 
+                header="Situação" 
+                value={(item) => formatarDescricaoSituacaoParcela(item.pago)} 
+              /> 
+            </Table>
+          </Panel>
+        </>
+      )}
+    </>
   )
 }
 
