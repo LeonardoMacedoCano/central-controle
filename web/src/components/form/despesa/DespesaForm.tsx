@@ -1,10 +1,10 @@
 import React from 'react';
 import { Despesa } from '../../../types/Despesa';
+import { Categoria } from '../../../types/Categoria';
 import FlexBox from '../../flexbox/FlexBox';
 import FieldValue from '../../fieldvalue/FieldValue';
 import { formatarDataParaString } from '../../../utils/DateUtils';
 import { formatarValorParaReal } from '../../../utils/ValorUtils';
-import { Categoria } from '../../../types/Categoria';
 
 interface DespesaFormProps {
   despesa: Despesa;
@@ -14,27 +14,27 @@ interface DespesaFormProps {
 
 const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate }) => {
 
+  const updateDespesa = (updatedFields: Partial<Despesa>) => {
+    const despesaAtualizada: Despesa = {
+      ...despesa!,
+      ...updatedFields
+    };
+    onUpdate(despesaAtualizada);
+  };
+
   const handleUpdateCategoria = (value: any) => {
     const categoriaSelecionada = categorias.find(c => c.id === (value as Categoria).id);
     if (categoriaSelecionada) {
-      const despesaAtualizada: Despesa = {
-        ...despesa!,
-        categoria: categoriaSelecionada
-      };
-      onUpdate(despesaAtualizada);
+      updateDespesa({ categoria: categoriaSelecionada });
     }
   };
   
   const handleUpdateDescricao = (value: any) => {
     if (typeof value === 'string') {
-      const despesaAtualizada: Despesa = {
-        ...despesa!,
-        descricao: value
-      };
-      onUpdate(despesaAtualizada);
+      updateDespesa({ descricao: value });
     }
   };
-
+  
   return (
     <FlexBox 
       flexDirection="column"

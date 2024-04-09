@@ -11,23 +11,23 @@ interface ParcelaFormProps {
 
 const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
 
+  const updateParcela = (updatedFields: Partial<Parcela>) => {
+    const parcelaAtualizada: Parcela = {
+      ...parcela!,
+      ...updatedFields
+    };
+    onUpdate(parcelaAtualizada);
+  };
+
   const handleUpdateDataVencimento = (value: any) => {
     if (value instanceof Date) {
-      const parcelaAtualizada: Parcela = {
-        ...parcela!,
-        dataVencimento: value
-      };
-      onUpdate(parcelaAtualizada);
+      updateParcela({ dataVencimento: value });
     }
-  };  
+  };
   
   const handleUpdateValor = (value: any) => {
     if (typeof value === 'number') {
-      const parcelaAtualizada: Parcela = {
-        ...parcela!,
-        valor: value
-      };
-      onUpdate(parcelaAtualizada);
+      updateParcela({ valor: value });
     }
   };
 

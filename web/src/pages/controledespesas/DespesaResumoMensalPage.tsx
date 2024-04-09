@@ -3,18 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import DespesaService from '../../service/DespesaService';
 import ParcelaService from '../../service/ParcelaService';
-import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
-import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
 import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
 import Panel from '../../components/panel/Panel';
 import Container from '../../components/container/Container';
 import FieldValue from '../../components/fieldvalue/FieldValue';
-import { formatarValorParaReal } from '../../utils/ValorUtils';
-import { PagedResponse } from '../../types/PagedResponse';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
 import Button from '../../components/button/button/Button';
+import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
+import { PagedResponse } from '../../types/PagedResponse';
+import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
+import { formatarValorParaReal } from '../../utils/ValorUtils';
 
 const DespesaResumoMensalPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -23,7 +23,7 @@ const DespesaResumoMensalPage: React.FC = () => {
   const [despesasPage, setDespesasPage] = useState<PagedResponse<DespesaResumoMensal>>();
   const [valorTotal, setValorTotal] = useState<number>(0); 
   const [indexPagina, setIndexPagina] = useState<number>(0); 
-  const [registrosPorPagina, setRegistrosPorPagina] = useState<number>(3);  
+  const [registrosPorPagina, setRegistrosPorPagina] = useState<number>(10);  
 
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
@@ -35,29 +35,39 @@ const DespesaResumoMensalPage: React.FC = () => {
   }, [auth.usuario?.token]);
 
   useEffect(() => {
-    const carregarDespesaResumoMensal = async () => {
-      if (!token) return;
-
-      const [anoStr, mesStr] = formatarDataParaAnoMes(dataSelecionada).split('-');
-      const ano = parseInt(anoStr);
-      const mes = parseInt(mesStr);
-
-      const resultDespesas = await despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes);
-      setDespesasPage(resultDespesas || undefined);
-
-      const resultValorTotal = await parcelaService.getValorTotalParcelasMensal(token, ano, mes);
-      setValorTotal(resultValorTotal?.valueOf() || 0);
-    };
-
     carregarDespesaResumoMensal();
-  }, [token, dataSelecionada, indexPagina, registrosPorPagina])
+  }, [token, dataSelecionada, indexPagina, registrosPorPagina]);
+
+  const carregarDespesaResumoMensal = async () => {
+    if (!token) return;
+
+    const [anoStr, mesStr] = formatarDataParaAnoMes(dataSelecionada).split('-');
+    const ano = parseInt(anoStr);
+    const mes = parseInt(mesStr);
+
+    const resultDespesas = await despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes);
+    setDespesasPage(resultDespesas || undefined);
+
+    const resultValorTotal = await parcelaService.getValorTotalParcelasMensal(token, ano, mes);
+    setValorTotal(resultValorTotal?.valueOf() || 0);
+  };
+
+  const isRowSelected = (item: DespesaResumoMensal) => idDespesaSelecionada === item.id;
+
+  const carregarPagina = (indexPagina: number, registrosPorPagina: number) => {
+    setIndexPagina(indexPagina);
+    setRegistrosPorPagina(registrosPorPagina);
+  };
+
+  const deletarDespesa = async () => {
+    if (token && idDespesaSelecionada) {
+      await despesaService.excluirDespesa(token, idDespesaSelecionada);
+      carregarDespesaResumoMensal();
+    }
+  };
 
   const handleClickRow = (item: DespesaResumoMensal) => {
     setIdDespesaSelecionada(prevId => prevId === item.id ? null : item.id);
-  };
-  
-  const handleRowSelected = (item: DespesaResumoMensal) => {
-    return idDespesaSelecionada === item.id;
   };
 
   const handleUpdateVencimento = (value: any) => {
@@ -66,21 +76,16 @@ const DespesaResumoMensalPage: React.FC = () => {
     }
   };
 
-  const carregarPagina = (indexPagina: number, registrosPorPagina: number) => {
-    setIndexPagina(indexPagina);
-    setRegistrosPorPagina(registrosPorPagina);
-  };
-
-  const handleAdd = () => {
+  const handleAddDespesa = () => {
     navigate('/despesa');
   };
   
-  const handleEdit = () => {
+  const handleEditDespesa = () => {
     navigate(`/despesa/${idDespesaSelecionada}`);
   };
   
-  const handleDelete = () => {
-    console.log('Botão Deletar clicado');
+  const handleDeleteDespesa = () => {
+    deletarDespesa();
   };
 
   return (
@@ -131,22 +136,22 @@ const DespesaResumoMensalPage: React.FC = () => {
           messageEmpty="Nenhuma despesa encontrada."
           keyExtractor={(item) => item.id.toString()}
           onClickRow={handleClickRow}
-          rowSelected={handleRowSelected}
+          rowSelected={isRowSelected}
           customHeader={
             <>
               <Button 
                 variant='table-add' 
-                onClick={handleAdd} 
+                onClick={handleAddDespesa} 
                 disabled={idDespesaSelecionada !== null && idDespesaSelecionada > 0} 
               />
               <Button 
                 variant='table-edit' 
-                onClick={handleEdit} 
+                onClick={handleEditDespesa} 
                 disabled={!idDespesaSelecionada} 
               />
               <Button 
                 variant='table-delete' 
-                onClick={handleDelete} 
+                onClick={handleDeleteDespesa} 
                 disabled={!idDespesaSelecionada} 
               />
             </>

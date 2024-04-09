@@ -1,20 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Despesa } from '../../types/Despesa';
-import { Parcela } from '../../types/Parcela';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import DespesaService from '../../service/DespesaService';
 import Panel from '../../components/panel/Panel';
 import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
-import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
-import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
 import DespesaForm from '../../components/form/despesa/DespesaForm';
 import ParcelaForm from '../../components/form/despesa/ParcelaForm';
-import { Categoria } from '../../types/Categoria';
 import Button from '../../components/button/button/Button';
 import FloatingButton from '../../components/button/Floatingbutton/FloatingButton';
 import { FaSave } from 'react-icons/fa';
+import { Despesa } from '../../types/Despesa';
+import { Parcela } from '../../types/Parcela';
+import { Categoria } from '../../types/Categoria';
+import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
+import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
 
 const DespesaPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
@@ -45,45 +45,26 @@ const DespesaPage: React.FC = () => {
   }, [auth.usuario?.token]);
 
   useEffect(() => {
-    const carregarDespesa = async () => {
-      if (token) {
-        try {
-          const resultDespesa = (id > 0 ? await despesaService.getDespesaByIdWithParcelas(token, id) : null);
-          const resultCategorias = await despesaService.getTodasCategoriasDespesa(token);
-  
-          if (resultDespesa) {
-            setDespesa(resultDespesa);
-          }
-          setCategorias(resultCategorias || []);
-        } catch (error) {
-          console.error("Erro ao carregar a despesa:", error);
-        }
-      }
-    };
-  
     carregarDespesa();
   }, [token, id]);
 
-  const handleClickRow = (item: Parcela) => {
-    setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
+  const carregarDespesa = async () => {
+    if (token) {
+      try {
+        const resultDespesa = (id > 0 ? await despesaService.getDespesaByIdWithParcelas(token, id) : null);
+        const resultCategorias = await despesaService.getTodasCategoriasDespesa(token);
+
+        if (resultDespesa) {
+          setDespesa(resultDespesa);
+        }
+        setCategorias(resultCategorias || []);
+      } catch (error) {
+        console.error("Erro ao carregar a despesa:", error);
+      }
+    }
   };
 
-  const handleRowSelected = (item: Parcela) => {
-    return numeroParcelaSelecionada === item.numero;
-  };
-
-  const handleUpdateDespesa = (despesaAtualizada: Despesa) => {
-    setDespesa(despesaAtualizada);
-  };
-
-  const handleUpdateParcela = (parcelaAtualizada: Parcela) => {
-    const index = despesa.parcelas.findIndex(p => p.numero === parcelaAtualizada.numero);
-    const updatedParcelas = [...despesa.parcelas];
-    updatedParcelas[index] = parcelaAtualizada;
-    setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: updatedParcelas }));
-  };
-
-  const handleAddParcela = () => {
+  const criarNovaParcela = () => {
     const novoNumeroParcela = despesa.parcelas.length + 1;
     const novaParcela: Parcela = {
       id: 0,
@@ -93,33 +74,50 @@ const DespesaPage: React.FC = () => {
       pago: false
     };
   
-    setDespesa(prevDespesa => ({
-      ...prevDespesa,
-      parcelas: [...prevDespesa.parcelas, novaParcela]
-    }));
-  
+    setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: [...prevDespesa.parcelas, novaParcela] }));
     setNumeroParcelaSelecionada(novoNumeroParcela);
+  };
+
+  const isRowSelected = (item: Parcela) => numeroParcelaSelecionada === item.numero;
+
+  const handleClickRow = (item: Parcela) => {
+    setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
+  };
+
+  const handleUpdateDespesa = (despesaAtualizada: Despesa) => {
+    setDespesa(despesaAtualizada);
+  };
+
+  const handleUpdateParcela = (parcelaAtualizada: Parcela) => {
+    const updatedParcelas = despesa.parcelas.map(p => p.numero === parcelaAtualizada.numero ? parcelaAtualizada : p);
+    setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: updatedParcelas }));
+  };
+
+  const handleAddParcela = () => {
+    criarNovaParcela();
     setShowParcelaForm(true);
   };
 
-  const handleEditParcela = () => {
-    setShowParcelaForm(true);
-  };
+  const handleEditParcela = () => setShowParcelaForm(true);
 
   const handleDeleteParcela = () => {
     console.log('handleDeleteParcela');  
   };
 
-  const handleSave = () => {
+  const handleSaveDespesa = () => {
     setShowParcelaForm(false);
 
     if (token) {
       if (id > 0) {
-        //to do - editDespesa
+        console.log('to do - editDespesa');
       } else {
         despesaService.gerarDespesa(token, despesa);
       }
     }
+  };
+
+  const handleSaveParcela = () => {
+    setShowParcelaForm(false);
   };
 
   return (
@@ -127,9 +125,8 @@ const DespesaPage: React.FC = () => {
       <FloatingButton
         mainButtonIcon={<FaSave />}
         mainButtonHint='Salvar Despesa'
-        mainAction={handleSave}
+        mainAction={showParcelaForm ? handleSaveDespesa : handleSaveParcela}
       />
-
       {showParcelaForm ? (
         <Panel
           maxWidth='1000px' 
@@ -152,7 +149,6 @@ const DespesaPage: React.FC = () => {
               onUpdate={handleUpdateDespesa}
             />
           </Panel>
-
           <Panel
             maxWidth='1000px' 
             title='Parcelas'
@@ -162,7 +158,7 @@ const DespesaPage: React.FC = () => {
               messageEmpty="Nenhuma parcela encontrada."
               keyExtractor={(item) => item.id.toString()}
               onClickRow={handleClickRow}
-              rowSelected={handleRowSelected}
+              rowSelected={isRowSelected}
               customHeader={
                 <>
                   <Button 
