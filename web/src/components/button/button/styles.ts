@@ -1,4 +1,5 @@
-import styled, { css, CSSObject } from 'styled-components';
+import styled, { css } from 'styled-components';
+import { convertReactStyleToCSSObject } from '../../../utils/styledUtils';
 
 interface StyledButtonProps {
   variant?: 'table-add' | 'table-edit' | 'table-delete' | 'success' | 'info' | 'warning';
@@ -7,12 +8,6 @@ interface StyledButtonProps {
   disabled?: boolean;
   style?: React.CSSProperties;
 }
-
-const convertReactStyleToCSSObject = (style: React.CSSProperties): CSSObject => {
-  return Object.fromEntries(
-    Object.entries(style).map(([key, value]) => [key, value])
-  );
-};
 
 const commonButtonTableStyles = css`
   height: 30px;
@@ -24,6 +19,46 @@ const commonButtonTableStyles = css`
   align-items: center;
   margin: 5px;
 `;
+
+const getButtonVariantStyles = (variant: StyledButtonProps['variant'], theme: any) => {
+  switch (variant) {
+    case 'table-add':
+      return css`
+        ${commonButtonTableStyles};
+        background-color: ${theme.colors.success};
+      `;
+    case 'table-edit':
+      return css`
+        ${commonButtonTableStyles};
+        background-color: ${theme.colors.info};
+      `;
+    case 'table-delete':
+      return css`
+        ${commonButtonTableStyles};
+        background-color: ${theme.colors.warning};
+      `;
+    case 'success':
+      return css`
+        background-color: ${theme.colors.success};
+        color: ${theme.colors.white};
+      `;
+    case 'info':
+      return css`
+        background-color: ${theme.colors.info};
+        color: ${theme.colors.white};
+      `;
+    case 'warning':
+      return css`
+        background-color: ${theme.colors.warning};
+        color: ${theme.colors.white};
+      `;
+    default:
+      return css`
+        background-color: ${theme.colors.primary};
+        color: ${theme.colors.white};
+      `;
+  }
+};
 
 export const StyledButton = styled.button<StyledButtonProps>`
   border: none;
@@ -40,45 +75,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
     opacity: ${props => (props.disabled ? '0.3' : '0.3')};
   }
 
-  ${({ variant, theme }) => {
-    switch (variant) {
-      case 'table-add':
-        return css`
-          ${commonButtonTableStyles};
-          background-color: ${theme.colors.success};
-        `;
-      case 'table-edit':
-        return css`
-          ${commonButtonTableStyles};
-          background-color: ${theme.colors.info};
-        `;
-      case 'table-delete':
-      return css`
-        ${commonButtonTableStyles};
-        background-color: ${theme.colors.warning};
-      `;
-      case 'success':
-        return css`
-          background-color: ${theme.colors.success};
-          color: ${theme.colors.white};
-        `;
-      case 'info':
-        return css`
-          background-color: ${theme.colors.info};
-          color: ${theme.colors.white};
-        `;
-      case 'warning':
-        return css`
-          background-color: ${theme.colors.warning};
-          color: ${theme.colors.white};
-        `;
-      default:
-        return css`
-          background-color: ${theme.colors.primary};
-          color: ${theme.colors.white};
-        `;
-    }
-  }}
+  ${({ variant, theme }) => getButtonVariantStyles(variant, theme)}
 
   ${props => props.style && css`${convertReactStyleToCSSObject(props.style)}`}
 `;

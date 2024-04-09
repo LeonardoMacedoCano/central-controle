@@ -15,7 +15,6 @@ import { PagedResponse } from '../../types/PagedResponse';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
 import Button from '../../components/button/button/Button';
-import { Categoria } from '../../types/Categoria';
 
 const DespesaResumoMensalPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
@@ -61,7 +60,7 @@ const DespesaResumoMensalPage: React.FC = () => {
     return idDespesaSelecionada === item.id;
   };
 
-  const handleUpdateVencimento = (value: string | number | boolean | Date | Categoria) => {
+  const handleUpdateVencimento = (value: any) => {
     if (typeof value === 'string') {
       setDataSelecionada(formataraMesAnoParaData(value)); 
     }
@@ -95,7 +94,7 @@ const DespesaResumoMensalPage: React.FC = () => {
             <FieldValue 
               description='Data' 
               type='month' 
-              value={dataSelecionada} 
+              value={formatarDataParaAnoMes(dataSelecionada)} 
               editable={true}
               width='150px'
               inputWidth='150px'

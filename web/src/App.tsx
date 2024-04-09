@@ -12,7 +12,6 @@ import ControleTarefas from './pages/controletarefas/index.tsx';
 import ControleIdeias from './pages/controleideias/index.tsx';
 import dark from './styles/themes/dark';
 import DespesaPage from './pages/controledespesas/DespesaPage.tsx';
-//import light from './styles/themes/light';
 
 const App: React.FC = () => {
   return (

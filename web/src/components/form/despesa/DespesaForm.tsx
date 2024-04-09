@@ -14,7 +14,7 @@ interface DespesaFormProps {
 
 const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate }) => {
 
-  const handleUpdateCategoria = (value: string | number | boolean | Date | Categoria) => {
+  const handleUpdateCategoria = (value: any) => {
     const categoriaSelecionada = categorias.find(c => c.id === (value as Categoria).id);
     if (categoriaSelecionada) {
       const despesaAtualizada: Despesa = {
@@ -25,7 +25,7 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate
     }
   };
   
-  const handleUpdateDescricao = (value: string | number | boolean | Date | Categoria) => {
+  const handleUpdateDescricao = (value: any) => {
     if (typeof value === 'string') {
       const despesaAtualizada: Despesa = {
         ...despesa!,

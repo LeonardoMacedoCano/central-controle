@@ -16,7 +16,7 @@ type FieldValueProps = {
   inputWidth?: string;
   inline?: boolean;
   categorias?: Categoria[];
-  onUpdate?: (value: string | number | boolean | Date | Categoria) => void;
+  onUpdate?: (value: any) => void;
 };
 
 class FieldValue extends React.Component<FieldValueProps> {
@@ -25,7 +25,7 @@ class FieldValue extends React.Component<FieldValueProps> {
     const { onUpdate, type, minValue, maxValue } = this.props;
   
     if (onUpdate) {
-      let formattedValue: string | number | boolean | Date | Categoria = event.target.value;
+      let formattedValue: any = event.target.value;
   
       if (type === 'number') {
         formattedValue = parseFloat(event.target.value);
@@ -54,7 +54,7 @@ class FieldValue extends React.Component<FieldValueProps> {
     }
   };
 
-  formatValue = (val: string | number | boolean | Date | Categoria) => {
+  formatValue = (val: any) => {
     const { type } = this.props;
 
     if ((type !== 'date') && (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean')) {

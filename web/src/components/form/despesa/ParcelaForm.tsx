@@ -2,7 +2,6 @@ import React from 'react';
 import { Parcela } from '../../../types/Parcela';
 import FlexBox from '../../flexbox/FlexBox';
 import FieldValue from '../../fieldvalue/FieldValue';
-import { Categoria } from '../../../types/Categoria';
 import { formatarDataParaStringYMD } from '../../../utils/DateUtils';
 
 interface ParcelaFormProps {
@@ -12,7 +11,7 @@ interface ParcelaFormProps {
 
 const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
 
-  const handleUpdateDataVencimento = (value: string | number | boolean | Date | Categoria) => {
+  const handleUpdateDataVencimento = (value: any) => {
     if (value instanceof Date) {
       const parcelaAtualizada: Parcela = {
         ...parcela!,
@@ -22,7 +21,7 @@ const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
     }
   };  
   
-  const handleUpdateValor = (value: string | number | boolean | Date | Categoria) => {
+  const handleUpdateValor = (value: any) => {
     if (typeof value === 'number') {
       const parcelaAtualizada: Parcela = {
         ...parcela!,

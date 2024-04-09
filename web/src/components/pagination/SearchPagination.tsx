@@ -63,7 +63,7 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
     }
   };
 
-  handleUpdateRegistrosPorPagina = (value: string | number | boolean | Date) => {
+  handleUpdateRegistrosPorPagina = (value: any) => {
     if (typeof value === 'number') {
       this.setState({ registrosPorPagina: value }, () => {
         this.carregarPagina(0, this.state.registrosPorPagina);
@@ -86,7 +86,6 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
         <FlexBox>
           <FlexBox.Item 
             borderRight  
-            flex={1} 
             width='160px' 
           >
             <FieldValue 
@@ -104,7 +103,6 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
             />
           </FlexBox.Item>
           <FlexBox.Item 
-            flex={1} 
             alignCenter
           >
             <C.ItemContainer>
@@ -125,7 +123,6 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
           </FlexBox.Item>
           <FlexBox.Item 
             borderLeft
-            flex={1} 
             width='160px'
             alignRight
           >
