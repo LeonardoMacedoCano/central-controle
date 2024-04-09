@@ -10,6 +10,7 @@ interface DespesaApi {
   getDespesaByIdWithParcelas: (token: string, id: number) => Promise< Despesa | undefined >;
   getTodasCategoriasDespesa: (token: string) => Promise< Categoria[] | undefined >;
   gerarDespesa: (token: string, data: Despesa) => Promise< undefined >;
+  excluirDespesa: (token: string, id: number) => Promise< undefined >; 
 }
 
 const DespesaService = (): DespesaApi => {
@@ -48,7 +49,15 @@ const DespesaService = (): DespesaApi => {
 
   const gerarDespesa = async (token: string, data: Despesa) => {
     try {
-      await request<Despesa>('post', 'despesa', token, mensagens, despesaPayload(data));
+      await request<undefined>('post', 'despesa', token, mensagens, despesaPayload(data));
+    } catch (error) {
+      return undefined;
+    }
+  };
+
+  const excluirDespesa = async (token: string, id: number) => {
+    try {
+      await request<undefined>(`delete`, `despesa/${id}`, token, mensagens);
     } catch (error) {
       return undefined;
     }
@@ -58,7 +67,8 @@ const DespesaService = (): DespesaApi => {
     listarDespesaResumoMensal,
     getDespesaByIdWithParcelas,
     getTodasCategoriasDespesa,
-    gerarDespesa
+    gerarDespesa,
+    excluirDespesa
   };
 };
 
