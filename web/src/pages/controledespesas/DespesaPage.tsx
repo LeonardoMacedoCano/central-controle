@@ -50,24 +50,40 @@ const DespesaPage: React.FC = () => {
   }, [token, id]);
 
   const carregarDespesa = async () => {
-    if (token) {
-      try {
-        const resultDespesa = (id > 0 ? await despesaService.getDespesaByIdWithParcelas(token, id) : null);
-        const resultCategorias = await despesaService.getTodasCategoriasDespesa(token);
+    if (!token) return;
 
-        if (resultDespesa) {
-          setDespesa(resultDespesa);
-        }
-        setCategorias(resultCategorias || []);
-      } catch (error) {
-        console.error("Erro ao carregar a despesa:", error);
-      }
+    try {
+      const [resultDespesa, resultCategorias] = await Promise.all([
+        id > 0 ? despesaService.getDespesaByIdWithParcelas(token, id) : null,
+        despesaService.getTodasCategoriasDespesa(token)
+      ]);
+
+      if (resultDespesa) setDespesa(resultDespesa);
+      setCategorias(resultCategorias || []);
+    } catch (error) {
+      console.error("Erro ao carregar a despesa:", error);
     }
   };
 
+  const atualizarDespesa = (newDespesa: Partial<Despesa>) => {
+    setDespesa(prevDespesa => ({ ...prevDespesa, ...newDespesa }));
+  };
+
+  const salvarDespesa = async () => {
+    setShowParcelaForm(false);
+
+    if (!token) return;
+
+    try {
+      id > 0 ? await despesaService.editarDespesa(token, id, despesa) : await despesaService.gerarDespesa(token, despesa);
+      navigate('/controledespesas');
+    } catch (error) {
+      console.error("Erro ao salvar a despesa:", error);
+    }
+  }
+
   const adicionarNovaParcela = () => {
-    const novoNumeroParcela = (despesa.parcelas.length > 0 ? despesa.parcelas[despesa.parcelas.length - 1].numero + 1 : 1);
-    
+    const novoNumeroParcela = despesa.parcelas.length > 0 ? despesa.parcelas[despesa.parcelas.length - 1].numero + 1 : 1;
     const novaParcela: Parcela = {
       id: 0,
       numero: novoNumeroParcela,
@@ -75,62 +91,40 @@ const DespesaPage: React.FC = () => {
       valor: 0,
       pago: false
     };
-  
-    setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: [...prevDespesa.parcelas, novaParcela] }));
+
+    atualizarDespesa({ parcelas: [...despesa.parcelas, novaParcela] });
     setNumeroParcelaSelecionada(novoNumeroParcela);
     setShowParcelaForm(true);
   };
 
   const deletarParcela = () => {
-    if (numeroParcelaSelecionada && numeroParcelaSelecionada > 0) {
-      const updatedParcelas = despesa.parcelas.filter(p => p.numero !== numeroParcelaSelecionada);
-      setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: updatedParcelas }));
-      setNumeroParcelaSelecionada(null);
-    }
-  }
+    if (!numeroParcelaSelecionada || numeroParcelaSelecionada <= 0) return;
+
+    const updatedParcelas = despesa.parcelas.filter(p => p.numero !== numeroParcelaSelecionada);
+    atualizarDespesa({ parcelas: updatedParcelas });
+    setNumeroParcelaSelecionada(null);
+  };
 
   const atualizarParcela = (parcelaAtualizada: Parcela) => {
     const updatedParcelas = despesa.parcelas.map(p => p.numero === parcelaAtualizada.numero ? parcelaAtualizada : p);
-    setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: updatedParcelas }));
-  }
+    atualizarDespesa({ parcelas: updatedParcelas });
+  };
 
-  const salvarDespesa = async () => {
+  const exitParcela = () => {
     setShowParcelaForm(false);
-
-    if (token) {
-      if (id > 0) {
-        await despesaService.editarDespesa(token, id, despesa);
-      } else {
-        await despesaService.gerarDespesa(token, despesa);
-      }
-      navigate('/controledespesas');
-    }
+    setNumeroParcelaSelecionada(null);
   }
 
   const isRowSelected = (item: Parcela) => numeroParcelaSelecionada === item.numero;
 
   const handleClickRow = (item: Parcela) => setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
 
-  const handleAddParcela = () => adicionarNovaParcela();
-
-  const handleEditParcela = () => setShowParcelaForm(true);
-
-  const handleSaveParcela = () => setShowParcelaForm(false);
-
-  const handleDeleteParcela = () => deletarParcela();
-
-  const handleUpdateParcela = (parcelaAtualizada: Parcela) => atualizarParcela(parcelaAtualizada);
-
-  const handleUpdateDespesa = (despesaAtualizada: Despesa) => setDespesa(despesaAtualizada);
-
-  const handleSaveDespesa = () => salvarDespesa();
-
   return (
     <>
       <FloatingButton
         mainButtonIcon={<FaCheck />}
         mainButtonHint={showParcelaForm ? 'Salvar Parcela' : 'Salvar Despesa'}
-        mainAction={showParcelaForm ? handleSaveParcela : handleSaveDespesa}
+        mainAction={showParcelaForm ? exitParcela : salvarDespesa}
       />
       {showParcelaForm ? (
         <Panel
@@ -139,7 +133,7 @@ const DespesaPage: React.FC = () => {
         >
           <ParcelaForm
             parcela={despesa.parcelas[despesa.parcelas.length - 1]}
-            onUpdate={handleUpdateParcela}
+            onUpdate={atualizarParcela}
           />
         </Panel>
       ) : (
@@ -151,7 +145,7 @@ const DespesaPage: React.FC = () => {
             <DespesaForm
               despesa={despesa}
               categorias={categorias}
-              onUpdate={handleUpdateDespesa}
+              onUpdate={atualizarDespesa}
             />
           </Panel>
           <Panel
@@ -168,17 +162,17 @@ const DespesaPage: React.FC = () => {
                 <>
                   <Button 
                     variant='table-add' 
-                    onClick={handleAddParcela} 
+                    onClick={adicionarNovaParcela} 
                     disabled={numeroParcelaSelecionada !== null && numeroParcelaSelecionada > 0} 
                   />
                   <Button 
                     variant='table-edit' 
-                    onClick={handleEditParcela} 
+                    onClick={() => setShowParcelaForm(true)} 
                     disabled={!numeroParcelaSelecionada} 
                   />
                   <Button 
                     variant='table-delete' 
-                    onClick={handleDeleteParcela} 
+                    onClick={deletarParcela} 
                     disabled={!numeroParcelaSelecionada} 
                   />
                 </>

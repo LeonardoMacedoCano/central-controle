@@ -45,12 +45,14 @@ const DespesaResumoMensalPage: React.FC = () => {
     const ano = parseInt(anoStr);
     const mes = parseInt(mesStr);
 
-    const resultDespesas = await despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes);
-    setDespesasPage(resultDespesas || undefined);
+    const [resultDespesas, resultValorTotal] = await Promise.all([
+        despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes),
+        parcelaService.getValorTotalParcelasMensal(token, ano, mes)
+    ]);
 
-    const resultValorTotal = await parcelaService.getValorTotalParcelasMensal(token, ano, mes);
+    setDespesasPage(resultDespesas || undefined);
     setValorTotal(resultValorTotal?.valueOf() || 0);
-  };
+};
 
   const isRowSelected = (item: DespesaResumoMensal) => idDespesaSelecionada === item.id;
 
@@ -66,27 +68,17 @@ const DespesaResumoMensalPage: React.FC = () => {
     }
   };
 
-  const handleClickRow = (item: DespesaResumoMensal) => {
-    setIdDespesaSelecionada(prevId => prevId === item.id ? null : item.id);
-  };
-
-  const handleUpdateVencimento = (value: any) => {
+  const atualizarDataVencimento = (value: any) => {
     if (typeof value === 'string') {
       setDataSelecionada(formataraMesAnoParaData(value)); 
     }
   };
 
-  const handleAddDespesa = () => {
-    navigate('/despesa');
-  };
-  
-  const handleEditDespesa = () => {
-    navigate(`/despesa/${idDespesaSelecionada}`);
-  };
-  
-  const handleDeleteDespesa = () => {
-    deletarDespesa();
-  };
+  const handleClickRow = (item: DespesaResumoMensal) => setIdDespesaSelecionada(prevId => prevId === item.id ? null : item.id);
+
+  const handleAddDespesa = () => navigate('/despesa');
+
+  const handleEditDespesa = () => navigate(`/despesa/${idDespesaSelecionada}`);
 
   return (
     <Container>
@@ -103,7 +95,7 @@ const DespesaResumoMensalPage: React.FC = () => {
               editable={true}
               width='150px'
               inputWidth='150px'
-              onUpdate={handleUpdateVencimento} 
+              onUpdate={atualizarDataVencimento} 
             />
           </FlexBox.Item>
           <FlexBox.Item 
@@ -151,7 +143,7 @@ const DespesaResumoMensalPage: React.FC = () => {
               />
               <Button 
                 variant='table-delete' 
-                onClick={handleDeleteDespesa} 
+                onClick={deletarDespesa} 
                 disabled={!idDespesaSelecionada} 
               />
             </>
