@@ -109,7 +109,7 @@ const DespesaPage: React.FC = () => {
 
     if (token) {
       if (id > 0) {
-        console.log('to do - editDespesa');
+        despesaService.editarDespesa(token, id, despesa);
       } else {
         despesaService.gerarDespesa(token, despesa);
       }
@@ -125,7 +125,7 @@ const DespesaPage: React.FC = () => {
       <FloatingButton
         mainButtonIcon={<FaSave />}
         mainButtonHint='Salvar Despesa'
-        mainAction={showParcelaForm ? handleSaveDespesa : handleSaveParcela}
+        mainAction={showParcelaForm ? handleSaveParcela : handleSaveDespesa}
       />
       {showParcelaForm ? (
         <Panel

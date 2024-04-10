@@ -6,16 +6,47 @@ import { Categoria } from '../types/Categoria';
 import { usarMensagens } from '../contexts/mensagens';
 
 interface DespesaApi {
+  gerarDespesa: (token: string, data: Despesa) => Promise< undefined >;
+  editarDespesa: (token: string, id: number, data: Despesa) => Promise< undefined >;
+  excluirDespesa: (token: string, id: number) => Promise< undefined >; 
   listarDespesaResumoMensal: (token: string, page: number, size: number, ano: number, mes: number) => Promise< PagedResponse<DespesaResumoMensal> | undefined >;
   getDespesaByIdWithParcelas: (token: string, id: number) => Promise< Despesa | undefined >;
   getTodasCategoriasDespesa: (token: string) => Promise< Categoria[] | undefined >;
-  gerarDespesa: (token: string, data: Despesa) => Promise< undefined >;
-  excluirDespesa: (token: string, id: number) => Promise< undefined >; 
 }
 
 const DespesaService = (): DespesaApi => {
   const { request } = DefaultService();
   const mensagens = usarMensagens();
+
+  const despesaPayload = (data: Despesa) => ({
+    categoria: data.categoria,
+    descricao: data.descricao,
+    parcelas: data.parcelas
+  });
+
+  const gerarDespesa = async (token: string, data: Despesa) => {
+    try {
+      await request<undefined>('post', 'despesa', token, mensagens, despesaPayload(data));
+    } catch (error) {
+      return undefined;
+    }
+  };
+
+  const editarDespesa = async (token: string, id: number, data: Despesa) => {
+    try {
+      await request<undefined>('put', `despesa/${id}`, token, mensagens, despesaPayload(data));
+    } catch (error) {
+      return undefined;
+    }
+  };
+
+  const excluirDespesa = async (token: string, id: number) => {
+    try {
+      await request<undefined>(`delete`, `despesa/${id}`, token, mensagens);
+    } catch (error) {
+      return undefined;
+    }
+  };
 
   const listarDespesaResumoMensal = async (token: string, page: number, size: number, ano: number, mes: number) => {
     try {
@@ -40,35 +71,14 @@ const DespesaService = (): DespesaApi => {
       return undefined;
     }
   };
-
-  const despesaPayload = (data: Despesa) => ({
-    categoria: data.categoria,
-    descricao: data.descricao,
-    parcelas: data.parcelas
-  });
-
-  const gerarDespesa = async (token: string, data: Despesa) => {
-    try {
-      await request<undefined>('post', 'despesa', token, mensagens, despesaPayload(data));
-    } catch (error) {
-      return undefined;
-    }
-  };
-
-  const excluirDespesa = async (token: string, id: number) => {
-    try {
-      await request<undefined>(`delete`, `despesa/${id}`, token, mensagens);
-    } catch (error) {
-      return undefined;
-    }
-  };
-
+ 
   return {
+    gerarDespesa,
+    editarDespesa,
+    excluirDespesa,
     listarDespesaResumoMensal,
     getDespesaByIdWithParcelas,
-    getTodasCategoriasDespesa,
-    gerarDespesa,
-    excluirDespesa
+    getTodasCategoriasDespesa
   };
 };
 

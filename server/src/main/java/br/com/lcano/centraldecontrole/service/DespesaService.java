@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,9 +112,9 @@ public class DespesaService {
         despesaExistente.setDescricao(data.getDescricao());
 
         List<DespesaParcela> parcelasAtualizadas = despesaParcelaService.atualizarParcelas(despesaExistente, data.getParcelasDTO());
-        List<DespesaParcela> novasParcelas = new ArrayList<>(parcelasAtualizadas);
 
-        despesaExistente.setParcelas(novasParcelas);
+        despesaExistente.getParcelas().clear();
+        despesaExistente.getParcelas().addAll(parcelasAtualizadas);
 
         salvarDespesa(despesaExistente);
         despesaParcelaService.salvarParcelas(despesaExistente.getParcelas());
