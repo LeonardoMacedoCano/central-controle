@@ -231,14 +231,38 @@ class DespesaServiceTest {
         despesaDTO.setDescricao(descricao);
 
         Despesa despesaExistente = new Despesa();
-        when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
+        despesaExistente.setId(idDespesa);
 
+        when(despesaRepository.findById(idDespesa)).thenReturn(Optional.of(despesaExistente));
         when(categoriaDespesaRepository.findById(idCategoria)).thenReturn(Optional.of(categoriaDespesa));
+
+        List<DespesaParcela> parcelas = new ArrayList<>();
+        DespesaParcela parcelaExistente = new DespesaParcela();
+        parcelaExistente.setId(1L);
+        parcelaExistente.setNumero(1);
+        parcelaExistente.setDataVencimento(null);
+        parcelaExistente.setValor(100.0);
+        parcelaExistente.setPago(false);
+        parcelas.add(parcelaExistente);
+
+        despesaExistente.setParcelas(parcelas);
+
+        DespesaParcelaDTO parcelaDTO = new DespesaParcelaDTO();
+        parcelaDTO.setId(1L);
+        parcelaDTO.setNumero(1);
+        parcelaDTO.setDataVencimento(null);
+        parcelaDTO.setValor(200.0);
+        parcelaDTO.setPago(true);
+
+        List<DespesaParcelaDTO> parcelasDTO = List.of(parcelaDTO);
+
+        when(despesaParcelaService.atualizarParcelas(despesaExistente, parcelasDTO)).thenReturn(parcelas);
 
         despesaService.editarDespesa(idDespesa, despesaDTO, usuario);
 
         verify(despesaRepository).findById(idDespesa);
         verify(despesaRepository).save(despesaExistente);
+        verify(despesaParcelaService).salvarParcelas(despesaExistente.getParcelas());
 
         assertEquals(categoriaDespesa, despesaExistente.getCategoria());
         assertEquals(usuario, despesaExistente.getUsuario());

@@ -1,5 +1,6 @@
 package br.com.lcano.centraldecontrole.service;
 
+import br.com.lcano.centraldecontrole.domain.DespesaParcela;
 import br.com.lcano.centraldecontrole.dto.DespesaDTO;
 import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
 import br.com.lcano.centraldecontrole.domain.Despesa;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -110,7 +112,13 @@ public class DespesaService {
         despesaExistente.setUsuario(usuario);
         despesaExistente.setDescricao(data.getDescricao());
 
+        List<DespesaParcela> parcelasAtualizadas = despesaParcelaService.atualizarParcelas(despesaExistente, data.getParcelasDTO());
+        List<DespesaParcela> novasParcelas = new ArrayList<>(parcelasAtualizadas);
+
+        despesaExistente.setParcelas(novasParcelas);
+
         salvarDespesa(despesaExistente);
+        despesaParcelaService.salvarParcelas(despesaExistente.getParcelas());
     }
 
     @Transactional

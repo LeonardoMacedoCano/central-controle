@@ -1,4 +1,5 @@
 package br.com.lcano.centraldecontrole.service;
+
 import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
 import br.com.lcano.centraldecontrole.domain.Despesa;
 import br.com.lcano.centraldecontrole.domain.DespesaParcela;
@@ -17,7 +18,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -90,6 +91,76 @@ public class DespesaParcelaServiceTest {
         assertEquals(parcelaDTO2.getDataVencimento(), parcelas.get(1).getDataVencimento());
         assertEquals(parcelaDTO2.getValor(), parcelas.get(1).getValor());
         assertEquals(parcelaDTO2.getPago(), parcelas.get(1).isPago());
+    }
+
+    @Test
+    void testEditarParcela() {
+        DespesaParcela parcelaExistente = new DespesaParcela();
+        parcelaExistente.setId(1L);
+        parcelaExistente.setNumero(1);
+        parcelaExistente.setDataVencimento(new Date());
+        parcelaExistente.setValor(100.0);
+        parcelaExistente.setPago(false);
+
+        DespesaParcelaDTO parcelaDTO = new DespesaParcelaDTO();
+        parcelaDTO.setId(1L);
+        parcelaDTO.setNumero(1);
+        parcelaDTO.setDataVencimento(new Date());
+        parcelaDTO.setValor(200.0);
+        parcelaDTO.setPago(true);
+
+        despesaParcelaService.editarParcela(parcelaExistente, parcelaDTO);
+
+        assertEquals(parcelaDTO.getDataVencimento(), parcelaExistente.getDataVencimento());
+        assertEquals(parcelaDTO.getValor(), parcelaExistente.getValor());
+        assertEquals(parcelaDTO.getPago(), parcelaExistente.isPago());
+    }
+
+    @Test
+    public void testAtualizarParcelas() {
+        Despesa despesaExistente = new Despesa();
+        despesaExistente.setId(1L);
+        despesaExistente.setParcelas(new ArrayList<>());
+
+        DespesaParcela parcelaExistente = new DespesaParcela();
+        parcelaExistente.setId(1L);
+        parcelaExistente.setNumero(1);
+        parcelaExistente.setDataVencimento(new Date());
+        parcelaExistente.setValor(100.0);
+        parcelaExistente.setPago(false);
+        despesaExistente.getParcelas().add(parcelaExistente);
+
+        DespesaParcelaDTO parcelaDTO1 = new DespesaParcelaDTO();
+        parcelaDTO1.setId(1L);
+        parcelaDTO1.setNumero(1);
+        parcelaDTO1.setDataVencimento(new Date());
+        parcelaDTO1.setValor(200.0);
+        parcelaDTO1.setPago(true);
+
+        DespesaParcelaDTO parcelaDTO2 = new DespesaParcelaDTO();
+        parcelaDTO2.setNumero(2);
+        parcelaDTO2.setDataVencimento(new Date());
+        parcelaDTO2.setValor(300.0);
+        parcelaDTO2.setPago(false);
+
+        List<DespesaParcelaDTO> parcelasDTO = List.of(parcelaDTO1, parcelaDTO2);
+
+        List<DespesaParcela> parcelasAtualizadas = despesaParcelaService.atualizarParcelas(despesaExistente, parcelasDTO);
+
+        assertEquals(2, parcelasAtualizadas.size());
+
+        DespesaParcela parcelaAtualizada1 = parcelasAtualizadas.get(0);
+        assertNotNull(parcelaAtualizada1.getId());
+        assertEquals(parcelaDTO1.getDataVencimento(), parcelaAtualizada1.getDataVencimento());
+        assertEquals(parcelaDTO1.getValor(), parcelaAtualizada1.getValor());
+        assertEquals(parcelaDTO1.getPago(), parcelaAtualizada1.isPago());
+
+        DespesaParcela parcelaAtualizada2 = parcelasAtualizadas.get(1);
+        assertNull(parcelaAtualizada2.getId());
+        assertEquals(parcelaDTO2.getNumero(), parcelaAtualizada2.getNumero());
+        assertEquals(parcelaDTO2.getDataVencimento(), parcelaAtualizada2.getDataVencimento());
+        assertEquals(parcelaDTO2.getValor(), parcelaAtualizada2.getValor());
+        assertEquals(parcelaDTO2.getPago(), parcelaAtualizada2.isPago());
     }
 
     @Test

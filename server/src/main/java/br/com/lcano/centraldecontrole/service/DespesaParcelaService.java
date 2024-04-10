@@ -7,6 +7,7 @@ import br.com.lcano.centraldecontrole.repository.DespesaParcelaRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,35 @@ public class DespesaParcelaService {
         return parcelasDTO.stream()
             .map(parcelaDTO -> criarParcela(parcelaDTO, despesa))
             .collect(Collectors.toList());
+    }
+
+    public void editarParcela(DespesaParcela parcelaExistente, DespesaParcelaDTO parcelaDTO) {
+        parcelaExistente.setDataVencimento(parcelaDTO.getDataVencimento());
+        parcelaExistente.setValor(parcelaDTO.getValor());
+        parcelaExistente.setPago(parcelaDTO.getPago());
+    }
+
+    public List<DespesaParcela> atualizarParcelas(Despesa despesaExistente, List<DespesaParcelaDTO> parcelasDTO) {
+        List<DespesaParcela> parcelasAtualizadas = new ArrayList<>();
+
+        for (DespesaParcelaDTO parcelaDTO : parcelasDTO) {
+            if (parcelaDTO.getId() != null && parcelaDTO.getId() > 0) {
+                DespesaParcela parcelaExistente = despesaExistente.getParcelas().stream()
+                        .filter(p -> p.getId().equals(parcelaDTO.getId()))
+                        .findFirst()
+                        .orElse(null);
+
+                if (parcelaExistente != null) {
+                    editarParcela(parcelaExistente, parcelaDTO);
+                    parcelasAtualizadas.add(parcelaExistente);
+                }
+            } else {
+                DespesaParcela novaParcela = criarParcela(parcelaDTO, despesaExistente);
+                parcelasAtualizadas.add(novaParcela);
+            }
+        }
+
+        return parcelasAtualizadas;
     }
 
     public List<DespesaParcela> listarParcelasPorVencimento(Despesa despesa, Integer ano, Integer mes) {
