@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import DespesaService from '../../service/DespesaService';
 import Panel from '../../components/panel/Panel';
@@ -9,7 +9,7 @@ import DespesaForm from '../../components/form/despesa/DespesaForm';
 import ParcelaForm from '../../components/form/despesa/ParcelaForm';
 import Button from '../../components/button/button/Button';
 import FloatingButton from '../../components/button/Floatingbutton/FloatingButton';
-import { FaSave } from 'react-icons/fa';
+import { FaCheck } from 'react-icons/fa';
 import { Despesa } from '../../types/Despesa';
 import { Parcela } from '../../types/Parcela';
 import { Categoria } from '../../types/Categoria';
@@ -37,6 +37,7 @@ const DespesaPage: React.FC = () => {
   
   const auth = useContext(AuthContext);
   const despesaService = DespesaService();
+  const navigate = useNavigate();
 
   const id = typeof idStr === 'string' ? parseInt(idStr, 10) : 0;
 
@@ -64,8 +65,9 @@ const DespesaPage: React.FC = () => {
     }
   };
 
-  const criarNovaParcela = () => {
-    const novoNumeroParcela = despesa.parcelas.length + 1;
+  const adicionarNovaParcela = () => {
+    const novoNumeroParcela = (despesa.parcelas.length > 0 ? despesa.parcelas[despesa.parcelas.length - 1].numero + 1 : 1);
+    
     const novaParcela: Parcela = {
       id: 0,
       numero: novoNumeroParcela,
@@ -76,55 +78,58 @@ const DespesaPage: React.FC = () => {
   
     setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: [...prevDespesa.parcelas, novaParcela] }));
     setNumeroParcelaSelecionada(novoNumeroParcela);
-  };
-
-  const isRowSelected = (item: Parcela) => numeroParcelaSelecionada === item.numero;
-
-  const handleClickRow = (item: Parcela) => {
-    setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
-  };
-
-  const handleUpdateDespesa = (despesaAtualizada: Despesa) => {
-    setDespesa(despesaAtualizada);
-  };
-
-  const handleUpdateParcela = (parcelaAtualizada: Parcela) => {
-    const updatedParcelas = despesa.parcelas.map(p => p.numero === parcelaAtualizada.numero ? parcelaAtualizada : p);
-    setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: updatedParcelas }));
-  };
-
-  const handleAddParcela = () => {
-    criarNovaParcela();
     setShowParcelaForm(true);
   };
 
-  const handleEditParcela = () => setShowParcelaForm(true);
+  const deletarParcela = () => {
+    if (numeroParcelaSelecionada && numeroParcelaSelecionada > 0) {
+      const updatedParcelas = despesa.parcelas.filter(p => p.numero !== numeroParcelaSelecionada);
+      setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: updatedParcelas }));
+      setNumeroParcelaSelecionada(null);
+    }
+  }
 
-  const handleDeleteParcela = () => {
-    console.log('handleDeleteParcela');  
-  };
+  const atualizarParcela = (parcelaAtualizada: Parcela) => {
+    const updatedParcelas = despesa.parcelas.map(p => p.numero === parcelaAtualizada.numero ? parcelaAtualizada : p);
+    setDespesa(prevDespesa => ({ ...prevDespesa, parcelas: updatedParcelas }));
+  }
 
-  const handleSaveDespesa = () => {
+  const salvarDespesa = async () => {
     setShowParcelaForm(false);
 
     if (token) {
       if (id > 0) {
-        despesaService.editarDespesa(token, id, despesa);
+        await despesaService.editarDespesa(token, id, despesa);
       } else {
-        despesaService.gerarDespesa(token, despesa);
+        await despesaService.gerarDespesa(token, despesa);
       }
+      navigate('/controledespesas');
     }
-  };
+  }
 
-  const handleSaveParcela = () => {
-    setShowParcelaForm(false);
-  };
+  const isRowSelected = (item: Parcela) => numeroParcelaSelecionada === item.numero;
+
+  const handleClickRow = (item: Parcela) => setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
+
+  const handleAddParcela = () => adicionarNovaParcela();
+
+  const handleEditParcela = () => setShowParcelaForm(true);
+
+  const handleSaveParcela = () => setShowParcelaForm(false);
+
+  const handleDeleteParcela = () => deletarParcela();
+
+  const handleUpdateParcela = (parcelaAtualizada: Parcela) => atualizarParcela(parcelaAtualizada);
+
+  const handleUpdateDespesa = (despesaAtualizada: Despesa) => setDespesa(despesaAtualizada);
+
+  const handleSaveDespesa = () => salvarDespesa();
 
   return (
     <>
       <FloatingButton
-        mainButtonIcon={<FaSave />}
-        mainButtonHint='Salvar Despesa'
+        mainButtonIcon={<FaCheck />}
+        mainButtonHint={showParcelaForm ? 'Salvar Parcela' : 'Salvar Despesa'}
         mainAction={showParcelaForm ? handleSaveParcela : handleSaveDespesa}
       />
       {showParcelaForm ? (
