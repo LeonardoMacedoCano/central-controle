@@ -52,6 +52,7 @@ const DespesaResumoMensalPage: React.FC = () => {
 
     setDespesasPage(resultDespesas || undefined);
     setValorTotal(resultValorTotal?.valueOf() || 0);
+    setIdDespesaSelecionada(null);
 };
 
   const isRowSelected = (item: DespesaResumoMensal) => idDespesaSelecionada === item.id;
