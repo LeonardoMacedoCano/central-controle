@@ -97,11 +97,13 @@ public class DespesaService {
     }
 
     @Transactional
-    public void gerarDespesa(DespesaDTO data, Usuario usuario) {
+    public Long gerarDespesa(DespesaDTO data, Usuario usuario) {
         Despesa novaDespesa = criarDespesa(data, usuario);
         novaDespesa.getParcelas().addAll(despesaParcelaService.criarParcelas(novaDespesa, data.getParcelasDTO()));
         salvarDespesa(novaDespesa);
         despesaParcelaService.salvarParcelas(novaDespesa.getParcelas());
+
+        return novaDespesa.getId();
     }
 
     @Transactional

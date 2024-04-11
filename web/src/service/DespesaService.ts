@@ -6,7 +6,7 @@ import { Categoria } from '../types/Categoria';
 import { usarMensagens } from '../contexts/mensagens';
 
 interface DespesaApi {
-  gerarDespesa: (token: string, data: Despesa) => Promise< undefined >;
+  gerarDespesa: (token: string, data: Despesa) => Promise<{ idDespesa: number } | undefined>;
   editarDespesa: (token: string, id: number, data: Despesa) => Promise< undefined >;
   excluirDespesa: (token: string, id: number) => Promise< undefined >; 
   listarDespesaResumoMensal: (token: string, page: number, size: number, ano: number, mes: number) => Promise< PagedResponse<DespesaResumoMensal> | undefined >;
@@ -26,11 +26,12 @@ const DespesaService = (): DespesaApi => {
 
   const gerarDespesa = async (token: string, data: Despesa) => {
     try {
-      await request<undefined>('post', 'despesa', token, mensagens, despesaPayload(data));
+      return await request<{ idDespesa: number }>('post', 'despesa', token, mensagens, despesaPayload(data));
     } catch (error) {
       return undefined;
     }
   };
+  
 
   const editarDespesa = async (token: string, id: number, data: Despesa) => {
     try {

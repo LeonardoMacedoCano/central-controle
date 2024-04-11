@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import DespesaService from '../../service/DespesaService';
 import Panel from '../../components/panel/Panel';
@@ -37,7 +37,6 @@ const DespesaPage: React.FC = () => {
   
   const auth = useContext(AuthContext);
   const despesaService = DespesaService();
-  const navigate = useNavigate();
 
   const id = typeof idStr === 'string' ? parseInt(idStr, 10) : 0;
 
@@ -46,22 +45,29 @@ const DespesaPage: React.FC = () => {
   }, [auth.usuario?.token]);
 
   useEffect(() => {
-    carregarDespesa();
+    if (id > 0 ) carregarDespesa(id);
+    carregarCategoriasDespesa();
   }, [token, id]);
 
-  const carregarDespesa = async () => {
+  const carregarDespesa = async (idDespesa: number) => {
     if (!token) return;
 
     try {
-      const [resultDespesa, resultCategorias] = await Promise.all([
-        id > 0 ? despesaService.getDespesaByIdWithParcelas(token, id) : null,
-        despesaService.getTodasCategoriasDespesa(token)
-      ]);
-
-      if (resultDespesa) setDespesa(resultDespesa);
-      setCategorias(resultCategorias || []);
+      const result = await despesaService.getDespesaByIdWithParcelas(token, idDespesa);
+      if (result) setDespesa(result);
     } catch (error) {
       console.error("Erro ao carregar a despesa:", error);
+    }
+  };
+
+  const carregarCategoriasDespesa = async () => {
+    if (!token) return;
+
+    try {
+      const result = await despesaService.getTodasCategoriasDespesa(token);
+      setCategorias(result || []);
+    } catch (error) {
+      console.error("Erro ao carregar as categorias de despesa:", error);
     }
   };
 
@@ -70,13 +76,18 @@ const DespesaPage: React.FC = () => {
   };
 
   const salvarDespesa = async () => {
-    setShowParcelaForm(false);
-
     if (!token) return;
 
     try {
-      id > 0 ? await despesaService.editarDespesa(token, id, despesa) : await despesaService.gerarDespesa(token, despesa);
-      navigate('/controledespesas');
+      let idDespesa = 0;
+      if (id > 0) {
+        await despesaService.editarDespesa(token, id, despesa);
+        idDespesa = id;
+      } else {
+        const response = await despesaService.gerarDespesa(token, despesa);
+        if (response?.idDespesa) idDespesa = response?.idDespesa;
+      }
+      if (idDespesa > 0) carregarDespesa(idDespesa);
     } catch (error) {
       console.error("Erro ao salvar a despesa:", error);
     }

@@ -25,8 +25,7 @@ public class DespesaResource {
     @PostMapping
     public ResponseEntity<Object> gerarDespesa(@RequestBody DespesaDTO data, HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
-        despesaService.gerarDespesa(data, usuario);
-        return CustomSuccess.buildResponseEntity("Despesa adicionada com sucesso.");
+        return CustomSuccess.buildResponseEntity("Despesa adicionada com sucesso.", "idDespesa", despesaService.gerarDespesa(data, usuario));
     }
 
     @PutMapping("/{idDespesa}")
