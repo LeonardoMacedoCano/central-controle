@@ -10,7 +10,7 @@ import Container from '../../components/container/Container';
 import FieldValue from '../../components/fieldvalue/FieldValue';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
-import Button from '../../components/button/button/Button';
+import TableToolbar from '../../components/table/TableToolbar';
 import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
 import { PagedResponse } from '../../types/PagedResponse';
 import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
@@ -131,23 +131,12 @@ const DespesaResumoMensalPage: React.FC = () => {
           onClickRow={handleClickRow}
           rowSelected={isRowSelected}
           customHeader={
-            <>
-              <Button 
-                variant='table-add' 
-                onClick={handleAddDespesa} 
-                disabled={idDespesaSelecionada !== null && idDespesaSelecionada > 0} 
-              />
-              <Button 
-                variant='table-edit' 
-                onClick={handleEditDespesa} 
-                disabled={!idDespesaSelecionada} 
-              />
-              <Button 
-                variant='table-delete' 
-                onClick={deletarDespesa} 
-                disabled={!idDespesaSelecionada} 
-              />
-            </>
+            <TableToolbar
+              handleAdd={handleAddDespesa}
+              handleEdit={handleEditDespesa}
+              handleDelete={deletarDespesa}
+              isItemSelected={!!idDespesaSelecionada}
+            />
           }
         >
           <Column<DespesaResumoMensal> 

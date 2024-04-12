@@ -1,9 +1,9 @@
 import React from 'react';
 import * as C from './styles';
-import { FaPlus, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaDollarSign  } from 'react-icons/fa';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: 'table-add' | 'table-edit' | 'table-delete' | 'success' | 'info' | 'warning';
+  variant: 'table-add' | 'table-edit' | 'table-delete' | 'table-money' | 'success' | 'info' | 'warning';
   width?: string;
   height?: string;
   icon?: React.ReactNode;
@@ -28,6 +28,10 @@ const getIconAndHint = (variant: ButtonProps['variant'], iconProp?: React.ReactN
     case 'table-delete':
       icon = <FaTrash />;
       hint = 'Deletar';
+      break;
+    case 'table-money':
+      icon = <FaDollarSign />;
+      hint = 'Alterar Situção';
       break;
     default:
       icon = iconProp;

@@ -7,8 +7,9 @@ import Table from '../../components/table/Table';
 import Column from '../../components/table/Column';
 import DespesaForm from '../../components/form/despesa/DespesaForm';
 import ParcelaForm from '../../components/form/despesa/ParcelaForm';
-import Button from '../../components/button/button/Button';
 import FloatingButton from '../../components/button/Floatingbutton/FloatingButton';
+import Container from '../../components/container/Container';
+import TableToolbar from '../../components/table/TableToolbar';
 import { FaCheck } from 'react-icons/fa';
 import { Despesa } from '../../types/Despesa';
 import { Parcela } from '../../types/Parcela';
@@ -116,6 +117,21 @@ const DespesaPage: React.FC = () => {
     setNumeroParcelaSelecionada(null);
   };
 
+  const alterarSituacaoParcela = () => {
+    if (!numeroParcelaSelecionada || numeroParcelaSelecionada <= 0) return;
+
+    const parcelaSelecionada = despesa.parcelas.find(p => p.numero === numeroParcelaSelecionada);
+    if (parcelaSelecionada) {
+      const updatedParcela: Parcela = {
+        ...parcelaSelecionada,
+        pago: !parcelaSelecionada.pago
+      };
+
+      const updatedParcelas = despesa.parcelas.map(p => p.numero === numeroParcelaSelecionada ? updatedParcela : p);
+      atualizarDespesa({ parcelas: updatedParcelas });
+    }
+  };
+
   const atualizarParcela = (parcelaAtualizada: Parcela) => {
     const updatedParcelas = despesa.parcelas.map(p => p.numero === parcelaAtualizada.numero ? parcelaAtualizada : p);
     atualizarDespesa({ parcelas: updatedParcelas });
@@ -131,7 +147,7 @@ const DespesaPage: React.FC = () => {
   const handleClickRow = (item: Parcela) => setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
 
   return (
-    <>
+    <Container>
       <FloatingButton
         mainButtonIcon={<FaCheck />}
         mainButtonHint={showParcelaForm ? 'Salvar Parcela' : 'Salvar Despesa'}
@@ -170,23 +186,13 @@ const DespesaPage: React.FC = () => {
               onClickRow={handleClickRow}
               rowSelected={isRowSelected}
               customHeader={
-                <>
-                  <Button 
-                    variant='table-add' 
-                    onClick={adicionarNovaParcela} 
-                    disabled={numeroParcelaSelecionada !== null && numeroParcelaSelecionada > 0} 
-                  />
-                  <Button 
-                    variant='table-edit' 
-                    onClick={() => setShowParcelaForm(true)} 
-                    disabled={!numeroParcelaSelecionada} 
-                  />
-                  <Button 
-                    variant='table-delete' 
-                    onClick={deletarParcela} 
-                    disabled={!numeroParcelaSelecionada} 
-                  />
-                </>
+                <TableToolbar 
+                  handleAdd={adicionarNovaParcela}
+                  handleEdit={() => setShowParcelaForm(true)}
+                  handleDelete={deletarParcela}
+                  handleMoney={alterarSituacaoParcela}
+                  isItemSelected={!!numeroParcelaSelecionada}
+                />
               }
             >
               <Column<Parcela> 
@@ -213,7 +219,7 @@ const DespesaPage: React.FC = () => {
           </Panel>
         </>
       )}
-    </>
+    </Container>
   )
 }
 
