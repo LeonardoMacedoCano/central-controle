@@ -94,7 +94,7 @@ const DespesaResumoMensalPage: React.FC = () => {
               type='month' 
               value={formatarDataParaAnoMes(dataSelecionada)} 
               editable={true}
-              width='150px'
+              width='160px'
               inputWidth='150px'
               onUpdate={atualizarDataVencimento} 
             />
@@ -108,7 +108,7 @@ const DespesaResumoMensalPage: React.FC = () => {
               description='Valor Total' 
               type='string' 
               value={formatarValorParaReal(valorTotal)}
-              width='150px'
+              width='160px'
               inputWidth='150px' 
             />
           </FlexBox.Item>

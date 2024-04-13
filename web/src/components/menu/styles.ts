@@ -6,12 +6,12 @@ export const AppHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: ${props => props.theme.colors.quaternary};
   background-color: ${props => props.theme.colors.secondary};
   box-shadow: 0 0 5px 1px;
   padding: 0 20px;
 
   > svg {
-    color: ${props => props.theme.colors.white};
     width: 30px;
     height: 30px;
     cursor: pointer;
@@ -19,7 +19,7 @@ export const AppHeader = styled.div`
 `;
 
 export const TitleHeader = styled.h1`
-  color: ${props => props.theme.colors.white};
+  color: ${props => props.theme.colors.quaternary};
   font-size: 24px;
   margin: 0;
 `;
@@ -28,7 +28,7 @@ export const AppSidebarItem = styled.div`
   display: flex;
   align-items: center;
   background-color: ${props => props.theme.colors.primary};
-  border: 1px solid ${props => props.theme.colors.gray};
+  border: 1px solid ${props => props.theme.colors.tertiary};
   font-size: 20px;
   color: ${props => props.theme.colors.white};
   padding: 10px;
@@ -51,7 +51,7 @@ interface AppSidebarProps {
 
 export const AppSidebar = styled.div<AppSidebarProps>`
   background-color: ${props => props.theme.colors.secondary};
-  border-right: 1px solid ${props => props.theme.colors.gray};
+  border-right: 1px solid ${props => props.theme.colors.quaternary};
   position: fixed;
   height: 100%;
   top: 0px;
@@ -63,7 +63,7 @@ export const AppSidebar = styled.div<AppSidebarProps>`
 
   > svg {
     position: fixed;
-    color: ${props => props.theme.colors.white};
+    color: ${props => props.theme.colors.quaternary};
     width: 30px;
     height: 30px;
     margin-top: 32px;

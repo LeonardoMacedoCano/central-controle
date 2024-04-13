@@ -42,6 +42,10 @@ export const Input = styled.input<InputProps>`
   background-color: transparent;
   margin-left: ${props => props.inline ? '5px' : 'none'};
   cursor: ${props => (props.readOnly ? 'not-allowed' : 'pointer')};
+
+  &::-webkit-calendar-picker-indicator {
+    filter: ${() => `invert(100%)`};
+  }
 `;
 
 export const Select = styled.select<InputProps>`

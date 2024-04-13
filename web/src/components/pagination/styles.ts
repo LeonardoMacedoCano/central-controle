@@ -19,6 +19,7 @@ export const ItemContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: ${props => props.theme.colors.quaternary};
 `;
 
 export const Item = styled.li<{ disabled?: boolean}>`

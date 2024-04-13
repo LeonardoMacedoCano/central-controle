@@ -40,7 +40,7 @@ const getButtonVariantStyles = (variant: StyledButtonProps['variant'], theme: an
     case 'table-money':
       return css`
         ${commonButtonTableStyles};
-        background-color: #03af00;
+        background-color: ${theme.colors.success};
       `;
     case 'success':
       return css`

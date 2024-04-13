@@ -178,6 +178,7 @@ const DespesaPage: React.FC = () => {
           <Panel
             maxWidth='1000px' 
             title='Parcelas'
+            footer={<></>}
           >
             <Table
               values={despesa ? despesa.parcelas : []}
