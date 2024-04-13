@@ -61,7 +61,6 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate
           />
         </FlexBox.Item>
         <FlexBox.Item
-          borderRight  
         >
           <FieldValue 
             description='Valor Total'
@@ -88,7 +87,6 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate
         </FlexBox.Item>
         <FlexBox.Item
           borderTop
-          borderRight  
         >
           <FieldValue 
             description='Descrição'

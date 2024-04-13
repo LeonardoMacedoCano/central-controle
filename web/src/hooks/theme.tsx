@@ -15,6 +15,7 @@ interface ITheme {
     primary: string;
     secondary: string;
     tertiary: string;
+    quaternary: string;
 
     white: string;
     black: string;

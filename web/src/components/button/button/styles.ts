@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { convertReactStyleToCSSObject } from '../../../utils/styledUtils';
 
 interface StyledButtonProps {
-  variant?: 'table-add' | 'table-edit' | 'table-delete' | 'table-money' | 'success' | 'info' | 'warning';
+  variant?: 'table-add' | 'table-edit' | 'table-delete' | 'table-money' | 'success' | 'info' | 'warning' | 'login';
   width?: string;
   height?: string;
   disabled?: boolean;
@@ -56,6 +56,15 @@ const getButtonVariantStyles = (variant: StyledButtonProps['variant'], theme: an
       return css`
         background-color: ${theme.colors.warning};
         color: ${theme.colors.white};
+      `;
+    case 'login':
+      return css`
+        width: 98%;
+        background-color: ${props => props.theme.colors.quaternary};
+        font-weight: 800;
+        height: 50px;
+        border-radius: 5px;
+        font-size: 18px;
       `;
     default:
       return css`

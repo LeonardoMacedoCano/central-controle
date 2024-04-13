@@ -7,8 +7,7 @@ export const AppHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   background-color: ${props => props.theme.colors.secondary};
-  border-bottom: 1px solid ${props => props.theme.colors.gray};
-  box-shadow: 0 0 20px 3px;
+  box-shadow: 0 0 5px 1px;
   padding: 0 20px;
 
   > svg {

@@ -16,7 +16,11 @@ type FieldValueProps = {
   inputWidth?: string;
   inline?: boolean;
   categorias?: Categoria[];
+  icon?: React.ReactNode;
+  padding?: string;
+  placeholder?: string;
   onUpdate?: (value: any) => void;
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 };
 
 class FieldValue extends React.Component<FieldValueProps> {
@@ -79,11 +83,26 @@ class FieldValue extends React.Component<FieldValueProps> {
   };
 
   render() {
-    const { description, type, value, editable, width, maxWidth, maxHeight, inline, inputWidth, categorias } = this.props;
+    const { 
+      description, 
+      type, 
+      value, 
+      editable, 
+      width, 
+      maxWidth, 
+      maxHeight, 
+      inline, 
+      inputWidth, 
+      categorias, 
+      icon, 
+      padding, 
+      placeholder, 
+      onKeyDown 
+    } = this.props;
     const selectedCategoria = (type === 'categoria' ? this.getSelectedCategoria(parseInt(value as string, 10)) : undefined);
 
     return (
-      <C.FieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline}>
+      <C.FieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline} padding={padding}>
         {description && 
           <C.Label>
             {description}
@@ -105,14 +124,23 @@ class FieldValue extends React.Component<FieldValueProps> {
             ))}
           </C.Select>
         ) : (
-          <C.Input
-            type={editable ? type : 'string'} 
-            readOnly={!editable}
-            value={this.formatValue(value)}
-            onChange={this.handleInputChange}
-            inputWidth={inputWidth}
-            inline={inline}
-          />
+          <>
+            {icon && 
+              <C.Icon>
+                {icon}
+              </C.Icon>
+            }
+            <C.Input
+              type={editable ? type : 'string'} 
+              readOnly={!editable}
+              value={this.formatValue(value)}
+              onChange={this.handleInputChange}
+              inputWidth={inputWidth}
+              inline={inline}
+              onKeyDown={onKeyDown}
+              placeholder={placeholder}
+            />
+          </>
         )}
       </C.FieldValue>
     );

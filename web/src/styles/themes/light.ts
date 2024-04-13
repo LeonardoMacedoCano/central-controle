@@ -5,6 +5,7 @@ export default {
     primary: '#DCDCDC',
     secondary: '#FFFFFF',
     tertiary: '#F5F5F5',
+    quaternary: '#F5F5F5',
 
     white: '#000',
     black: '#FFF',

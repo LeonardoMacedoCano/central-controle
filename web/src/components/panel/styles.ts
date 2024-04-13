@@ -23,7 +23,7 @@ export const Title = styled.div`
 
 export const PanelContainer = styled.div`
   width: 100%;
-  background-color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.secondary};
   box-shadow: 0px 0px 5px ${({ theme }) => theme.colors.gray};
   border-radius: 5px;
   margin-top: 20px;

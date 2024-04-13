@@ -3,7 +3,7 @@ import * as C from './styles';
 import { FaPlus, FaEdit, FaTrash, FaDollarSign  } from 'react-icons/fa';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant: 'table-add' | 'table-edit' | 'table-delete' | 'table-money' | 'success' | 'info' | 'warning';
+  variant?: 'table-add' | 'table-edit' | 'table-delete' | 'table-money' | 'success' | 'info' | 'warning' | 'login';
   width?: string;
   height?: string;
   icon?: React.ReactNode;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import * as C from './styles';
 
 interface FlexBoxProps {
@@ -6,6 +6,7 @@ interface FlexBoxProps {
   width?: string;
   height?: string;
   flexDirection?: 'row' | 'column';
+  style?: CSSProperties;
 }
 
 interface FlexBoxChildProps {

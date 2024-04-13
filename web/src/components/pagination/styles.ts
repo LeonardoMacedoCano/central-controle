@@ -25,7 +25,7 @@ export const Item = styled.li<{ disabled?: boolean}>`
   width: 35px;
   height: 100%;
   font-size: 20px;
-  color: ${props => props.theme.colors.black};
+  color: ${props => props.theme.colors.white};
   display: flex;
   align-items: center;
   justify-content: center;

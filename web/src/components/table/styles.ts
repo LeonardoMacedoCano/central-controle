@@ -10,7 +10,7 @@ export const CustomHeader = styled.div`
   height: 45px;
   display: flex;
   align-items: center;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.tertiary};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.quaternary};
 `;
 
 export const StyledTable = styled.table`
@@ -20,14 +20,14 @@ export const StyledTable = styled.table`
 
 export const TableHeadRow = styled.tr`
   width: 100%;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.tertiary};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.quaternary};
 `;
 
 export const TableHeadColumn = styled.th`
   padding: 0 10px;
   text-align: left;
-  background-color: #f8f8f8;
-  border-right: 1px solid ${({ theme }) => theme.colors.tertiary};
+  background-color: ${({ theme }) => theme.colors.secondary};
+  border-right: 1px solid ${({ theme }) => theme.colors.quaternary};
   &:last-child {
     border-right: none;
   }
@@ -42,14 +42,14 @@ export const TableColumnTitle = styled.div`
 `;
 
 export const TableRow = styled.tr<{ isSelected?: boolean }>`
-  background-color: #f8f8f8;
+  background-color: ${({ theme }) => theme.colors.secondary};
   
   &:nth-child(odd) {
-    background-color: #e4e4e4;
+    background-color: ${({ theme }) => theme.colors.tertiary};
   }
 
   &:last-child {
-    border-bottom: 2px solid ${({ theme }) => theme.colors.tertiary};
+    border-bottom: 2px solid ${({ theme }) => theme.colors.quaternary};
   }
 `;
 
@@ -57,7 +57,7 @@ export const TableColumn = styled.td<{ isSelected?: boolean }>`
   height: 35px;
   padding: 0 10px;
   text-align: left;
-  border-right: 1px solid ${({ theme }) => theme.colors.tertiary};
+  border-right: 1px solid ${({ theme }) => theme.colors.quaternary};
   position: relative;
   
   &:first-child::before {
@@ -67,7 +67,7 @@ export const TableColumn = styled.td<{ isSelected?: boolean }>`
     left: 0;
     bottom: 0;
     width: 5px;
-    background-color: ${({ theme, isSelected }) => (isSelected ? theme.colors.tertiary : 'transparent')};
+    background-color: ${({ theme, isSelected }) => (isSelected ? theme.colors.quaternary : 'transparent')};
   }
 
   &:last-child {

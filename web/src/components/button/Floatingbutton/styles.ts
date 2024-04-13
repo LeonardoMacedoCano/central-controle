@@ -11,7 +11,7 @@ export const MainButton = styled.button`
   width: 55px;
   height: 55px;
   color: white;
-  background-color: ${props => props.theme.colors.primary};
+  background-color: ${props => props.theme.colors.tertiary};
   border: none;
   border-radius: 50%;
   font-size: 25px;
@@ -41,7 +41,7 @@ export const OptionsContainer = styled.div`
 `;
 
 export const OptionCircle = styled.button`
-  background-color: ${props => props.theme.colors.primary};
+  background-color: ${props => props.theme.colors.tertiary};
   color: white;
   border: none;
   border-radius: 50%;

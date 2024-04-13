@@ -1,35 +1,34 @@
-import { ChangeEvent, useContext, useState } from "react";
+import * as C from './styles';
+import { ThemeContext } from "styled-components";
+import { useContext, useState } from "react";
+import { MdAccountCircle, MdLock } from 'react-icons/md';
 import { AuthContext } from "../../contexts/auth/AuthContext";
 import { usarMensagens } from '../../contexts/mensagens';
-import { MdAccountCircle, MdLock } from 'react-icons/md';
-import { HiEye, HiEyeOff } from 'react-icons/hi';
-import * as C from './styles';
+import Container from "../../components/container/Container";
+import FlexBox from "../../components/flexbox/FlexBox";
+import FieldValue from "../../components/fieldvalue/FieldValue";
+import Button from "../../components/button/button/Button";
 
 export const Login = () => {
   const auth = useContext(AuthContext);
+  const theme = useContext(ThemeContext);
   const mensagens = usarMensagens();
 
   const [username, setUsername] = useState('');
   const [senha, setSenha] = useState('');
-  const [showSenha, setShowSenha] = useState(false);
 
-  const handleUsernameInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
+  const updateUsername = (value: any) => {
+    setUsername(value);
   }
 
-  const handlePasswordInput = (event: ChangeEvent<HTMLInputElement>) => {
-    setSenha(event.target.value);
+  const updatePassword = (value: any) => {
+    setSenha(value);
   }
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       handleLogin();
     }
-  };
-
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setShowSenha(!showSenha);
   };
 
   const handleLogin = async () => {
@@ -40,45 +39,61 @@ export const Login = () => {
       }
     }
   }
-        
+
   return (
-    <C.Container>
+    <Container
+      margin="0"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        width: '100vw',
+      }}
+    >
       <C.Body>
         <C.Titulo>
           Central de Controle
         </C.Titulo>
-        <C.CampoUsername>
-          <MdAccountCircle  style={C.IconeUsername} />
-          <C.InputCampoUsername
-            type="text"
-            placeholder="Digite seu usuário"
-            value={username}
-            onChange={handleUsernameInput}
-          />
-        </C.CampoUsername>
-
-        <C.CampoSenha>
-          <MdLock style={C.IconeSenha} />
-          <C.InputCampoSenha
-            placeholder="Digite sua senha"
-            type={showSenha ? 'text' : 'password'}
-            value={senha}
-            onChange={handlePasswordInput}
-            onKeyDown={handleKeyDown}
-          />
-          <C.IconeOlho>
-            {showSenha ? (
-              <HiEye size={20} onClick={handleClick} />
-            ) : (
-              <HiEyeOff size={20} onClick={handleClick} />
-            )}
-          </C.IconeOlho>
-        </C.CampoSenha>
-
-        <C.BotaoEntrar onClick={handleLogin} type="submit">
-          Entrar
-        </C.BotaoEntrar>
+        <FlexBox
+          style={C.Input(theme)}
+        >
+          <FlexBox.Item>
+            <FieldValue
+              type='string'
+              value={username}
+              icon={<MdAccountCircle style={C.Icon(theme)} />}
+              editable={true}
+              onUpdate={updateUsername}
+              inline={true}
+              padding="0"
+              placeholder="Digite seu usuário"
+            />
+          </FlexBox.Item>
+        </FlexBox>
+        <FlexBox
+          style={C.Input(theme)}
+        >
+          <FlexBox.Item>
+            <FieldValue
+              type='string'
+              value={senha}
+              icon={<MdLock style={C.Icon(theme)} />}
+              editable={true}
+              onUpdate={updatePassword}
+              inline={true}
+              padding="0"
+              placeholder="Digite sua senha"
+              onKeyDown={handleKeyDown}
+            />
+          </FlexBox.Item>
+        </FlexBox>
+        <Button 
+          variant="login" 
+          description="Entrar"
+          onClick={handleLogin}
+        />
       </C.Body>
-    </C.Container>           
+    </Container>           
   )
 }
