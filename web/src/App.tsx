@@ -1,21 +1,21 @@
 import React from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import darkOnyxAmber from './styles/themes/darkOnyxAmber.ts';
+import GlobalStyles from './styles/GlobalStyles';
 import { ProvedorMensagens } from './contexts/mensagens/index.tsx';
 import { AuthProvider } from './contexts/auth/AuthProvider.tsx';
-import GlobalStyles from './styles/GlobalStyles';
 import { RequireAuth } from './contexts/auth/RequireAuth.tsx';
 import AppHeader from './components/menu/AppHeader.tsx';
 import { Home } from './pages/home/index.tsx';
 import DespesaResumoMensalPage from './pages/controledespesas/DespesaResumoMensalPage.tsx';
 import ControleTarefas from './pages/controletarefas/index.tsx';
 import ControleIdeias from './pages/controleideias/index.tsx';
-import dark from './styles/themes/dark';
 import DespesaPage from './pages/controledespesas/DespesaPage.tsx';
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={dark}>
+    <ThemeProvider theme={darkOnyxAmber}>
       <ProvedorMensagens>
         <AuthProvider>
           <BrowserRouter>
