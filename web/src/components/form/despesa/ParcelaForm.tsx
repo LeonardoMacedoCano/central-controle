@@ -31,40 +31,66 @@ const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
     }
   };
 
+  const handleUpdatePago = (value: any) => {
+    if (typeof value === 'boolean') {
+      updateParcela({ pago: value });
+    }
+  };
+
   return (
     <FlexBox 
-      flexDirection="row"
+      flexDirection="column"
     >
-      <FlexBox.Item
-        borderRight  
+      <FlexBox 
+        flexDirection="row"
       >
-        <FieldValue 
-          description='Numero'
-          type='number'
-          value={parcela.numero}
-        />
-      </FlexBox.Item>
-      <FlexBox.Item
-        borderRight  
+        <FlexBox.Item>
+          <FieldValue 
+            description='Numero'
+            type='number'
+            value={parcela.numero}
+          />
+        </FlexBox.Item>
+      </FlexBox>
+      <FlexBox 
+        flexDirection="row"
       >
-        <FieldValue 
-          description='Data Vencimento'
-          type='date'
-          value={formatarDataParaStringYMD(parcela.dataVencimento)}
-          editable={true}
-          onUpdate={handleUpdateDataVencimento}
-        />
-      </FlexBox.Item>
-      <FlexBox.Item  
-      >
-        <FieldValue 
-          description='Valor'
-          type='number'
-          value={parcela.valor}
-          editable={true}
-          onUpdate={handleUpdateValor}
-        />
-      </FlexBox.Item>
+        <FlexBox.Item  
+          borderTop
+          borderRight
+        >
+          <FieldValue 
+            description='Data Vencimento'
+            type='date'
+            value={formatarDataParaStringYMD(parcela.dataVencimento)}
+            editable={true}
+            onUpdate={handleUpdateDataVencimento}
+          />
+        </FlexBox.Item>
+        <FlexBox.Item  
+          borderTop
+          borderRight
+        >
+          <FieldValue 
+            description='Valor'
+            type='number'
+            value={parcela.valor}
+            editable={true}
+            onUpdate={handleUpdateValor}
+          />
+        </FlexBox.Item>
+        <FlexBox.Item  
+          borderTop
+        >
+          <FieldValue 
+            description='Pago'
+            type='boolean'
+            value={parcela.pago}
+            editable={true}
+            onUpdate={handleUpdatePago}
+          />
+        </FlexBox.Item>
+      </FlexBox>
     </FlexBox>
   )
 }

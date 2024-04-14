@@ -25,7 +25,7 @@ type FieldValueProps = {
 
 class FieldValue extends React.Component<FieldValueProps> {
 
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  handleInputChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     const { onUpdate, type, minValue, maxValue } = this.props;
   
     if (onUpdate) {
@@ -39,7 +39,7 @@ class FieldValue extends React.Component<FieldValueProps> {
         } else if (maxValue && formattedValue > maxValue) {
           formattedValue = maxValue;
         }
-      } else if (typeof formattedValue === 'boolean' && type === 'boolean') {
+      } else if (type === 'boolean') {
         formattedValue = event.target.value === 'true';
       } else if (type === 'date') {
         formattedValue = formatarStringParaData(event.target.value);
@@ -61,12 +61,14 @@ class FieldValue extends React.Component<FieldValueProps> {
   formatValue = (val: any) => {
     const { type } = this.props;
 
-    if ((type !== 'date') && (typeof val === 'string' || typeof val === 'number' || typeof val === 'boolean')) {
+    if ((type !== 'date') && (typeof val === 'string' || typeof val === 'number')) {
       return String(val);
     } else if (val instanceof Date && type === 'month') {
       return formatarDataParaAnoMes(val);
-    } else if (typeof val === 'string' && type == 'date') {
+    } else if (typeof val === 'string' && type === 'date') {
       return formatarDataParaStringYMD(formatarStringParaData(val));
+    } else if (typeof val === 'boolean' && type === 'boolean') {
+      return val ? 'true' : 'false';
     } else {
       return '';
     }
@@ -122,6 +124,17 @@ class FieldValue extends React.Component<FieldValueProps> {
                 {`${categoria.id} - ${categoria.descricao}`}
               </option>
             ))}
+          </C.Select>
+        ) : type === 'boolean' ? (
+          <C.Select
+            value={this.formatValue(value)}
+            onChange={this.handleInputChange}
+            disabled={!editable}
+            inputWidth={inputWidth}
+            inline={inline}
+          >
+            <option value="true">Sim</option>
+            <option value="false">Não</option>
           </C.Select>
         ) : (
           <>
