@@ -151,13 +151,17 @@ const DespesaPage: React.FC = () => {
   };
 
   const isCamposObrigatoriosParcelaPreenchidos = (): boolean => {
-    return despesa.parcelas.some(parcela => 
-      parcela.numero > 0 &&
-      parcela.dataVencimento !== null &&
-      parcela.valor > 0
+    const parcelaSelecionada = despesa.parcelas.find(parcela => parcela.numero === numeroParcelaSelecionada);
+  
+    return (
+      !!parcelaSelecionada &&
+      parcelaSelecionada.numero > 0 &&
+      parcelaSelecionada.dataVencimento !== null &&
+      parcelaSelecionada.valor > 0 &&
+      !isNaN(parcelaSelecionada.valor)
     );
   };
-
+  
   const isRowSelected = (item: Parcela) => numeroParcelaSelecionada === item.numero;
 
   const handleClickRow = (item: Parcela) => setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
