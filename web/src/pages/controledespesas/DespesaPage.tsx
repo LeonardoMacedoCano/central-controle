@@ -178,7 +178,7 @@ const DespesaPage: React.FC = () => {
           <Panel
             maxWidth='1000px' 
             title='Parcelas'
-            footer={<></>}
+            footer={despesa.parcelas.length > 0 && <></>}
           >
             <Table
               values={despesa ? despesa.parcelas : []}

@@ -4,6 +4,7 @@ import { DespesaResumoMensal } from '../types/DespesaResumoMensal';
 import { Despesa } from '../types/Despesa';
 import { Categoria } from '../types/Categoria';
 import { usarMensagens } from '../contexts/mensagens';
+import { format } from 'date-fns-tz';
 
 interface DespesaApi {
   gerarDespesa: (token: string, data: Despesa) => Promise<{ idDespesa: number } | undefined>;
@@ -21,11 +22,15 @@ const DespesaService = (): DespesaApi => {
   const despesaPayload = (data: Despesa) => ({
     categoria: data.categoria,
     descricao: data.descricao,
-    parcelas: data.parcelas
-  });
+    parcelas: data.parcelas.map(parcela => ({
+      ...parcela,
+      dataVencimento: format(new Date(parcela.dataVencimento), 'yyyy-MM-dd', { timeZone: 'America/Sao_Paulo' })
+    }))
+  });  
 
   const gerarDespesa = async (token: string, data: Despesa) => {
     try {
+      console.log(despesaPayload(data));
       return await request<{ idDespesa: number }>('post', 'despesa', token, mensagens, despesaPayload(data));
     } catch (error) {
       return undefined;

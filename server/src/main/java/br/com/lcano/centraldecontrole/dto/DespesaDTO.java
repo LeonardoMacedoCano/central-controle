@@ -1,8 +1,9 @@
 package br.com.lcano.centraldecontrole.dto;
 
 import br.com.lcano.centraldecontrole.domain.Despesa;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import br.com.lcano.centraldecontrole.util.CustomDateDeserializer;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 import java.util.Date;
 import java.util.List;
@@ -13,7 +14,7 @@ public class DespesaDTO {
 
     private CategoriaDTO categoria;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date dataLancamento;
 
     private String descricao;
