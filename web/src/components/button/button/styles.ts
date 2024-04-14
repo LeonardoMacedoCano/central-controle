@@ -86,7 +86,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
   height: ${props => props.height || 'auto'};
 
   &:hover {
-    opacity: ${props => (props.disabled ? '0.3' : '0.3')};
+    opacity: 0.3;
   }
 
   ${({ variant, theme }) => getButtonVariantStyles(variant, theme)}

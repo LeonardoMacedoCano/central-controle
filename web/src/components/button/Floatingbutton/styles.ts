@@ -18,9 +18,9 @@ export const MainButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: 1;
+  opacity: ${props => (props.disabled ? '0.3' : '1')};
   transition: background-color 0.3s ease, opacity 0.3s ease;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 
   &:hover {
     opacity: 0.7;

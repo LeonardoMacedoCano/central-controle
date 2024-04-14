@@ -12,9 +12,10 @@ interface FloatingButtonProps {
   mainButtonHint?: string;
   mainAction?: () => void;
   options?: Option[];
+  disabled?: boolean;
 }
 
-const FloatingButton: React.FC<FloatingButtonProps> = ({ mainButtonIcon, mainButtonHint, mainAction, options }) => {
+const FloatingButton: React.FC<FloatingButtonProps> = ({ mainButtonIcon, mainButtonHint, mainAction, options, disabled }) => {
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
   const enableOptions = () => {
@@ -37,6 +38,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({ mainButtonIcon, mainBut
         onMouseLeave={disableOptions}
         title={mainButtonHint}
         onClick={mainAction}
+        disabled={disabled}
       >
         {mainButtonIcon}
       </MainButton>

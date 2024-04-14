@@ -56,6 +56,11 @@ export const Select = styled.select<InputProps>`
   outline: none;
   background-color: transparent;
   margin-left: ${props => props.inline ? '5px' : 'none'};
+
+  option {
+    color: ${props => props.theme.colors.white};
+    background-color: ${props => props.theme.colors.primary};
+  }
 `;
 
 export const Icon = styled.div`

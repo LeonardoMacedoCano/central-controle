@@ -142,6 +142,22 @@ const DespesaPage: React.FC = () => {
     setNumeroParcelaSelecionada(null);
   }
 
+  const isCamposObrigatoriosDespesaPreenchidos = (): boolean => {
+    return (
+      despesa.categoria.id > 0 &&
+      despesa.descricao.trim() !== '' &&
+      despesa.parcelas.length > 0
+    );
+  };
+
+  const isCamposObrigatoriosParcelaPreenchidos = (): boolean => {
+    return despesa.parcelas.some(parcela => 
+      parcela.numero > 0 &&
+      parcela.dataVencimento !== null &&
+      parcela.valor > 0
+    );
+  };
+
   const isRowSelected = (item: Parcela) => numeroParcelaSelecionada === item.numero;
 
   const handleClickRow = (item: Parcela) => setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
@@ -152,6 +168,7 @@ const DespesaPage: React.FC = () => {
         mainButtonIcon={<FaCheck />}
         mainButtonHint={showParcelaForm ? 'Salvar Parcela' : 'Salvar Despesa'}
         mainAction={showParcelaForm ? exitParcela : salvarDespesa}
+        disabled={showParcelaForm ? !isCamposObrigatoriosParcelaPreenchidos() : !isCamposObrigatoriosDespesaPreenchidos() }
       />
       {showParcelaForm ? (
         <Panel

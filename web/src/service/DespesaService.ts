@@ -30,7 +30,6 @@ const DespesaService = (): DespesaApi => {
 
   const gerarDespesa = async (token: string, data: Despesa) => {
     try {
-      console.log(despesaPayload(data));
       return await request<{ idDespesa: number }>('post', 'despesa', token, mensagens, despesaPayload(data));
     } catch (error) {
       return undefined;
