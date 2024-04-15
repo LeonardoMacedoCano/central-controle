@@ -2,6 +2,7 @@ import React from 'react';
 import * as C from './styles';
 import { formatarDataParaAnoMes, formatarDataParaStringYMD, formatarStringParaData } from '../../utils/DateUtils';
 import { Categoria } from '../../types/Categoria';
+import { formatarNumeroComZerosAEsquerda } from '../../utils/ValorUtils';
 
 type FieldValueProps = {
   type: 'string' | 'number' | 'boolean' | 'date' | 'month' | 'categoria';
@@ -121,7 +122,7 @@ class FieldValue extends React.Component<FieldValueProps> {
             <option value="">Selecione uma categoria</option>
             {categorias?.map((categoria) => (
               <option key={categoria.id} value={categoria.id.toString()}>
-                {`${categoria.id} - ${categoria.descricao}`}
+                {`${formatarNumeroComZerosAEsquerda(categoria.id, 2)} - ${categoria.descricao}`}
               </option>
             ))}
           </C.Select>
