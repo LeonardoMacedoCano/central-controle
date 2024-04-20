@@ -3,13 +3,11 @@ import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import DespesaService from '../../service/DespesaService';
 import Panel from '../../components/panel/Panel';
-import Table from '../../components/table/Table';
-import Column from '../../components/table/Column';
+import { Table, Column, TableToolbar } from '../../components/table/Table';
 import DespesaForm from '../../components/form/despesa/DespesaForm';
 import ParcelaForm from '../../components/form/despesa/ParcelaForm';
 import FloatingButton from '../../components/button/Floatingbutton/FloatingButton';
 import Container from '../../components/container/Container';
-import TableToolbar from '../../components/table/TableToolbar';
 import { FaCheck } from 'react-icons/fa';
 import { Despesa } from '../../types/Despesa';
 import { Parcela } from '../../types/Parcela';
@@ -216,28 +214,25 @@ const DespesaPage: React.FC = () => {
                   isItemSelected={!!numeroParcelaSelecionada}
                 />
               }
-            >
-              <Column<Parcela> 
-                fieldName="numero" 
-                header="Número" 
-                value={(item) => item.numero} 
-              /> 
-              <Column<Parcela> 
-                fieldName="dataVencimento" 
-                header="Data Vencimento" 
-                value={(item) => formatarDataParaString(item.dataVencimento)} 
-              /> 
-              <Column<Parcela> 
-                fieldName="valor" 
-                header="Valor" 
-                value={(item) => formatarValorParaReal(item.valor)} 
-              />  
-              <Column<Parcela> 
-                fieldName="pago" 
-                header="Situação" 
-                value={(item) => formatarDescricaoSituacaoParcela(item.pago)} 
-              /> 
-            </Table>
+              columns={[
+                <Column<Parcela> 
+                  header="Número" 
+                  value={(item) => item.numero} 
+                />,
+                <Column<Parcela> 
+                  header="Data Vencimento" 
+                  value={(item) => formatarDataParaString(item.dataVencimento)} 
+                />,
+                <Column<Parcela> 
+                  header="Valor" 
+                  value={(item) => formatarValorParaReal(item.valor)} 
+                />,  
+                <Column<Parcela> 
+                  header="Situação" 
+                  value={(item) => formatarDescricaoSituacaoParcela(item.pago)} 
+                />
+              ]}
+            />
           </Panel>
         </>
       )}

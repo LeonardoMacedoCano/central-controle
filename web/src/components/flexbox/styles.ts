@@ -7,10 +7,10 @@ interface FlexBoxContainerProps {
 }
 
 export const FlexBoxContainer = styled.div<FlexBoxContainerProps>`
-  width: ${props => props.width || '100%'};
-  height: ${props => props.height || '100%'};
+  width: ${({ width }) => width || '100%'};
+  height: ${({ height }) => height || '100%'};
   display: flex;
-  flex-direction: ${props => props.flexDirection || 'row'};
+  flex-direction: ${({ flexDirection }) => flexDirection || 'row'};
 `;
 
 interface FlexBoxItemProps {
@@ -25,12 +25,12 @@ interface FlexBoxItemProps {
 }
 
 export const FlexBoxItem = styled.div<FlexBoxItemProps>`
-  width: ${props => props.width || '100%'};
-  height: ${props => props.height || '100%'};
-  ${props => props.alignRight && 'margin-left: auto;'}
-  ${props => props.alignCenter && 'margin: 0 auto;'}
-  border-top: ${props => props.borderTop ? `1px solid ${props.theme.colors.quaternary}` : 'none'};
-  border-bottom: ${props => props.borderBottom ? `1px solid ${props.theme.colors.quaternary}` : 'none'};
-  border-left: ${props => props.borderLeft ? `1px solid ${props.theme.colors.quaternary}` : 'none'};
-  border-right: ${props => props.borderRight ? `1px solid ${props.theme.colors.quaternary}` : 'none'};
+  width: ${({ width }) => width || '100%'};
+  height: ${({ height }) => height || '100%'};
+  ${({ alignRight }) => alignRight && 'margin-left: auto;'}
+  ${({ alignCenter }) => alignCenter && 'margin: 0 auto;'}
+  border-top: ${({ borderTop, theme }) => borderTop ? `1px solid ${theme.colors.quaternary}` : 'none'};
+  border-bottom: ${({ borderBottom, theme }) => borderBottom ? `1px solid ${theme.colors.quaternary}` : 'none'};
+  border-left: ${({ borderLeft, theme }) => borderLeft ? `1px solid ${theme.colors.quaternary}` : 'none'};
+  border-right: ${({ borderRight, theme }) => borderRight ? `1px solid ${theme.colors.quaternary}` : 'none'};
 `;

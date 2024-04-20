@@ -22,7 +22,11 @@ export const ItemContainer = styled.div`
   color: ${props => props.theme.colors.quaternary};
 `;
 
-export const Item = styled.li<{ disabled?: boolean}>`
+interface ItemProps {
+  disabled?: boolean;
+}
+
+export const Item = styled.li<ItemProps>`
   width: 35px;
   height: 100%;
   font-size: 20px;
@@ -30,20 +34,14 @@ export const Item = styled.li<{ disabled?: boolean}>`
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${props => (props.disabled ? '0.2' : '1')};
 
   &:first-child {
     margin-left: 0;
   }
 
   &:hover {
-    color: ${props => props.theme.colors.gray};
+    color: ${props => (props.disabled ? props.theme.colors.white : props.theme.colors.gray)};
   }
-
-  ${props =>
-    props.disabled &&
-    `
-      opacity: 0.2;
-      cursor: not-allowed;
-    `}
 `;

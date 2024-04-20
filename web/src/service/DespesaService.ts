@@ -8,11 +8,11 @@ import { format } from 'date-fns-tz';
 
 interface DespesaApi {
   gerarDespesa: (token: string, data: Despesa) => Promise<{ idDespesa: number } | undefined>;
-  editarDespesa: (token: string, id: number, data: Despesa) => Promise< undefined >;
-  excluirDespesa: (token: string, id: number) => Promise< undefined >; 
-  listarDespesaResumoMensal: (token: string, page: number, size: number, ano: number, mes: number) => Promise< PagedResponse<DespesaResumoMensal> | undefined >;
-  getDespesaByIdWithParcelas: (token: string, id: number) => Promise< Despesa | undefined >;
-  getTodasCategoriasDespesa: (token: string) => Promise< Categoria[] | undefined >;
+  editarDespesa: (token: string, id: number, data: Despesa) => Promise<void | undefined>;
+  excluirDespesa: (token: string, id: number) => Promise<void | undefined>;
+  listarDespesaResumoMensal: (token: string, page: number, size: number, ano: number, mes: number) => Promise<PagedResponse<DespesaResumoMensal> | undefined>;
+  getDespesaByIdWithParcelas: (token: string, id: number) => Promise<Despesa | undefined>;
+  getTodasCategoriasDespesa: (token: string) => Promise<Categoria[] | undefined>;
 }
 
 const DespesaService = (): DespesaApi => {
@@ -26,18 +26,17 @@ const DespesaService = (): DespesaApi => {
       ...parcela,
       dataVencimento: format(new Date(parcela.dataVencimento), 'yyyy-MM-dd', { timeZone: 'America/Sao_Paulo' })
     }))
-  });  
+  });
 
-  const gerarDespesa = async (token: string, data: Despesa) => {
+  const gerarDespesa = async (token: string, data: Despesa): Promise<{ idDespesa: number } | undefined> => {
     try {
       return await request<{ idDespesa: number }>('post', 'despesa', token, mensagens, despesaPayload(data));
     } catch (error) {
       return undefined;
     }
   };
-  
 
-  const editarDespesa = async (token: string, id: number, data: Despesa) => {
+  const editarDespesa = async (token: string, id: number, data: Despesa): Promise<void | undefined> => {
     try {
       await request<undefined>('put', `despesa/${id}`, token, mensagens, despesaPayload(data));
     } catch (error) {
@@ -45,38 +44,38 @@ const DespesaService = (): DespesaApi => {
     }
   };
 
-  const excluirDespesa = async (token: string, id: number) => {
+  const excluirDespesa = async (token: string, id: number): Promise<void | undefined> => {
     try {
-      await request<undefined>(`delete`, `despesa/${id}`, token, mensagens);
+      await request<undefined>('delete', `despesa/${id}`, token, mensagens);
     } catch (error) {
       return undefined;
     }
   };
 
-  const listarDespesaResumoMensal = async (token: string, page: number, size: number, ano: number, mes: number) => {
+  const listarDespesaResumoMensal = async (token: string, page: number, size: number, ano: number, mes: number): Promise<PagedResponse<DespesaResumoMensal> | undefined> => {
     try {
-      return await request<PagedResponse<DespesaResumoMensal>>(`get`, `despesa?page=${page}&size=${size}&ano=${ano}&mes=${mes}`, token);
+      return await request<PagedResponse<DespesaResumoMensal>>('get', `despesa?page=${page}&size=${size}&ano=${ano}&mes=${mes}`, token);
     } catch (error) {
       return undefined;
     }
   };
 
-  const getDespesaByIdWithParcelas = async (token: string, id: number) => {
+  const getDespesaByIdWithParcelas = async (token: string, id: number): Promise<Despesa | undefined> => {
     try {
-      return await request<Despesa>(`get`, `despesa/${id}`, token);
+      return await request<Despesa>('get', `despesa/${id}`, token);
     } catch (error) {
       return undefined;
     }
   };
 
-  const getTodasCategoriasDespesa = async (token: string) => {
+  const getTodasCategoriasDespesa = async (token: string): Promise<Categoria[] | undefined> => {
     try {
-      return await request<Categoria[]>(`get`, 'categoriadespesa', token);
+      return await request<Categoria[]>('get', 'categoriadespesa', token);
     } catch (error) {
       return undefined;
     }
   };
- 
+
   return {
     gerarDespesa,
     editarDespesa,

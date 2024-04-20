@@ -23,6 +23,7 @@ const commonButtonTableStyles = css`
 const getButtonVariantStyles = (variant: StyledButtonProps['variant'], theme: any) => {
   switch (variant) {
     case 'table-add':
+    case 'table-money':
       return css`
         ${commonButtonTableStyles};
         background-color: ${theme.colors.success};
@@ -37,24 +38,11 @@ const getButtonVariantStyles = (variant: StyledButtonProps['variant'], theme: an
         ${commonButtonTableStyles};
         background-color: ${theme.colors.warning};
       `;
-    case 'table-money':
-      return css`
-        ${commonButtonTableStyles};
-        background-color: ${theme.colors.success};
-      `;
     case 'success':
-      return css`
-        background-color: ${theme.colors.success};
-        color: ${theme.colors.white};
-      `;
     case 'info':
-      return css`
-        background-color: ${theme.colors.info};
-        color: ${theme.colors.white};
-      `;
     case 'warning':
       return css`
-        background-color: ${theme.colors.warning};
+        background-color: ${theme.colors[variant]};
         color: ${theme.colors.white};
       `;
     case 'login':

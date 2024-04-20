@@ -1,15 +1,15 @@
 import DefaultService from './DefaultService';
 
 interface ParcelaApi {
-  getValorTotalParcelasMensal: (token: string, ano: number, mes: number) => Promise<Number | undefined>;
+  getValorTotalParcelasMensal: (token: string, ano: number, mes: number) => Promise<number | undefined>;
 }
 
 const ParcelaService = (): ParcelaApi => {
   const { request } = DefaultService();
 
-  const getValorTotalParcelasMensal = async (token: string, ano: number, mes: number) => {
+  const getValorTotalParcelasMensal = async (token: string, ano: number, mes: number): Promise<number | undefined> => {
     try {
-      return await request<Number>(`get`, `parcela/valor-total-mensal?ano=${ano}&mes=${mes}`, token);
+      return await request<number>('get', `parcela/valor-total-mensal?ano=${ano}&mes=${mes}`, token);
     } catch (error) {
       return undefined;
     }

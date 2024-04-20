@@ -36,32 +36,23 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate
   };
   
   return (
-    <FlexBox 
-      flexDirection="column"
-    >
-      <FlexBox 
-        flexDirection="row"
-      >
-        <FlexBox.Item
-          borderRight  
-        >
+    <FlexBox flexDirection="column">
+      <FlexBox flexDirection="row">
+        <FlexBox.Item borderRight>
           <FieldValue 
             description='Data Lançamento'
             type='string'
             value={formatarDataParaString(despesa.dataLancamento)}
           />
         </FlexBox.Item>
-        <FlexBox.Item
-          borderRight  
-        >
+        <FlexBox.Item borderRight>
           <FieldValue 
             description='Situação'
             type='string'
             value={despesa.situacao}
           />
         </FlexBox.Item>
-        <FlexBox.Item
-        >
+        <FlexBox.Item>
           <FieldValue 
             description='Valor Total'
             type='number'
@@ -69,13 +60,8 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate
           />
         </FlexBox.Item>
       </FlexBox>
-      <FlexBox 
-        flexDirection="row"
-      >
-        <FlexBox.Item
-          borderTop 
-          borderRight 
-        >
+      <FlexBox flexDirection="row">
+        <FlexBox.Item borderTop borderRight>
           <FieldValue 
             description='Categoria'
             type='categoria'
@@ -85,9 +71,7 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate
             onUpdate={handleUpdateCategoria}
           />
         </FlexBox.Item>
-        <FlexBox.Item
-          borderTop
-        >
+        <FlexBox.Item borderTop>
           <FieldValue 
             description='Descrição'
             type='string'
@@ -98,7 +82,7 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate
         </FlexBox.Item>
       </FlexBox>
     </FlexBox>
-  )
+  );
 }
 
 export default DespesaForm;

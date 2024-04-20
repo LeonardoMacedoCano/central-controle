@@ -6,7 +6,7 @@ interface FieldValueProps {
   maxHeight?: string;
   inline?: boolean;
   padding?: string;
-};
+}
 
 export const FieldValue = styled.div<FieldValueProps>`
   width: ${props => props.width || '100%'};
@@ -28,12 +28,13 @@ export const Label = styled.span`
   align-items: center;
 `;
 
-interface InputProps {
+interface StyledInputProps {
   inputWidth?: string;
   inline?: boolean;
-};
+  readOnly?: boolean;
+}
 
-export const Input = styled.input<InputProps>`
+export const StyledInput = styled.input<StyledInputProps>`
   color: ${props => props.theme.colors.quaternary};
   width: ${props => props.inputWidth || '100%'};
   font-size: 15px;
@@ -48,7 +49,7 @@ export const Input = styled.input<InputProps>`
   }
 `;
 
-export const Select = styled.select<InputProps>`
+export const StyledSelect = styled.select<StyledInputProps>`
   color: ${props => props.theme.colors.quaternary};
   width: ${props => props.inputWidth || '100%'};
   font-size: 15px;

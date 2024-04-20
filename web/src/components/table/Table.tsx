@@ -1,10 +1,68 @@
-import React, { ReactElement } from 'react';
-import { Props as ColumnProps } from './Column';
+import React, { ReactNode } from 'react';
 import * as C from './styles';
+import Button from '../../components/button/button/Button';
 
-interface Props<T> {
+type ColumnProps<T> = {
+  header: ReactNode;
+  value(value: T, index: number): ReactNode;
+};
+
+export const Column = <T extends any>({}: ColumnProps<T>) => {
+  return null;
+};
+
+interface TableToolbarProps {
+  handleAdd?: () => void;
+  handleEdit?: (show: boolean) => void;
+  handleDelete?: () => void;
+  handleMoney?: () => void;
+  isItemSelected: boolean;
+}
+
+export const TableToolbar: React.FC<TableToolbarProps> = ({
+  handleAdd,
+  handleEdit,
+  handleDelete,
+  handleMoney,
+  isItemSelected,
+}) => {
+  return (
+    <>
+      {handleAdd && (
+        <Button 
+          variant='table-add' 
+          onClick={handleAdd} 
+          disabled={isItemSelected} 
+        />
+      )}
+      {handleEdit && (
+        <Button 
+          variant='table-edit' 
+          onClick={() => handleEdit(true)} 
+          disabled={!isItemSelected} 
+        />
+      )}
+      {handleDelete && (
+        <Button 
+          variant='table-delete' 
+          onClick={handleDelete} 
+          disabled={!isItemSelected} 
+        />
+      )}
+      {handleMoney && (
+        <Button 
+          variant='table-money' 
+          onClick={handleMoney} 
+          disabled={!isItemSelected} 
+        />
+      )}
+    </>
+  );
+};
+
+interface TableProps<T> {
   values: T[];
-  children: ReactElement<ColumnProps<T>>[];
+  columns: ReactNode[];
   messageEmpty?: string;
   keyExtractor(item: T, index?: number): string | number;
   onClickRow(item: T, index?: number): void;
@@ -16,26 +74,38 @@ interface Indexable {
   [key: string]: any;
 }
 
-class Table<T extends Indexable> extends React.Component<Props<T>> {
-  renderTableHead() {
-    const { children } = this.props;
+export const Table = <T extends Indexable>({
+  values,
+  columns,
+  messageEmpty = 'Nenhuma parcela encontrada.',
+  keyExtractor,
+  onClickRow,
+  rowSelected,
+  customHeader,
+}: TableProps<T>) => {
+  const renderTableHead = () => {
     return (
       <thead>
         <C.TableHeadRow>
-          {children.map((child, index) => (
-            <C.TableHeadColumn key={index}>
-              <C.TableColumnTitle>
-                {child.props.header}
-              </C.TableColumnTitle>
-            </C.TableHeadColumn>
-          ))}
+          {columns.map((column, index) => {
+            if (React.isValidElement(column)) {
+              const columnProps = column.props as ColumnProps<T>;
+              return (
+                <C.TableHeadColumn key={index}>
+                  <C.TableColumnTitle>
+                    {columnProps.header}
+                  </C.TableColumnTitle>
+                </C.TableHeadColumn>
+              );
+            }
+            return null;
+          })}
         </C.TableHeadRow>
       </thead>
     );
-  }
+  };
 
-  renderTableBody() {
-    const { values, children, keyExtractor, onClickRow, rowSelected } = this.props;
+  const renderTableBody = () => {
     return (
       <tbody>
         {values.map((item, index) => (
@@ -43,39 +113,41 @@ class Table<T extends Indexable> extends React.Component<Props<T>> {
             key={keyExtractor(item, index)}
             onClick={() => onClickRow(item, index)}
           >
-            {children.map((child, childIndex) => (
-              <C.TableColumn 
-                key={childIndex}
-                isSelected={rowSelected ? rowSelected(item) : false}>
-                {child.props.value ? child.props.value(item, index) : item[child.props.fieldName]}
-              </C.TableColumn>
-            ))}
+            {columns.map((column, columnIndex) => {
+              if (React.isValidElement(column)) {
+                const columnProps = column.props as ColumnProps<T>;
+                return (
+                  <C.TableColumn
+                    key={columnIndex}
+                    isSelected={rowSelected ? rowSelected(item) : false}
+                  >
+                    {columnProps.value(item, index)}
+                  </C.TableColumn>
+                );
+              }
+              return null;
+            })}
           </C.TableRow>
         ))}
       </tbody>
     );
-  }
+  };
 
-  render() {
-    const { values, messageEmpty, customHeader } = this.props;
-    return (
-      <C.TableContainer>
-        {customHeader && (
-          <C.CustomHeader>
-            {customHeader}
-          </C.CustomHeader>
-        )}
-        {values.length === 0 ? (
-          <C.EmptyMessage>{messageEmpty}</C.EmptyMessage>
-        ) : (
-          <C.StyledTable>
-            {this.renderTableHead()}
-            {this.renderTableBody()}
-          </C.StyledTable>
-        )}
-      </C.TableContainer>
-    );
-  }
-}
-
-export default Table;
+  return (
+    <C.TableContainer>
+      {customHeader && (
+        <C.CustomHeader>
+          {customHeader}
+        </C.CustomHeader>
+      )}
+      {values.length === 0 ? (
+        <C.EmptyMessage>{messageEmpty}</C.EmptyMessage>
+      ) : (
+        <C.StyledTable>
+          {renderTableHead()}
+          {renderTableBody()}
+        </C.StyledTable>
+      )}
+    </C.TableContainer>
+  );
+};

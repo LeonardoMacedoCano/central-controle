@@ -1,17 +1,17 @@
 import React from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import darkOnyxAmber from './styles/themes/darkOnyxAmber.ts';
+import darkOnyxAmber from './styles/themes/darkOnyxAmber';
 import GlobalStyles from './styles/GlobalStyles';
-import { ProvedorMensagens } from './contexts/mensagens/index.tsx';
-import { AuthProvider } from './contexts/auth/AuthProvider.tsx';
-import { RequireAuth } from './contexts/auth/RequireAuth.tsx';
-import AppHeader from './components/menu/AppHeader.tsx';
-import { Home } from './pages/home/index.tsx';
-import DespesaResumoMensalPage from './pages/controledespesas/DespesaResumoMensalPage.tsx';
-import ControleTarefas from './pages/controletarefas/index.tsx';
-import ControleIdeias from './pages/controleideias/index.tsx';
-import DespesaPage from './pages/controledespesas/DespesaPage.tsx';
+import { ProvedorMensagens } from './contexts/mensagens';
+import { AuthProvider } from './contexts/auth/AuthProvider';
+import { RequireAuth } from './contexts/auth/RequireAuth';
+import AppHeader from './components/menu/AppHeader';
+import { Home } from './pages/home';
+import DespesaResumoMensalPage from './pages/controledespesas/DespesaResumoMensalPage';
+import ControleTarefas from './pages/controletarefas';
+import ControleIdeias from './pages/controleideias';
+import DespesaPage from './pages/controledespesas/DespesaPage';
 
 const App: React.FC = () => {
   return (
@@ -19,19 +19,19 @@ const App: React.FC = () => {
       <ProvedorMensagens>
         <AuthProvider>
           <BrowserRouter>
-            <GlobalStyles />   
-            {<RequireAuth>
+            <GlobalStyles />
+            <RequireAuth>
               <>
-                <AppHeader/>
+                <AppHeader />
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/controledespesas" element={<DespesaResumoMensalPage />} />
-                  <Route path="/despesa/:idStr?" element={<DespesaPage/>} />
+                  <Route path="/despesa/:idStr?" element={<DespesaPage />} />
                   <Route path="/controletarefas" element={<ControleTarefas />} />
                   <Route path="/controleideias" element={<ControleIdeias />} />
                 </Routes>
               </>
-            </RequireAuth>}
+            </RequireAuth>
           </BrowserRouter>
         </AuthProvider>
       </ProvedorMensagens>
@@ -39,4 +39,4 @@ const App: React.FC = () => {
   );
 }
 
-export default App
+export default App;

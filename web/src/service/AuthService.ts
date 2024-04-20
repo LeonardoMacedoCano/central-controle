@@ -11,7 +11,7 @@ const AuthService = (): AuthApi => {
   const { request } = DefaultService();
   const mensagens = usarMensagens();
 
-  const validateToken = async (token: string) => {
+  const validateToken = async (token: string): Promise<{ usuario: Usuario } | undefined> => {
     try {
       return await request<{ usuario: Usuario }>('get', `auth/validateToken?token=${token}`);
     } catch (error) {
@@ -19,7 +19,7 @@ const AuthService = (): AuthApi => {
     }
   };
 
-  const login = async (username: string, senha: string) => {
+  const login = async (username: string, senha: string): Promise<{ usuario: Usuario } | undefined> => {
     try {
       return await request<{ usuario: Usuario }>('post', 'auth/login', undefined, mensagens, { username, senha });
     } catch (error) {

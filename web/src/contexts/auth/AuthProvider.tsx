@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
         if (data?.usuario) {
           setUsuario(data.usuario);
         } else {
-          setToken(''); 
+          clearToken(); 
         }
       } 
     }
@@ -32,13 +32,17 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
     return false;
   }
 
-  const signout = async () => {
+  const signout = () => {
     setUsuario(null);
-    setToken('');
+    clearToken();
   }
 
   const setToken = (token: string) => {
     localStorage.setItem('authToken', token);
+  }
+
+  const clearToken = () => {
+    localStorage.removeItem('authToken');
   }
 
   return (

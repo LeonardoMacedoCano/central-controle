@@ -5,11 +5,14 @@ import AppSidebar from './AppSidebar';
 
 const AppHeader: React.FC = () => {
   const [isActiveSidebar, setActiveSidebar] = useState(false);
-  const showSidebar = () => setActiveSidebar(!isActiveSidebar);
+
+  const toggleSidebar = () => {
+    setActiveSidebar(prev => !prev);
+  };
 
   return (
     <C.AppHeader>
-      <FaBars onClick={showSidebar} />
+      <FaBars onClick={toggleSidebar} />
       <C.TitleHeader>
         Central de Controle
       </C.TitleHeader>

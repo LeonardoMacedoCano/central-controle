@@ -38,12 +38,8 @@ const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
   };
 
   return (
-    <FlexBox 
-      flexDirection="column"
-    >
-      <FlexBox 
-        flexDirection="row"
-      >
+    <FlexBox flexDirection="column">
+      <FlexBox flexDirection="row">
         <FlexBox.Item>
           <FieldValue 
             description='Numero'
@@ -52,13 +48,8 @@ const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
           />
         </FlexBox.Item>
       </FlexBox>
-      <FlexBox 
-        flexDirection="row"
-      >
-        <FlexBox.Item  
-          borderTop
-          borderRight
-        >
+      <FlexBox flexDirection="row">
+        <FlexBox.Item borderTop borderRight>
           <FieldValue 
             description='Data Vencimento'
             type='date'
@@ -67,10 +58,7 @@ const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
             onUpdate={handleUpdateDataVencimento}
           />
         </FlexBox.Item>
-        <FlexBox.Item  
-          borderTop
-          borderRight
-        >
+        <FlexBox.Item borderTop borderRight>
           <FieldValue 
             description='Valor'
             type='number'
@@ -79,9 +67,7 @@ const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
             onUpdate={handleUpdateValor}
           />
         </FlexBox.Item>
-        <FlexBox.Item  
-          borderTop
-        >
+        <FlexBox.Item borderTop>
           <FieldValue 
             description='Pago'
             type='boolean'
@@ -92,7 +78,7 @@ const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
         </FlexBox.Item>
       </FlexBox>
     </FlexBox>
-  )
+  );
 }
 
 export default ParcelaForm;

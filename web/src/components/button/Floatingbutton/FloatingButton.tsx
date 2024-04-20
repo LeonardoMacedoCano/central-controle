@@ -18,24 +18,20 @@ interface FloatingButtonProps {
 const FloatingButton: React.FC<FloatingButtonProps> = ({ mainButtonIcon, mainButtonHint, mainAction, options, disabled }) => {
   const [showOptions, setShowOptions] = useState<boolean>(false);
 
-  const enableOptions = () => {
-    setShowOptions(true);
-  };
-
-  const disableOptions = () => {
-    setShowOptions(false);
+  const toggleOptions = (show: boolean) => {
+    setShowOptions(show);
   };
 
   const handleOptionClick = (action: () => void) => {
     action();
-    disableOptions();
+    toggleOptions(false);
   };
 
   return (
     <FloatingButtonWrapper>
       <MainButton 
-        onMouseEnter={enableOptions} 
-        onMouseLeave={disableOptions}
+        onMouseEnter={() => toggleOptions(true)} 
+        onMouseLeave={() => toggleOptions(false)}
         title={mainButtonHint}
         onClick={mainAction}
         disabled={disabled}
@@ -44,7 +40,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({ mainButtonIcon, mainBut
       </MainButton>
 
       {options && showOptions && (
-        <OptionsContainer onMouseEnter={enableOptions} onMouseLeave={disableOptions}>
+        <OptionsContainer onMouseEnter={() => toggleOptions(true)} onMouseLeave={() => toggleOptions(false)}>
           {options.map((option, index) => (
             <OptionCircle key={index} onClick={() => handleOptionClick(option.action)} title={option.hint}>
               {option.icon}

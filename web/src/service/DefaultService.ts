@@ -10,12 +10,19 @@ const api = axios.create({
   baseURL: 'http://localhost:8080/api',
 });
 
-const handleErrorMessage = (contextoMensagem: TipoContextoMensagens, error: any, defaultMessage: string) => {
+const handleErrorMessage = (
+  contextoMensagem: TipoContextoMensagens, 
+  error: any, 
+  defaultMessage: string
+) => {
   const errorMessage = error.response?.data?.error || defaultMessage;
   contextoMensagem.exibirErro(errorMessage);
 };
 
-const handleSuccessMessage = (contextoMensagem: TipoContextoMensagens, response: AxiosResponse<ApiResponse>) => {
+const handleSuccessMessage = (
+  contextoMensagem: TipoContextoMensagens, 
+  response: AxiosResponse<ApiResponse>
+) => {
   const successMessage = response?.data?.success;
   if (successMessage) {
     contextoMensagem.exibirSucesso(successMessage);
@@ -42,6 +49,7 @@ export const RequestApi = async <T>(
     if (contextoMensagem) { 
       handleSuccessMessage(contextoMensagem, response);
     }
+    
     return response.data as T;
   } catch (error: any) {
     if (contextoMensagem) {

@@ -24,17 +24,31 @@ type FieldValueProps = {
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 };
 
-class FieldValue extends React.Component<FieldValueProps> {
-
-  handleInputChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
-    const { onUpdate, type, minValue, maxValue } = this.props;
-  
+const FieldValue: React.FC<FieldValueProps> = ({
+  type,
+  value,
+  description,
+  editable,
+  width,
+  maxWidth,
+  maxHeight,
+  minValue,
+  maxValue,
+  inputWidth,
+  inline,
+  categorias,
+  icon,
+  padding,
+  placeholder,
+  onUpdate,
+  onKeyDown,
+}) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     if (onUpdate) {
       let formattedValue: any = event.target.value;
-  
+
       if (type === 'number') {
         formattedValue = parseFloat(event.target.value);
-        
         if (minValue && formattedValue < minValue) {
           formattedValue = minValue;
         } else if (maxValue && formattedValue > maxValue) {
@@ -50,18 +64,16 @@ class FieldValue extends React.Component<FieldValueProps> {
     }
   };
 
-  handleCategoriaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleCategoriaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedId = parseInt(event.target.value, 10);
-    const selectedCategoria = this.getSelectedCategoria(selectedId);
+    const selectedCategoria = getSelectedCategoria(selectedId);
 
-    if (this.props.onUpdate) {
-      this.props.onUpdate(selectedCategoria || '');
+    if (onUpdate) {
+      onUpdate(selectedCategoria || '');
     }
   };
 
-  formatValue = (val: any) => {
-    const { type } = this.props;
-
+  const formatValue = (val: any) => {
     if ((type !== 'date') && (typeof val === 'string' || typeof val === 'number')) {
       return String(val);
     } else if (val instanceof Date && type === 'month') {
@@ -75,90 +87,72 @@ class FieldValue extends React.Component<FieldValueProps> {
     }
   };
 
-  getSelectedCategoria = (selectedId: number): Categoria | null => {
+  const getSelectedCategoria = (selectedId: number): Categoria | null => {
     if (selectedId > 0) {
-      return this.props.categorias?.find(c => c.id === selectedId) || null;
-    } else if (this.props.value instanceof Object && 'id' in this.props.value) {
-      return this.props.value as Categoria;
+      return categorias?.find(c => c.id === selectedId) || null;
+    } else if (value instanceof Object && 'id' in value) {
+      return value as Categoria;
     } else {
-      return null
+      return null;
     }
   };
 
-  render() {
-    const { 
-      description, 
-      type, 
-      value, 
-      editable, 
-      width, 
-      maxWidth, 
-      maxHeight, 
-      inline, 
-      inputWidth, 
-      categorias, 
-      icon, 
-      padding, 
-      placeholder, 
-      onKeyDown 
-    } = this.props;
-    const selectedCategoria = (type === 'categoria' ? this.getSelectedCategoria(parseInt(value as string, 10)) : undefined);
+  const selectedCategoria = (type === 'categoria' ? getSelectedCategoria(parseInt(value as string, 10)) : undefined);
 
-    return (
-      <C.FieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline} padding={padding}>
-        {description && 
-          <C.Label>
-            {description}
-          </C.Label>
-        }
-        {type === 'categoria' ? (
-          <C.Select
-            value={selectedCategoria ? selectedCategoria.id.toString() : ''}
-            onChange={this.handleCategoriaChange}
-            disabled={!editable}
+  return (
+    <C.FieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline} padding={padding}>
+      {description && 
+        <C.Label>
+          {description}
+        </C.Label>
+      }
+      {type === 'categoria' ? (
+        <C.StyledSelect
+          value={selectedCategoria ? selectedCategoria.id.toString() : ''}
+          onChange={handleCategoriaChange}
+          disabled={!editable}
+          inputWidth={inputWidth}
+          inline={inline}
+        >
+          <option value="">Selecione uma categoria</option>
+          {categorias?.map((categoria) => (
+            <option key={categoria.id} value={categoria.id.toString()}>
+              {`${formatarNumeroComZerosAEsquerda(categoria.id, 2)} - ${categoria.descricao}`}
+            </option>
+          ))}
+        </C.StyledSelect>
+      ) : type === 'boolean' ? (
+        <C.StyledSelect
+          value={formatValue(value)}
+          onChange={handleInputChange}
+          disabled={!editable}
+          inputWidth={inputWidth}
+          inline={inline}
+        >
+          <option value="true">Sim</option>
+          <option value="false">Não</option>
+        </C.StyledSelect>
+      ) : (
+        <>
+          {icon && 
+            <C.Icon>
+              {icon}
+            </C.Icon>
+          }
+          <C.StyledInput
+            type={editable ? type : 'string'} 
+            readOnly={!editable}
+            value={formatValue(value)}
+            onChange={handleInputChange}
             inputWidth={inputWidth}
             inline={inline}
-          >
-            <option value="">Selecione uma categoria</option>
-            {categorias?.map((categoria) => (
-              <option key={categoria.id} value={categoria.id.toString()}>
-                {`${formatarNumeroComZerosAEsquerda(categoria.id, 2)} - ${categoria.descricao}`}
-              </option>
-            ))}
-          </C.Select>
-        ) : type === 'boolean' ? (
-          <C.Select
-            value={this.formatValue(value)}
-            onChange={this.handleInputChange}
-            disabled={!editable}
-            inputWidth={inputWidth}
-            inline={inline}
-          >
-            <option value="true">Sim</option>
-            <option value="false">Não</option>
-          </C.Select>
-        ) : (
-          <>
-            {icon && 
-              <C.Icon>
-                {icon}
-              </C.Icon>
-            }
-            <C.Input
-              type={editable ? type : 'string'} 
-              readOnly={!editable}
-              value={this.formatValue(value)}
-              onChange={this.handleInputChange}
-              inputWidth={inputWidth}
-              inline={inline}
-              onKeyDown={onKeyDown}
-              placeholder={placeholder}
-            />
-          </>
-        )}
-      </C.FieldValue>
-    );
-  }
-}
+            onKeyDown={onKeyDown}
+            placeholder={placeholder}
+          />
+        </>
+      )}
+    </C.FieldValue>
+  );
+};
 
 export default FieldValue;

@@ -11,7 +11,7 @@ interface SearchPaginationProps {
   height?: string;
   width?: string;
   carregarPagina: (indexPagina: number, registrosPorPagina: number) => void;
-};
+}
 
 interface SearchPaginationState {
   indexPaginaAtual: number;
@@ -39,30 +39,6 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
     carregarPagina(indexPagina, registrosPorPagina);
   };
 
-  carregarPrimeiraPagina = () => {
-    if (this.state.indexPaginaAtual > 0) {
-      this.carregarPagina(0, this.state.registrosPorPagina);  
-    }
-  };
-
-  carregarPaginaAnterior = () => {
-    if (this.state.indexPaginaAtual > 0) {
-      this.carregarPagina(this.state.indexPaginaAtual - 1, this.state.registrosPorPagina);  
-    }
-  };
-
-  carregarProximaPagina = () => {
-    if (this.state.indexPaginaAtual < this.props.page.totalPages - 1) {
-      this.carregarPagina(this.state.indexPaginaAtual + 1, this.state.registrosPorPagina);  
-    }
-  };
-
-  carregarUltimaPagina = () => {
-    if (this.state.indexPaginaAtual < this.props.page.totalPages - 1) {
-      this.carregarPagina(this.props.page.totalPages - 1, this.state.registrosPorPagina);  
-    }
-  };
-
   handleUpdateRegistrosPorPagina = (value: any) => {
     if (typeof value === 'number') {
       this.setState({ registrosPorPagina: value }, () => {
@@ -70,7 +46,7 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
       });
     }
   };
-  
+
   render() {
     const { page, height, width } = this.props;
     const { indexPaginaAtual, registrosPorPagina } = this.state;
@@ -84,11 +60,8 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
     return (
       <C.SearchPagination height={height} width={width}>
         <FlexBox>
-          <FlexBox.Item 
-            borderRight  
-            width='160px' 
-          >
-            <FieldValue 
+          <FlexBox.Item borderRight width='160px'>
+            <FieldValue
               description='Itens por pág: '
               type='number'
               value={formatarNumeroComZerosAEsquerda(registrosPorPagina, 3)}
@@ -102,13 +75,11 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
               onUpdate={this.handleUpdateRegistrosPorPagina}
             />
           </FlexBox.Item>
-          <FlexBox.Item 
-            alignCenter
-          >
+          <FlexBox.Item alignCenter>
             <C.ItemContainer>
               <C.Item onClick={this.carregarPrimeiraPagina} disabled={isPrimeiraPagina}>
                 <FaAngleDoubleLeft />
-              </C.Item>  
+              </C.Item>
               <C.Item onClick={this.carregarPaginaAnterior} disabled={isPrimeiraPagina}>
                 <FaAngleLeft />
               </C.Item>
@@ -121,12 +92,8 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
               </C.Item>
             </C.ItemContainer>
           </FlexBox.Item>
-          <FlexBox.Item 
-            borderLeft
-            width='160px'
-            alignRight
-          >
-            <FieldValue 
+          <FlexBox.Item borderLeft width='160px' alignRight>
+            <FieldValue
               description='Total de itens: '
               type='number'
               value={formatarNumeroComZerosAEsquerda(totalRegistros, 3)}
@@ -137,9 +104,33 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
             />
           </FlexBox.Item>
         </FlexBox>
-      </C.SearchPagination> 
-    );  
+      </C.SearchPagination>
+    );
   }
+
+  private carregarPrimeiraPagina = () => {
+    if (this.state.indexPaginaAtual > 0) {
+      this.carregarPagina(0, this.state.registrosPorPagina);
+    }
+  };
+
+  private carregarPaginaAnterior = () => {
+    if (this.state.indexPaginaAtual > 0) {
+      this.carregarPagina(this.state.indexPaginaAtual - 1, this.state.registrosPorPagina);
+    }
+  };
+
+  private carregarProximaPagina = () => {
+    if (this.state.indexPaginaAtual < this.props.page.totalPages - 1) {
+      this.carregarPagina(this.state.indexPaginaAtual + 1, this.state.registrosPorPagina);
+    }
+  };
+
+  private carregarUltimaPagina = () => {
+    if (this.state.indexPaginaAtual < this.props.page.totalPages - 1) {
+      this.carregarPagina(this.props.page.totalPages - 1, this.state.registrosPorPagina);
+    }
+  };
 }
 
 export default SearchPagination;

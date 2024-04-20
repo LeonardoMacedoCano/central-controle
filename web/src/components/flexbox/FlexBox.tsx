@@ -1,8 +1,8 @@
-import React, { CSSProperties } from 'react';
+import { CSSProperties, FC, ReactNode } from 'react';
 import * as C from './styles';
 
 interface FlexBoxProps {
-  children: React.ReactNode;
+  children: ReactNode;
   width?: string;
   height?: string;
   flexDirection?: 'row' | 'column';
@@ -10,7 +10,7 @@ interface FlexBoxProps {
 }
 
 interface FlexBoxChildProps {
-  children: React.ReactNode;
+  children: ReactNode;
   width?: string;
   height?: string;
   borderTop?: boolean;
@@ -21,24 +21,16 @@ interface FlexBoxChildProps {
   alignRight?: boolean;
 }
 
-class FlexBox extends React.Component<FlexBoxProps> {
-  static Item: React.FC<FlexBoxChildProps> = (props) => {
-    const { children, ...rest } = props;
-    return (
-      <C.FlexBoxItem {...rest}>
-        {children}
-      </C.FlexBoxItem>
-    );
-  };
+export const FlexBox: FC<FlexBoxProps> & { Item: FC<FlexBoxChildProps> } = ({ children, ...rest }) => (
+  <C.FlexBoxContainer {...rest}>
+    {children}
+  </C.FlexBoxContainer>
+);
 
-  render() {
-    const { children, ...rest } = this.props;
-    return (
-      <C.FlexBoxContainer {...rest}>
-        {children}
-      </C.FlexBoxContainer>
-    );
-  }
-}
+FlexBox.Item = ({ children, ...rest }) => (
+  <C.FlexBoxItem {...rest}>
+    {children}
+  </C.FlexBoxItem>
+);
 
 export default FlexBox;

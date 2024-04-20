@@ -3,14 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import DespesaService from '../../service/DespesaService';
 import ParcelaService from '../../service/ParcelaService';
-import Table from '../../components/table/Table';
-import Column from '../../components/table/Column';
+import { Table, Column, TableToolbar } from '../../components/table/Table';
 import Panel from '../../components/panel/Panel';
 import Container from '../../components/container/Container';
 import FieldValue from '../../components/fieldvalue/FieldValue';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
-import TableToolbar from '../../components/table/TableToolbar';
 import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
 import { PagedResponse } from '../../types/PagedResponse';
 import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
@@ -138,24 +136,25 @@ const DespesaResumoMensalPage: React.FC = () => {
               isItemSelected={!!idDespesaSelecionada}
             />
           }
-        >
-          <Column<DespesaResumoMensal> 
-            fieldName="categoria.descricao" 
-            header="Categoria" 
-            value={(item) => item.categoria.descricao} />
-          <Column<DespesaResumoMensal> 
-            fieldName="descricao" 
-            header="Descrição" 
-            value={(item) => item.descricao} />
-          <Column<DespesaResumoMensal> 
-            fieldName="valorTotal" 
-            header="Valor" 
-            value={(item) => formatarValorParaReal(item.valorTotal)} />
-          <Column<DespesaResumoMensal> 
-            fieldName="situacao" 
-            header="Situação" 
-            value={(item) => item.situacao} />
-        </Table>
+          columns={[
+            <Column<DespesaResumoMensal> 
+              header="Categoria" 
+              value={(item) => item.categoria.descricao} 
+            />,
+            <Column<DespesaResumoMensal> 
+              header="Descrição" 
+              value={(item) => item.descricao} 
+            />,
+            <Column<DespesaResumoMensal> 
+              header="Valor" 
+              value={(item) => formatarValorParaReal(item.valorTotal)} 
+            />,
+            <Column<DespesaResumoMensal> 
+              header="Situação" 
+              value={(item) => item.situacao} 
+            />
+          ]}
+        />
       </Panel>
     </Container>
   );

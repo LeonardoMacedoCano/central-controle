@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const FloatingButtonWrapper = styled.div`
   position: fixed;
@@ -7,24 +7,28 @@ export const FloatingButtonWrapper = styled.div`
   z-index: 1000;
 `;
 
-export const MainButton = styled.button`
-  width: 55px;
-  height: 55px;
+const commonButtonStyles = css`
   color: white;
   background-color: ${props => props.theme.colors.tertiary};
   border: none;
   border-radius: 50%;
-  font-size: 25px;
   display: flex;
   justify-content: center;
   align-items: center;
-  opacity: ${props => (props.disabled ? '0.3' : '1')};
+  font-size: 25px;
   transition: background-color 0.3s ease, opacity 0.3s ease;
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
 
   &:hover {
     opacity: 0.7;
   }
+`;
+
+export const MainButton = styled.button`
+  ${commonButtonStyles};
+  width: 55px;
+  height: 55px;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${props => (props.disabled ? '0.3' : '1')};
 `;
 
 export const OptionsContainer = styled.div`
@@ -35,31 +39,19 @@ export const OptionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 export const OptionCircle = styled.button`
-  background-color: ${props => props.theme.colors.tertiary};
-  color: white;
-  border: none;
-  border-radius: 50%;
+  ${commonButtonStyles};
   width: 40px;
   height: 40px;
   font-size: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1;
-  transition: background-color 0.3s ease, opacity 0.3s ease;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${props => (props.disabled ? '0.3' : '1')};
 
   &:last-child {
     margin-bottom: 20px;
-  }
-
-  &:hover {
-    opacity: 0.7;
   }
 `;
