@@ -1,6 +1,6 @@
 import DefaultService from './DefaultService';
 import { Usuario } from '../types/Usuario';
-import { usarMensagens } from '../contexts/mensagens';
+import { useMessage } from '../contexts/message/ContextMessageProvider';
 
 interface AuthApi {
   validateToken: (token: string) => Promise<{ usuario: Usuario } | undefined>;
@@ -9,7 +9,7 @@ interface AuthApi {
 
 const AuthService = (): AuthApi => {
   const { request } = DefaultService();
-  const mensagens = usarMensagens();
+  const message = useMessage();
 
   const validateToken = async (token: string): Promise<{ usuario: Usuario } | undefined> => {
     try {
@@ -21,7 +21,7 @@ const AuthService = (): AuthApi => {
 
   const login = async (username: string, senha: string): Promise<{ usuario: Usuario } | undefined> => {
     try {
-      return await request<{ usuario: Usuario }>('post', 'auth/login', undefined, mensagens, { username, senha });
+      return await request<{ usuario: Usuario }>('post', 'auth/login', undefined, message, { username, senha });
     } catch (error) {
       return undefined;
     }

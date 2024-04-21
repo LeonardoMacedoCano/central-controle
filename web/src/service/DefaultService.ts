@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { TipoContextoMensagens } from '../contexts/mensagens';
+import { ContextMessageProps } from '../contexts/message/ContextMessageProvider';
 
 interface ApiResponse {
   success?: string;
@@ -11,21 +11,21 @@ const api = axios.create({
 });
 
 const handleErrorMessage = (
-  contextoMensagem: TipoContextoMensagens, 
+  contextMessage: ContextMessageProps, 
   error: any, 
   defaultMessage: string
 ) => {
   const errorMessage = error.response?.data?.error || defaultMessage;
-  contextoMensagem.exibirErro(errorMessage);
+  contextMessage.showError(errorMessage);
 };
 
 const handleSuccessMessage = (
-  contextoMensagem: TipoContextoMensagens, 
+  contextMessage: ContextMessageProps, 
   response: AxiosResponse<ApiResponse>
 ) => {
   const successMessage = response?.data?.success;
   if (successMessage) {
-    contextoMensagem.exibirSucesso(successMessage);
+    contextMessage.showSuccess(successMessage);
   }
 };
 
@@ -33,7 +33,7 @@ export const RequestApi = async <T>(
   method: 'get' | 'post' | 'put' | 'delete',
   url: string,
   token?: string,
-  contextoMensagem?: TipoContextoMensagens,
+  contextMessage?: ContextMessageProps,
   data?: Record<string, any>
 ): Promise<T | undefined> => {
   try {
@@ -46,14 +46,14 @@ export const RequestApi = async <T>(
       ...config,
     });
 
-    if (contextoMensagem) { 
-      handleSuccessMessage(contextoMensagem, response);
+    if (contextMessage) { 
+      handleSuccessMessage(contextMessage, response);
     }
     
     return response.data as T;
   } catch (error: any) {
-    if (contextoMensagem) {
-      handleErrorMessage(contextoMensagem, error, `Erro na requisição ${method.toUpperCase()} para ${url}`);
+    if (contextMessage) {
+      handleErrorMessage(contextMessage, error, `Erro na requisição ${method.toUpperCase()} para ${url}`);
     }
     return undefined;
   }

@@ -3,7 +3,7 @@ import { PagedResponse } from '../types/PagedResponse';
 import { DespesaResumoMensal } from '../types/DespesaResumoMensal';
 import { Despesa } from '../types/Despesa';
 import { Categoria } from '../types/Categoria';
-import { usarMensagens } from '../contexts/mensagens';
+import { useMessage } from '../contexts/message/ContextMessageProvider';
 import { format } from 'date-fns-tz';
 
 interface DespesaApi {
@@ -17,7 +17,7 @@ interface DespesaApi {
 
 const DespesaService = (): DespesaApi => {
   const { request } = DefaultService();
-  const mensagens = usarMensagens();
+  const message = useMessage();
 
   const despesaPayload = (data: Despesa) => ({
     categoria: data.categoria,
@@ -30,7 +30,7 @@ const DespesaService = (): DespesaApi => {
 
   const gerarDespesa = async (token: string, data: Despesa): Promise<{ idDespesa: number } | undefined> => {
     try {
-      return await request<{ idDespesa: number }>('post', 'despesa', token, mensagens, despesaPayload(data));
+      return await request<{ idDespesa: number }>('post', 'despesa', token, message, despesaPayload(data));
     } catch (error) {
       return undefined;
     }
@@ -38,7 +38,7 @@ const DespesaService = (): DespesaApi => {
 
   const editarDespesa = async (token: string, id: number, data: Despesa): Promise<void | undefined> => {
     try {
-      await request<undefined>('put', `despesa/${id}`, token, mensagens, despesaPayload(data));
+      await request<undefined>('put', `despesa/${id}`, token, message, despesaPayload(data));
     } catch (error) {
       return undefined;
     }
@@ -46,7 +46,7 @@ const DespesaService = (): DespesaApi => {
 
   const excluirDespesa = async (token: string, id: number): Promise<void | undefined> => {
     try {
-      await request<undefined>('delete', `despesa/${id}`, token, mensagens);
+      await request<undefined>('delete', `despesa/${id}`, token, message);
     } catch (error) {
       return undefined;
     }

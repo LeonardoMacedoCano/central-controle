@@ -9,7 +9,7 @@ import {
   FaCheckCircle,
   FaRegCalendarAlt,
   FaDollarSign,
-  FaPlug
+  FaSignOutAlt
 } from 'react-icons/fa';
 import AppSidebarItem from './AppSidebarItem';
 
@@ -36,7 +36,7 @@ const AppSidebar: FC<AppSidebarProps> = ({ isActiveSidebar, setActiveSidebar }) 
     { to: "/controleideias", Icon: FaCommentMedical, Text: "Controle de ideias" },
     { to: "/", Icon: FaRegCalendarAlt, Text: "Calendario" },
     { to: "/", Icon: FaRegSun, Text: "Configuração" },
-    { to: "/", Icon: FaPlug, Text: "Sair", onClick: handleLogout },
+    { to: "/", Icon: FaSignOutAlt, Text: "Sair", onClick: handleLogout },
   ];
 
   return (

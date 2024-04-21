@@ -3,7 +3,7 @@ import { ThemeContext } from "styled-components";
 import { useContext, useState } from "react";
 import { MdAccountCircle, MdLock } from 'react-icons/md';
 import { AuthContext } from "../../contexts/auth/AuthContext";
-import { usarMensagens } from '../../contexts/mensagens';
+import { useMessage } from '../../contexts/message/ContextMessageProvider';
 import Container from "../../components/container/Container";
 import FlexBox from "../../components/flexbox/FlexBox";
 import FieldValue from "../../components/fieldvalue/FieldValue";
@@ -12,7 +12,7 @@ import Button from "../../components/button/button/Button";
 export const Login = () => {
   const auth = useContext(AuthContext);
   const theme = useContext(ThemeContext);
-  const mensagens = usarMensagens();
+  const message = useMessage();
 
   const [username, setUsername] = useState('');
   const [senha, setSenha] = useState('');
@@ -35,7 +35,7 @@ export const Login = () => {
     if (username && senha) {
       const isLogged = await auth.login(username, senha);
       if (isLogged) {
-        mensagens.exibirSucesso('Login bem-sucedido!')
+        message.showSuccess('Login bem-sucedido!')
       }
     }
   }

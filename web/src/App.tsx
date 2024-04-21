@@ -3,7 +3,7 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import darkOnyxAmber from './styles/themes/darkOnyxAmber';
 import GlobalStyles from './styles/GlobalStyles';
-import { ProvedorMensagens } from './contexts/mensagens';
+import ContextMessageProvider from './contexts/message/ContextMessageProvider';
 import { AuthProvider } from './contexts/auth/AuthProvider';
 import { RequireAuth } from './contexts/auth/RequireAuth';
 import AppHeader from './components/menu/AppHeader';
@@ -16,7 +16,7 @@ import DespesaPage from './pages/controledespesas/DespesaPage';
 const App: React.FC = () => {
   return (
     <ThemeProvider theme={darkOnyxAmber}>
-      <ProvedorMensagens>
+      <ContextMessageProvider>
         <AuthProvider>
           <BrowserRouter>
             <GlobalStyles />
@@ -34,7 +34,7 @@ const App: React.FC = () => {
             </RequireAuth>
           </BrowserRouter>
         </AuthProvider>
-      </ProvedorMensagens>
+      </ContextMessageProvider>
     </ThemeProvider>
   );
 }
