@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import DespesaService from '../../service/DespesaService';
+import useConfirmModal from '../../hooks/useConfirmModal';
+import { useMessage } from '../../contexts/message/ContextMessageProvider';
 import Panel from '../../components/panel/Panel';
 import { Table, Column, TableToolbar } from '../../components/table/Table';
 import DespesaForm from '../../components/form/despesa/DespesaForm';
 import ParcelaForm from '../../components/form/despesa/ParcelaForm';
-import FloatingButton from '../../components/button/Floatingbutton/FloatingButton';
+import FloatingButton from '../../components/button/floatingbutton/FloatingButton';
 import Container from '../../components/container/Container';
 import { FaCheck } from 'react-icons/fa';
 import { Despesa } from '../../types/Despesa';
@@ -15,26 +17,27 @@ import { Categoria } from '../../types/Categoria';
 import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
 import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
 
+const initialDespesaState: Despesa = {
+  id: 0,
+  categoria: { id: 0, descricao: '' },
+  dataLancamento: getDataAtual(),
+  descricao: '',
+  valorTotal: 0,
+  situacao: '',
+  parcelas: []
+};
+
 const DespesaPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
   const [token, setToken] = useState<string | null>(null);
-  const [despesa, setDespesa] = useState<Despesa>({
-    id: 0,
-    categoria: {
-      id: 0,
-      descricao: ''
-    },
-    dataLancamento: getDataAtual(),
-    descricao: '',
-    valorTotal: 0,
-    situacao: '',
-    parcelas: []
-  });
+  const [despesa, setDespesa] = useState<Despesa>(initialDespesaState);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [numeroParcelaSelecionada, setNumeroParcelaSelecionada] = useState<number | null>(null);
   const [showParcelaForm, setShowParcelaForm] = useState<boolean>(false);
-  
+
+  const { confirm, ConfirmModalComponent } = useConfirmModal();
   const auth = useContext(AuthContext);
+  const message = useMessage();
   const despesaService = DespesaService();
 
   const id = typeof idStr === 'string' ? parseInt(idStr, 10) : 0;
@@ -44,7 +47,9 @@ const DespesaPage: React.FC = () => {
   }, [auth.usuario?.token]);
 
   useEffect(() => {
-    if (id > 0 ) carregarDespesa(id);
+    if (id > 0) {
+      carregarDespesa(id);
+    }
     carregarCategoriasDespesa();
   }, [token, id]);
 
@@ -55,7 +60,7 @@ const DespesaPage: React.FC = () => {
       const result = await despesaService.getDespesaByIdWithParcelas(token, idDespesa);
       if (result) setDespesa(result);
     } catch (error) {
-      console.error("Erro ao carregar a despesa:", error);
+      message.showErrorWithLog('Erro ao carregar a despesa.', error);
     }
   };
 
@@ -66,7 +71,7 @@ const DespesaPage: React.FC = () => {
       const result = await despesaService.getTodasCategoriasDespesa(token);
       setCategorias(result || []);
     } catch (error) {
-      console.error("Erro ao carregar as categorias de despesa:", error);
+      message.showErrorWithLog('Erro ao carregar as categorias de despesa.', error);
     }
   };
 
@@ -84,13 +89,13 @@ const DespesaPage: React.FC = () => {
         idDespesa = id;
       } else {
         const response = await despesaService.gerarDespesa(token, despesa);
-        if (response?.idDespesa) idDespesa = response?.idDespesa;
+        if (response?.idDespesa) idDespesa = response.idDespesa;
       }
       if (idDespesa > 0) carregarDespesa(idDespesa);
     } catch (error) {
-      console.error("Erro ao salvar a despesa:", error);
+      message.showErrorWithLog('Erro ao salvar a despesa.', error);
     }
-  }
+  };
 
   const adicionarNovaParcela = () => {
     const novoNumeroParcela = despesa.parcelas.length > 0 ? despesa.parcelas[despesa.parcelas.length - 1].numero + 1 : 1;
@@ -110,9 +115,14 @@ const DespesaPage: React.FC = () => {
   const deletarParcela = () => {
     if (!numeroParcelaSelecionada || numeroParcelaSelecionada <= 0) return;
 
-    const updatedParcelas = despesa.parcelas.filter(p => p.numero !== numeroParcelaSelecionada);
-    atualizarDespesa({ parcelas: updatedParcelas });
-    setNumeroParcelaSelecionada(null);
+    try {
+      const updatedParcelas = despesa.parcelas.filter(p => p.numero !== numeroParcelaSelecionada);
+      atualizarDespesa({ parcelas: updatedParcelas });
+      setNumeroParcelaSelecionada(null);
+      message.showSuccess('Parcela excluída com sucesso.');
+    } catch (error) {
+      message.showErrorWithLog('Erro ao deletar a parcela.', error); 
+    }
   };
 
   const alterarSituacaoParcela = () => {
@@ -138,7 +148,7 @@ const DespesaPage: React.FC = () => {
   const exitParcela = () => {
     setShowParcelaForm(false);
     setNumeroParcelaSelecionada(null);
-  }
+  };
 
   const isCamposObrigatoriosDespesaPreenchidos = (): boolean => {
     return (
@@ -150,7 +160,7 @@ const DespesaPage: React.FC = () => {
 
   const isCamposObrigatoriosParcelaPreenchidos = (): boolean => {
     const parcelaSelecionada = despesa.parcelas.find(parcela => parcela.numero === numeroParcelaSelecionada);
-  
+
     return (
       !!parcelaSelecionada &&
       parcelaSelecionada.numero > 0 &&
@@ -159,46 +169,50 @@ const DespesaPage: React.FC = () => {
       !isNaN(parcelaSelecionada.valor)
     );
   };
-  
+
   const isRowSelected = (item: Parcela) => numeroParcelaSelecionada === item.numero;
 
   const handleClickRow = (item: Parcela) => setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
 
+  const handleSalvarDespesa = async () => {
+    const result = await confirm("Confirmação", "Deseja realmente salvar a despesa?");
+
+    if (result) {
+      salvarDespesa();
+    } else {
+      message.showInfo('Ação cancelada!');
+    }
+  };
+
+  const handleDeletarParcela = async () => {
+    const result = await confirm("Confirmação", `Deseja realmente deletar a parcela ${numeroParcelaSelecionada}?`);
+
+    if (result) {
+      deletarParcela();
+    } else {
+      message.showInfo('Ação cancelada!');
+    }
+  };
+
   return (
     <Container>
+      {ConfirmModalComponent}
       <FloatingButton
         mainButtonIcon={<FaCheck />}
         mainButtonHint={showParcelaForm ? 'Salvar Parcela' : 'Salvar Despesa'}
-        mainAction={showParcelaForm ? exitParcela : salvarDespesa}
-        disabled={showParcelaForm ? !isCamposObrigatoriosParcelaPreenchidos() : !isCamposObrigatoriosDespesaPreenchidos() }
+        mainAction={showParcelaForm ? exitParcela : handleSalvarDespesa}
+        disabled={showParcelaForm ? !isCamposObrigatoriosParcelaPreenchidos() : !isCamposObrigatoriosDespesaPreenchidos()}
       />
       {showParcelaForm ? (
-        <Panel
-          maxWidth='1000px' 
-          title='Parcela'
-        >
-          <ParcelaForm
-            parcela={despesa.parcelas[despesa.parcelas.length - 1]}
-            onUpdate={atualizarParcela}
-          />
+        <Panel maxWidth='1000px' title='Parcela'>
+          <ParcelaForm parcela={despesa.parcelas[despesa.parcelas.length - 1]} onUpdate={atualizarParcela} />
         </Panel>
       ) : (
         <>
-          <Panel
-            maxWidth='1000px' 
-            title='Despesa'
-          >
-            <DespesaForm
-              despesa={despesa}
-              categorias={categorias}
-              onUpdate={atualizarDespesa}
-            />
+          <Panel maxWidth='1000px' title='Despesa'>
+            <DespesaForm despesa={despesa} categorias={categorias} onUpdate={atualizarDespesa} />
           </Panel>
-          <Panel
-            maxWidth='1000px' 
-            title='Parcelas'
-            footer={despesa.parcelas.length > 0 && <></>}
-          >
+          <Panel maxWidth='1000px' title='Parcelas' footer={despesa.parcelas.length > 0 && <></>}>
             <Table
               values={despesa ? despesa.parcelas : []}
               messageEmpty="Nenhuma parcela encontrada."
@@ -206,38 +220,26 @@ const DespesaPage: React.FC = () => {
               onClickRow={handleClickRow}
               rowSelected={isRowSelected}
               customHeader={
-                <TableToolbar 
+                <TableToolbar
                   handleAdd={adicionarNovaParcela}
                   handleEdit={() => setShowParcelaForm(true)}
-                  handleDelete={deletarParcela}
+                  handleDelete={handleDeletarParcela}
                   handleMoney={alterarSituacaoParcela}
                   isItemSelected={!!numeroParcelaSelecionada}
                 />
               }
               columns={[
-                <Column<Parcela> 
-                  header="Número" 
-                  value={(item) => item.numero} 
-                />,
-                <Column<Parcela> 
-                  header="Data Vencimento" 
-                  value={(item) => formatarDataParaString(item.dataVencimento)} 
-                />,
-                <Column<Parcela> 
-                  header="Valor" 
-                  value={(item) => formatarValorParaReal(item.valor)} 
-                />,  
-                <Column<Parcela> 
-                  header="Situação" 
-                  value={(item) => formatarDescricaoSituacaoParcela(item.pago)} 
-                />
+                <Column<Parcela> header="Número" value={(item) => item.numero} />,
+                <Column<Parcela> header="Data Vencimento" value={(item) => formatarDataParaString(item.dataVencimento)} />,
+                <Column<Parcela> header="Valor" value={(item) => formatarValorParaReal(item.valor)} />,
+                <Column<Parcela> header="Situação" value={(item) => formatarDescricaoSituacaoParcela(item.pago)} />
               ]}
             />
           </Panel>
         </>
       )}
     </Container>
-  )
-}
+  );
+};
 
 export default DespesaPage;
