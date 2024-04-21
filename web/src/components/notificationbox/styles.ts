@@ -24,6 +24,12 @@ export const SuccessMessage = styled.div`
   color: ${props => props.theme.colors.success};
 `;
 
+export const InfoMessage = styled.div`
+  ${defaultMessage}
+  border-top: 3px solid ${props => props.theme.colors.info};
+  color: ${props => props.theme.colors.info};
+`;
+
 export const ButtonContainer = styled.div`
   position: absolute;
   top: 5px;
