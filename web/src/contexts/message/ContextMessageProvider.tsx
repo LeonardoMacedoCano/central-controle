@@ -3,6 +3,7 @@ import NotificationBox from '../../components/notificationbox/NotificationBox';
 
 export interface ContextMessageProps {
   showError: (message: string) => void;
+  showErrorWithLog: (message: string, error: any) => void;
   showSuccess: (message: string) => void;
   showInfo: (message: string) => void;
 }
@@ -14,73 +15,57 @@ interface MessageProviderProps {
 }
 
 const ContextMessageProvider: React.FC<MessageProviderProps> = ({ children }) => {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const [messages, setMessages] = useState<{ type: 'error' | 'success' | 'info'; message: string | null }>({
+    type: 'error',
+    message: null,
+  });
 
   useEffect(() => {
-    const errorClearTimeout = errorMessage ? setTimeout(() => setErrorMessage(null), 5000) : undefined;
-    const successClearTimeout = successMessage ? setTimeout(() => setSuccessMessage(null), 5000) : undefined;
-    const infoClearTimeout = infoMessage ? setTimeout(() => setInfoMessage(null), 5000) : undefined;
+    const clearTimer = messages.message ? setTimeout(() => setMessages({ ...messages, message: null }), 5000) : undefined;
 
     return () => {
-      errorClearTimeout && clearTimeout(errorClearTimeout);
-      successClearTimeout && clearTimeout(successClearTimeout);
-      infoClearTimeout && clearTimeout(infoClearTimeout);
+      clearTimer && clearTimeout(clearTimer);
     };
-  }, [errorMessage, successMessage, infoMessage]);
+  }, [messages]);
 
-  const closeError = () => {
-    setErrorMessage(null);
-  };
-
-  const closeSuccess = () => {
-    setSuccessMessage(null);
-  };
-
-  const closeInfo = () => {
-    setInfoMessage(null);
-  };
-
-  const clearMessages = () => {
-    closeError();
-    closeSuccess();
-    closeInfo();
+  const showMessage = (type: 'error' | 'success' | 'info', message: string) => {
+    setMessages({ type, message });
   };
 
   const showError = (message: string) => {
-    clearMessages();
-    setErrorMessage(message);
+    showMessage('error', message);
   };
 
   const showSuccess = (message: string) => {
-    clearMessages();
-    setSuccessMessage(message);
+    showMessage('success', message);
   };
 
   const showInfo = (message: string) => {
-    clearMessages();
-    setInfoMessage(message);
+    showMessage('info', message);
+  };
+
+  const showErrorWithLog = (messageText: string, error: any) => {
+    const formattedMessage = `${messageText} Consulte o log para mais detalhes!`;
+    console.error(`${messageText}`, error);
+    showMessage('error', formattedMessage);
   };
 
   return (
-    <ContextMessage.Provider value={{ showError, showSuccess, showInfo }}>
-      {errorMessage && <NotificationBox type='error' message={errorMessage} onClose={closeError} />}
-      {successMessage && <NotificationBox type='success' message={successMessage} onClose={closeSuccess} />}
-      {infoMessage && <NotificationBox type='info' message={infoMessage} onClose={closeInfo} />}
+    <ContextMessage.Provider value={{ showError, showErrorWithLog, showSuccess, showInfo }}>
+      {messages.message && <NotificationBox type={messages.type} message={messages.message} onClose={() => setMessages({ ...messages, message: null })} />}
       {children}
     </ContextMessage.Provider>
   );
 };
 
-export const useMessage = () => {
-  const contexto = useContext(ContextMessage);
+export const useMessage = (): ContextMessageProps => {
+  const context = useContext(ContextMessage);
 
-  if (!contexto) {
+  if (!context) {
     throw new Error('useMessage must be used within a ContextMessageProvider');
   }
 
-  return contexto;
+  return context;
 };
 
 export default ContextMessageProvider;
