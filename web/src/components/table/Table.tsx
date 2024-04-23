@@ -13,7 +13,7 @@ export const Column = <T extends any>({}: ColumnProps<T>) => {
 
 interface TableToolbarProps {
   handleAdd?: () => void;
-  handleEdit?: (show: boolean) => void;
+  handleEdit?: () => void;
   handleDelete?: () => void;
   handleMoney?: () => void;
   isItemSelected: boolean;
@@ -38,7 +38,7 @@ export const TableToolbar: React.FC<TableToolbarProps> = ({
       {handleEdit && (
         <Button 
           variant='table-edit' 
-          onClick={() => handleEdit(true)} 
+          onClick={handleEdit} 
           disabled={!isItemSelected} 
         />
       )}

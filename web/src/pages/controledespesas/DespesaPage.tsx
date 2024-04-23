@@ -174,16 +174,6 @@ const DespesaPage: React.FC = () => {
 
   const handleClickRow = (item: Parcela) => setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
 
-  const handleSalvarDespesa = async () => {
-    const result = await confirm("Confirmação", "Deseja realmente salvar a despesa?");
-
-    if (result) {
-      salvarDespesa();
-    } else {
-      message.showInfo('Ação cancelada!');
-    }
-  };
-
   const handleDeletarParcela = async () => {
     const result = await confirm("Confirmação", `Deseja realmente deletar a parcela ${numeroParcelaSelecionada}?`);
 
@@ -200,7 +190,7 @@ const DespesaPage: React.FC = () => {
       <FloatingButton
         mainButtonIcon={<FaCheck />}
         mainButtonHint={showParcelaForm ? 'Salvar Parcela' : 'Salvar Despesa'}
-        mainAction={showParcelaForm ? exitParcela : handleSalvarDespesa}
+        mainAction={showParcelaForm ? exitParcela : salvarDespesa}
         disabled={showParcelaForm ? !isCamposObrigatoriosParcelaPreenchidos() : !isCamposObrigatoriosDespesaPreenchidos()}
       />
       {showParcelaForm ? (

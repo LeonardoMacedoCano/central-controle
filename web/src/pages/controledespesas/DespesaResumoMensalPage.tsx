@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
+import { useMessage } from '../../contexts/message/ContextMessageProvider';
 import DespesaService from '../../service/DespesaService';
 import ParcelaService from '../../service/ParcelaService';
 import { Table, Column, TableToolbar } from '../../components/table/Table';
@@ -9,6 +10,7 @@ import Container from '../../components/container/Container';
 import FieldValue from '../../components/fieldvalue/FieldValue';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
+import useConfirmModal from '../../hooks/useConfirmModal';
 import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
 import { PagedResponse } from '../../types/PagedResponse';
 import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
@@ -18,15 +20,18 @@ const DespesaResumoMensalPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
   const [dataSelecionada, setDataSelecionada] = useState(() => getDataAtual());
   const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
-  const [despesasPage, setDespesasPage] = useState<PagedResponse<DespesaResumoMensal>>();
+  const [despesasPage, setDespesasPage] = useState<PagedResponse<DespesaResumoMensal> | undefined>(undefined);
   const [valorTotal, setValorTotal] = useState<number>(0); 
   const [indexPagina, setIndexPagina] = useState<number>(0); 
   const [registrosPorPagina, setRegistrosPorPagina] = useState<number>(10);  
 
   const auth = useContext(AuthContext);
+  const message = useMessage();
   const navigate = useNavigate();
   const despesaService = DespesaService();
   const parcelaService = ParcelaService();
+
+  const { confirm, ConfirmModalComponent } = useConfirmModal();
 
   useEffect(() => {
     setToken(auth.usuario?.token || null);
@@ -44,14 +49,14 @@ const DespesaResumoMensalPage: React.FC = () => {
     const mes = parseInt(mesStr);
 
     const [resultDespesas, resultValorTotal] = await Promise.all([
-        despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes),
-        parcelaService.getValorTotalParcelasMensal(token, ano, mes)
+      despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes),
+      parcelaService.getValorTotalParcelasMensal(token, ano, mes)
     ]);
 
-    setDespesasPage(resultDespesas || undefined);
+    setDespesasPage(resultDespesas);
     setValorTotal(resultValorTotal?.valueOf() || 0);
     setIdDespesaSelecionada(null);
-};
+  };
 
   const isRowSelected = (item: DespesaResumoMensal) => idDespesaSelecionada === item.id;
 
@@ -67,10 +72,8 @@ const DespesaResumoMensalPage: React.FC = () => {
     }
   };
 
-  const atualizarDataVencimento = (value: any) => {
-    if (typeof value === 'string') {
-      setDataSelecionada(formataraMesAnoParaData(value)); 
-    }
+  const atualizarDataVencimento = (value: string) => {
+    setDataSelecionada(formataraMesAnoParaData(value)); 
   };
 
   const handleClickRow = (item: DespesaResumoMensal) => setIdDespesaSelecionada(prevId => prevId === item.id ? null : item.id);
@@ -79,8 +82,19 @@ const DespesaResumoMensalPage: React.FC = () => {
 
   const handleEditDespesa = () => navigate(`/despesa/${idDespesaSelecionada}`);
 
+  const handleDeletarParcela = async () => {
+    const result = await confirm("Confirmação", `Deseja realmente deletar essa despesa?`);
+
+    if (result) {
+      deletarDespesa();
+    } else {
+      message.showInfo('Ação cancelada!');
+    }
+  };
+
   return (
     <Container>
+      {ConfirmModalComponent}
       <Panel maxWidth='1000px' title='Resumo Mensal'>
         <FlexBox>
           <FlexBox.Item 
@@ -117,13 +131,13 @@ const DespesaResumoMensalPage: React.FC = () => {
         title='Despesas'
         footer={
           despesasPage && despesasPage?.totalElements > 0 && 
-          (<SearchPagination
+          <SearchPagination
             page={despesasPage}
             carregarPagina={carregarPagina}
           />
-        )}>
+        }>
         <Table
-          values={despesasPage ? despesasPage.content : []}
+          values={despesasPage?.content || []}
           messageEmpty="Nenhuma despesa encontrada."
           keyExtractor={(item) => item.id.toString()}
           onClickRow={handleClickRow}
@@ -132,7 +146,7 @@ const DespesaResumoMensalPage: React.FC = () => {
             <TableToolbar
               handleAdd={handleAddDespesa}
               handleEdit={handleEditDespesa}
-              handleDelete={deletarDespesa}
+              handleDelete={handleDeletarParcela}
               isItemSelected={!!idDespesaSelecionada}
             />
           }
