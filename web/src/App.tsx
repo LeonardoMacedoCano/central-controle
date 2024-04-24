@@ -12,6 +12,7 @@ import DespesaResumoMensalPage from './pages/controledespesas/DespesaResumoMensa
 import ControleTarefas from './pages/controletarefas';
 import ControleIdeias from './pages/controleideias';
 import DespesaPage from './pages/controledespesas/DespesaPage';
+import ConfiguracaoPage from './pages/configuracao/ConfiguracaoPage';
 
 const App: React.FC = () => {
   return (
@@ -29,6 +30,7 @@ const App: React.FC = () => {
                   <Route path="/despesa/:idStr?" element={<DespesaPage />} />
                   <Route path="/controletarefas" element={<ControleTarefas />} />
                   <Route path="/controleideias" element={<ControleIdeias />} />
+                  <Route path="/configuracao" element={<ConfiguracaoPage />} />
                 </Routes>
               </>
             </RequireAuth>

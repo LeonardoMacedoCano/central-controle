@@ -35,7 +35,7 @@ const AppSidebar: FC<AppSidebarProps> = ({ isActiveSidebar, setActiveSidebar }) 
     { to: "/controletarefas", Icon: FaCheckCircle, Text: "Controle de tarefas" },
     { to: "/controleideias", Icon: FaCommentMedical, Text: "Controle de ideias" },
     { to: "/", Icon: FaRegCalendarAlt, Text: "Calendario" },
-    { to: "/", Icon: FaRegSun, Text: "Configuração" },
+    { to: "/configuracao", Icon: FaRegSun, Text: "Configuração" },
     { to: "/", Icon: FaSignOutAlt, Text: "Sair", onClick: handleLogout },
   ];
 
