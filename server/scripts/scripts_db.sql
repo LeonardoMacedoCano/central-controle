@@ -34,39 +34,3 @@ CREATE TABLE parcela (
     FOREIGN KEY (iddespesa) REFERENCES despesa(id),
     UNIQUE KEY (iddespesa, numero)
 );
-
-CREATE TABLE categoriatarefa (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    descricao VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE tarefa (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    idusuario INT NOT NULL,
-    idcategoria INT NOT NULL,
-    titulo VARCHAR(255) NOT NULL,
-    descricao VARCHAR(255) NOT NULL,
-    datainclusao DATETIME NOT NULL,
-    dataprazo DATETIME NOT NULL,
-    finalizado CHAR(1) DEFAULT 'N',
-    FOREIGN KEY (idusuario) REFERENCES usuario(id),
-    FOREIGN KEY (idcategoria) REFERENCES categoriatarefa(id)
-);
-
-CREATE TABLE categoriaideia (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    descricao VARCHAR(255)
-);
-
-CREATE TABLE ideia (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    idusuario INT,
-    idcategoria INT,
-    titulo VARCHAR(255),
-    descricao VARCHAR(255),
-    datainclusao DATETIME,
-    dataprazo DATETIME,
-    finalizado CHAR,
-    FOREIGN KEY (idusuario) REFERENCES usuario(id),
-    FOREIGN KEY (idcategoria) REFERENCES categoriaideia(id)
-);
