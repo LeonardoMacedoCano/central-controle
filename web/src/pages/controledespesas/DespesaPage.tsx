@@ -9,7 +9,7 @@ import { Table, Column, TableToolbar } from '../../components/table/Table';
 import DespesaForm from '../../components/form/despesa/DespesaForm';
 import ParcelaForm from '../../components/form/despesa/ParcelaForm';
 import Container from '../../components/container/Container';
-import FloatingButton from '../../components/button/Floatingbutton/FloatingButton';
+import FloatingButton from '../../components/button/floatingbutton/FloatingButton';
 import { FaCheck } from 'react-icons/fa';
 import { Despesa } from '../../types/Despesa';
 import { Parcela } from '../../types/Parcela';

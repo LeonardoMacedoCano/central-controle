@@ -4,11 +4,11 @@ import * as C from './styles';
 const AppHeader: React.FC = () => {
   return (
     <C.AppHeader>
-      <>Icone aqui</>
+      <>Teste 1</>
       <C.TitleHeader>
         Central de Controle
       </C.TitleHeader>
-      <>Icone aqui</>
+      <>Teste 2</>
     </C.AppHeader>
   );
 };
