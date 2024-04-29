@@ -5,8 +5,8 @@ import AppSidebar from './AppSideBar';
 const AppLayout: React.FC = () => {
   return (
     <>
-        <AppHeader/>
-        <AppSidebar/>
+      <AppHeader/>
+      <AppSidebar/>
     </>
   );
 };

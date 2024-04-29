@@ -42,7 +42,6 @@ const AppSidebar: React.FC = () => {
 
   return (
     <C.AppSidebarContainer isActive={isActiveSidebar}>
-
       <C.AppSidebar>
         <C.ContentSidebar onClick={handleCloseSidebar}>
           {sidebarItems.map((item, index) => (

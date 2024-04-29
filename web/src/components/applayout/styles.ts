@@ -9,8 +9,7 @@ export const AppHeader = styled.div`
   color: ${({ theme }) => theme.colors.quaternary};
   background-color: ${({ theme }) => theme.colors.secondary};
   box-shadow: 0 0 5px 1px;
-  padding: 0 20px;
-  margin-left: 30px;
+  padding: 0 20px 0 50px;
 
   > svg {
     width: 30px;
