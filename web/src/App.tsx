@@ -6,7 +6,7 @@ import GlobalStyles from './styles/GlobalStyles';
 import ContextMessageProvider from './contexts/message/ContextMessageProvider';
 import { AuthProvider } from './contexts/auth/AuthProvider';
 import { RequireAuth } from './contexts/auth/RequireAuth';
-import AppHeader from './components/menu/AppHeader';
+import AppLayout from './components/applayout/AppLayout';
 import { Home } from './pages/home';
 import DespesaResumoMensalPage from './pages/controledespesas/DespesaResumoMensalPage';
 import ControleTarefas from './pages/controletarefas';
@@ -23,7 +23,7 @@ const App: React.FC = () => {
             <GlobalStyles />
             <RequireAuth>
               <>
-                <AppHeader />
+                <AppLayout />
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/controledespesas" element={<DespesaResumoMensalPage />} />
