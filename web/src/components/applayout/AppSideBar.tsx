@@ -27,7 +27,7 @@ const AppSidebar: React.FC = () => {
   };
 
   const handleToggleSidebar = () => {
-    setActiveSidebar(prevState => !prevState); // Inverte o estado atual
+    setActiveSidebar(prevState => !prevState);
   };
 
   const sidebarItems = [

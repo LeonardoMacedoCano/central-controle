@@ -9,7 +9,7 @@ export const AppHeader = styled.div`
   color: ${({ theme }) => theme.colors.quaternary};
   background-color: ${({ theme }) => theme.colors.secondary};
   box-shadow: 0 0 5px 1px;
-  padding: 0 20px 0 50px;
+  padding: 0 20px;
 
   > svg {
     width: 30px;
@@ -33,11 +33,10 @@ export const AppSidebarContainer = styled.div<{ isActive: boolean }>`
   height: 100%;
   transform: ${({ isActive }) => isActive ? 'translateX(0)' : 'translateX(-300px)'};
   transition: transform 0.3s ease-in-out;
-  background-color: transparent;
   z-index: 1000;
   color: ${({ theme }) => theme.colors.quaternary};
-  background-color: ${({ theme }) => theme.colors.secondary};
-  box-shadow: 0 0 2px 1px;
+  background-color: ${({ isActive, theme }) => isActive ? theme.colors.secondary : 'transparent'};
+  box-shadow: ${({ isActive }) => isActive ? '0 0 2px 1px' : 'none'};
 `;
 
 export const AppSidebar = styled.div`
@@ -78,7 +77,7 @@ export const LinkSidebar = styled(RouterLink)`
 
 export const ToggleSidebarButton = styled.button`
   width: 30px;
-  background-color: ${({ theme }) => theme.colors.secondary};
+  background-color: transparent;
   border: none;
   display: flex;
   align-items: center;
