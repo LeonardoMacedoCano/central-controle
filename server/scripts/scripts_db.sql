@@ -9,6 +9,11 @@ CREATE TABLE usuario (
 INSERT INTO usuario (id, username, senha, datainclusao, ativo)
 VALUES(1, 'user1', '$2a$10$2FQaqTlAqTPZz0n5eAbqpeap8Ac1vhW.hQhbidlpXBy08k5OAgM3a', '2024-01-01', 'S');
 
+CREATE TABLE formapagamento (
+    id INT PRIMARY KEY,
+    descricao VARCHAR(100) NOT NULL
+);
+
 CREATE TABLE categoriadespesa (
     id INT AUTO_INCREMENT PRIMARY KEY,
     descricao VARCHAR(255) NOT NULL
@@ -27,10 +32,12 @@ CREATE TABLE despesa (
 CREATE TABLE parcela (
     id INT AUTO_INCREMENT PRIMARY KEY,
     iddespesa INT NOT NULL,
+    idformapagamento INT,
     numero INT NOT NULL,
     datavencimento DATE NOT NULL,
     valor FLOAT NOT NULL,
     pago CHAR(1) DEFAULT 'N',
     FOREIGN KEY (iddespesa) REFERENCES despesa(id),
+    FOREIGN KEY (idformapagamento) REFERENCES formapagamento(id),
     UNIQUE KEY (iddespesa, numero)
 );

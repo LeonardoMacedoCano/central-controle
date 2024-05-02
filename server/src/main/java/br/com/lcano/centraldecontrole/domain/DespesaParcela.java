@@ -40,4 +40,8 @@ public class DespesaParcela implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "iddespesa")
     private Despesa despesa;
+
+    @ManyToOne
+    @JoinColumn(name = "idformapagamento")
+    private FormaPagamento formaPagamento;
 }

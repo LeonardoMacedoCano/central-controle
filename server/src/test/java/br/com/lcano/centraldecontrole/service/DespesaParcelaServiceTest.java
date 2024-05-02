@@ -1,9 +1,6 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
-import br.com.lcano.centraldecontrole.domain.Despesa;
-import br.com.lcano.centraldecontrole.domain.DespesaParcela;
-import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.domain.*;
 import br.com.lcano.centraldecontrole.dto.DespesaParcelaDTO;
 import br.com.lcano.centraldecontrole.repository.DespesaParcelaRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
@@ -28,11 +25,13 @@ public class DespesaParcelaServiceTest {
     private DespesaParcelaRepository despesaParcelaRepository;
     @InjectMocks
     private DespesaParcelaService despesaParcelaService;
+    @InjectMocks
+    private FormaPagamentoService formaPagamentoService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        despesaParcelaService = new DespesaParcelaService(despesaParcelaRepository);
+        despesaParcelaService = new DespesaParcelaService(despesaParcelaRepository, formaPagamentoService);
     }
 
     @Test
@@ -173,13 +172,13 @@ public class DespesaParcelaServiceTest {
 
         Usuario usuario = new Usuario("teste", "123", new Date());
         CategoriaDespesa categoriaDespesa = new CategoriaDespesa("teste");
-
+        FormaPagamento formaPagamento = new FormaPagamento("Cartao");
         Despesa despesa = new Despesa(1L, usuario, categoriaDespesa, "teste1", new Date(), new ArrayList<>());
 
         List<DespesaParcela> parcelasMock = Arrays.asList(
-                new DespesaParcela(1L, 1, dataInicio, 10.00, false, despesa),
-                new DespesaParcela(2L, 2, dataInicio, 10.00, false, despesa),
-                new DespesaParcela(3L, 3, dataFim, 10.00, false, despesa));
+                new DespesaParcela(1L, 1, dataInicio, 10.00, false, despesa, formaPagamento),
+                new DespesaParcela(2L, 2, dataInicio, 10.00, false, despesa, formaPagamento),
+                new DespesaParcela(3L, 3, dataFim, 10.00, false, despesa, formaPagamento));
 
         despesa.setParcelas(parcelasMock);
 
@@ -196,13 +195,13 @@ public class DespesaParcelaServiceTest {
     public void testCalcularValorTotalParcelasMensal() {
         Usuario usuario = new Usuario("teste", "123", new Date());
         CategoriaDespesa categoriaDespesa = new CategoriaDespesa("teste");
-
+        FormaPagamento formaPagamento = new FormaPagamento("Cartao");
         Despesa despesa = new Despesa(1L, usuario, categoriaDespesa, "teste1", new Date(), new ArrayList<>());
 
         List<DespesaParcela> parcelasMock = Arrays.asList(
-                new DespesaParcela(1L, 1, new Date(), 5.00, false, despesa),
-                new DespesaParcela(2L, 2, new Date(), 10.00, false, despesa),
-                new DespesaParcela(3L, 3, new Date(), 15.00, false, despesa));
+                new DespesaParcela(1L, 1, new Date(), 5.00, false, despesa, formaPagamento),
+                new DespesaParcela(2L, 2, new Date(), 10.00, false, despesa, formaPagamento),
+                new DespesaParcela(3L, 3, new Date(), 15.00, false, despesa, formaPagamento));
 
         when(despesaParcelaRepository.findByDataVencimentoBetween(
                 any(Date.class), any(Date.class))).thenReturn(parcelasMock);

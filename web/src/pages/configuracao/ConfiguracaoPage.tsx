@@ -6,16 +6,12 @@ import Tabs from '../../components/tabs/Tabs';
 const ConfiguracaoPage: React.FC = () => {
   const tabs = [
     {
-      label: 'Tab 1',
+      label: 'Usuário',
       content: <div>Conteúdo da aba 1</div>,
     },
     {
-      label: 'Tab 2',
+      label: 'Despesa',
       content: <div>Conteúdo da aba 2</div>,
-    },
-    {
-      label: 'Tab 3',
-      content: <div>Conteúdo da aba 3</div>,
     },
   ];
 

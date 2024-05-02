@@ -14,10 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class DespesaParcelaService {
     private final DespesaParcelaRepository despesaParcelaRepository;
+    private final FormaPagamentoService formaPagamentoService;
 
     @Autowired
-    public DespesaParcelaService(DespesaParcelaRepository despesaParcelaRepository) {
+    public DespesaParcelaService(DespesaParcelaRepository despesaParcelaRepository, FormaPagamentoService formaPagamentoService) {
         this.despesaParcelaRepository = despesaParcelaRepository;
+        this.formaPagamentoService = formaPagamentoService;
     }
 
     public void salvarParcelas(List<DespesaParcela> parcelas) {
@@ -31,6 +33,11 @@ public class DespesaParcelaService {
         novaParcela.setDataVencimento(data.getDataVencimento());
         novaParcela.setValor(data.getValor());
         novaParcela.setPago(data.getPago());
+
+        if (data.getFormaPagamento() != null && data.getFormaPagamento().getId() != null) {
+            novaParcela.setFormaPagamento(formaPagamentoService.getFormaPagamentoById(data.getFormaPagamento().getId()));
+        }
+
         return novaParcela;
     }
 
@@ -44,8 +51,11 @@ public class DespesaParcelaService {
         parcelaExistente.setDataVencimento(parcelaDTO.getDataVencimento());
         parcelaExistente.setValor(parcelaDTO.getValor());
         parcelaExistente.setPago(parcelaDTO.getPago());
-    }
 
+        if (parcelaDTO.getFormaPagamento() != null && parcelaDTO.getFormaPagamento().getId() != null) {
+            parcelaExistente.setFormaPagamento(formaPagamentoService.getFormaPagamentoById(parcelaDTO.getFormaPagamento().getId()));
+        }
+    }
     public List<DespesaParcela> atualizarParcelas(Despesa despesaExistente, List<DespesaParcelaDTO> parcelasDTO) {
         List<DespesaParcela> parcelasAtualizadas = new ArrayList<>();
 

@@ -1,10 +1,7 @@
 package br.com.lcano.centraldecontrole.resource;
 
-import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
-import br.com.lcano.centraldecontrole.domain.Despesa;
-import br.com.lcano.centraldecontrole.domain.DespesaParcela;
+import br.com.lcano.centraldecontrole.domain.*;
 import br.com.lcano.centraldecontrole.dto.DespesaDTO;
-import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.dto.DespesaResumoMensalDTO;
 import br.com.lcano.centraldecontrole.service.DespesaService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -102,12 +99,16 @@ class DespesaResourceTest {
     }
 
     @Test
-    void testGetDebitoByIdWithParcelas() {
+    void testGetDespesaByIdWithParcelas() {
         HttpServletRequest request = mock(HttpServletRequest.class);
 
         CategoriaDespesa categoria = new CategoriaDespesa();
         categoria.setId(1L);
         categoria.setDescricao("Teste");
+
+        FormaPagamento formaPagamento = new FormaPagamento();
+        formaPagamento.setId(1L);
+        formaPagamento.setDescricao("Cartao");
 
         Long idDespesa = 1L;
         Despesa despesa = new Despesa();
@@ -115,9 +116,9 @@ class DespesaResourceTest {
         despesa.setCategoria(categoria);
 
         List<DespesaParcela> parcelas = Arrays.asList(
-                new DespesaParcela(1L, 1, new Date(), 5.00, false, despesa),
-                new DespesaParcela(2L, 2, new Date(), 10.00, false, despesa),
-                new DespesaParcela(3L, 3, new Date(), 15.00, false, despesa));
+                new DespesaParcela(1L, 1, new Date(), 5.00, false, despesa, formaPagamento),
+                new DespesaParcela(2L, 2, new Date(), 10.00, false, despesa, formaPagamento),
+                new DespesaParcela(3L, 3, new Date(), 15.00, false, despesa, formaPagamento));
 
         despesa.setParcelas(parcelas);
 

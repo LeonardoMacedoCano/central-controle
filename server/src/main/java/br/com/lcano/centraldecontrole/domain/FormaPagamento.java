@@ -3,13 +3,14 @@ package br.com.lcano.centraldecontrole.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-@MappedSuperclass
+@Table(name = "formapagamento")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(of = "id")
-public class Categoria {
+public class FormaPagamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,7 +18,7 @@ public class Categoria {
     @Column(nullable = false)
     private String descricao;
 
-    public Categoria(String descricao) {
+    public FormaPagamento(String descricao) {
         this.descricao = descricao;
     }
 }
