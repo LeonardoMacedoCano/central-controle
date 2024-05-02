@@ -36,7 +36,7 @@ class CategoriaDespesaResourceTest {
         categoriaDTO1.setDescricao("Transporte");
 
         CategoriaDTO categoriaDTO2 = new CategoriaDTO();
-        categoriaDTO2.setId(1L);
+        categoriaDTO2.setId(2L);
         categoriaDTO2.setDescricao("Alimentação");
 
         List<CategoriaDTO> categoriasDespesaMock = new ArrayList<>();

@@ -2,7 +2,9 @@ package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.domain.*;
 import br.com.lcano.centraldecontrole.dto.DespesaParcelaDTO;
+import br.com.lcano.centraldecontrole.dto.FormaPagamentoDTO;
 import br.com.lcano.centraldecontrole.repository.DespesaParcelaRepository;
+import br.com.lcano.centraldecontrole.repository.FormaPagamentoRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,10 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,13 +25,15 @@ public class DespesaParcelaServiceTest {
     private DespesaParcelaRepository despesaParcelaRepository;
     @InjectMocks
     private DespesaParcelaService despesaParcelaService;
-    @InjectMocks
+    @Mock
+    private FormaPagamentoRepository formaPagamentoRepository;
+    @Mock
     private FormaPagamentoService formaPagamentoService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        despesaParcelaService = new DespesaParcelaService(despesaParcelaRepository, formaPagamentoService);
+        despesaParcelaService = new DespesaParcelaService(despesaParcelaRepository, formaPagamentoRepository, formaPagamentoService);
     }
 
     @Test
@@ -49,7 +51,13 @@ public class DespesaParcelaServiceTest {
         parcelaDTO.setValor(100.0);
         parcelaDTO.setPago(false);
 
+        FormaPagamento formaPagamento = new FormaPagamento(1L, "Pix");
+
+        parcelaDTO.setFormaPagamento(FormaPagamentoDTO.converterParaDTO(formaPagamento));
+
         Despesa despesa = new Despesa();
+
+        when(formaPagamentoService.getFormaPagamentoById(formaPagamento.getId())).thenReturn(formaPagamento);
 
         DespesaParcela novaParcela = despesaParcelaService.criarParcela(parcelaDTO, despesa);
 
@@ -57,10 +65,13 @@ public class DespesaParcelaServiceTest {
         assertEquals(parcelaDTO.getDataVencimento(), novaParcela.getDataVencimento());
         assertEquals(parcelaDTO.getValor(), novaParcela.getValor());
         assertEquals(parcelaDTO.getPago(), novaParcela.isPago());
+        assertEquals(parcelaDTO.getFormaPagamento().getId(), novaParcela.getFormaPagamento().getId());
+        assertEquals(parcelaDTO.getFormaPagamento().getDescricao(), novaParcela.getFormaPagamento().getDescricao());
     }
 
     @Test
     public void testCriarParcelas() {
+        FormaPagamento formaPagamento = new FormaPagamento(1L, "Pix");
         Despesa despesa = new Despesa();
 
         List<DespesaParcelaDTO> parcelasDTO = new ArrayList<>();
@@ -69,6 +80,8 @@ public class DespesaParcelaServiceTest {
         parcelaDTO1.setDataVencimento(new Date());
         parcelaDTO1.setValor(100.0);
         parcelaDTO1.setPago(false);
+        parcelaDTO1.setFormaPagamento(FormaPagamentoDTO.converterParaDTO(formaPagamento));
+
         parcelasDTO.add(parcelaDTO1);
 
         DespesaParcelaDTO parcelaDTO2 = new DespesaParcelaDTO();
@@ -78,6 +91,8 @@ public class DespesaParcelaServiceTest {
         parcelaDTO2.setPago(false);
         parcelasDTO.add(parcelaDTO2);
 
+        when(formaPagamentoService.getFormaPagamentoById(formaPagamento.getId())).thenReturn(formaPagamento);
+
         List<DespesaParcela> parcelas = despesaParcelaService.criarParcelas(despesa, parcelasDTO);
 
         assertEquals(parcelasDTO.size(), parcelas.size());
@@ -85,21 +100,28 @@ public class DespesaParcelaServiceTest {
         assertEquals(parcelaDTO1.getDataVencimento(), parcelas.get(0).getDataVencimento());
         assertEquals(parcelaDTO1.getValor(), parcelas.get(0).getValor());
         assertEquals(parcelaDTO1.getPago(), parcelas.get(0).isPago());
+        assertEquals(parcelaDTO1.getFormaPagamento().getId(), parcelas.get(0).getFormaPagamento().getId());
+        assertEquals(parcelaDTO1.getFormaPagamento().getDescricao(), parcelas.get(0).getFormaPagamento().getDescricao());
 
         assertEquals(parcelaDTO2.getNumero(), parcelas.get(1).getNumero());
         assertEquals(parcelaDTO2.getDataVencimento(), parcelas.get(1).getDataVencimento());
         assertEquals(parcelaDTO2.getValor(), parcelas.get(1).getValor());
         assertEquals(parcelaDTO2.getPago(), parcelas.get(1).isPago());
+        assertNull(parcelas.get(1).getFormaPagamento());
     }
 
     @Test
     void testEditarParcela() {
+        FormaPagamento formaPagamentoCartao = new FormaPagamento(1L, "Cartão de Crédito");
+        FormaPagamento formaPagamentoPix = new FormaPagamento(2L, "Pix");
+
         DespesaParcela parcelaExistente = new DespesaParcela();
         parcelaExistente.setId(1L);
         parcelaExistente.setNumero(1);
         parcelaExistente.setDataVencimento(new Date());
         parcelaExistente.setValor(100.0);
         parcelaExistente.setPago(false);
+        parcelaExistente.setFormaPagamento(formaPagamentoCartao);
 
         DespesaParcelaDTO parcelaDTO = new DespesaParcelaDTO();
         parcelaDTO.setId(1L);
@@ -107,12 +129,17 @@ public class DespesaParcelaServiceTest {
         parcelaDTO.setDataVencimento(new Date());
         parcelaDTO.setValor(200.0);
         parcelaDTO.setPago(true);
+        parcelaDTO.setFormaPagamento(FormaPagamentoDTO.converterParaDTO(formaPagamentoPix));
+
+        when(formaPagamentoService.getFormaPagamentoById(formaPagamentoPix.getId())).thenReturn(formaPagamentoPix);
 
         despesaParcelaService.editarParcela(parcelaExistente, parcelaDTO);
 
         assertEquals(parcelaDTO.getDataVencimento(), parcelaExistente.getDataVencimento());
         assertEquals(parcelaDTO.getValor(), parcelaExistente.getValor());
         assertEquals(parcelaDTO.getPago(), parcelaExistente.isPago());
+        assertEquals(parcelaDTO.getFormaPagamento().getId(), parcelaExistente.getFormaPagamento().getId());
+        assertEquals(parcelaDTO.getFormaPagamento().getDescricao(), parcelaExistente.getFormaPagamento().getDescricao());
     }
 
     @Test

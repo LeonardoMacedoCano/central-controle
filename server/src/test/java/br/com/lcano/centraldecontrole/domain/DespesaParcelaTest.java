@@ -27,12 +27,15 @@ public class DespesaParcelaTest {
         despesaParcela.setDataVencimento(dataVencimento);
         despesaParcela.setValor(100.00);
         despesaParcela.setPago(true);
+        FormaPagamento formaPagamento = new FormaPagamento(1L, "Cartao");
+        despesaParcela.setFormaPagamento(formaPagamento);
 
         assertEquals(1L, despesaParcela.getId());
         assertEquals(1, despesaParcela.getNumero());
         assertEquals(dataVencimento, despesaParcela.getDataVencimento());
         assertEquals(100.00, despesaParcela.getValor());
         assertTrue(despesaParcela.isPago());
+        assertEquals(formaPagamento, despesaParcela.getFormaPagamento());
     }
 
     @Test
