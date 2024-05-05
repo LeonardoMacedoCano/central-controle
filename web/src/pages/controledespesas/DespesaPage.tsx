@@ -16,6 +16,8 @@ import { Parcela } from '../../types/Parcela';
 import { Categoria } from '../../types/Categoria';
 import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
 import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
+import { FormaPagamento } from '../../types/FormaPagamento';
+import ParcelaService from '../../service/ParcelaService';
 
 const initialDespesaState: Despesa = {
   id: 0,
@@ -32,6 +34,7 @@ const DespesaPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
   const [despesa, setDespesa] = useState<Despesa>(initialDespesaState);
   const [categorias, setCategorias] = useState<Categoria[]>([]);
+  const [formasPagamento, setFormasPagamento] = useState<FormaPagamento[]>([]);
   const [numeroParcelaSelecionada, setNumeroParcelaSelecionada] = useState<number | null>(null);
   const [showParcelaForm, setShowParcelaForm] = useState<boolean>(false);
 
@@ -39,6 +42,7 @@ const DespesaPage: React.FC = () => {
   const auth = useContext(AuthContext);
   const message = useMessage();
   const despesaService = DespesaService();
+  const parcelaService = ParcelaService();
 
   const id = typeof idStr === 'string' ? parseInt(idStr, 10) : 0;
 
@@ -51,6 +55,7 @@ const DespesaPage: React.FC = () => {
       carregarDespesa(id);
     }
     carregarCategoriasDespesa();
+    carregarFormasPagamento();
   }, [token, id]);
 
   const carregarDespesa = async (idDespesa: number) => {
@@ -72,6 +77,17 @@ const DespesaPage: React.FC = () => {
       setCategorias(result || []);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar as categorias de despesa.', error);
+    }
+  };
+
+  const carregarFormasPagamento = async () => {
+    if (!token) return;
+
+    try {
+      const result = await parcelaService.getTodasFormaPagamento(token);
+      setFormasPagamento(result || []);
+    } catch (error) {
+      message.showErrorWithLog('Erro ao carregar as formas de pagamento.', error);
     }
   };
 
@@ -104,7 +120,8 @@ const DespesaPage: React.FC = () => {
       numero: novoNumeroParcela,
       dataVencimento: getDataAtual(),
       valor: 0,
-      pago: false
+      pago: false,
+      formaPagamento: null
     };
 
     atualizarDespesa({ parcelas: [...despesa.parcelas, novaParcela] });
@@ -195,7 +212,7 @@ const DespesaPage: React.FC = () => {
       />
       {showParcelaForm ? (
         <Panel maxWidth='1000px' title='Parcela'>
-          <ParcelaForm parcela={despesa.parcelas[despesa.parcelas.length - 1]} onUpdate={atualizarParcela} />
+          <ParcelaForm parcela={despesa.parcelas[(numeroParcelaSelecionada || despesa.parcelas.length) - 1]} formasPagamento={formasPagamento} onUpdate={atualizarParcela} />
         </Panel>
       ) : (
         <>
@@ -222,7 +239,8 @@ const DespesaPage: React.FC = () => {
                 <Column<Parcela> header="Número" value={(item) => item.numero} />,
                 <Column<Parcela> header="Data Vencimento" value={(item) => formatarDataParaString(item.dataVencimento)} />,
                 <Column<Parcela> header="Valor" value={(item) => formatarValorParaReal(item.valor)} />,
-                <Column<Parcela> header="Situação" value={(item) => formatarDescricaoSituacaoParcela(item.pago)} />
+                <Column<Parcela> header="Situação" value={(item) => formatarDescricaoSituacaoParcela(item.pago)} />,
+                <Column<Parcela> header="Forma Pagamento" value={(item) => item.formaPagamento ? item.formaPagamento?.descricao : ""} />
               ]}
             />
           </Panel>

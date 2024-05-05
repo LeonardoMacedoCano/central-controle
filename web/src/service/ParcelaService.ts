@@ -1,7 +1,9 @@
+import { FormaPagamento } from '../types/FormaPagamento';
 import DefaultService from './DefaultService';
 
 interface ParcelaApi {
   getValorTotalParcelasMensal: (token: string, ano: number, mes: number) => Promise<number | undefined>;
+  getTodasFormaPagamento: (token: string) => Promise<FormaPagamento[] | undefined>;
 }
 
 const ParcelaService = (): ParcelaApi => {
@@ -15,8 +17,17 @@ const ParcelaService = (): ParcelaApi => {
     }
   };
 
+  const getTodasFormaPagamento = async (token: string): Promise<FormaPagamento[] | undefined> => {
+    try {
+      return await request<FormaPagamento[]>('get', 'formapagamento', token);
+    } catch (error) {
+      return undefined;
+    }
+  };
+
   return {
-    getValorTotalParcelasMensal
+    getValorTotalParcelasMensal,
+    getTodasFormaPagamento
   };
 };
 

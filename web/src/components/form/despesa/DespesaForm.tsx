@@ -13,7 +13,6 @@ interface DespesaFormProps {
 }
 
 const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate }) => {
-
   const updateDespesa = (updatedFields: Partial<Despesa>) => {
     const despesaAtualizada: Despesa = {
       ...despesa!,
@@ -23,12 +22,13 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate
   };
 
   const handleUpdateCategoria = (value: any) => {
-    const categoriaSelecionada = categorias.find(c => c.id === (value as Categoria).id);
+    const categoriaId = String(value);
+    const categoriaSelecionada = categorias.find(c => String(c.id) === categoriaId); 
     if (categoriaSelecionada) {
       updateDespesa({ categoria: categoriaSelecionada });
     }
   };
-  
+
   const handleUpdateDescricao = (value: any) => {
     if (typeof value === 'string') {
       updateDespesa({ descricao: value });
@@ -64,10 +64,10 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate
         <FlexBox.Item borderTop borderRight>
           <FieldValue 
             description='Categoria'
-            type='categoria'
-            value={despesa.categoria}
+            type='select'
+            value={{ key: despesa.categoria.id, value: despesa.categoria.descricao }}
             editable={true}
-            categorias={categorias}
+            options={categorias.map(categoria => ({ key: categoria.id, value: categoria.descricao }))}
             onUpdate={handleUpdateCategoria}
           />
         </FlexBox.Item>

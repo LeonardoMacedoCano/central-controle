@@ -1,12 +1,12 @@
 import React from 'react';
 import * as C from './styles';
 import { formatarDataParaAnoMes, formatarDataParaStringYMD, formatarStringParaData } from '../../utils/DateUtils';
-import { Categoria } from '../../types/Categoria';
 import { formatarNumeroComZerosAEsquerda } from '../../utils/ValorUtils';
+import { SelectValue } from '../../types/SelectValue';
 
 type FieldValueProps = {
-  type: 'string' | 'number' | 'boolean' | 'date' | 'month' | 'categoria';
-  value: string | number | boolean | Categoria;
+  type: 'string' | 'number' | 'boolean' | 'date' | 'month' | 'select';
+  value: string | number | boolean | SelectValue;
   description?: string;
   editable?: boolean;
   width?: string;
@@ -16,7 +16,7 @@ type FieldValueProps = {
   maxValue?: number;
   inputWidth?: string;
   inline?: boolean;
-  categorias?: Categoria[];
+  options?: SelectValue[];
   icon?: React.ReactNode;
   padding?: string;
   placeholder?: string;
@@ -36,7 +36,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
   maxValue,
   inputWidth,
   inline,
-  categorias,
+  options,
   icon,
   padding,
   placeholder,
@@ -64,15 +64,6 @@ const FieldValue: React.FC<FieldValueProps> = ({
     }
   };
 
-  const handleCategoriaChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedId = parseInt(event.target.value, 10);
-    const selectedCategoria = getSelectedCategoria(selectedId);
-
-    if (onUpdate) {
-      onUpdate(selectedCategoria || '');
-    }
-  };
-
   const formatValue = (val: any) => {
     if ((type !== 'date') && (typeof val === 'string' || typeof val === 'number')) {
       return String(val);
@@ -87,18 +78,6 @@ const FieldValue: React.FC<FieldValueProps> = ({
     }
   };
 
-  const getSelectedCategoria = (selectedId: number): Categoria | null => {
-    if (selectedId > 0) {
-      return categorias?.find(c => c.id === selectedId) || null;
-    } else if (value instanceof Object && 'id' in value) {
-      return value as Categoria;
-    } else {
-      return null;
-    }
-  };
-
-  const selectedCategoria = (type === 'categoria' ? getSelectedCategoria(parseInt(value as string, 10)) : undefined);
-
   return (
     <C.FieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline} padding={padding}>
       {description && 
@@ -106,25 +85,25 @@ const FieldValue: React.FC<FieldValueProps> = ({
           {description}
         </C.Label>
       }
-      {type === 'categoria' ? (
+      {type === 'select' ? (
         <C.StyledSelect
-          value={selectedCategoria ? selectedCategoria.id.toString() : ''}
-          onChange={handleCategoriaChange}
+          value={(typeof value === 'object' && value !== null) ? value.key : String(value)}
+          onChange={(event) => handleInputChange(event)}
           disabled={!editable}
           inputWidth={inputWidth}
           inline={inline}
         >
-          <option value="">Selecione uma categoria</option>
-          {categorias?.map((categoria) => (
-            <option key={categoria.id} value={categoria.id.toString()}>
-              {`${formatarNumeroComZerosAEsquerda(categoria.id, 2)} - ${categoria.descricao}`}
-            </option>
+          <option value=''>{placeholder || 'Selecione uma opção'}</option>
+          {options?.map((option) => (
+            <option key={option.key} value={String(option.key)}>
+              {`${formatarNumeroComZerosAEsquerda(option.key, 2)} - ${option.value}`}
+            </option>          
           ))}
         </C.StyledSelect>
       ) : type === 'boolean' ? (
         <C.StyledSelect
           value={formatValue(value)}
-          onChange={handleInputChange}
+          onChange={(event) => handleInputChange(event)}
           disabled={!editable}
           inputWidth={inputWidth}
           inline={inline}
@@ -143,7 +122,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
             type={editable ? type : 'string'} 
             readOnly={!editable}
             value={formatValue(value)}
-            onChange={handleInputChange}
+            onChange={(event) => handleInputChange(event)}
             inputWidth={inputWidth}
             inline={inline}
             onKeyDown={onKeyDown}
