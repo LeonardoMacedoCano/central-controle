@@ -27,6 +27,11 @@ public class UsuarioConfigService {
                 .orElseThrow(() -> new UsuarioException.UsuarioConfigNaoEncontradoById(id));
     }
 
+    public UsuarioConfig getUsuarioConfigByUsuario(Usuario usuario) {
+        return usuarioConfigRepository.findByUsuario(usuario)
+                .orElseThrow(UsuarioException.UsuarioConfigNaoEncontrado::new);
+    }
+
     @Transactional
     public void gerarUsuarioConfig(Usuario usuario) {
         UsuarioConfig novoUsuarioConfig = new UsuarioConfig(usuario);

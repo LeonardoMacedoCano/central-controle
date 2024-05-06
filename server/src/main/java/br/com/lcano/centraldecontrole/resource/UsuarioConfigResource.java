@@ -1,8 +1,10 @@
 package br.com.lcano.centraldecontrole.resource;
 
+import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.dto.UsuarioConfigDTO;
 import br.com.lcano.centraldecontrole.service.UsuarioConfigService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +25,9 @@ public class UsuarioConfigResource {
         return CustomSuccess.buildResponseEntity("Configuração editada com sucesso.");
     }
 
-    @GetMapping("/{idUsuarioConfig}")
-    public ResponseEntity<UsuarioConfigDTO> getUsuarioConfigByIdWith(@PathVariable Long idUsuarioConfig) {
-        return ResponseEntity.ok(UsuarioConfigDTO.converterParaDTO(usuarioConfigService.getUsuarioConfigById(idUsuarioConfig)));
+    @GetMapping()
+    public ResponseEntity<UsuarioConfigDTO> getUsuarioConfigByUsuario(HttpServletRequest request) {
+        Usuario usuario = (Usuario) request.getAttribute("usuario");
+        return ResponseEntity.ok(UsuarioConfigDTO.converterParaDTO(usuarioConfigService.getUsuarioConfigByUsuario(usuario)));
     }
 }

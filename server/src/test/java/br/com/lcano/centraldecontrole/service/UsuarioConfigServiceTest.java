@@ -57,6 +57,28 @@ public class UsuarioConfigServiceTest {
     }
 
     @Test
+    void testGetUsuarioConfigByUsuario_UsuarioConfigFound() {
+        Usuario usuario = new Usuario();
+        UsuarioConfig usuarioConfig = new UsuarioConfig();
+        usuarioConfig.setUsuario(usuario);
+
+        when(usuarioConfigRepository.findByUsuario(usuario)).thenReturn(Optional.of(usuarioConfig));
+
+        UsuarioConfig result = usuarioConfigService.getUsuarioConfigByUsuario(usuario);
+
+        assertEquals(usuarioConfig, result);
+    }
+
+    @Test
+    void testGetUsuarioConfigByUsuario_UsuarioConfigNotFound() {
+        Usuario usuario = new Usuario();
+
+        when(usuarioConfigRepository.findByUsuario(usuario)).thenReturn(Optional.empty());
+
+        assertThrows(UsuarioException.UsuarioConfigNaoEncontrado.class, () -> usuarioConfigService.getUsuarioConfigByUsuario(usuario));
+    }
+
+    @Test
     void testGerarUsuarioConfig() {
         Usuario usuario = new Usuario();
         usuario.setId(1L);

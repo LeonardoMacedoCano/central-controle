@@ -35,11 +35,22 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private boolean ativo;
 
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private UsuarioConfig usuarioConfig;
+
     public Usuario(String username, String senha, Date dataInclusao) {
         this.username = username;
         this.senha = senha;
         this.dataInclusao = dataInclusao;
         this.ativo = true;
+    }
+
+    public Usuario(Long id, String username, String senha, Date dataInclusao, Boolean ativo) {
+        this.id = id;
+        this.username = username;
+        this.senha = senha;
+        this.dataInclusao = dataInclusao;
+        this.ativo = ativo;
     }
 
     @Override

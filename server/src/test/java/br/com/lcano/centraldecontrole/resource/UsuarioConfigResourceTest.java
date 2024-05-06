@@ -1,14 +1,18 @@
 package br.com.lcano.centraldecontrole.resource;
 
+import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.UsuarioConfig;
 import br.com.lcano.centraldecontrole.dto.UsuarioConfigDTO;
 import br.com.lcano.centraldecontrole.service.UsuarioConfigService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -34,18 +38,23 @@ public class UsuarioConfigResourceTest {
     }
 
     @Test
-    void testGetUsuarioConfigByIdWith() {
+    void testGetUsuarioConfigByUsuario() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        Usuario usuario = new Usuario("Usuario1", "senha1", new Date());
+
         UsuarioConfig usuarioConfig = new UsuarioConfig();
         usuarioConfig.setId(1L);
+        usuarioConfig.setUsuario(usuario);
         usuarioConfig.setDespesaNumeroItemPagina(10);
         usuarioConfig.setDespesaValorMetaMensal(100.0);
         usuarioConfig.setDespesaDiaPadraoVencimento(15);
 
         UsuarioConfigDTO usuarioConfigDTO = UsuarioConfigDTO.converterParaDTO(usuarioConfig);
 
-        when(usuarioConfigService.getUsuarioConfigById(1L)).thenReturn(usuarioConfig);
+        when(request.getAttribute("usuario")).thenReturn(usuario);
+        when(usuarioConfigService.getUsuarioConfigByUsuario(usuario)).thenReturn(usuarioConfig);
 
-        ResponseEntity<UsuarioConfigDTO> responseEntity = usuarioConfigResource.getUsuarioConfigByIdWith(1L);
+        ResponseEntity<UsuarioConfigDTO> responseEntity = usuarioConfigResource.getUsuarioConfigByUsuario(request);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(usuarioConfigDTO, responseEntity.getBody());
