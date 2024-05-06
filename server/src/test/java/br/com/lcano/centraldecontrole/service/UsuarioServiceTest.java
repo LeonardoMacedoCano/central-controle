@@ -11,16 +11,25 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 public class UsuarioServiceTest {
     @Mock
     private UsuarioRepository usuarioRepository;
+    @Mock
+    private UsuarioConfigService usuarioConfigService;
     @InjectMocks
     private UsuarioService usuarioService;
+
+    @Test
+    void testSalvarUsuario() {
+        Usuario usuario = new Usuario();
+        usuarioService.salvarUsuario(usuario);
+        verify(usuarioRepository, times(1)).save(usuario);
+    }
+
 
     @Test
     void testGetTodosUsuarios() {
@@ -49,5 +58,16 @@ public class UsuarioServiceTest {
         assertEquals(usuario2.getUsername(), usuarioDTO2.getUsername());
         assertEquals(usuario2.getSenha(), usuarioDTO2.getSenha());
         assertEquals(usuario2.getDataInclusao(), usuarioDTO2.getDataInclusao());
+    }
+
+    @Test
+    void testGerarUsuario() {
+        String username = "testuser";
+        String senha = "password";
+
+        usuarioService.gerarUsuario(username, senha);
+
+        verify(usuarioRepository, times(1)).save(any(Usuario.class));
+        verify(usuarioConfigService, times(1)).gerarUsuarioConfig(any(Usuario.class));
     }
 }

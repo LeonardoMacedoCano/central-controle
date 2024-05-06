@@ -7,6 +7,7 @@ public class UsuarioException extends RuntimeException {
     public static final String MSG_USUARIO_DESATIVADO = "Usuário desativado.";
     public static final String MSG_ERRO_GERAR_TOKEN = "Erro ao gerar Token.";
     public static final String MSG_TOKEN_EXPIRADO_OU_INVALIDO = "Token expirado ou inválido.";
+    public static final String MSG_USUARIO_CONFIG_NAO_ENCONTRADO_BY_ID = "Configuração do Usuário não encontrado com o id: %d.";
 
     public static class UsuarioNaoEncontrado extends RuntimeException {
         public UsuarioNaoEncontrado() {
@@ -35,6 +36,12 @@ public class UsuarioException extends RuntimeException {
     public static class TokenExpiradoOuInvalido extends RuntimeException {
         public TokenExpiradoOuInvalido() {
             super(MSG_TOKEN_EXPIRADO_OU_INVALIDO);
+        }
+    }
+
+    public static class UsuarioConfigNaoEncontradoById extends RuntimeException {
+        public UsuarioConfigNaoEncontradoById(Long IDUsuarioConfig) {
+            super(String.format(MSG_USUARIO_CONFIG_NAO_ENCONTRADO_BY_ID, IDUsuarioConfig));
         }
     }
 }

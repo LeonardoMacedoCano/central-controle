@@ -14,6 +14,17 @@ CREATE TABLE formapagamento (
     descricao VARCHAR(100) NOT NULL
 );
 
+CREATE TABLE usuarioconfig (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idusuario INT NOT NULL UNIQUE,
+    despesanumeroitempagina INT DEFAULT 10,
+    despesavalormetamensal DECIMAL(10, 2),
+    despesadiapadraovencimento INT DEFAULT 10,
+    despesaidformapagamentopadrao INT,
+    FOREIGN KEY (idusuario) REFERENCES usuario(id),
+	FOREIGN KEY (despesaidformapagamentopadrao) REFERENCES formapagamento(id)
+);
+
 CREATE TABLE categoriadespesa (
     id INT AUTO_INCREMENT PRIMARY KEY,
     descricao VARCHAR(255) NOT NULL
