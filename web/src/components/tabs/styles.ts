@@ -45,5 +45,5 @@ export const TabButton = styled.button<{ active: boolean }>`
 `;
 
 export const TabContent = styled.div`
-  padding: 20px 10px;
+  padding: 20px;
 `;

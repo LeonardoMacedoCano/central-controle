@@ -49,7 +49,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
 
       if (type === 'number') {
         formattedValue = parseFloat(event.target.value);
-        if (minValue && formattedValue < minValue) {
+        if ((minValue || minValue == 0) && formattedValue < minValue) {
           formattedValue = minValue;
         } else if (maxValue && formattedValue > maxValue) {
           formattedValue = maxValue;
