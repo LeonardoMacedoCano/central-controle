@@ -12,6 +12,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,24 +60,24 @@ public class UsuarioConfigServiceTest {
 
     @Test
     void testGetUsuarioConfigByUsuario_UsuarioConfigFound() {
-        Usuario usuario = new Usuario();
+        Usuario usuario = new Usuario(1L, "Usuario1", "senha1", new Date(), true);
         UsuarioConfig usuarioConfig = new UsuarioConfig();
         usuarioConfig.setUsuario(usuario);
 
-        when(usuarioConfigRepository.findByUsuario(usuario)).thenReturn(Optional.of(usuarioConfig));
+        when(usuarioConfigRepository.findByUsuarioId(usuario.getId())).thenReturn(Optional.of(usuarioConfig));
 
-        UsuarioConfig result = usuarioConfigService.getUsuarioConfigByUsuario(usuario);
+        UsuarioConfig result = usuarioConfigService.getUsuarioConfigByIdUsuario(usuario.getId());
 
         assertEquals(usuarioConfig, result);
     }
 
     @Test
     void testGetUsuarioConfigByUsuario_UsuarioConfigNotFound() {
-        Usuario usuario = new Usuario();
+        Usuario usuario = new Usuario(1L, "Usuario1", "senha1", new Date(), true);
 
-        when(usuarioConfigRepository.findByUsuario(usuario)).thenReturn(Optional.empty());
+        when(usuarioConfigRepository.findByUsuarioId(usuario.getId())).thenReturn(Optional.empty());
 
-        assertThrows(UsuarioException.UsuarioConfigNaoEncontrado.class, () -> usuarioConfigService.getUsuarioConfigByUsuario(usuario));
+        assertThrows(UsuarioException.UsuarioConfigNaoEncontrado.class, () -> usuarioConfigService.getUsuarioConfigByIdUsuario(usuario.getId()));
     }
 
     @Test

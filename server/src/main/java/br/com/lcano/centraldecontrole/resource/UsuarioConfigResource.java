@@ -28,6 +28,6 @@ public class UsuarioConfigResource {
     @GetMapping()
     public ResponseEntity<UsuarioConfigDTO> getUsuarioConfigByUsuario(HttpServletRequest request) {
         Usuario usuario = (Usuario) request.getAttribute("usuario");
-        return ResponseEntity.ok(UsuarioConfigDTO.converterParaDTO(usuarioConfigService.getUsuarioConfigByUsuario(usuario)));
+        return ResponseEntity.ok(UsuarioConfigDTO.converterParaDTO(usuarioConfigService.getUsuarioConfigByIdUsuario(usuario.getId())));
     }
 }

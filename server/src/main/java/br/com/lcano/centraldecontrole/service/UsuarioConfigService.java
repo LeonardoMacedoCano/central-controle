@@ -27,8 +27,8 @@ public class UsuarioConfigService {
                 .orElseThrow(() -> new UsuarioException.UsuarioConfigNaoEncontradoById(id));
     }
 
-    public UsuarioConfig getUsuarioConfigByUsuario(Usuario usuario) {
-        return usuarioConfigRepository.findByUsuario(usuario)
+    public UsuarioConfig getUsuarioConfigByIdUsuario(Long idUsuario) {
+        return usuarioConfigRepository.findByUsuarioId(idUsuario)
                 .orElseThrow(UsuarioException.UsuarioConfigNaoEncontrado::new);
     }
 

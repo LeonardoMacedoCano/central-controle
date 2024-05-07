@@ -40,7 +40,7 @@ public class UsuarioConfigResourceTest {
     @Test
     void testGetUsuarioConfigByUsuario() {
         HttpServletRequest request = mock(HttpServletRequest.class);
-        Usuario usuario = new Usuario("Usuario1", "senha1", new Date());
+        Usuario usuario = new Usuario(1L, "Usuario1", "senha1", new Date(), true);
 
         UsuarioConfig usuarioConfig = new UsuarioConfig();
         usuarioConfig.setId(1L);
@@ -52,7 +52,7 @@ public class UsuarioConfigResourceTest {
         UsuarioConfigDTO usuarioConfigDTO = UsuarioConfigDTO.converterParaDTO(usuarioConfig);
 
         when(request.getAttribute("usuario")).thenReturn(usuario);
-        when(usuarioConfigService.getUsuarioConfigByUsuario(usuario)).thenReturn(usuarioConfig);
+        when(usuarioConfigService.getUsuarioConfigByIdUsuario(usuario.getId())).thenReturn(usuarioConfig);
 
         ResponseEntity<UsuarioConfigDTO> responseEntity = usuarioConfigResource.getUsuarioConfigByUsuario(request);
 
