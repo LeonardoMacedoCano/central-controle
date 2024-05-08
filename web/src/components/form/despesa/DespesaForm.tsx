@@ -1,18 +1,41 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../../contexts/auth/AuthContext';
+import { useMessage } from '../../../contexts/message/ContextMessageProvider';
+import DespesaService from '../../../service/DespesaService';
 import { Despesa } from '../../../types/Despesa';
 import { Categoria } from '../../../types/Categoria';
-import FlexBox from '../../flexbox/FlexBox';
-import FieldValue from '../../fieldvalue/FieldValue';
 import { formatarDataParaString } from '../../../utils/DateUtils';
 import { formatarValorParaReal } from '../../../utils/ValorUtils';
+import FlexBox from '../../flexbox/FlexBox';
+import FieldValue from '../../fieldvalue/FieldValue';
 
 interface DespesaFormProps {
   despesa: Despesa;
-  categorias: Categoria[];
   onUpdate: (despesaAtualizada: Despesa) => void;
 }
 
-const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, categorias, onUpdate }) => {
+const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, onUpdate }) => {
+  const [categorias, setCategorias] = useState<Categoria[]>([]);
+  
+  const auth = useContext(AuthContext);
+  const message = useMessage();
+  const despesaService = DespesaService();
+
+  useEffect(() => {
+    const carregarCategoriasDespesa = async () => {
+      if (!auth.usuario?.token) return;
+  
+      try {
+        const result = await despesaService.getTodasCategoriasDespesa(auth.usuario?.token);
+        setCategorias(result || []);
+      } catch (error) {
+        message.showErrorWithLog('Erro ao carregar as categorias de despesa.', error);
+      }
+    };
+
+    carregarCategoriasDespesa();
+  }, []);
+
   const updateDespesa = (updatedFields: Partial<Despesa>) => {
     const despesaAtualizada: Despesa = {
       ...despesa!,

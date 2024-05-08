@@ -11,30 +11,14 @@ import ParcelaForm from '../../components/form/despesa/ParcelaForm';
 import Container from '../../components/container/Container';
 import FloatingButton from '../../components/button/floatingbutton/FloatingButton';
 import { FaCheck } from 'react-icons/fa';
-import { Despesa } from '../../types/Despesa';
+import { Despesa, initialDespesaState } from '../../types/Despesa';
 import { Parcela } from '../../types/Parcela';
-import { Categoria } from '../../types/Categoria';
 import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
 import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
-import { FormaPagamento } from '../../types/FormaPagamento';
-import ParcelaService from '../../service/ParcelaService';
-
-const initialDespesaState: Despesa = {
-  id: 0,
-  categoria: { id: 0, descricao: '' },
-  dataLancamento: getDataAtual(),
-  descricao: '',
-  valorTotal: 0,
-  situacao: '',
-  parcelas: []
-};
 
 const DespesaPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
-  const [token, setToken] = useState<string | null>(null);
   const [despesa, setDespesa] = useState<Despesa>(initialDespesaState);
-  const [categorias, setCategorias] = useState<Categoria[]>([]);
-  const [formasPagamento, setFormasPagamento] = useState<FormaPagamento[]>([]);
   const [numeroParcelaSelecionada, setNumeroParcelaSelecionada] = useState<number | null>(null);
   const [showParcelaForm, setShowParcelaForm] = useState<boolean>(false);
 
@@ -42,52 +26,23 @@ const DespesaPage: React.FC = () => {
   const auth = useContext(AuthContext);
   const message = useMessage();
   const despesaService = DespesaService();
-  const parcelaService = ParcelaService();
 
   const id = typeof idStr === 'string' ? parseInt(idStr, 10) : 0;
-
-  useEffect(() => {
-    setToken(auth.usuario?.token || null);
-  }, [auth.usuario?.token]);
 
   useEffect(() => {
     if (id > 0) {
       carregarDespesa(id);
     }
-    carregarCategoriasDespesa();
-    carregarFormasPagamento();
-  }, [token, id]);
+  }, [auth.usuario?.token, id]);
 
   const carregarDespesa = async (idDespesa: number) => {
-    if (!token) return;
+    if (!auth.usuario?.token) return;
 
     try {
-      const result = await despesaService.getDespesaByIdWithParcelas(token, idDespesa);
+      const result = await despesaService.getDespesaByIdWithParcelas(auth.usuario?.token, idDespesa);
       if (result) setDespesa(result);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar a despesa.', error);
-    }
-  };
-
-  const carregarCategoriasDespesa = async () => {
-    if (!token) return;
-
-    try {
-      const result = await despesaService.getTodasCategoriasDespesa(token);
-      setCategorias(result || []);
-    } catch (error) {
-      message.showErrorWithLog('Erro ao carregar as categorias de despesa.', error);
-    }
-  };
-
-  const carregarFormasPagamento = async () => {
-    if (!token) return;
-
-    try {
-      const result = await parcelaService.getTodasFormaPagamento(token);
-      setFormasPagamento(result || []);
-    } catch (error) {
-      message.showErrorWithLog('Erro ao carregar as formas de pagamento.', error);
     }
   };
 
@@ -96,15 +51,15 @@ const DespesaPage: React.FC = () => {
   };
 
   const salvarDespesa = async () => {
-    if (!token) return;
+    if (!auth.usuario?.token) return;
 
     try {
       let idDespesa = 0;
       if (id > 0) {
-        await despesaService.editarDespesa(token, id, despesa);
+        await despesaService.editarDespesa(auth.usuario?.token, id, despesa);
         idDespesa = id;
       } else {
-        const response = await despesaService.gerarDespesa(token, despesa);
+        const response = await despesaService.gerarDespesa(auth.usuario?.token, despesa);
         if (response?.idDespesa) idDespesa = response.idDespesa;
       }
       if (idDespesa > 0) carregarDespesa(idDespesa);
@@ -212,12 +167,12 @@ const DespesaPage: React.FC = () => {
       />
       {showParcelaForm ? (
         <Panel maxWidth='1000px' title='Parcela'>
-          <ParcelaForm parcela={despesa.parcelas[(numeroParcelaSelecionada || despesa.parcelas.length) - 1]} formasPagamento={formasPagamento} onUpdate={atualizarParcela} />
+          <ParcelaForm parcela={despesa.parcelas[(numeroParcelaSelecionada || despesa.parcelas.length) - 1]} onUpdate={atualizarParcela} />
         </Panel>
       ) : (
         <>
           <Panel maxWidth='1000px' title='Despesa'>
-            <DespesaForm despesa={despesa} categorias={categorias} onUpdate={atualizarDespesa} />
+            <DespesaForm despesa={despesa} onUpdate={atualizarDespesa} />
           </Panel>
           <Panel maxWidth='1000px' title='Parcelas' footer={despesa.parcelas.length > 0 && <></>}>
             <Table

@@ -4,53 +4,66 @@ import { AuthContext } from '../../contexts/auth/AuthContext';
 import { useMessage } from '../../contexts/message/ContextMessageProvider';
 import DespesaService from '../../service/DespesaService';
 import ParcelaService from '../../service/ParcelaService';
+import UsuarioConfigService from '../../service/UsuarioConfigService';
+import useConfirmModal from '../../hooks/useConfirmModal';
 import { Table, Column, TableToolbar } from '../../components/table/Table';
 import Panel from '../../components/panel/Panel';
 import Container from '../../components/container/Container';
 import FieldValue from '../../components/fieldvalue/FieldValue';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
-import useConfirmModal from '../../hooks/useConfirmModal';
 import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
 import { PagedResponse } from '../../types/PagedResponse';
+import { initialUsuarioConfigState } from '../../types/UsuarioConfig';
 import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
 import { formatarValorParaReal } from '../../utils/ValorUtils';
 
 const DespesaResumoMensalPage: React.FC = () => {
-  const [token, setToken] = useState<string | null>(null);
   const [dataSelecionada, setDataSelecionada] = useState(() => getDataAtual());
   const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
   const [despesasPage, setDespesasPage] = useState<PagedResponse<DespesaResumoMensal> | undefined>(undefined);
   const [valorTotal, setValorTotal] = useState<number>(0); 
   const [indexPagina, setIndexPagina] = useState<number>(0); 
-  const [registrosPorPagina, setRegistrosPorPagina] = useState<number>(10);  
+  const [registrosPorPagina, setRegistrosPorPagina] = useState<number | null>(null); 
 
   const auth = useContext(AuthContext);
   const message = useMessage();
   const navigate = useNavigate();
+  const usuarioConfigService = UsuarioConfigService();
   const despesaService = DespesaService();
   const parcelaService = ParcelaService();
 
   const { confirm, ConfirmModalComponent } = useConfirmModal();
 
   useEffect(() => {
-    setToken(auth.usuario?.token || null);
-  }, [auth.usuario?.token]);
+    const carregarConfiguracao = async () => {
+      if (!auth.usuario?.token) return;
+  
+      try {
+        const result = await usuarioConfigService.getUsuarioConfigByUsuario(auth.usuario?.token);
+        setRegistrosPorPagina(result?.despesaNumeroItemPagina || initialUsuarioConfigState.despesaNumeroItemPagina);
+      } catch (error) {
+        message.showErrorWithLog('Erro ao carregar as configurações do usuário.', error);
+      }
+    };
+
+    carregarConfiguracao();
+  }, []);
 
   useEffect(() => {
     carregarDespesaResumoMensal();
-  }, [token, dataSelecionada, indexPagina, registrosPorPagina]);
+  }, [auth.usuario?.token, dataSelecionada, indexPagina, registrosPorPagina]);
 
   const carregarDespesaResumoMensal = async () => {
-    if (!token) return;
+    if (!auth.usuario?.token || !registrosPorPagina) return;
 
     const [anoStr, mesStr] = formatarDataParaAnoMes(dataSelecionada).split('-');
     const ano = parseInt(anoStr);
     const mes = parseInt(mesStr);
 
     const [resultDespesas, resultValorTotal] = await Promise.all([
-      despesaService.listarDespesaResumoMensal(token, indexPagina, registrosPorPagina, ano, mes),
-      parcelaService.getValorTotalParcelasMensal(token, ano, mes)
+      despesaService.listarDespesaResumoMensal(auth.usuario?.token, indexPagina, registrosPorPagina, ano, mes),
+      parcelaService.getValorTotalParcelasMensal(auth.usuario?.token, ano, mes)
     ]);
 
     setDespesasPage(resultDespesas);
@@ -66,8 +79,8 @@ const DespesaResumoMensalPage: React.FC = () => {
   };
 
   const deletarDespesa = async () => {
-    if (token && idDespesaSelecionada) {
-      await despesaService.excluirDespesa(token, idDespesaSelecionada);
+    if (auth.usuario?.token && idDespesaSelecionada) {
+      await despesaService.excluirDespesa(auth.usuario?.token, idDespesaSelecionada);
       carregarDespesaResumoMensal();
     }
   };

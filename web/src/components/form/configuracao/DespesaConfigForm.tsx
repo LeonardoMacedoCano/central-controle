@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../../contexts/auth/AuthContext';
+import { useMessage } from '../../../contexts/message/ContextMessageProvider';
+import ParcelaService from '../../../service/ParcelaService';
 import { UsuarioConfig } from '../../../types/UsuarioConfig';
 import { FormaPagamento } from '../../../types/FormaPagamento';
 import FlexBox from '../../flexbox/FlexBox';
@@ -6,11 +9,31 @@ import FieldValue from '../../fieldvalue/FieldValue';
 
 interface DespesaConfigFormProps {
   usuarioConfig: UsuarioConfig;
-  formasPagamento: FormaPagamento[];
   onUpdate: (usuarioConfigAtualizado: UsuarioConfig) => void;
 }
 
-const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, formasPagamento, onUpdate }) => {
+const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, onUpdate }) => {
+  const [formasPagamento, setFormasPagamento] = useState<FormaPagamento[]>([]);
+
+  const auth = useContext(AuthContext);
+  const message = useMessage();
+  const parcelaService = ParcelaService();
+
+  useEffect(() => {
+    const carregarCategoriasDespesa = async () => {
+      if (!auth.usuario?.token) return;
+  
+      try {
+        const result = await parcelaService.getTodasFormaPagamento(auth.usuario?.token);
+        setFormasPagamento(result || []);
+      } catch (error) {
+        message.showErrorWithLog('Erro ao carregar as formas de pagamento.', error);
+      }
+    };
+
+    carregarCategoriasDespesa();
+  }, []);
+
   const updateUsuarioConfig = (updatedFields: Partial<UsuarioConfig>) => {
     const usuarioConfigAtualizado: UsuarioConfig = {
       ...usuarioConfig!,

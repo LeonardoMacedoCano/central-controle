@@ -1,17 +1,40 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { AuthContext } from '../../../contexts/auth/AuthContext';
+import { useMessage } from '../../../contexts/message/ContextMessageProvider';
+import ParcelaService from '../../../service/ParcelaService';
+import { formatarDataParaStringYMD } from '../../../utils/DateUtils';
+import { FormaPagamento } from '../../../types/FormaPagamento';
 import { Parcela } from '../../../types/Parcela';
 import FlexBox from '../../flexbox/FlexBox';
 import FieldValue from '../../fieldvalue/FieldValue';
-import { formatarDataParaStringYMD } from '../../../utils/DateUtils';
-import { FormaPagamento } from '../../../types/FormaPagamento';
 
 interface ParcelaFormProps {
   parcela: Parcela;
-  formasPagamento: FormaPagamento[];
   onUpdate: (parcelaAtualizada: Parcela) => void;
 }
 
-const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, formasPagamento, onUpdate }) => {
+const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
+  const [formasPagamento, setFormasPagamento] = useState<FormaPagamento[]>([]);
+
+  const auth = useContext(AuthContext);
+  const message = useMessage();
+  const parcelaService = ParcelaService();
+
+  useEffect(() => {
+    const carregarCategoriasDespesa = async () => {
+      if (!auth.usuario?.token) return;
+  
+      try {
+        const result = await parcelaService.getTodasFormaPagamento(auth.usuario?.token);
+        setFormasPagamento(result || []);
+      } catch (error) {
+        message.showErrorWithLog('Erro ao carregar as formas de pagamento.', error);
+      }
+    };
+
+    carregarCategoriasDespesa();
+  }, []);
+
   const updateParcela = (updatedFields: Partial<Parcela>) => {
     const parcelaAtualizada: Parcela = {
       ...parcela!,
