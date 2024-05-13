@@ -9,8 +9,6 @@ import { RequireAuth } from './contexts/auth/RequireAuth';
 import AppLayout from './components/applayout/AppLayout';
 import { Home } from './pages/home';
 import DespesaResumoMensalPage from './pages/controledespesas/DespesaResumoMensalPage';
-import ControleTarefas from './pages/controletarefas';
-import ControleIdeias from './pages/controleideias';
 import DespesaPage from './pages/controledespesas/DespesaPage';
 import ConfiguracaoPage from './pages/configuracao/ConfiguracaoPage';
 
@@ -28,8 +26,6 @@ const App: React.FC = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/controledespesas" element={<DespesaResumoMensalPage />} />
                   <Route path="/despesa/:idStr?" element={<DespesaPage />} />
-                  <Route path="/controletarefas" element={<ControleTarefas />} />
-                  <Route path="/controleideias" element={<ControleIdeias />} />
                   <Route path="/configuracao" element={<ConfiguracaoPage />} />
                 </Routes>
               </>

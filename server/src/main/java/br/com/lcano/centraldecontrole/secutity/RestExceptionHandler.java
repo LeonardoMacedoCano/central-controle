@@ -1,8 +1,6 @@
 package br.com.lcano.centraldecontrole.secutity;
 
 import br.com.lcano.centraldecontrole.exception.DespesaException;
-import br.com.lcano.centraldecontrole.exception.IdeiaException;
-import br.com.lcano.centraldecontrole.exception.TarefaException;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;
@@ -76,28 +74,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({TarefaException.CategoriaTarefaNaoEncontradaById.class})
-    protected ResponseEntity<Object> handleCategoriaTarefaNaoEncontradaById(TarefaException.CategoriaTarefaNaoEncontradaById ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
     @ExceptionHandler({DespesaException.FormaPagamentoNaoEncontradaById.class})
     protected ResponseEntity<Object> handleFormaPagamentoNaoEncontradaById(DespesaException.FormaPagamentoNaoEncontradaById ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({TarefaException.TarefaNaoEncontradaById.class})
-    protected ResponseEntity<Object> handleTarefaNaoEncontradaById(TarefaException.TarefaNaoEncontradaById ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler({IdeiaException.CategoriaIdeiaNaoEncontradaById.class})
-    protected ResponseEntity<Object> handleCategoriaIdeiaNaoEncontradaById(IdeiaException.CategoriaIdeiaNaoEncontradaById ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler({IdeiaException.IdeiaNaoEncontradaById.class})
-    protected ResponseEntity<Object> handleIdeiaNaoEncontradaById(IdeiaException.IdeiaNaoEncontradaById ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
 }

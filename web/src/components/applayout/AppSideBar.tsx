@@ -3,10 +3,7 @@ import * as C from './styles';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import {
   FaHome,
-  FaCommentMedical,
   FaRegSun,
-  FaCheckCircle,
-  FaRegCalendarAlt,
   FaDollarSign,
   FaSignOutAlt,
   FaAngleLeft,
@@ -33,9 +30,6 @@ const AppSidebar: React.FC = () => {
   const sidebarItems = [
     { to: "/", Icon: FaHome, Text: "Home" },
     { to: "/controledespesas", Icon: FaDollarSign, Text: "Controle de despesas" },
-    { to: "/controletarefas", Icon: FaCheckCircle, Text: "Controle de tarefas" },
-    { to: "/controleideias", Icon: FaCommentMedical, Text: "Controle de ideias" },
-    { to: "/", Icon: FaRegCalendarAlt, Text: "Calendario" },
     { to: "/configuracao", Icon: FaRegSun, Text: "Configuração" },
     { to: "/", Icon: FaSignOutAlt, Text: "Sair", onClick: handleLogout },
   ];
