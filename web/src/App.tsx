@@ -5,6 +5,7 @@ import darkOnyxAmber from './styles/themes/darkOnyxAmber';
 import GlobalStyles from './styles/GlobalStyles';
 import ContextMessageProvider from './contexts/message/ContextMessageProvider';
 import { AuthProvider } from './contexts/auth/AuthProvider';
+import { UsuarioConfigProvider } from './contexts/usuarioconfig/UsuarioConfigProvider';
 import { RequireAuth } from './contexts/auth/RequireAuth';
 import AppLayout from './components/applayout/AppLayout';
 import { Home } from './pages/home';
@@ -17,20 +18,22 @@ const App: React.FC = () => {
     <ThemeProvider theme={darkOnyxAmber}>
       <ContextMessageProvider>
         <AuthProvider>
-          <BrowserRouter>
-            <GlobalStyles />
-            <RequireAuth>
-              <>
-                <AppLayout />
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/controledespesas" element={<DespesaResumoMensalPage />} />
-                  <Route path="/despesa/:idStr?" element={<DespesaPage />} />
-                  <Route path="/configuracao" element={<ConfiguracaoPage />} />
-                </Routes>
-              </>
-            </RequireAuth>
-          </BrowserRouter>
+          <UsuarioConfigProvider>
+            <BrowserRouter>
+              <GlobalStyles />
+              <RequireAuth>
+                <>
+                  <AppLayout />
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/controledespesas" element={<DespesaResumoMensalPage />} />
+                    <Route path="/despesa/:idStr?" element={<DespesaPage />} />
+                    <Route path="/configuracao" element={<ConfiguracaoPage />} />
+                  </Routes>
+                </>
+              </RequireAuth>
+            </BrowserRouter>
+          </UsuarioConfigProvider>
         </AuthProvider>
       </ContextMessageProvider>
     </ThemeProvider>

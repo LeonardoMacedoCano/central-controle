@@ -42,9 +42,9 @@ const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, on
     onUpdate(usuarioConfigAtualizado);
   };
 
-  const handleNumeroItemPagina = (value: any) => {
+  const handleNumeroMaxItemPagina = (value: any) => {
     if (typeof value === 'number') {
-      updateUsuarioConfig({ despesaNumeroItemPagina: value });
+      updateUsuarioConfig({ despesaNumeroMaxItemPagina: value });
     }
   };
 
@@ -71,12 +71,12 @@ const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, on
       <FlexBox flexDirection="row">
         <FlexBox.Item borderBottom>
           <FieldValue 
-            description='Numero Item Pagina'
+            description='Numero Max. Item Pagina'
             type='number'
-            value={usuarioConfig.despesaNumeroItemPagina}
+            value={usuarioConfig.despesaNumeroMaxItemPagina}
             minValue={1}
             editable={true}
-            onUpdate={handleNumeroItemPagina}
+            onUpdate={handleNumeroMaxItemPagina}
           />
         </FlexBox.Item>
       </FlexBox>

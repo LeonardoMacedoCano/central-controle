@@ -13,7 +13,7 @@ const UsuarioConfigService = (): UsuarioConfigApi => {
 
   const usuarioConfigPayload = (data: UsuarioConfig) => ({
     id: data.id,
-    despesaNumeroItemPagina: data.despesaNumeroItemPagina,
+    despesaNumeroMaxItemPagina: data.despesaNumeroMaxItemPagina,
     despesaValorMetaMensal: data.despesaValorMetaMensal,
     despesaDiaPadraoVencimento: data.despesaDiaPadraoVencimento,
     despesaFormaPagamentoPadrao: data.despesaFormaPagamentoPadrao

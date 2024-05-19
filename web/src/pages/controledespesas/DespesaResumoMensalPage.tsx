@@ -4,7 +4,6 @@ import { AuthContext } from '../../contexts/auth/AuthContext';
 import { useMessage } from '../../contexts/message/ContextMessageProvider';
 import DespesaService from '../../service/DespesaService';
 import ParcelaService from '../../service/ParcelaService';
-import UsuarioConfigService from '../../service/UsuarioConfigService';
 import useConfirmModal from '../../hooks/useConfirmModal';
 import { Table, Column, TableToolbar } from '../../components/table/Table';
 import Panel from '../../components/panel/Panel';
@@ -14,9 +13,9 @@ import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
 import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
 import { PagedResponse } from '../../types/PagedResponse';
-import { initialUsuarioConfigState } from '../../types/UsuarioConfig';
 import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
 import { formatarValorParaReal } from '../../utils/ValorUtils';
+import { UsuarioConfigContext } from '../../contexts/usuarioconfig/UsuarioConfigContext';
 
 const DespesaResumoMensalPage: React.FC = () => {
   const [dataSelecionada, setDataSelecionada] = useState(() => getDataAtual());
@@ -25,30 +24,28 @@ const DespesaResumoMensalPage: React.FC = () => {
   const [valorTotal, setValorTotal] = useState<number>(0); 
   const [indexPagina, setIndexPagina] = useState<number>(0); 
   const [registrosPorPagina, setRegistrosPorPagina] = useState<number | null>(null); 
-
+  const { usuarioConfig } = useContext(UsuarioConfigContext);
+  const { confirm, ConfirmModalComponent } = useConfirmModal();
+  
   const auth = useContext(AuthContext);
   const message = useMessage();
   const navigate = useNavigate();
-  const usuarioConfigService = UsuarioConfigService();
   const despesaService = DespesaService();
   const parcelaService = ParcelaService();
 
-  const { confirm, ConfirmModalComponent } = useConfirmModal();
-
   useEffect(() => {
     const carregarConfiguracao = async () => {
-      if (!auth.usuario?.token) return;
-  
+      if (!auth.usuario?.token || !usuarioConfig) return; 
+
       try {
-        const result = await usuarioConfigService.getUsuarioConfigByUsuario(auth.usuario?.token);
-        setRegistrosPorPagina(result?.despesaNumeroItemPagina || initialUsuarioConfigState.despesaNumeroItemPagina);
+        setRegistrosPorPagina(usuarioConfig.despesaNumeroMaxItemPagina);
       } catch (error) {
         message.showErrorWithLog('Erro ao carregar as configurações do usuário.', error);
       }
     };
-
+  
     carregarConfiguracao();
-  }, []);
+  }, [auth.usuario?.token, usuarioConfig]);  
 
   useEffect(() => {
     carregarDespesaResumoMensal();
