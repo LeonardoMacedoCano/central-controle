@@ -132,6 +132,7 @@ const DespesaResumoMensalPage: React.FC = () => {
               value={formatarValorParaReal(valorTotal)}
               width='160px'
               inputWidth='150px' 
+              variant={valorTotal > usuarioConfig.despesaValorMetaMensal ? 'warning': 'success'}
             />
           </FlexBox.Item>
         </FlexBox>

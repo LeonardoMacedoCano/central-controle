@@ -7,6 +7,7 @@ import { SelectValue } from '../../types/SelectValue';
 type FieldValueProps = {
   type: 'string' | 'number' | 'boolean' | 'date' | 'month' | 'select';
   value: string | number | boolean | SelectValue;
+  variant?: 'success' | 'info' | 'warning';
   description?: string;
   editable?: boolean;
   width?: string;
@@ -27,6 +28,7 @@ type FieldValueProps = {
 const FieldValue: React.FC<FieldValueProps> = ({
   type,
   value,
+  variant,
   description,
   editable,
   width,
@@ -92,6 +94,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
           disabled={!editable}
           inputWidth={inputWidth}
           inline={inline}
+          variant={variant}
         >
           <option value=''>{placeholder || 'Selecione uma opção'}</option>
           {options?.map((option) => (
@@ -107,6 +110,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
           disabled={!editable}
           inputWidth={inputWidth}
           inline={inline}
+          variant={variant}
         >
           <option value="true">Sim</option>
           <option value="false">Não</option>
@@ -127,6 +131,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
             inline={inline}
             onKeyDown={onKeyDown}
             placeholder={placeholder}
+            variant={variant}
           />
         </>
       )}
