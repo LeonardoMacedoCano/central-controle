@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
+import { UsuarioConfigContext } from '../../contexts/usuarioconfig/UsuarioConfigContext';
+import { useMessage } from '../../contexts/message/ContextMessageProvider';
 import DespesaService from '../../service/DespesaService';
 import useConfirmModal from '../../hooks/useConfirmModal';
-import { useMessage } from '../../contexts/message/ContextMessageProvider';
 import Panel from '../../components/panel/Panel';
 import { Table, Column, TableToolbar } from '../../components/table/Table';
 import DespesaForm from '../../components/form/despesa/DespesaForm';
@@ -21,7 +22,7 @@ const DespesaPage: React.FC = () => {
   const [despesa, setDespesa] = useState<Despesa>(initialDespesaState);
   const [numeroParcelaSelecionada, setNumeroParcelaSelecionada] = useState<number | null>(null);
   const [showParcelaForm, setShowParcelaForm] = useState<boolean>(false);
-
+  const { usuarioConfig } = useContext(UsuarioConfigContext);
   const { confirm, ConfirmModalComponent } = useConfirmModal();
   const auth = useContext(AuthContext);
   const message = useMessage();
@@ -68,12 +69,26 @@ const DespesaPage: React.FC = () => {
     }
   };
 
+  const getDataVencimentoPadrao = (): Date => {
+    const dataAtual = getDataAtual();
+    const anoAtual = dataAtual.getFullYear();
+    const mesAtual = dataAtual.getMonth();
+    const diaAtual = dataAtual.getDate();
+    const diaPadraoVencimento = usuarioConfig.despesaDiaPadraoVencimento;
+  
+    let mes = diaAtual > diaPadraoVencimento ? mesAtual + 1 : mesAtual;
+    const ano = mes > 11 ? anoAtual + 1 : anoAtual;
+    mes = mes % 12;
+
+    return new Date(ano, mes, diaPadraoVencimento);
+  };
+
   const adicionarNovaParcela = () => {
     const novoNumeroParcela = despesa.parcelas.length > 0 ? despesa.parcelas[despesa.parcelas.length - 1].numero + 1 : 1;
     const novaParcela: Parcela = {
       id: 0,
       numero: novoNumeroParcela,
-      dataVencimento: getDataAtual(),
+      dataVencimento: getDataVencimentoPadrao(),
       valor: 0,
       pago: false,
       formaPagamento: null
