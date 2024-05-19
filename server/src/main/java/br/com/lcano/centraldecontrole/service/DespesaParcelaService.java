@@ -4,7 +4,6 @@ import br.com.lcano.centraldecontrole.domain.Despesa;
 import br.com.lcano.centraldecontrole.domain.DespesaParcela;
 import br.com.lcano.centraldecontrole.dto.DespesaParcelaDTO;
 import br.com.lcano.centraldecontrole.repository.DespesaParcelaRepository;
-import br.com.lcano.centraldecontrole.repository.FormaPagamentoRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,15 +14,12 @@ import java.util.stream.Collectors;
 @Service
 public class DespesaParcelaService {
     private final DespesaParcelaRepository despesaParcelaRepository;
-    private final FormaPagamentoRepository formaPagamentoRepository;
     private final FormaPagamentoService formaPagamentoService;
 
     @Autowired
     public DespesaParcelaService(DespesaParcelaRepository despesaParcelaRepository,
-                                 FormaPagamentoRepository formaPagamentoRepository,
                                  FormaPagamentoService formaPagamentoService) {
         this.despesaParcelaRepository = despesaParcelaRepository;
-        this.formaPagamentoRepository = formaPagamentoRepository;
         this.formaPagamentoService = formaPagamentoService;
     }
 
@@ -59,8 +55,11 @@ public class DespesaParcelaService {
 
         if (parcelaDTO.getFormaPagamento() != null && parcelaDTO.getFormaPagamento().getId() != null) {
             parcelaExistente.setFormaPagamento(formaPagamentoService.getFormaPagamentoById(parcelaDTO.getFormaPagamento().getId()));
+        } else {
+            parcelaExistente.setFormaPagamento(null);
         }
     }
+
     public List<DespesaParcela> atualizarParcelas(Despesa despesaExistente, List<DespesaParcelaDTO> parcelasDTO) {
         List<DespesaParcela> parcelasAtualizadas = new ArrayList<>();
 

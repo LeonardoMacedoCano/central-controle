@@ -119,7 +119,8 @@ const DespesaPage: React.FC = () => {
     if (parcelaSelecionada) {
       const updatedParcela: Parcela = {
         ...parcelaSelecionada,
-        pago: !parcelaSelecionada.pago
+        pago: !parcelaSelecionada.pago,
+        formaPagamento: !parcelaSelecionada.pago && !parcelaSelecionada.formaPagamento ? usuarioConfig.despesaFormaPagamentoPadrao : parcelaSelecionada.formaPagamento
       };
 
       const updatedParcelas = despesa.parcelas.map(p => p.numero === numeroParcelaSelecionada ? updatedParcela : p);
@@ -128,7 +129,12 @@ const DespesaPage: React.FC = () => {
   };
 
   const atualizarParcela = (parcelaAtualizada: Parcela) => {
-    const updatedParcelas = despesa.parcelas.map(p => p.numero === parcelaAtualizada.numero ? parcelaAtualizada : p);
+    const updatedParcela = {
+      ...parcelaAtualizada,
+      formaPagamento: parcelaAtualizada.pago && !parcelaAtualizada.formaPagamento ? usuarioConfig.despesaFormaPagamentoPadrao : parcelaAtualizada.formaPagamento
+    };
+  
+    const updatedParcelas = despesa.parcelas.map(p => p.numero === updatedParcela.numero ? updatedParcela : p);
     atualizarDespesa({ parcelas: updatedParcelas });
   };
 

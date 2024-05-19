@@ -4,7 +4,6 @@ import br.com.lcano.centraldecontrole.domain.*;
 import br.com.lcano.centraldecontrole.dto.DespesaParcelaDTO;
 import br.com.lcano.centraldecontrole.dto.FormaPagamentoDTO;
 import br.com.lcano.centraldecontrole.repository.DespesaParcelaRepository;
-import br.com.lcano.centraldecontrole.repository.FormaPagamentoRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,14 +25,12 @@ public class DespesaParcelaServiceTest {
     @InjectMocks
     private DespesaParcelaService despesaParcelaService;
     @Mock
-    private FormaPagamentoRepository formaPagamentoRepository;
-    @Mock
     private FormaPagamentoService formaPagamentoService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        despesaParcelaService = new DespesaParcelaService(despesaParcelaRepository, formaPagamentoRepository, formaPagamentoService);
+        despesaParcelaService = new DespesaParcelaService(despesaParcelaRepository, formaPagamentoService);
     }
 
     @Test

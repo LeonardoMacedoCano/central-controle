@@ -30,7 +30,7 @@ public class UsuarioConfigDTOTest {
         UsuarioConfigDTO dto = UsuarioConfigDTO.converterParaDTO(usuarioConfig);
 
         assertEquals(usuarioConfig.getId(), dto.getId());
-        assertEquals(usuarioConfig.getDespesaNumeroMaxItemPagina(), dto.getDespesaNumeroItemPagina());
+        assertEquals(usuarioConfig.getDespesaNumeroMaxItemPagina(), dto.getDespesaNumeroMaxItemPagina());
         assertEquals(usuarioConfig.getDespesaDiaPadraoVencimento(), dto.getDespesaDiaPadraoVencimento());
         assertEquals(usuarioConfig.getDespesaValorMetaMensal(), dto.getDespesaValorMetaMensal());
         assertEquals(usuarioConfig.getDespesaFormaPagamentoPadrao(), dto.getDespesaFormaPagamentoPadrao());
