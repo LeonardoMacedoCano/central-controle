@@ -45,7 +45,7 @@ public class UsuarioConfigResourceTest {
         UsuarioConfig usuarioConfig = new UsuarioConfig();
         usuarioConfig.setId(1L);
         usuarioConfig.setUsuario(usuario);
-        usuarioConfig.setDespesaNumeroItemPagina(10);
+        usuarioConfig.setDespesaNumeroMaxItemPagina(10);
         usuarioConfig.setDespesaValorMetaMensal(100.0);
         usuarioConfig.setDespesaDiaPadraoVencimento(15);
 

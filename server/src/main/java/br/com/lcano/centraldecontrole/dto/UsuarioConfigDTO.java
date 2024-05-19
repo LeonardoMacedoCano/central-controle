@@ -8,7 +8,7 @@ import lombok.Data;
 public class UsuarioConfigDTO {
     private Long id;
 
-    private int despesaNumeroItemPagina;
+    private int despesaNumeroMaxItemPagina;
 
     private double despesaValorMetaMensal;
 
@@ -20,7 +20,7 @@ public class UsuarioConfigDTO {
         UsuarioConfigDTO dto = new UsuarioConfigDTO();
 
         dto.setId(usuarioConfig.getId());
-        dto.setDespesaNumeroItemPagina(usuarioConfig.getDespesaNumeroItemPagina());
+        dto.setDespesaNumeroMaxItemPagina(usuarioConfig.getDespesaNumeroMaxItemPagina());
         dto.setDespesaValorMetaMensal(usuarioConfig.getDespesaValorMetaMensal());
         dto.setDespesaDiaPadraoVencimento(usuarioConfig.getDespesaDiaPadraoVencimento());
         dto.setDespesaFormaPagamentoPadrao(usuarioConfig.getDespesaFormaPagamentoPadrao());

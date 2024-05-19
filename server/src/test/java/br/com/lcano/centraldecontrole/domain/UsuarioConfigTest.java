@@ -18,7 +18,7 @@ public class UsuarioConfigTest {
         UsuarioConfig usuarioConfig = new UsuarioConfig(usuario);
 
         assertEquals(usuario, usuarioConfig.getUsuario());
-        assertEquals(10, usuarioConfig.getDespesaNumeroItemPagina());
+        assertEquals(10, usuarioConfig.getDespesaNumeroMaxItemPagina());
         assertEquals(0.0, usuarioConfig.getDespesaValorMetaMensal());
         assertEquals(10, usuarioConfig.getDespesaDiaPadraoVencimento());
     }
@@ -31,14 +31,14 @@ public class UsuarioConfigTest {
 
         usuarioConfig.setId(1L);
         usuarioConfig.setUsuario(usuario);
-        usuarioConfig.setDespesaNumeroItemPagina(20);
+        usuarioConfig.setDespesaNumeroMaxItemPagina(20);
         usuarioConfig.setDespesaValorMetaMensal(100.0);
         usuarioConfig.setDespesaDiaPadraoVencimento(15);
         usuarioConfig.setDespesaFormaPagamentoPadrao(formaPagamento);
 
         assertEquals(1L, usuarioConfig.getId());
         assertEquals(usuario, usuarioConfig.getUsuario());
-        assertEquals(20, usuarioConfig.getDespesaNumeroItemPagina());
+        assertEquals(20, usuarioConfig.getDespesaNumeroMaxItemPagina());
         assertEquals(100.0, usuarioConfig.getDespesaValorMetaMensal());
         assertEquals(15, usuarioConfig.getDespesaDiaPadraoVencimento());
         assertEquals(formaPagamento, usuarioConfig.getDespesaFormaPagamentoPadrao());

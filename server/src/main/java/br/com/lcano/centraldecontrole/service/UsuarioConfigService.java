@@ -41,7 +41,7 @@ public class UsuarioConfigService {
     @Transactional
     public void editarUsuarioConfig(Long idUsuarioConfig, UsuarioConfigDTO data) {
         UsuarioConfig usuarioConfigExistente = getUsuarioConfigById(idUsuarioConfig);
-        usuarioConfigExistente.setDespesaNumeroItemPagina(data.getDespesaNumeroItemPagina());
+        usuarioConfigExistente.setDespesaNumeroMaxItemPagina(data.getDespesaNumeroMaxItemPagina());
         usuarioConfigExistente.setDespesaValorMetaMensal(data.getDespesaValorMetaMensal());
         usuarioConfigExistente.setDespesaDiaPadraoVencimento(data.getDespesaDiaPadraoVencimento());
         usuarioConfigExistente.setDespesaFormaPagamentoPadrao(data.getDespesaFormaPagamentoPadrao());

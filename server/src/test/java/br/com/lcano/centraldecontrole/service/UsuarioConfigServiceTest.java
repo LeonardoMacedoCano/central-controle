@@ -94,7 +94,7 @@ public class UsuarioConfigServiceTest {
         UsuarioConfig usuarioConfig = new UsuarioConfig();
         usuarioConfig.setId(1L);
         UsuarioConfigDTO data = new UsuarioConfigDTO();
-        data.setDespesaNumeroItemPagina(20);
+        data.setDespesaNumeroMaxItemPagina(20);
         data.setDespesaValorMetaMensal(100.0);
         data.setDespesaDiaPadraoVencimento(15);
         FormaPagamento formaPagamento = new FormaPagamento();
@@ -104,7 +104,7 @@ public class UsuarioConfigServiceTest {
 
         usuarioConfigService.editarUsuarioConfig(1L, data);
 
-        assertEquals(20, usuarioConfig.getDespesaNumeroItemPagina());
+        assertEquals(20, usuarioConfig.getDespesaNumeroMaxItemPagina());
         assertEquals(100.0, usuarioConfig.getDespesaValorMetaMensal());
         assertEquals(15, usuarioConfig.getDespesaDiaPadraoVencimento());
         assertEquals(formaPagamento, usuarioConfig.getDespesaFormaPagamentoPadrao());

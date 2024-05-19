@@ -24,8 +24,8 @@ public class UsuarioConfig implements Serializable {
     @JoinColumn(name = "idusuario", nullable = false)
     private Usuario usuario;
 
-    @Column(name = "despesanumeroitempagina", columnDefinition = "INT DEFAULT 10")
-    private int despesaNumeroItemPagina;
+    @Column(name = "despesanumeromaxitempagina", columnDefinition = "INT DEFAULT 10")
+    private int despesaNumeroMaxItemPagina;
 
     @Column(name = "despesavalormetamensal")
     private double despesaValorMetaMensal;
@@ -39,7 +39,7 @@ public class UsuarioConfig implements Serializable {
 
     public UsuarioConfig(Usuario usuario) {
         this.usuario = usuario;
-        this.despesaNumeroItemPagina = 10;
+        this.despesaNumeroMaxItemPagina = 10;
         this.despesaValorMetaMensal = 0.0;
         this.despesaDiaPadraoVencimento = 10;
     }

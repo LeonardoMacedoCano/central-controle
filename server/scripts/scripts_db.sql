@@ -6,9 +6,6 @@ CREATE TABLE usuario (
 	ativo CHAR(1) DEFAULT 'S'
 );
 
-INSERT INTO usuario (id, username, senha, datainclusao, ativo)
-VALUES(1, 'user1', '$2a$10$2FQaqTlAqTPZz0n5eAbqpeap8Ac1vhW.hQhbidlpXBy08k5OAgM3a', '2024-01-01', 'S');
-
 CREATE TABLE formapagamento (
     id INT PRIMARY KEY,
     descricao VARCHAR(100) NOT NULL
@@ -17,13 +14,20 @@ CREATE TABLE formapagamento (
 CREATE TABLE usuarioconfig (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idusuario INT NOT NULL UNIQUE,
-    despesanumeroitempagina INT DEFAULT 10,
+    despesanumeromaxitempagina INT DEFAULT 10,
     despesavalormetamensal DECIMAL(10, 2),
     despesadiapadraovencimento INT DEFAULT 10,
     despesaidformapagamentopadrao INT,
     FOREIGN KEY (idusuario) REFERENCES usuario(id),
 	FOREIGN KEY (despesaidformapagamentopadrao) REFERENCES formapagamento(id)
 );
+
+INSERT INTO usuario (id, username, senha, datainclusao, ativo)
+VALUES(1, 'user1', '$2a$10$2FQaqTlAqTPZz0n5eAbqpeap8Ac1vhW.hQhbidlpXBy08k5OAgM3a', '2024-01-01', 'S');
+
+INSERT INTO usuarioconfig
+(id, idusuario, despesanumeromaxitempagina, despesavalormetamensal, despesadiapadraovencimento, despesaidformapagamentopadrao)
+VALUES(1, 1, 10, 0, 10, NULL);
 
 CREATE TABLE categoriadespesa (
     id INT AUTO_INCREMENT PRIMARY KEY,
