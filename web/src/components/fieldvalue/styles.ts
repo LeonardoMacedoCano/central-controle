@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { getVariantColor } from '../../utils/styledUtils';
 
 interface FieldValueProps {
   width?: string;
@@ -35,30 +36,12 @@ interface StyledInputProps {
   variant?: 'success' | 'info' | 'warning';
 }
 
-const getButtonVariantStyles = (variant: StyledInputProps['variant'], theme: any) => {
-  const colors = theme.colors;
-
-  switch (variant) {
-    case 'success':
-    case 'info':
-    case 'warning':
-      return css`
-        color: ${colors[variant]};
-        background-color: transparent;
-      `;
-    default:
-      return css`
-        color: ${colors.white};
-        background-color: transparent;
-      `;
-  }
-};
-
 export const StyledInput = styled.input<StyledInputProps>`
   width: ${({ inputWidth }) => inputWidth || '100%'};
   font-size: 15px;
   height: 100%;
   outline: none;
+  background-color: transparent;
   margin-left: ${({ inline }) => (inline ? '5px' : 'none')};
   cursor: ${({ readOnly }) => (readOnly ? 'not-allowed' : 'pointer')};
 
@@ -66,7 +49,11 @@ export const StyledInput = styled.input<StyledInputProps>`
     filter: invert(100%);
   }
 
-  ${({ variant, theme }) => getButtonVariantStyles(variant, theme)}
+  ${({ variant, theme }) =>
+    variant && css`
+      color: ${getVariantColor(variant, theme)};
+    `
+  }
 `;
 
 export const StyledSelect = styled.select<StyledInputProps>`
@@ -74,9 +61,14 @@ export const StyledSelect = styled.select<StyledInputProps>`
   font-size: 15px;
   height: 100%;
   outline: none;
+  background-color: transparent;
   margin-left: ${({ inline }) => (inline ? '5px' : 'none')};
 
-  ${({ variant, theme }) => getButtonVariantStyles(variant, theme)}
+  ${({ variant, theme }) =>
+    variant && css`
+      color: ${getVariantColor(variant, theme)};
+    `
+  }
 
   option {
     color: ${({ theme }) => theme.colors.white};

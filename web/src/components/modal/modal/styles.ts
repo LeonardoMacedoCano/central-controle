@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { getVariantColor } from '../../../utils/styledUtils';
 
 interface ModalContainerProps {
   width: string;
@@ -21,30 +22,39 @@ export const ModalOverlay = styled.div`
 export const ModalContainer = styled.div<ModalContainerProps>`
   width: ${({ width }) => width};
   height: ${({ height }) => height};
-  padding: 20px;
   background-color: ${({ theme }) => theme.colors.primary};
   border-radius: 8px;
   box-shadow: 0 0 5px 5px ${({ theme }) => theme.colors.secondary};
 `;
 
-export const ModalHeader = styled.div`
+interface ModalHeaderProps {
+  variant: 'success' | 'info' | 'warning';
+}
+export const ModalHeader = styled.div<ModalHeaderProps>`
+  color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ variant, theme }) => getVariantColor(variant, theme)};
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  border-top-right-radius: 8px;
+  border-top-left-radius: 8px; 
+  margin-bottom: 10px;
+  padding: 10px;
 `;
 
-export const ModalTitle = styled.h2`
+export const ModalTitle = styled.div<ModalHeaderProps>`
   margin: 0;
-  color: ${({ theme }) => theme.colors.quaternary};
+  color: ${({ variant, theme }) => getVariantColor(variant, theme)};
+  padding: 10px 20px;
 `;
 
 export const ModalContent = styled.div`
-  margin-bottom: 20px;
+  padding: 10px 20px;
 `;
 
 export const ModalActions = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  padding: 20px;
 `;

@@ -1,7 +1,6 @@
 import React from 'react';
 import Modal from '../modal/Modal';
 import Button from '../../button/button/Button';
-import { FaCheck, FaTimes } from "react-icons/fa";
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -14,34 +13,31 @@ interface ConfirmModalProps {
 const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, title, content, onClose, onConfirm }) => {
   const confirmButton = (
     <Button 
-      variant="success"
-      width="50px"
-      height="25px"
+      variant="warning"
+      width="100px"
+      height="30px"
       style={{
         borderRadius: '5px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      icon={<FaCheck/>}
-      hint="Sim"
+      description="ACEITAR"
       onClick={() => { onConfirm(); onClose(); }}
     />
   );
 
   const cancelButton = (
     <Button 
-      variant="warning"
-      width="50px"
-      height="25px"
+      width="100px"
+      height="30px"
       style={{
         borderRadius: '5px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      icon={<FaTimes/>}
-      hint="Não"
+      description="CANCELAR"
       onClick={onClose}
     />
   );
@@ -51,13 +47,13 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, title, content, onC
       isOpen={isOpen}
       title={title}
       content={content}
-      modalWidth='350px'
+      modalWidth='400px'
       onClose={onClose}
       showCloseButton={false}
       actions={
         <>
-          {confirmButton}
           {cancelButton}
+          {confirmButton}
         </>
       }
     />

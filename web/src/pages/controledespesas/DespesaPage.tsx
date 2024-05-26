@@ -168,7 +168,7 @@ const DespesaPage: React.FC = () => {
   const handleClickRow = (item: Parcela) => setNumeroParcelaSelecionada(prevId => prevId === item.numero ? null : item.numero);
 
   const handleDeletarParcela = async () => {
-    const result = await confirm("Confirmação", `Deseja realmente deletar a parcela ${numeroParcelaSelecionada}?`);
+    const result = await confirm(`Exclusão da parcela n.º ${numeroParcelaSelecionada}`, `Tem certeza de que deseja excluir esta parcela? Esta ação não pode ser desfeita e a parcela será removida permanentemente.`);
 
     if (result) {
       deletarParcela();

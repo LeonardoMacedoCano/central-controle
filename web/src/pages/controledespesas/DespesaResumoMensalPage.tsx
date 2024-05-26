@@ -93,7 +93,7 @@ const DespesaResumoMensalPage: React.FC = () => {
   const handleEditDespesa = () => navigate(`/despesa/${idDespesaSelecionada}`);
 
   const handleDeletarParcela = async () => {
-    const result = await confirm("Confirmação", `Deseja realmente deletar essa despesa?`);
+    const result = await confirm("Exclusão de despesa", `Tem certeza de que deseja excluir esta despesa? Esta ação não pode ser desfeita e a despesa será removida permanentemente.`);
 
     if (result) {
       deletarDespesa();

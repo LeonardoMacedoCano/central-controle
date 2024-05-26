@@ -39,6 +39,7 @@ export const TableColumnTitle = styled.div`
   display: flex;
   align-items: center;
   box-sizing: border-box;
+  color: ${({ theme }) => theme.colors.quaternary};
 `;
 
 export const TableRow = styled.tr<{ isSelected?: boolean }>`
