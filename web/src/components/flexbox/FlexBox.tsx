@@ -6,6 +6,10 @@ interface FlexBoxProps {
   width?: string;
   height?: string;
   flexDirection?: 'row' | 'column';
+  borderTop?: boolean;
+  borderBottom?: boolean;
+  borderRight?: boolean;
+  borderLeft?: boolean;
   style?: CSSProperties;
 }
 

@@ -50,7 +50,7 @@ export const StyledInput = styled.input<StyledInputProps>`
   }
 
   ${({ variant, theme }) =>
-    variant && css`
+    variant &&css`
       color: ${getVariantColor(variant, theme)};
     `
   }
@@ -65,10 +65,10 @@ export const StyledSelect = styled.select<StyledInputProps>`
   margin-left: ${({ inline }) => (inline ? '5px' : 'none')};
 
   ${({ variant, theme }) =>
-    variant && css`
+    variant &&
+    css`
       color: ${getVariantColor(variant, theme)};
-    `
-  }
+    `}
 
   option {
     color: ${({ theme }) => theme.colors.white};

@@ -67,11 +67,12 @@ const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, on
   };
 
   return (
-    <FlexBox flexDirection="column">
-      <FlexBox flexDirection="row">
-        <FlexBox.Item borderBottom>
+    <FlexBox flexDirection="column" borderTop borderBottom borderLeft borderRight>
+      <FlexBox flexDirection="row" >
+        <FlexBox.Item borderRight >
           <FieldValue 
-            description='Numero Max. Item Pagina'
+            description='Número Itens Página'
+            hint='Número máximo de itens por página'
             type='number'
             value={usuarioConfig.despesaNumeroMaxItemPagina}
             minValue={1}
@@ -79,11 +80,10 @@ const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, on
             onUpdate={handleNumeroMaxItemPagina}
           />
         </FlexBox.Item>
-      </FlexBox>
-      <FlexBox flexDirection="row">
-        <FlexBox.Item borderBottom>
+        <FlexBox.Item >
           <FieldValue 
             description='Valor Meta Mensal'
+            hint='Valor teto para meta de gastos mensais'
             type='number'
             value={usuarioConfig.despesaValorMetaMensal}
             editable={true}
@@ -92,10 +92,11 @@ const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, on
           />
         </FlexBox.Item>
       </FlexBox>
-      <FlexBox flexDirection="row">
-        <FlexBox.Item borderBottom>
+      <FlexBox flexDirection="row" borderTop>
+        <FlexBox.Item borderRight >
           <FieldValue 
-            description='Dia Padrao Vencimento'
+            description='Dia Padrão Vencimento'
+            hint='Dia padrão para vencimento das parcelas'
             type='number'
             value={usuarioConfig.despesaDiaPadraoVencimento}
             editable={true}
@@ -104,11 +105,10 @@ const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, on
             onUpdate={handleDiaPadraoVencimento}
           />
         </FlexBox.Item>
-      </FlexBox>
-      <FlexBox flexDirection="row">
-        <FlexBox.Item borderBottom>
+        <FlexBox.Item >
           <FieldValue 
-            description='Forma Pagamento Padrao'
+            description='Forma Pagamento Padrão'
+            hint='Forma padrão para pagamento das parcelas'
             type='select'
             value={{ key: usuarioConfig.despesaFormaPagamentoPadrao?.id || 0, value: usuarioConfig.despesaFormaPagamentoPadrao?.descricao || ''}}
             editable={true}

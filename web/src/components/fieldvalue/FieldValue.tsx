@@ -9,6 +9,7 @@ type FieldValueProps = {
   value: string | number | boolean | SelectValue;
   variant?: 'success' | 'info' | 'warning';
   description?: string;
+  hint?: string;
   editable?: boolean;
   width?: string;
   maxWidth?: string;
@@ -30,6 +31,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
   value,
   variant,
   description,
+  hint,
   editable,
   width,
   maxWidth,
@@ -83,7 +85,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
   return (
     <C.FieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline} padding={padding}>
       {description && 
-        <C.Label>
+        <C.Label title={hint}>
           {description}
         </C.Label>
       }
