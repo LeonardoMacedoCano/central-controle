@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.lcano.centraldecontrole.resource.UsuarioResourceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-05-19T18:38:43" hostname="canolab" time="0.041">
+  <properties/>
+  <testcase name="testGetTodosUsuarios()" classname="br.com.lcano.centraldecontrole.resource.UsuarioResourceTest" time="0.041"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

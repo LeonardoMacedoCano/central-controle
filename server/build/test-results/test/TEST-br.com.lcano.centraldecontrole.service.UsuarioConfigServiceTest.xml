@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2024-05-19T18:38:44" hostname="canolab" time="0.042">
+  <properties/>
+  <testcase name="testGetUsuarioConfigByUsuario_UsuarioConfigFound()" classname="br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest" time="0.006"/>
+  <testcase name="testEditarUsuarioConfig()" classname="br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest" time="0.006"/>
+  <testcase name="testGetUsuarioConfigById_NotExists()" classname="br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest" time="0.006"/>
+  <testcase name="testGerarUsuarioConfig()" classname="br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest" time="0.005"/>
+  <testcase name="testGetUsuarioConfigById_Exists()" classname="br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest" time="0.003"/>
+  <testcase name="testGetUsuarioConfigByUsuario_UsuarioConfigNotFound()" classname="br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest" time="0.004"/>
+  <testcase name="testSalvarUsuarioConfig()" classname="br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest" time="0.004"/>
+  <system-out><![CDATA[2024-05-19T15:38:44.239-03:00  INFO 10120 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest]: UsuarioConfigServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-05-19T15:38:44.241-03:00  INFO 10120 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration br.com.lcano.centraldecontrole.CentralDeControleApplication for test class br.com.lcano.centraldecontrole.service.UsuarioConfigServiceTest
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

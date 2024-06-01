@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.lcano.centraldecontrole.domain.UsuarioTests" tests="6" skipped="0" failures="0" errors="0" timestamp="2024-05-19T18:38:42" hostname="canolab" time="0.013">
+  <properties/>
+  <testcase name="testIsEnabled()" classname="br.com.lcano.centraldecontrole.domain.UsuarioTests" time="0.002"/>
+  <testcase name="testGetAuthorities()" classname="br.com.lcano.centraldecontrole.domain.UsuarioTests" time="0.001"/>
+  <testcase name="testConstrutor()" classname="br.com.lcano.centraldecontrole.domain.UsuarioTests" time="0.002"/>
+  <testcase name="testIsAccountNonExpired()" classname="br.com.lcano.centraldecontrole.domain.UsuarioTests" time="0.001"/>
+  <testcase name="testIsAccountNonLocked()" classname="br.com.lcano.centraldecontrole.domain.UsuarioTests" time="0.001"/>
+  <testcase name="testIsCredentialsNonExpired()" classname="br.com.lcano.centraldecontrole.domain.UsuarioTests" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

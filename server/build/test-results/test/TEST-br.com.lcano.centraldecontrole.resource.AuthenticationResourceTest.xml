@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.lcano.centraldecontrole.resource.AuthenticationResourceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2024-05-19T18:38:43" hostname="canolab" time="0.148">
+  <properties/>
+  <testcase name="testLogin_UsuarioDesativado()" classname="br.com.lcano.centraldecontrole.resource.AuthenticationResourceTest" time="0.03"/>
+  <testcase name="testLogin_Sucesso()" classname="br.com.lcano.centraldecontrole.resource.AuthenticationResourceTest" time="0.066"/>
+  <testcase name="testRegister_Sucesso()" classname="br.com.lcano.centraldecontrole.resource.AuthenticationResourceTest" time="0.011"/>
+  <testcase name="testValidateToken_Sucesso()" classname="br.com.lcano.centraldecontrole.resource.AuthenticationResourceTest" time="0.017"/>
+  <testcase name="testLogin_UsuarioNaoEncontrado()" classname="br.com.lcano.centraldecontrole.resource.AuthenticationResourceTest" time="0.006"/>
+  <system-out><![CDATA[2024-05-19T15:38:42.673-03:00  INFO 10120 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [br.com.lcano.centraldecontrole.resource.AuthenticationResourceTest]: AuthenticationResourceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-05-19T15:38:42.722-03:00  INFO 10120 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration br.com.lcano.centraldecontrole.CentralDeControleApplication for test class br.com.lcano.centraldecontrole.resource.AuthenticationResourceTest
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

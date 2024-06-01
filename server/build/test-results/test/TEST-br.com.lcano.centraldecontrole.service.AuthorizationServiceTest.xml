@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.lcano.centraldecontrole.service.AuthorizationServiceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2024-05-19T18:38:43" hostname="canolab" time="0.028">
+  <properties/>
+  <testcase name="testLoadUserByUsername()" classname="br.com.lcano.centraldecontrole.service.AuthorizationServiceTest" time="0.004"/>
+  <testcase name="testCadastrarUsuario_UsuarioJaCadastrado()" classname="br.com.lcano.centraldecontrole.service.AuthorizationServiceTest" time="0.005"/>
+  <testcase name="testUsuarioAtivo()" classname="br.com.lcano.centraldecontrole.service.AuthorizationServiceTest" time="0.005"/>
+  <testcase name="testUsuarioJaCadastrado()" classname="br.com.lcano.centraldecontrole.service.AuthorizationServiceTest" time="0.005"/>
+  <system-out><![CDATA[2024-05-19T15:38:43.671-03:00  INFO 10120 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [br.com.lcano.centraldecontrole.service.AuthorizationServiceTest]: AuthorizationServiceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-05-19T15:38:43.688-03:00  INFO 10120 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration br.com.lcano.centraldecontrole.CentralDeControleApplication for test class br.com.lcano.centraldecontrole.service.AuthorizationServiceTest
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
