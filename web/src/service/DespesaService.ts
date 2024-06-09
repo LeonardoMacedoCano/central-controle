@@ -4,7 +4,7 @@ import { DespesaResumoMensal } from '../types/DespesaResumoMensal';
 import { Despesa } from '../types/Despesa';
 import { Categoria } from '../types/Categoria';
 import { useMessage } from '../contexts/message/ContextMessageProvider';
-import { format } from 'date-fns-tz';
+import { formatDateToTimeZone } from '../utils/DateUtils';
 
 interface DespesaApi {
   gerarDespesa: (token: string, data: Despesa) => Promise<{ idDespesa: number } | undefined>;
@@ -24,7 +24,7 @@ const DespesaService = (): DespesaApi => {
     descricao: data.descricao,
     parcelas: data.parcelas.map(parcela => ({
       ...parcela,
-      dataVencimento: format(new Date(parcela.dataVencimento), 'yyyy-MM-dd', { timeZone: 'America/Sao_Paulo' })
+      dataVencimento: formatDateToTimeZone(new Date(parcela.dataVencimento), 'America/Sao_Paulo', { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/').reverse().join('-')
     }))
   });
 

@@ -50,3 +50,7 @@ export const formatarStringParaData = (dataStr: string): Date => {
 
   return new Date(year, month, day);
 };
+
+export const formatDateToTimeZone = (date: Date, timeZone: string, formatOptions: Intl.DateTimeFormatOptions) => {
+  return new Intl.DateTimeFormat('en-GB', { ...formatOptions, timeZone }).format(date);
+};
