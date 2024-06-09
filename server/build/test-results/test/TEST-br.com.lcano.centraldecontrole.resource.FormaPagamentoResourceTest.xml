@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="br.com.lcano.centraldecontrole.resource.FormaPagamentoResourceTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-05-19T18:38:43" hostname="canolab" time="0.006">
-  <properties/>
-  <testcase name="testGetTodasFormaPagamento()" classname="br.com.lcano.centraldecontrole.resource.FormaPagamentoResourceTest" time="0.006"/>
-  <system-out><![CDATA[2024-05-19T15:38:43.526-03:00  INFO 10120 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [br.com.lcano.centraldecontrole.resource.FormaPagamentoResourceTest]: FormaPagamentoResourceTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2024-05-19T15:38:43.528-03:00  INFO 10120 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration br.com.lcano.centraldecontrole.CentralDeControleApplication for test class br.com.lcano.centraldecontrole.resource.FormaPagamentoResourceTest
-]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
