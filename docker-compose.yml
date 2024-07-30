@@ -3,8 +3,6 @@ services:
     container_name: central-controle-server
     build:
       context: ./server
-    ports:
-      - "8080:8080"
     environment:
       - DB_URL=${DB_URL}
       - DB_USERNAME=${DB_USERNAME}
@@ -15,8 +13,6 @@ services:
     container_name: central-controle-web
     build:
       context: ./web
-    ports:
-      - "5173:5173"
     depends_on:
       - server
 
