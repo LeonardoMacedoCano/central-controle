@@ -6,11 +6,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - DATASOURCE_URL=${DB_URL}
-      - DATASOURCE_USERNAME=${DB_USERNAME}
-      - DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - DB_URL=${DB_URL}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
       - JWT_SECRET=${JWT_SECRET}
-      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
 
   web:
     container_name: central-controle-web
