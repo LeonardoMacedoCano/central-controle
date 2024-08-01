@@ -1,57 +1,89 @@
-import { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import * as C from './styles';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import {
   FaHome,
-  FaRegSun,
+  FaCog,
   FaDollarSign,
   FaSignOutAlt,
-  FaAngleLeft,
-  FaAngleRight
+  FaBars
 } from 'react-icons/fa';
-import AppSidebarItem from './AppSideBarItem';
 
-const AppSidebar: React.FC = () => {
-  const [isActiveSidebar, setActiveSidebar] = useState(false);
+interface AppSidebarProps {
+  isOpen: boolean;
+  toggleMenu: () => void;
+  activeSubmenu: string | null;
+  setActiveSubmenu: React.Dispatch<React.SetStateAction<string | null>>;
+  handleLinkClick: () => void;
+}
+
+const AppSidebar: React.FC<AppSidebarProps> = ({ 
+  isOpen, 
+  toggleMenu, 
+  activeSubmenu, 
+  setActiveSubmenu, 
+  handleLinkClick 
+}) => {
   const auth = useContext(AuthContext);
 
   const handleLogout = () => {
     auth.signout();
+    handleLinkClick();
   };
 
-  const handleCloseSidebar = () => {
-    setActiveSidebar(false);
-  };
-
-  const handleToggleSidebar = () => {
-    setActiveSidebar(prevState => !prevState);
+  const handleSubmenuToggle = (submenu: string) => {
+    setActiveSubmenu(prev => prev === submenu ? null : submenu);
   };
 
   const sidebarItems = [
     { to: "/", Icon: FaHome, Text: "Home" },
-    { to: "/controledespesas", Icon: FaDollarSign, Text: "Controle de despesas" },
-    { to: "/configuracao", Icon: FaRegSun, Text: "Configuração" },
+    {
+      Icon: FaDollarSign,
+      Text: "Controle de despesas",
+      submenu: [
+        { to: "/controledespesas", Text: "Resumo Mensal" },
+        { to: "/despesa", Text: "Formulário" },
+      ]
+    },
+    { to: "/configuracao", Icon: FaCog, Text: "Configuração" },
     { to: "/", Icon: FaSignOutAlt, Text: "Sair", onClick: handleLogout },
   ];
 
   return (
-    <C.AppSidebarContainer isActive={isActiveSidebar}>
+    <C.AppSidebarContainer isActive={isOpen} onClick={isOpen ? undefined : toggleMenu}>
+      <C.MenuIcon isActive={isOpen} onClick={toggleMenu}>
+        <FaBars />
+      </C.MenuIcon>
       <C.AppSidebar>
-        <C.ContentSidebar onClick={handleCloseSidebar}>
-          {sidebarItems.map((item, index) => (
-            <C.LinkSidebar key={index} to={item.to} onClick={item.onClick}>
-              <AppSidebarItem Icon={item.Icon} Text={item.Text} />
+        {sidebarItems.map((item, index) => (
+          item.submenu ? (
+            <C.SubmenuContainer key={index}>
+              <C.MenuItem onClick={() => handleSubmenuToggle(item.Text)}>
+                <item.Icon />
+                {isOpen && (<span>{item.Text}</span>)}
+              </C.MenuItem>
+              {isOpen && activeSubmenu === item.Text && (
+                <C.SubmenuContent>
+                  {item.submenu.map((subItem, subIndex) => (
+                    <C.LinkSidebar key={`${index}-${subIndex}`} to={subItem.to} onClick={handleLinkClick}>
+                      <C.SubMenuItem>{subItem.Text}</C.SubMenuItem>
+                    </C.LinkSidebar>
+                  ))}
+                </C.SubmenuContent>
+              )}
+            </C.SubmenuContainer>
+          ) : (
+            <C.LinkSidebar key={index} to={item.to} onClick={item.onClick || handleLinkClick}>
+              <C.MenuItem>
+                <item.Icon />
+                {isOpen && <span>{item.Text}</span>}
+              </C.MenuItem>
             </C.LinkSidebar>
-          ))}
-        </C.ContentSidebar>
+          )
+        ))}
       </C.AppSidebar>
-
-      <C.ToggleSidebarButton onClick={handleToggleSidebar}>
-        {isActiveSidebar ? <FaAngleLeft /> : <FaAngleRight />}
-      </C.ToggleSidebarButton>
     </C.AppSidebarContainer>
   );
 };
 
 export default AppSidebar;
-
