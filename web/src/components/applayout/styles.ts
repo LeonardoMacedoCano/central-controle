@@ -3,44 +3,66 @@ import { Link as RouterLink } from 'react-router-dom';
 
 export const MainContent = styled.div<{ isMenuOpen: boolean }>`
   flex: 1;
-  margin-left: ${({ isMenuOpen }) => isMenuOpen ? '250px' : '60px'};
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   transition: margin-left 0.3s ease-in-out;
 `;
 
-export const PageContent = styled.main``;
+export const PageContent = styled.main`
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+`;
 
 export const AppSidebarContainer = styled.div<{ isActive: boolean }>`
   z-index: 1000;
-  overflow: hidden;
   position: fixed;
   left: 0;
-  top: 0;
+  top: 60px;
   height: 100%;
-  width: ${({ isActive }) => isActive ? '250px' : '60px'};  
+  width: ${({ isActive }) => isActive ? '250px' : '0'};
   color: ${({ theme }) => theme.colors.tertiary};
   background-color: ${({ theme }) => theme.colors.secondary};
-  box-shadow: 0 0 5px 2px;
+  box-shadow: 0 2px 5px ${({ theme }) => theme.colors.tertiary};
   transition: width 0.3s ease-in-out;
+  overflow-x: hidden;
 `;
 
-export const MenuIcon = styled.div<{ isActive: boolean }>`
+export const AppHeader = styled.div`
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: ${({ theme }) => theme.colors.tertiary};
+  background-color: ${({ theme }) => theme.colors.secondary};
+  box-shadow: 0 2px 5px ${({ theme }) => theme.colors.tertiary};
+  padding: 0 20px;
+  flex-shrink: 0;
+
+  > svg {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+`;
+
+export const MenuIcon = styled.div`
   height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: left 0.3s ease-in-out;
   
   svg {
     font-size: 25px;
-    position: absolute;
-    left: ${({ isActive }) => isActive ? '210px' : '10px'};
   }
 `;
 
 export const AppSidebar = styled.div`
-  height: 100%;
+  height: 100vh;
   overflow-y: auto;
+  border-top: 1px solid ${({ theme }) => theme.colors.tertiary};
 `;
 
 export const LinkSidebar = styled(RouterLink)`
@@ -55,13 +77,14 @@ export const MenuItem = styled.div`
   height: 60px;
   cursor: pointer;
   transition: background-color 0.3s;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.tertiary};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.tertiary};
 
   &:hover {
     background-color: ${({ theme }) => theme.colors.tertiary};
   }
 
   > svg {
+    font-size: 20px;
     margin-right: 15px;
   }
 
@@ -71,6 +94,8 @@ export const MenuItem = styled.div`
 `;
 
 export const SubmenuContainer = styled.div`
+  text-decoration: none;
+  color: inherit;
 `;
 
 export const SubmenuContent = styled.div`
@@ -78,26 +103,9 @@ export const SubmenuContent = styled.div`
 `;
 
 export const SubMenuItem = styled(MenuItem)`
-  padding-left: 50px;
-  height: 60px;
+  height: 50px;
+  padding-left: 15px;
   background-color: ${({ theme }) => theme.colors.primary};
-`;
-
-export const AppHeader = styled.div`
-  height: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: ${({ theme }) => theme.colors.tertiary};
-  background-color: ${({ theme }) => theme.colors.secondary};
-  box-shadow: 0 0 5px 2px;
-  padding: 0 20px;
-
-  > svg {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-  }
 `;
 
 export const TitleHeader = styled.div`

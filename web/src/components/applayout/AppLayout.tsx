@@ -1,12 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState, useRef, useEffect, ReactNode } from 'react';
 import AppHeader from './AppHeader';
 import AppSidebar from './AppSideBar';
 import * as C from './styles';
 import Container from '../container/Container';
 
-const AppLayout: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+interface AppLayoutProps {
+  children: ReactNode;
+}
+
+const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -37,20 +40,22 @@ const AppLayout: React.FC = () => {
   }, [isMenuOpen]);
 
   return (
-    <Container margin='none' padding='0' style={{display: 'flex'}}>
+    <Container 
+      margin='none'
+      padding='0'
+      style={{display: 'flex', height: '100vh', overflow: 'hidden'}}>
       <div ref={sidebarRef}>
         <AppSidebar 
           isOpen={isMenuOpen} 
-          toggleMenu={toggleMenu} 
           activeSubmenu={activeSubmenu}
           setActiveSubmenu={setActiveSubmenu}
           handleLinkClick={handleLinkClick}
         />
       </div>
       <C.MainContent isMenuOpen={isMenuOpen}>
-        <AppHeader />
+        <AppHeader toggleMenu={toggleMenu} />
         <C.PageContent>
-          <Outlet />
+          {children}
         </C.PageContent>
       </C.MainContent>
     </Container>

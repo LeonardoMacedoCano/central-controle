@@ -1,9 +1,17 @@
 import React from 'react';
 import * as C from './styles';
+import { FaBars } from 'react-icons/fa';
 
-const AppHeader: React.FC = () => {
+interface AppHeaderProps {
+  toggleMenu: () => void;
+}
+
+const AppHeader: React.FC<AppHeaderProps> = ({ toggleMenu }) => {
   return (
     <C.AppHeader>
+      <C.MenuIcon onClick={toggleMenu}>
+        <FaBars />
+      </C.MenuIcon>
       <C.TitleHeader>
         Central de Controle
       </C.TitleHeader>

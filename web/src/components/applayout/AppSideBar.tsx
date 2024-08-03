@@ -5,13 +5,11 @@ import {
   FaHome,
   FaCog,
   FaDollarSign,
-  FaSignOutAlt,
-  FaBars
+  FaSignOutAlt
 } from 'react-icons/fa';
 
 interface AppSidebarProps {
   isOpen: boolean;
-  toggleMenu: () => void;
   activeSubmenu: string | null;
   setActiveSubmenu: React.Dispatch<React.SetStateAction<string | null>>;
   handleLinkClick: () => void;
@@ -19,7 +17,6 @@ interface AppSidebarProps {
 
 const AppSidebar: React.FC<AppSidebarProps> = ({ 
   isOpen, 
-  toggleMenu, 
   activeSubmenu, 
   setActiveSubmenu, 
   handleLinkClick 
@@ -50,10 +47,7 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
   ];
 
   return (
-    <C.AppSidebarContainer isActive={isOpen} onClick={isOpen ? undefined : toggleMenu}>
-      <C.MenuIcon isActive={isOpen} onClick={toggleMenu}>
-        <FaBars />
-      </C.MenuIcon>
+    <C.AppSidebarContainer isActive={isOpen}>
       <C.AppSidebar>
         {sidebarItems.map((item, index) => (
           item.submenu ? (
@@ -66,7 +60,9 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
                 <C.SubmenuContent>
                   {item.submenu.map((subItem, subIndex) => (
                     <C.LinkSidebar key={`${index}-${subIndex}`} to={subItem.to} onClick={handleLinkClick}>
-                      <C.SubMenuItem>{subItem.Text}</C.SubMenuItem>
+                      <C.SubMenuItem>
+                        {subItem.Text}
+                      </C.SubMenuItem>
                     </C.LinkSidebar>
                   ))}
                 </C.SubmenuContent>

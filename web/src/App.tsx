@@ -22,15 +22,14 @@ const App: React.FC = () => {
             <BrowserRouter>
               <GlobalStyles />
               <RequireAuth>
-                <>
-                  <AppLayout />
+                <AppLayout>
                   <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/controledespesas" element={<DespesaResumoMensalPage />} />
                     <Route path="/despesa/:idStr?" element={<DespesaPage />} />
                     <Route path="/configuracao" element={<ConfiguracaoPage />} />
                   </Routes>
-                </>
+                </AppLayout>
               </RequireAuth>
             </BrowserRouter>
           </UsuarioConfigProvider>
