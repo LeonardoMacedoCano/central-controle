@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.dto;
 
-import br.com.lcano.centraldecontrole.domain.FormaPagamento;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.FormaPagamento;
 import br.com.lcano.centraldecontrole.domain.UsuarioConfig;
 import lombok.Data;
 

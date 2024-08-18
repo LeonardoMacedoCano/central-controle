@@ -1,5 +1,6 @@
 package br.com.lcano.centraldecontrole.domain;
 
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.FormaPagamento;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serial;

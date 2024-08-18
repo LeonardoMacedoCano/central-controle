@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.secutity;
 
-import br.com.lcano.centraldecontrole.exception.DespesaException;
+import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;

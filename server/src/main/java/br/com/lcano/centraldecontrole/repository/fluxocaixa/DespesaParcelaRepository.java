@@ -1,0 +1,16 @@
+package br.com.lcano.centraldecontrole.repository.fluxocaixa;
+
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.List;
+
+@Repository
+public interface DespesaParcelaRepository extends JpaRepository<DespesaParcela, Long> {
+    List<DespesaParcela> findByDespesaAndDataVencimentoBetween(Despesa despesa, Date dataInicio, Date dataFim);
+
+    List<DespesaParcela> findByDataVencimentoBetween(Date dataInicio, Date dataFim);
+}

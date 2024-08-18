@@ -18,24 +18,19 @@ public class UsuarioConfigService {
         this.usuarioConfigRepository = usuarioConfigRepository;
     }
 
-    public void salvarUsuarioConfig(UsuarioConfig usuarioConfig) {
-        usuarioConfigRepository.save(usuarioConfig);
-    }
-
     public UsuarioConfig getUsuarioConfigById(Long id) {
-        return usuarioConfigRepository.findById(id)
+        return this.usuarioConfigRepository.findById(id)
                 .orElseThrow(() -> new UsuarioException.UsuarioConfigNaoEncontradoById(id));
     }
 
     public UsuarioConfig getUsuarioConfigByIdUsuario(Long idUsuario) {
-        return usuarioConfigRepository.findByUsuarioId(idUsuario)
+        return this.usuarioConfigRepository.findByUsuarioId(idUsuario)
                 .orElseThrow(UsuarioException.UsuarioConfigNaoEncontrado::new);
     }
 
     @Transactional
-    public void gerarUsuarioConfig(Usuario usuario) {
-        UsuarioConfig novoUsuarioConfig = new UsuarioConfig(usuario);
-        salvarUsuarioConfig(novoUsuarioConfig);
+    public void createUsuarioConfig(Usuario usuario) {
+        this.usuarioConfigRepository.save(new UsuarioConfig(usuario));
     }
 
     @Transactional
@@ -46,6 +41,6 @@ public class UsuarioConfigService {
         usuarioConfigExistente.setDespesaDiaPadraoVencimento(data.getDespesaDiaPadraoVencimento());
         usuarioConfigExistente.setDespesaFormaPagamentoPadrao(data.getDespesaFormaPagamentoPadrao());
 
-        salvarUsuarioConfig(usuarioConfigExistente);
+        this.usuarioConfigRepository.save(usuarioConfigExistente);
     }
 }

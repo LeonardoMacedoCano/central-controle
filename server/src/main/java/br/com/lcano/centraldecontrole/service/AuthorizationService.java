@@ -1,9 +1,13 @@
 package br.com.lcano.centraldecontrole.service;
 
+import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.dto.LoginDTO;
 import br.com.lcano.centraldecontrole.dto.UsuarioDTO;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,26 +18,48 @@ import org.springframework.stereotype.Service;
 public class AuthorizationService implements UserDetailsService {
     @Autowired
     UsuarioRepository usuarioRepository;
+
     @Autowired
     UsuarioService usuarioService;
 
+    @Autowired
+    TokenService tokenService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usuarioRepository.findByUsername(username);
-    }
-
-    public void cadastrarUsuario(UsuarioDTO data) {
-        if (usuarioJaCadastrado(data.getUsername())) {
-            throw new UsuarioException.UsuarioJaCadastrado();
-        }
-        usuarioService.gerarUsuario(data.getUsername(), new BCryptPasswordEncoder().encode(data.getSenha()));
+        return usuarioService.findByUsername(username);
     }
 
     public boolean usuarioJaCadastrado(String username) {
-        return loadUserByUsername(username) != null;
+        return this.loadUserByUsername(username) != null;
     }
 
     public boolean usuarioAtivo(String username) {
-        return loadUserByUsername(username).isEnabled();
+        return this.loadUserByUsername(username).isEnabled();
+    }
+
+    public LoginDTO login(UsuarioDTO data, AuthenticationManager authenticationManager) {
+        if (!this.usuarioJaCadastrado(data.getUsername())) {
+            throw new UsuarioException.UsuarioNaoEncontrado();
+        } else if (!this.usuarioAtivo(data.getUsername())) {
+            throw new UsuarioException.UsuarioDesativado();
+        }
+
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.getUsername(), data.getSenha());
+        var auth = authenticationManager.authenticate(usernamePassword);
+        var token = tokenService.gerarToken((Usuario) auth.getPrincipal());
+
+        return new LoginDTO(data.getUsername(), token);
+    }
+
+    public void register(UsuarioDTO data) {
+        if (this.usuarioJaCadastrado(data.getUsername())) throw new UsuarioException.UsuarioJaCadastrado();
+        this.usuarioService.register(data.getUsername(), new BCryptPasswordEncoder().encode(data.getSenha()));
+    }
+
+    public LoginDTO validateToken(String token) {
+        String username = this.tokenService.validateToken(token);
+        UserDetails usuario = this.usuarioRepository.findByUsername(username);
+        return new LoginDTO(usuario.getUsername(), token);
     }
 }
