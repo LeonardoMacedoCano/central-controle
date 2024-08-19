@@ -27,12 +27,17 @@ public class FluxoCaixaResource {
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateLancamento(@PathVariable Long id, @RequestBody LancamentoDTO lancamentoDTO) {
         this.fluxoCaixaService.updateLancamento(id, lancamentoDTO);
-        return CustomSuccess.buildResponseEntity("Lançamento editada com sucesso.");
+        return CustomSuccess.buildResponseEntity("Lançamento editado com sucesso.");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteLancamento(@PathVariable Long id) {
         this.fluxoCaixaService.deleteLancamento(id);
         return CustomSuccess.buildResponseEntity("Lançamento deletado com sucesso.");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<LancamentoDTO> getLancamento(@PathVariable Long id) {
+        return ResponseEntity.ok(this.fluxoCaixaService.getLancamentoDTO(id));
     }
 }

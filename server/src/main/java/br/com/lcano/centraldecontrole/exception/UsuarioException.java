@@ -1,14 +1,14 @@
 package br.com.lcano.centraldecontrole.exception;
 
 public class UsuarioException extends RuntimeException {
-    public static final String MSG_USUARIO_NAO_ENCONTRADO = "Usuário não encontrado.";
-    public static final String MSG_USUARIO_JA_CADASTRADO = "Usuário já cadastrado.";
+    private static final String MSG_USUARIO_NAO_ENCONTRADO = "Usuário não encontrado.";
+    private static final String MSG_USUARIO_JA_CADASTRADO = "Usuário já cadastrado.";
     public static final String MSG_CREDENCIAIS_INVALIDAS = "Credenciais inválidas.";
-    public static final String MSG_USUARIO_DESATIVADO = "Usuário desativado.";
-    public static final String MSG_ERRO_GERAR_TOKEN = "Erro ao gerar Token.";
-    public static final String MSG_TOKEN_EXPIRADO_OU_INVALIDO = "Token expirado ou inválido.";
-    public static final String MSG_USUARIO_CONFIG_NAO_ENCONTRADO_BY_ID = "Configuração do Usuário não encontrado com o id: %d.";
-    public static final String MSG_USUARIO_CONFIG_NAO_ENCONTRADO = "Configuração do Usuário não encontrado.";
+    private static final String MSG_USUARIO_DESATIVADO = "Usuário desativado.";
+    private static final String MSG_ERRO_GERAR_TOKEN = "Erro ao gerar Token.";
+    private static final String MSG_TOKEN_EXPIRADO_OU_INVALIDO = "Token expirado ou inválido.";
+    private static final String MSG_USUARIO_CONFIG_NAO_ENCONTRADO_BY_ID = "Configuração do Usuário %d não encontrado.";
+    private static final String MSG_USUARIO_CONFIG_NAO_ENCONTRADO = "Configuração do Usuário não encontrado.";
 
     public static class UsuarioNaoEncontrado extends RuntimeException {
         public UsuarioNaoEncontrado() {

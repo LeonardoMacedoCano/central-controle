@@ -61,12 +61,12 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
 
     @Override
     public void delete(Long id) {
-        this.despesaRepository.delete(this.getDespesaById(id));
+        this.despesaRepository.delete(this.getDespesaByLancamentoId(id));
     }
 
     @Override
     public DespesaDTO get(Long id) {
-        return DespesaDTO.converterParaDTO(getDespesaById(id));
+        return DespesaDTO.converterParaDTO(getDespesaByLancamentoIdWithParcelas(id));
     }
 
     @Override
@@ -84,14 +84,19 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
             .orElseThrow(() -> new DespesaException.CategoriaDespesaNaoEncontradaById(id));
     }
 
+    private Despesa getDespesaByLancamentoIdWithParcelas(Long lancamentoId) {
+        return despesaRepository.findByLancamentoIdWithParcelas(lancamentoId)
+                .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaByLancamentoId(lancamentoId));
+    }
+
+    private Despesa getDespesaByLancamentoId(Long lancamentoId) {
+        return despesaRepository.findByLancamentoId(lancamentoId)
+                .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaByLancamentoId(lancamentoId));
+    }
+
     public Despesa getDespesaByIdWithParcelas(Long id) {
         return despesaRepository.findByIdWithParcelas(id)
             .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaById(id));
-    }
-
-    public Despesa getDespesaByLancamentoIdWithParcelas(Long lancamentoId) {
-        return despesaRepository.findByLancamentoIdWithParcelas(lancamentoId)
-                .orElseThrow(() -> new IllegalArgumentException("Despesa não encontrada para o lançamento"));
     }
 
 /*

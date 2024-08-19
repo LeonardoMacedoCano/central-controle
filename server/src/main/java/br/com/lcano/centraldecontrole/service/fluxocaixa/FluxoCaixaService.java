@@ -4,6 +4,7 @@ import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.exception.LancamentoException;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.LancamentoRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
@@ -50,25 +51,27 @@ public class FluxoCaixaService {
 
     public void deleteLancamento(Long id) {
         Lancamento lancamento = getLancamentoById(id);
+        LancamentoItemService lancamentoItemService = getLancamentoItemService(lancamento.getTipo());
 
-        getLancamentoItemService(lancamento.getTipo()).delete(id);
+        lancamentoItemService.delete(id);
         lancamentoRepository.delete(lancamento);
     }
 
-    public LancamentoDTO getLancamento(Long id) {
+    public LancamentoDTO getLancamentoDTO(Long id) {
         Lancamento lancamento = getLancamentoById(id);
-        LancamentoItemDTO itemDTO = getLancamentoItemService(lancamento.getTipo()).get(id);
+        LancamentoItemService lancamentoItemService = getLancamentoItemService(lancamento.getTipo());
+        LancamentoItemDTO itemDTO = lancamentoItemService.get(id);
 
         return LancamentoDTO.converterParaDTO(lancamento, itemDTO);
     }
 
     private Lancamento getLancamentoById(Long id) {
         return lancamentoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Lançamento não encontrado"));
+                .orElseThrow(() -> new LancamentoException.LancamentoNaoEncontradoById(id));
     }
 
     private LancamentoItemService<? extends LancamentoItemDTO> getLancamentoItemService(TipoLancamentoEnum tipo) {
         return Optional.ofNullable(lancamentoItemServices.get(tipo))
-                .orElseThrow(() -> new IllegalArgumentException("Tipo de lançamento não suportado: " + tipo));
+                .orElseThrow(() -> new LancamentoException.LancamentoTipoNaoSuportado(tipo.getDescricao()));
     }
 }

@@ -1,7 +1,6 @@
 package br.com.lcano.centraldecontrole.dto;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
-import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.util.CustomDateDeserializer;
@@ -15,8 +14,6 @@ import java.util.Date;
 @Data
 public class LancamentoDTO {
     private Long id;
-
-    private Usuario usuario;
 
     @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date dataLancamento;

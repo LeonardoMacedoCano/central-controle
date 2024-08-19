@@ -1,5 +1,6 @@
 package br.com.lcano.centraldecontrole.secutity;
 
+import br.com.lcano.centraldecontrole.exception.LancamentoException;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -79,4 +80,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
+    @ExceptionHandler({DespesaException.DespesaNaoEncontradaByLancamentoId.class})
+    protected ResponseEntity<Object> handleDespesaNaoEncontradaByLancamentoId(DespesaException.DespesaNaoEncontradaByLancamentoId ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({LancamentoException.LancamentoNaoEncontradoById.class})
+    protected ResponseEntity<Object> handleLancamentoNaoEncontradaById(LancamentoException.LancamentoNaoEncontradoById ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({LancamentoException.LancamentoTipoNaoSuportado.class})
+    protected ResponseEntity<Object> handleLancamentoTipoNaoSuportado(LancamentoException.LancamentoTipoNaoSuportado ex) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 }
