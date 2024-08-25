@@ -43,5 +43,5 @@ public class DespesaParcela implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idformapagamento")
-    private FormaPagamento formaPagamento;
+    private DespesaFormaPagamento formaPagamento;
 }

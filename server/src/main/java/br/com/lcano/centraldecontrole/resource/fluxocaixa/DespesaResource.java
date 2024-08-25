@@ -31,8 +31,8 @@ public class DespesaResource {
 
      */
 
-    @GetMapping("/{idDespesa}")
-    public ResponseEntity<DespesaDTO> getDespesaByIdWithParcelas(@PathVariable Long idDespesa) {
-        return ResponseEntity.ok(DespesaDTO.converterParaDTO(this.despesaService.getDespesaByIdWithParcelas(idDespesa)));
+    @GetMapping("/{id}")
+    public ResponseEntity<DespesaDTO> getDespesaByIdWithParcelas(@PathVariable Long id) {
+        return ResponseEntity.ok(DespesaDTO.converterParaDTO(this.despesaService.getDespesaByIdWithParcelas(id)));
     }
 }

@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.dto;
 
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.FormaPagamento;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import br.com.lcano.centraldecontrole.domain.UsuarioConfig;
 import lombok.Data;
 
@@ -14,7 +14,7 @@ public class UsuarioConfigDTO {
 
     private int despesaDiaPadraoVencimento;
 
-    private FormaPagamento despesaFormaPagamentoPadrao;
+    private DespesaFormaPagamento despesaFormaPagamentoPadrao;
 
     public static UsuarioConfigDTO converterParaDTO(UsuarioConfig usuarioConfig) {
         UsuarioConfigDTO dto = new UsuarioConfigDTO();

@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.domain;
 
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.FormaPagamento;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serial;
@@ -35,8 +35,8 @@ public class UsuarioConfig implements Serializable {
     private int despesaDiaPadraoVencimento;
 
     @ManyToOne
-    @JoinColumn(name = "despesaidformapagamentopadrao")
-    private FormaPagamento despesaFormaPagamentoPadrao;
+    @JoinColumn(name = "despesaformapagamentopadrao")
+    private DespesaFormaPagamento despesaFormaPagamentoPadrao;
 
     public UsuarioConfig(Usuario usuario) {
         this.usuario = usuario;

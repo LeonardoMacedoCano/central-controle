@@ -21,7 +21,7 @@ public class DespesaParcelaDTO{
 
     private Boolean pago;
 
-    private FormaPagamentoDTO formaPagamento;
+    private DespesaFormaPagamentoDTO formaPagamento;
 
     public static DespesaParcelaDTO converterParaDTO(DespesaParcela despesaParcela) {
         DespesaParcelaDTO dto = new DespesaParcelaDTO();
@@ -32,7 +32,7 @@ public class DespesaParcelaDTO{
         dto.setPago(despesaParcela.isPago());
 
         if (despesaParcela.getFormaPagamento() != null) {
-            dto.setFormaPagamento(FormaPagamentoDTO.converterParaDTO(despesaParcela.getFormaPagamento()));
+            dto.setFormaPagamento(DespesaFormaPagamentoDTO.converterParaDTO(despesaParcela.getFormaPagamento()));
         }
         return dto;
     }

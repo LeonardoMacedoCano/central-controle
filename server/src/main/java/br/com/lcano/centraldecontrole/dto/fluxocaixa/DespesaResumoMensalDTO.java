@@ -1,5 +1,6 @@
 package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
+import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import lombok.Data;
@@ -13,10 +14,11 @@ public class DespesaResumoMensalDTO {
     private Double valorTotal;
     private String situacao;
 
-    public static DespesaResumoMensalDTO converterParaDTO(Despesa despesa) {
+    public static DespesaResumoMensalDTO converterParaDTO(Despesa despesa, Lancamento lancamento) {
         DespesaResumoMensalDTO dto = new DespesaResumoMensalDTO();
         dto.setId(despesa.getId());
         dto.setCategoria(CategoriaDTO.converterParaDTO(despesa.getCategoria()));
+        dto.setDescricao(lancamento.getDescricao());
 
         List<DespesaParcelaDTO> parcelasDTO = DespesaParcelaDTO.converterListaParaDTO(despesa.getParcelas());
 

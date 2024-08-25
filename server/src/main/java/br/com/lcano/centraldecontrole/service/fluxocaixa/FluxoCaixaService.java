@@ -5,10 +5,11 @@ import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.exception.LancamentoException;
-import br.com.lcano.centraldecontrole.repository.fluxocaixa.LancamentoRepository;
+import br.com.lcano.centraldecontrole.repository.LancamentoRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import jakarta.annotation.Resource;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,7 @@ public class FluxoCaixaService {
     @Autowired
     UsuarioUtil usuarioUtil;
 
+    @Transactional
     public void createLancamento(LancamentoDTO lancamentoDTO) {
         Lancamento lancamento = new Lancamento();
         lancamento.setDataLancamento(DateUtil.getDataAtual());
@@ -39,6 +41,7 @@ public class FluxoCaixaService {
         lancamentoItemService.create(lancamentoDTO.getItemDTO(), lancamento);
     }
 
+    @Transactional
     public void updateLancamento(Long id, LancamentoDTO lancamentoDTO) {
         Lancamento lancamento = getLancamentoById(id);
         lancamento.setDescricao(lancamentoDTO.getDescricao());
@@ -48,7 +51,7 @@ public class FluxoCaixaService {
         lancamentoItemService.update(id, lancamentoDTO.getItemDTO());
     }
 
-
+    @Transactional
     public void deleteLancamento(Long id) {
         Lancamento lancamento = getLancamentoById(id);
         LancamentoItemService lancamentoItemService = getLancamentoItemService(lancamento.getTipo());

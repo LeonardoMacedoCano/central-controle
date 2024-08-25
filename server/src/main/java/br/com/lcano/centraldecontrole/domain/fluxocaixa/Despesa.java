@@ -31,7 +31,7 @@ public class Despesa implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idcategoria", nullable = false)
-    private CategoriaDespesa categoria;
+    private DespesaCategoria categoria;
 
     @OneToMany(mappedBy = "despesa", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<DespesaParcela> parcelas = new ArrayList<>();

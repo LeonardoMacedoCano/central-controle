@@ -4,14 +4,14 @@ import br.com.lcano.centraldecontrole.domain.Categoria;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-@Table(name = "categoriadespesa")
+@Table(name = "despesacategoria")
 @Entity
-public class CategoriaDespesa extends Categoria {
-    public CategoriaDespesa() {
+public class DespesaCategoria extends Categoria {
+    public DespesaCategoria() {
         super();
     }
 
-    public CategoriaDespesa(String descricao) {
+    public DespesaCategoria(String descricao) {
         super(descricao);
     }
 }

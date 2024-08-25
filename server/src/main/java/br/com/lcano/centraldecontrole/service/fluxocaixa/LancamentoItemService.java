@@ -9,6 +9,5 @@ public interface LancamentoItemService<T extends LancamentoItemDTO> {
     void update(Long id, T itemDTO);
     void delete(Long id);
     T get(Long id);
-
     TipoLancamentoEnum getTipoLancamento();
 }

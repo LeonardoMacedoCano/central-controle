@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 @Service
 public class DespesaParcelaService {
     private final DespesaParcelaRepository despesaParcelaRepository;
-    private final FormaPagamentoService formaPagamentoService;
+    private final DespesaFormaPagamentoService despesaFormaPagamentoService;
 
     @Autowired
     public DespesaParcelaService(DespesaParcelaRepository despesaParcelaRepository,
-                                 FormaPagamentoService formaPagamentoService) {
+                                 DespesaFormaPagamentoService formaPagamentoService) {
         this.despesaParcelaRepository = despesaParcelaRepository;
-        this.formaPagamentoService = formaPagamentoService;
+        this.despesaFormaPagamentoService = formaPagamentoService;
     }
 
     public void salvarParcelas(List<DespesaParcela> parcelas) {
@@ -35,7 +35,7 @@ public class DespesaParcelaService {
         novaParcela.setValor(data.getValor());
         novaParcela.setPago(data.getPago());
 
-        if (data.getFormaPagamento() != null && data.getFormaPagamento().getId() != null) novaParcela.setFormaPagamento(this.formaPagamentoService.getFormaPagamentoById(data.getFormaPagamento().getId()));
+        if (data.getFormaPagamento() != null && data.getFormaPagamento().getId() != null) novaParcela.setFormaPagamento(this.despesaFormaPagamentoService.getFormaPagamentoById(data.getFormaPagamento().getId()));
 
         return novaParcela;
     }
@@ -51,7 +51,7 @@ public class DespesaParcelaService {
         parcelaExistente.setValor(parcelaDTO.getValor());
         parcelaExistente.setPago(parcelaDTO.getPago());
 
-        if (parcelaDTO.getFormaPagamento() != null && parcelaDTO.getFormaPagamento().getId() != null) parcelaExistente.setFormaPagamento(this.formaPagamentoService.getFormaPagamentoById(parcelaDTO.getFormaPagamento().getId()));
+        if (parcelaDTO.getFormaPagamento() != null && parcelaDTO.getFormaPagamento().getId() != null) parcelaExistente.setFormaPagamento(this.despesaFormaPagamentoService.getFormaPagamentoById(parcelaDTO.getFormaPagamento().getId()));
         else parcelaExistente.setFormaPagamento(null);
     }
 

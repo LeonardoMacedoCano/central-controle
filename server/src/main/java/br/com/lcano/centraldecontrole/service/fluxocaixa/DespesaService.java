@@ -3,34 +3,33 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.CategoriaDespesa;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
-import br.com.lcano.centraldecontrole.repository.fluxocaixa.CategoriaDespesaRepository;
+import br.com.lcano.centraldecontrole.repository.fluxocaixa.DespesaCategoriaRepository;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.DespesaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Service
 public class DespesaService implements LancamentoItemService<DespesaDTO> {
 
     private final DespesaRepository despesaRepository;
-    private final CategoriaDespesaRepository categoriaDespesaRepository;
-    private final CategoriaDespesaService categoriaDespesaService;
+    private final DespesaCategoriaRepository despesaCategoriaRepository;
+    private final DespesaCategoriaService despesaCategoriaService;
     private final DespesaParcelaService despesaParcelaService;
 
     @Autowired
     public DespesaService(DespesaRepository despesaRepository,
-                          CategoriaDespesaRepository categoriaDespesaRepository,
-                          CategoriaDespesaService categoriaDespesaService,
+                          DespesaCategoriaRepository categoriaDespesaRepository,
+                          DespesaCategoriaService categoriaDespesaService,
                           DespesaParcelaService despesaParcelaService) {
         this.despesaRepository = despesaRepository;
-        this.categoriaDespesaRepository = categoriaDespesaRepository;
-        this.categoriaDespesaService = categoriaDespesaService;
+        this.despesaCategoriaRepository = categoriaDespesaRepository;
+        this.despesaCategoriaService = categoriaDespesaService;
         this.despesaParcelaService = despesaParcelaService;
     }
 
@@ -38,7 +37,7 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
     public void create(DespesaDTO itemDTO, Lancamento lancamento) {
         Despesa novaDespesa = new Despesa();
         novaDespesa.setLancamento(lancamento);
-        novaDespesa.setCategoria(this.categoriaDespesaService.getCategoriaDespesaById(itemDTO.getCategoria().getId()));
+        novaDespesa.setCategoria(this.despesaCategoriaService.getCategoriaDespesaById(itemDTO.getCategoria().getId()));
         novaDespesa.getParcelas().addAll(this.despesaParcelaService.criarParcelas(novaDespesa, itemDTO.getParcelasDTO()));
         this.despesaRepository.save(novaDespesa);
         this.despesaParcelaService.salvarParcelas(novaDespesa.getParcelas());
@@ -79,9 +78,9 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
                 .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaById(id));
     }
 
-    private CategoriaDespesa getCategoriaById(Long id) {
-        return categoriaDespesaRepository.findById(id)
-            .orElseThrow(() -> new DespesaException.CategoriaDespesaNaoEncontradaById(id));
+    private DespesaCategoria getCategoriaById(Long id) {
+        return despesaCategoriaRepository.findById(id)
+            .orElseThrow(() -> new DespesaException.CategoriaNaoEncontradaById(id));
     }
 
     private Despesa getDespesaByLancamentoIdWithParcelas(Long lancamentoId) {
@@ -99,7 +98,7 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
             .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaById(id));
     }
 
-/*
+    /*
     public Page<DespesaResumoMensalDTO> listarDespesaResumoMensalDTO(Long idUsuario, Integer ano, Integer mes, Pageable pageable) {
         List<Despesa> despesas = despesaRepository.findByUsuarioId(idUsuario);
 
@@ -128,6 +127,5 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
 
         return new PageImpl<>(paginaDespesasResumoMensalDTO, pageable, despesaResumoMensalDTOList.size());
     }
-
- */
+     */
 }

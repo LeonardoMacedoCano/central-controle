@@ -65,8 +65,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({DespesaException.CategoriaDespesaNaoEncontradaById.class})
-    protected ResponseEntity<Object> handleCategoriaDespesaNaoEncontradaById(DespesaException.CategoriaDespesaNaoEncontradaById ex) {
+    @ExceptionHandler({DespesaException.CategoriaNaoEncontradaById.class})
+    protected ResponseEntity<Object> handleDespesaCategoriaNaoEncontradaById(DespesaException.CategoriaNaoEncontradaById ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
