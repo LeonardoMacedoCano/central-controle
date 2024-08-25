@@ -2,11 +2,11 @@ CREATE TABLE usuario (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
-    datainclusao DATETIME NOT NULL,
+    datainclusao DATE NOT NULL,
 	ativo CHAR(1) DEFAULT 'S'
 );
 
-CREATE TABLE formapagamento (
+CREATE TABLE despesaformapagamento (
     id INT PRIMARY KEY,
     descricao VARCHAR(100) NOT NULL
 );
@@ -17,42 +17,43 @@ CREATE TABLE usuarioconfig (
     despesanumeromaxitempagina INT DEFAULT 10,
     despesavalormetamensal DECIMAL(10, 2),
     despesadiapadraovencimento INT DEFAULT 10,
-    despesaidformapagamentopadrao INT,
+    despesaformapagamentopadrao INT,
     FOREIGN KEY (idusuario) REFERENCES usuario(id),
-	FOREIGN KEY (despesaidformapagamentopadrao) REFERENCES formapagamento(id)
+	FOREIGN KEY (despesaformapagamentopadrao) REFERENCES despesaformapagamento(id)
 );
 
-INSERT INTO usuario (id, username, senha, datainclusao, ativo)
-VALUES(1, 'user1', '$2a$10$2FQaqTlAqTPZz0n5eAbqpeap8Ac1vhW.hQhbidlpXBy08k5OAgM3a', '2024-01-01', 'S');
-
-INSERT INTO usuarioconfig
-(id, idusuario, despesanumeromaxitempagina, despesavalormetamensal, despesadiapadraovencimento, despesaidformapagamentopadrao)
-VALUES(1, 1, 10, 0, 10, NULL);
-
-CREATE TABLE categoriadespesa (
+CREATE TABLE despesacategoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
     descricao VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE despesa (
+CREATE TABLE lancamento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     idusuario INT NOT NULL,
-    idcategoria INT NOT NULL,
     datalancamento DATE NOT NULL,
     descricao VARCHAR(255) NOT NULL,
-    FOREIGN KEY (idusuario) REFERENCES usuario(id),
-    FOREIGN KEY (idcategoria) REFERENCES categoriadespesa(id)
+    tipo ENUM('DESPESA', 'RECEITA', 'PASSIVO', 'ATIVO') NOT NULL,
+    FOREIGN KEY (idusuario) REFERENCES usuario(id)
 );
 
-CREATE TABLE parcela (
+CREATE TABLE despesa (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idlancamento INT NOT NULL UNIQUE,
+    idcategoria INT NOT NULL,
+    FOREIGN KEY (idlancamento) REFERENCES lancamento(id),
+    FOREIGN KEY (idcategoria) REFERENCES despesacategoria(id)
+);
+
+CREATE TABLE despesaparcela (
     id INT AUTO_INCREMENT PRIMARY KEY,
     iddespesa INT NOT NULL,
     idformapagamento INT,
     numero INT NOT NULL,
     datavencimento DATE NOT NULL,
-    valor FLOAT NOT NULL,
+    valor DECIMAL(10, 2) NOT NULL,
     pago CHAR(1) DEFAULT 'N',
     FOREIGN KEY (iddespesa) REFERENCES despesa(id),
-    FOREIGN KEY (idformapagamento) REFERENCES formapagamento(id),
+    FOREIGN KEY (idformapagamento) REFERENCES despesaformapagamento(id),
     UNIQUE KEY (iddespesa, numero)
 );
+
