@@ -15,12 +15,15 @@ import java.util.stream.Collectors;
 public class DespesaParcelaService {
     private final DespesaParcelaRepository despesaParcelaRepository;
     private final DespesaFormaPagamentoService despesaFormaPagamentoService;
+    private final DateUtil dateUtil;
 
     @Autowired
     public DespesaParcelaService(DespesaParcelaRepository despesaParcelaRepository,
-                                 DespesaFormaPagamentoService formaPagamentoService) {
+                                 DespesaFormaPagamentoService formaPagamentoService,
+                                 DateUtil dateUtil) {
         this.despesaParcelaRepository = despesaParcelaRepository;
         this.despesaFormaPagamentoService = formaPagamentoService;
+        this.dateUtil = dateUtil;
     }
 
     public void salvarParcelas(List<DespesaParcela> parcelas) {
@@ -81,15 +84,15 @@ public class DespesaParcelaService {
     public List<DespesaParcela> getParcelasPorVencimento(Despesa despesa, Integer ano, Integer mes) {
         return this.despesaParcelaRepository.findByDespesaAndDataVencimentoBetween(
             despesa,
-            DateUtil.toDate(DateUtil.getPrimeiroDiaDoMes(ano, mes)),
-            DateUtil.toDate(DateUtil.getUltimoDiaDoMes(ano, mes))
+            dateUtil.toDate(dateUtil.getPrimeiroDiaDoMes(ano, mes)),
+            dateUtil.toDate(dateUtil.getUltimoDiaDoMes(ano, mes))
         );
     }
 
     public double calcularValorTotalParcelasMensal(Integer ano, Integer mes) {
         List<DespesaParcela> parcelas = this.despesaParcelaRepository.findByDataVencimentoBetween(
-            DateUtil.toDate(DateUtil.getPrimeiroDiaDoMes(ano, mes)),
-            DateUtil.toDate(DateUtil.getUltimoDiaDoMes(ano, mes)));
+            dateUtil.toDate(dateUtil.getPrimeiroDiaDoMes(ano, mes)),
+            dateUtil.toDate(dateUtil.getUltimoDiaDoMes(ano, mes)));
 
         return parcelas.stream().mapToDouble(DespesaParcela::getValor).sum();
     }

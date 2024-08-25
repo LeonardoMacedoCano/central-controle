@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.util;
 
-import org.springframework.beans.factory.annotation.Value;
+import br.com.lcano.centraldecontrole.secutity.PropertiesConfig;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -10,33 +10,32 @@ import java.util.TimeZone;
 
 @Component
 public class DateUtil {
-    private static String timeZoneId;
 
-    @Value("${spring.jackson.time-zone}")
-    private void setTimeZoneId(String timeZoneId) {
-        DateUtil.timeZoneId = timeZoneId;
-    }
-
-    public static Date getDataAtual() {
+    public Date getDataAtual() {
         Date currentDate = new Date();
         currentDate.setTime(currentDate.getTime() + getTimeZone().getRawOffset());
         return currentDate;
     }
 
-    public static TimeZone getTimeZone() {
-        return TimeZone.getTimeZone(timeZoneId);
+    public TimeZone getTimeZone() {
+        return TimeZone.getTimeZone(PropertiesConfig.getTimeZone());
     }
 
-    public static Date toDate(LocalDate localDate) {
+    public String getDateFormat() {
+        return PropertiesConfig.getDateFormat();
+    }
+
+    public Date toDate(LocalDate localDate) {
         return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
-    public static LocalDate getPrimeiroDiaDoMes(Integer ano, Integer mes) {
+    public LocalDate getPrimeiroDiaDoMes(Integer ano, Integer mes) {
         return LocalDate.of(ano, mes, 1);
     }
 
-    public static LocalDate getUltimoDiaDoMes(Integer ano, Integer mes) {
+    public LocalDate getUltimoDiaDoMes(Integer ano, Integer mes) {
         return getPrimeiroDiaDoMes(ano, mes).plusMonths(1).minusDays(1);
     }
+
 }
 

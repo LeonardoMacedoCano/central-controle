@@ -18,20 +18,19 @@ import java.util.Optional;
 
 @Service
 public class FluxoCaixaService {
-
     @Autowired
     LancamentoRepository lancamentoRepository;
-
     @Resource(name = "lancamentoItemServicesMap")
     Map<TipoLancamentoEnum, LancamentoItemService<? extends LancamentoItemDTO>> lancamentoItemServices;
-
     @Autowired
     UsuarioUtil usuarioUtil;
+    @Autowired
+    DateUtil dateUtil;
 
     @Transactional
     public void createLancamento(LancamentoDTO lancamentoDTO) {
         Lancamento lancamento = new Lancamento();
-        lancamento.setDataLancamento(DateUtil.getDataAtual());
+        lancamento.setDataLancamento(dateUtil.getDataAtual());
         lancamento.setDescricao(lancamentoDTO.getDescricao());
         lancamento.setTipo(lancamentoDTO.getTipo());
         lancamento.setUsuario(usuarioUtil.getUsuarioAutenticado());

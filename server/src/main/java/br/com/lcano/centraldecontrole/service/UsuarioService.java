@@ -12,17 +12,20 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioConfigService usuarioConfigService;
+    private final DateUtil dateUtil;
 
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository,
-                          UsuarioConfigService usuarioConfigService) {
+                          UsuarioConfigService usuarioConfigService,
+                          DateUtil dateUtil) {
         this.usuarioRepository = usuarioRepository;
         this.usuarioConfigService = usuarioConfigService;
+        this.dateUtil = dateUtil;
     }
 
     @Transactional
     public void register(String username, String senha) {
-        Usuario novoUsuario = new Usuario(username, senha, DateUtil.getDataAtual());
+        Usuario novoUsuario = new Usuario(username, senha, dateUtil.getDataAtual());
         this.usuarioRepository.save(novoUsuario);
         this.usuarioConfigService.createUsuarioConfig(novoUsuario);
     }
