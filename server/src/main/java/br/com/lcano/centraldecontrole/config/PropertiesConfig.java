@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.secutity;
+package br.com.lcano.centraldecontrole.config;
 
 import br.com.lcano.centraldecontrole.dto.UsuarioDTO;
 import br.com.lcano.centraldecontrole.service.AuthorizationService;

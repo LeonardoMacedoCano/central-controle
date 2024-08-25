@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.util;
 
-import br.com.lcano.centraldecontrole.secutity.PropertiesConfig;
+import br.com.lcano.centraldecontrole.config.PropertiesConfig;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
