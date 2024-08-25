@@ -1,8 +1,8 @@
-package br.com.lcano.centraldecontrole.domain;
+package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.CategoriaDespesa;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
+import br.com.lcano.centraldecontrole.domain.Lancamento;
+import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,26 +22,30 @@ public class DespesaTest {
     void testConstrutorComParametros() {
         Long id = 1L;
         Usuario usuario = new Usuario();
-        CategoriaDespesa categoria = new CategoriaDespesa();
+        DespesaCategoria categoria = new DespesaCategoria();
         String descricao = "Teste";
         Date dataLancamento = new Date();
         List<DespesaParcela> parcelas = new ArrayList<>();
 
-        Despesa despesa = new Despesa(id, usuario, categoria, descricao, dataLancamento, parcelas);
+        Lancamento lancamento = new Lancamento(1L, usuario, dataLancamento, descricao, TipoLancamentoEnum.DESPESA);
+        Despesa despesa = new Despesa(id, lancamento, categoria, parcelas);
 
         assertEquals(id, despesa.getId());
-        assertEquals(usuario, despesa.getUsuario());
+        assertEquals(usuario, lancamento.getUsuario());
         assertEquals(categoria, despesa.getCategoria());
-        assertEquals(descricao, despesa.getDescricao());
-        assertEquals(dataLancamento, despesa.getDataLancamento());
+        assertEquals(descricao, lancamento.getDescricao());
+        assertEquals(dataLancamento, lancamento.getDataLancamento());
         assertEquals(parcelas, despesa.getParcelas());
     }
 
     @Test
     void testEqualsAndHashCode() {
         Long id = 1L;
-        Despesa despesa1 = new Despesa(id, new Usuario(), new CategoriaDespesa(), "Teste", new Date(), new ArrayList<>());
-        Despesa despesa2 = new Despesa(id, new Usuario(), new CategoriaDespesa(), "Teste", new Date(), new ArrayList<>());
+        Lancamento lancamento1 = new Lancamento(1L, new Usuario(), new Date(), "Teste", TipoLancamentoEnum.DESPESA);
+        Lancamento lancamento2 = new Lancamento(1L, new Usuario(), new Date(), "Teste", TipoLancamentoEnum.DESPESA);
+
+        Despesa despesa1 = new Despesa(id, lancamento1, new DespesaCategoria(), new ArrayList<>());
+        Despesa despesa2 = new Despesa(id, lancamento2, new DespesaCategoria(), new ArrayList<>());
 
         assertTrue(despesa1.equals(despesa2) && despesa2.equals(despesa1));
         assertEquals(despesa1.hashCode(), despesa2.hashCode());
@@ -50,7 +54,8 @@ public class DespesaTest {
     @Test
     void testToString() {
         Long id = 1L;
-        Despesa despesa = new Despesa(id, new Usuario(), new CategoriaDespesa(), "Teste", new Date(), new ArrayList<>());
+        Lancamento lancamento = new Lancamento(1L, new Usuario(), new Date(), "Teste", TipoLancamentoEnum.DESPESA);
+        Despesa despesa = new Despesa(id, lancamento, new DespesaCategoria(), new ArrayList<>());
         assertEquals("Despesa(id=1)", despesa.toString());
     }
 }

@@ -1,8 +1,9 @@
-package br.com.lcano.centraldecontrole.dto;
+package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
-import br.com.lcano.centraldecontrole.domain.Despesa;
-import br.com.lcano.centraldecontrole.domain.DespesaParcela;
+import br.com.lcano.centraldecontrole.domain.Lancamento;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,15 +25,13 @@ public class DespesaResumoMensalDTOTest {
 
         Despesa despesa = new Despesa();
         despesa.setId(1L);
-        despesa.setCategoria(new CategoriaDespesa());
-        despesa.setDescricao("Despesa de teste");
+        despesa.setCategoria(new DespesaCategoria());
         despesa.setParcelas(parcelas);
 
-        DespesaResumoMensalDTO dto = DespesaResumoMensalDTO.converterParaDTO(despesa);
+        DespesaResumoMensalDTO dto = DespesaResumoMensalDTO.converterParaDTO(despesa, new Lancamento());
 
         assertEquals(despesa.getId(), dto.getId());
         assertNotNull(dto.getCategoria());
-        assertEquals(despesa.getDescricao(), dto.getDescricao());
         assertEquals(300.0, dto.getValorTotal());
         assertEquals("Parcialmente pago", dto.getSituacao());
     }

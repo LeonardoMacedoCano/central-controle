@@ -1,19 +1,19 @@
-package br.com.lcano.centraldecontrole.dto;
+package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.FormaPagamento;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class FormaPagamentoDTOTest {
+public class DespesaFormaPagamentoDTOTest {
 
     @Test
     void testConverterParaDTO() {
-        FormaPagamento formaPagamento = new FormaPagamento();
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento();
         formaPagamento.setId(1L);
         formaPagamento.setDescricao("Pix");
 
-        FormaPagamentoDTO dto = FormaPagamentoDTO.converterParaDTO(formaPagamento);
+        DespesaFormaPagamentoDTO dto = DespesaFormaPagamentoDTO.converterParaDTO(formaPagamento);
 
         assertEquals(formaPagamento.getId(), dto.getId());
         assertEquals(formaPagamento.getDescricao(), dto.getDescricao());

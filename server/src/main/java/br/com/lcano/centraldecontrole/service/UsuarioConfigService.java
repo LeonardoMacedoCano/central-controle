@@ -29,7 +29,7 @@ public class UsuarioConfigService {
     }
 
     @Transactional
-    public void createUsuarioConfig(Usuario usuario) {
+    public void createAndSaveUsuarioConfig(Usuario usuario) {
         this.usuarioConfigRepository.save(new UsuarioConfig(usuario));
     }
 

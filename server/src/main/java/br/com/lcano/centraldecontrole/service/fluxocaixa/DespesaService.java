@@ -24,11 +24,11 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
 
     @Autowired
     public DespesaService(DespesaRepository despesaRepository,
-                          DespesaCategoriaRepository categoriaDespesaRepository,
+                          DespesaCategoriaRepository despesaCategoriaRepository,
                           DespesaCategoriaService categoriaDespesaService,
                           DespesaParcelaService despesaParcelaService) {
         this.despesaRepository = despesaRepository;
-        this.despesaCategoriaRepository = categoriaDespesaRepository;
+        this.despesaCategoriaRepository = despesaCategoriaRepository;
         this.despesaCategoriaService = categoriaDespesaService;
         this.despesaParcelaService = despesaParcelaService;
     }

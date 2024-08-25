@@ -1,7 +1,7 @@
-package br.com.lcano.centraldecontrole.dto;
+package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.DespesaParcela;
-import br.com.lcano.centraldecontrole.domain.FormaPagamento;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import org.junit.jupiter.api.Test;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +19,7 @@ public class DespesaParcelaDTOTest {
         despesaParcela.setValor(100.0);
         despesaParcela.setPago(true);
 
-        FormaPagamento formaPagamento = new FormaPagamento(1L, "Cartao");
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento(1L, "Cartao");
         despesaParcela.setFormaPagamento(formaPagamento);
 
         DespesaParcelaDTO dto = DespesaParcelaDTO.converterParaDTO(despesaParcela);
@@ -35,8 +35,8 @@ public class DespesaParcelaDTOTest {
 
     @Test
     void testConverterListaParaDTO() {
-        FormaPagamento formaPagamentoCartao = new FormaPagamento(1L, "Cartao");
-        FormaPagamento formaPagamentoPix = new FormaPagamento(2L, "Pix");
+        DespesaFormaPagamento formaPagamentoCartao = new DespesaFormaPagamento(1L, "Cartao");
+        DespesaFormaPagamento formaPagamentoPix = new DespesaFormaPagamento(2L, "Pix");
 
         DespesaParcela despesaParcela1 = new DespesaParcela();
         despesaParcela1.setId(1L);

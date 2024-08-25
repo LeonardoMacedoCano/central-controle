@@ -1,7 +1,5 @@
-package br.com.lcano.centraldecontrole.domain;
+package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.FormaPagamento;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Date;
@@ -29,7 +27,7 @@ public class DespesaParcelaTest {
         despesaParcela.setDataVencimento(dataVencimento);
         despesaParcela.setValor(100.00);
         despesaParcela.setPago(true);
-        FormaPagamento formaPagamento = new FormaPagamento(1L, "Cartao");
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento(1L, "Cartao");
         despesaParcela.setFormaPagamento(formaPagamento);
 
         assertEquals(1L, despesaParcela.getId());

@@ -1,9 +1,9 @@
-package br.com.lcano.centraldecontrole.dto;
+package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.CategoriaDespesa;
-import br.com.lcano.centraldecontrole.domain.Despesa;
-import br.com.lcano.centraldecontrole.domain.DespesaParcela;
-import br.com.lcano.centraldecontrole.domain.FormaPagamento;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Date;
@@ -14,18 +14,16 @@ public class DespesaDTOTest {
 
     @Test
     void testConverterParaDTO() {
-        CategoriaDespesa categoria = new CategoriaDespesa();
+        DespesaCategoria categoria = new DespesaCategoria();
         categoria.setId(1L);
         categoria.setDescricao("Categoria de Teste");
 
-        FormaPagamento formaPagamento = new FormaPagamento();
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento();
         formaPagamento.setId(1L);
         formaPagamento.setDescricao("Cartao");
 
         Despesa despesa = new Despesa();
         despesa.setId(1L);
-        despesa.setDescricao("Despesa de Teste");
-        despesa.setDataLancamento(new Date());
         despesa.setCategoria(categoria);
         despesa.setParcelas(Arrays.asList(
                 new DespesaParcela(1L, 1, new Date(), 5.00, false, despesa, formaPagamento),
@@ -36,8 +34,6 @@ public class DespesaDTOTest {
         DespesaDTO dto = DespesaDTO.converterParaDTO(despesa);
 
         assertEquals(despesa.getId(), dto.getId());
-        assertEquals(despesa.getDescricao(), dto.getDescricao());
-        assertEquals(despesa.getDataLancamento(), dto.getDataLancamento());
         assertNotNull(dto.getCategoria());
         assertEquals(despesa.getCategoria().getId(), dto.getCategoria().getId());
         assertEquals(despesa.getCategoria().getDescricao(), dto.getCategoria().getDescricao());

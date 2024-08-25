@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.dto;
 
-import br.com.lcano.centraldecontrole.domain.FormaPagamento;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.UsuarioConfig;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ public class UsuarioConfigDTOTest {
         usuario.setId(1L);
         usuario.setUsername("Teste");
 
-        FormaPagamento formaPagamento = new FormaPagamento();
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento();
         formaPagamento.setId(1L);
         formaPagamento.setDescricao("Cartao");
 

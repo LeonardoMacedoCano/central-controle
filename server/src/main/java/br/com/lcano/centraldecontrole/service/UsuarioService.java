@@ -27,7 +27,7 @@ public class UsuarioService {
     public void register(String username, String senha) {
         Usuario novoUsuario = new Usuario(username, senha, dateUtil.getDataAtual());
         this.usuarioRepository.save(novoUsuario);
-        this.usuarioConfigService.createUsuarioConfig(novoUsuario);
+        this.usuarioConfigService.createAndSaveUsuarioConfig(novoUsuario);
     }
 
     public UserDetails findByUsername(String username) {
