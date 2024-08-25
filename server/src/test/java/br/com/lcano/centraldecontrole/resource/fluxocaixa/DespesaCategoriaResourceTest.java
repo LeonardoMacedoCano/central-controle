@@ -1,12 +1,11 @@
-package br.com.lcano.centraldecontrole.resource;
+package br.com.lcano.centraldecontrole.resource.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
-import br.com.lcano.centraldecontrole.service.CategoriaDespesaService;
+import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.ArrayList;
@@ -15,18 +14,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
-class CategoriaDespesaResourceTest {
+class DespesaCategoriaResourceTest {
     @Mock
-    private CategoriaDespesaService categoriaDespesaService;
+    private DespesaCategoriaService despesaCategoriaService;
 
     @InjectMocks
-    private CategoriaDespesaResource categoriaDespesaResource;
+    private DespesaCategoriaResource despesaCategoriaResource;
 
     @BeforeEach
     void setUp() {
-        categoriaDespesaService = mock(CategoriaDespesaService.class);
-        categoriaDespesaResource = new CategoriaDespesaResource(categoriaDespesaService);
+        despesaCategoriaService = mock(DespesaCategoriaService.class);
+        despesaCategoriaResource = new DespesaCategoriaResource(despesaCategoriaService);
     }
 
     @Test
@@ -43,12 +41,12 @@ class CategoriaDespesaResourceTest {
         categoriasDespesaMock.add(categoriaDTO1);
         categoriasDespesaMock.add(categoriaDTO2);
 
-        when(categoriaDespesaService.getTodasCategoriasDespesa()).thenReturn(categoriasDespesaMock);
+        when(despesaCategoriaService.getTodasCategoriasDespesa()).thenReturn(categoriasDespesaMock);
 
-        ResponseEntity<List<CategoriaDTO>> response = categoriaDespesaResource.getTodasCategoriasDespesa();
+        ResponseEntity<List<CategoriaDTO>> response = despesaCategoriaResource.getTodasCategoriasDespesa();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(categoriasDespesaMock, response.getBody());
-        verify(categoriaDespesaService, times(1)).getTodasCategoriasDespesa();
+        verify(despesaCategoriaService, times(1)).getTodasCategoriasDespesa();
     }
 }

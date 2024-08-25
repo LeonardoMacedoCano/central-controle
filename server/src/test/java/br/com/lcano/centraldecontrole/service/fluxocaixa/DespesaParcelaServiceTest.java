@@ -1,16 +1,20 @@
-package br.com.lcano.centraldecontrole.service;
+package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.*;
-import br.com.lcano.centraldecontrole.dto.DespesaParcelaDTO;
-import br.com.lcano.centraldecontrole.dto.FormaPagamentoDTO;
-import br.com.lcano.centraldecontrole.repository.DespesaParcelaRepository;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaParcelaDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaFormaPagamentoDTO;
+import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.repository.fluxocaixa.DespesaParcelaRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.*;
 
@@ -18,19 +22,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 public class DespesaParcelaServiceTest {
     @Mock
     private DespesaParcelaRepository despesaParcelaRepository;
+    @Mock
+    private DespesaFormaPagamentoService despesaFormaPagamentoService;
+    @Mock
+    private DateUtil dateUtil;
     @InjectMocks
     private DespesaParcelaService despesaParcelaService;
-    @Mock
-    private FormaPagamentoService formaPagamentoService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        despesaParcelaService = new DespesaParcelaService(despesaParcelaRepository, formaPagamentoService);
+        despesaParcelaService = new DespesaParcelaService(despesaParcelaRepository, despesaFormaPagamentoService, dateUtil);
     }
 
     @Test
@@ -48,15 +53,15 @@ public class DespesaParcelaServiceTest {
         parcelaDTO.setValor(100.0);
         parcelaDTO.setPago(false);
 
-        FormaPagamento formaPagamento = new FormaPagamento(1L, "Pix");
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento(1L, "Pix");
 
-        parcelaDTO.setFormaPagamento(FormaPagamentoDTO.converterParaDTO(formaPagamento));
+        parcelaDTO.setFormaPagamento(DespesaFormaPagamentoDTO.converterParaDTO(formaPagamento));
 
         Despesa despesa = new Despesa();
 
-        when(formaPagamentoService.getFormaPagamentoById(formaPagamento.getId())).thenReturn(formaPagamento);
+        when(despesaFormaPagamentoService.getFormaPagamentoById(formaPagamento.getId())).thenReturn(formaPagamento);
 
-        DespesaParcela novaParcela = despesaParcelaService.criarParcela(parcelaDTO, despesa);
+        DespesaParcela novaParcela = despesaParcelaService.createParcela(parcelaDTO, despesa);
 
         assertEquals(parcelaDTO.getNumero(), novaParcela.getNumero());
         assertEquals(parcelaDTO.getDataVencimento(), novaParcela.getDataVencimento());
@@ -68,7 +73,7 @@ public class DespesaParcelaServiceTest {
 
     @Test
     public void testCriarParcelas() {
-        FormaPagamento formaPagamento = new FormaPagamento(1L, "Pix");
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento(1L, "Pix");
         Despesa despesa = new Despesa();
 
         List<DespesaParcelaDTO> parcelasDTO = new ArrayList<>();
@@ -77,7 +82,7 @@ public class DespesaParcelaServiceTest {
         parcelaDTO1.setDataVencimento(new Date());
         parcelaDTO1.setValor(100.0);
         parcelaDTO1.setPago(false);
-        parcelaDTO1.setFormaPagamento(FormaPagamentoDTO.converterParaDTO(formaPagamento));
+        parcelaDTO1.setFormaPagamento(DespesaFormaPagamentoDTO.converterParaDTO(formaPagamento));
 
         parcelasDTO.add(parcelaDTO1);
 
@@ -88,7 +93,7 @@ public class DespesaParcelaServiceTest {
         parcelaDTO2.setPago(false);
         parcelasDTO.add(parcelaDTO2);
 
-        when(formaPagamentoService.getFormaPagamentoById(formaPagamento.getId())).thenReturn(formaPagamento);
+        when(despesaFormaPagamentoService.getFormaPagamentoById(formaPagamento.getId())).thenReturn(formaPagamento);
 
         List<DespesaParcela> parcelas = despesaParcelaService.criarParcelas(despesa, parcelasDTO);
 
@@ -109,8 +114,8 @@ public class DespesaParcelaServiceTest {
 
     @Test
     void testEditarParcela() {
-        FormaPagamento formaPagamentoCartao = new FormaPagamento(1L, "Cartão de Crédito");
-        FormaPagamento formaPagamentoPix = new FormaPagamento(2L, "Pix");
+        DespesaFormaPagamento formaPagamentoCartao = new DespesaFormaPagamento(1L, "Cartão de Crédito");
+        DespesaFormaPagamento formaPagamentoPix = new DespesaFormaPagamento(2L, "Pix");
 
         DespesaParcela parcelaExistente = new DespesaParcela();
         parcelaExistente.setId(1L);
@@ -126,11 +131,11 @@ public class DespesaParcelaServiceTest {
         parcelaDTO.setDataVencimento(new Date());
         parcelaDTO.setValor(200.0);
         parcelaDTO.setPago(true);
-        parcelaDTO.setFormaPagamento(FormaPagamentoDTO.converterParaDTO(formaPagamentoPix));
+        parcelaDTO.setFormaPagamento(DespesaFormaPagamentoDTO.converterParaDTO(formaPagamentoPix));
 
-        when(formaPagamentoService.getFormaPagamentoById(formaPagamentoPix.getId())).thenReturn(formaPagamentoPix);
+        when(despesaFormaPagamentoService.getFormaPagamentoById(formaPagamentoPix.getId())).thenReturn(formaPagamentoPix);
 
-        despesaParcelaService.editarParcela(parcelaExistente, parcelaDTO);
+        despesaParcelaService.updateParcela(parcelaExistente, parcelaDTO);
 
         assertEquals(parcelaDTO.getDataVencimento(), parcelaExistente.getDataVencimento());
         assertEquals(parcelaDTO.getValor(), parcelaExistente.getValor());
@@ -168,7 +173,7 @@ public class DespesaParcelaServiceTest {
 
         List<DespesaParcelaDTO> parcelasDTO = List.of(parcelaDTO1, parcelaDTO2);
 
-        List<DespesaParcela> parcelasAtualizadas = despesaParcelaService.atualizarParcelas(despesaExistente, parcelasDTO);
+        List<DespesaParcela> parcelasAtualizadas = despesaParcelaService.updateParcelas(despesaExistente, parcelasDTO);
 
         assertEquals(2, parcelasAtualizadas.size());
 
@@ -191,13 +196,14 @@ public class DespesaParcelaServiceTest {
         int ano = 2024;
         int mes = 3;
 
-        Date dataInicio = DateUtil.toDate(DateUtil.getPrimeiroDiaDoMes(ano, mes));
-        Date dataFim = DateUtil.toDate(DateUtil.getUltimoDiaDoMes(ano, mes));
+        Date dataInicio = dateUtil.toDate(dateUtil.getPrimeiroDiaDoMes(ano, mes));
+        Date dataFim = dateUtil.toDate(dateUtil.getUltimoDiaDoMes(ano, mes));
 
         Usuario usuario = new Usuario("teste", "123", new Date());
-        CategoriaDespesa categoriaDespesa = new CategoriaDespesa("teste");
-        FormaPagamento formaPagamento = new FormaPagamento("Cartao");
-        Despesa despesa = new Despesa(1L, usuario, categoriaDespesa, "teste1", new Date(), new ArrayList<>());
+        DespesaCategoria despesaCategoria = new DespesaCategoria("teste");
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento("Cartao");
+        Lancamento lancamento = new Lancamento(1L, usuario, new Date(), "teste1", TipoLancamentoEnum.DESPESA);
+        Despesa despesa = new Despesa(1L, lancamento, despesaCategoria, new ArrayList<>());
 
         List<DespesaParcela> parcelasMock = Arrays.asList(
                 new DespesaParcela(1L, 1, dataInicio, 10.00, false, despesa, formaPagamento),
@@ -209,7 +215,7 @@ public class DespesaParcelaServiceTest {
         when(despesaParcelaRepository.findByDespesaAndDataVencimentoBetween(despesa, dataInicio, dataFim))
                 .thenReturn(parcelasMock);
 
-        List<DespesaParcela> parcelas = despesaParcelaService.listarParcelasPorVencimento(despesa, ano, mes);
+        List<DespesaParcela> parcelas = despesaParcelaService.getParcelasPorVencimento(despesa, ano, mes);
 
         assertEquals(parcelasMock.size(), parcelas.size());
         assertEquals(parcelasMock, parcelas);
@@ -218,20 +224,22 @@ public class DespesaParcelaServiceTest {
     @Test
     public void testCalcularValorTotalParcelasMensal() {
         Usuario usuario = new Usuario("teste", "123", new Date());
-        CategoriaDespesa categoriaDespesa = new CategoriaDespesa("teste");
-        FormaPagamento formaPagamento = new FormaPagamento("Cartao");
-        Despesa despesa = new Despesa(1L, usuario, categoriaDespesa, "teste1", new Date(), new ArrayList<>());
+        DespesaCategoria despesaCategoria = new DespesaCategoria("teste");
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento("Cartao");
+        Lancamento lancamento = new Lancamento(1L, usuario, new Date(), "teste1", TipoLancamentoEnum.DESPESA);
+        Despesa despesa = new Despesa(1L, lancamento, despesaCategoria, new ArrayList<>());
+
+        Date dataInicioMes = dateUtil.toDate(dateUtil.getPrimeiroDiaDoMes(2024, Calendar.JUNE));
+        Date dataFimMes = dateUtil.toDate(dateUtil.getUltimoDiaDoMes(2024, Calendar.JUNE));
 
         List<DespesaParcela> parcelasMock = Arrays.asList(
-                new DespesaParcela(1L, 1, new Date(), 5.00, false, despesa, formaPagamento),
-                new DespesaParcela(2L, 2, new Date(), 10.00, false, despesa, formaPagamento),
-                new DespesaParcela(3L, 3, new Date(), 15.00, false, despesa, formaPagamento));
+                new DespesaParcela(1L, 1, dataInicioMes, 7.00, false, despesa, formaPagamento),
+                new DespesaParcela(3L, 3, dataFimMes, 10.00, false, despesa, formaPagamento));
 
-        when(despesaParcelaRepository.findByDataVencimentoBetween(
-                any(Date.class), any(Date.class))).thenReturn(parcelasMock);
+        when(despesaParcelaRepository.findByDataVencimentoBetween(any(), any())).thenReturn(parcelasMock);
 
-        double total = despesaParcelaService.calcularValorTotalParcelasMensal(2024, 3);
+        double total = despesaParcelaService.calcularValorTotalParcelasMensal(2024, Calendar.JUNE);
 
-        assertEquals(30.0, total);
+        assertEquals(17.0, total);
     }
 }

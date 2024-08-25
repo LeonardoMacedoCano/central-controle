@@ -1,6 +1,6 @@
-package br.com.lcano.centraldecontrole.resource;
+package br.com.lcano.centraldecontrole.resource.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.service.DespesaParcelaService;
+import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaParcelaService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

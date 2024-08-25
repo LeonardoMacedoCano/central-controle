@@ -17,13 +17,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorizationService implements UserDetailsService {
     @Autowired
-    UsuarioRepository usuarioRepository;
-
+    private final UsuarioRepository usuarioRepository;
     @Autowired
-    UsuarioService usuarioService;
-
+    private final UsuarioService usuarioService;
     @Autowired
-    TokenService tokenService;
+    private final TokenService tokenService;
+
+    public AuthorizationService(UsuarioRepository usuarioRepository, UsuarioService usuarioService, TokenService tokenService) {
+        this.usuarioRepository = usuarioRepository;
+        this.usuarioService = usuarioService;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

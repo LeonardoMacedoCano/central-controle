@@ -73,22 +73,22 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
         return TipoLancamentoEnum.DESPESA;
     }
 
-    private Despesa getDespesaById(Long id) {
+    public Despesa getDespesaById(Long id) {
         return despesaRepository.findById(id)
                 .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaById(id));
     }
 
-    private DespesaCategoria getCategoriaById(Long id) {
+    public DespesaCategoria getCategoriaById(Long id) {
         return despesaCategoriaRepository.findById(id)
             .orElseThrow(() -> new DespesaException.CategoriaNaoEncontradaById(id));
     }
 
-    private Despesa getDespesaByLancamentoIdWithParcelas(Long lancamentoId) {
+    public Despesa getDespesaByLancamentoIdWithParcelas(Long lancamentoId) {
         return despesaRepository.findByLancamentoIdWithParcelas(lancamentoId)
                 .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaByLancamentoId(lancamentoId));
     }
 
-    private Despesa getDespesaByLancamentoId(Long lancamentoId) {
+    public Despesa getDespesaByLancamentoId(Long lancamentoId) {
         return despesaRepository.findByLancamentoId(lancamentoId)
                 .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaByLancamentoId(lancamentoId));
     }

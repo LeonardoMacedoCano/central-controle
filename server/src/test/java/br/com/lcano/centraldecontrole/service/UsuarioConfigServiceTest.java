@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.domain.FormaPagamento;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.UsuarioConfig;
 import br.com.lcano.centraldecontrole.dto.UsuarioConfigDTO;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
 import java.util.Optional;
@@ -19,11 +18,9 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
 public class UsuarioConfigServiceTest {
     @Mock
     private UsuarioConfigRepository usuarioConfigRepository;
-
     @InjectMocks
     private UsuarioConfigService usuarioConfigService;
 
@@ -31,13 +28,6 @@ public class UsuarioConfigServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         usuarioConfigService = new UsuarioConfigService(usuarioConfigRepository);
-    }
-
-    @Test
-    void testSalvarUsuarioConfig() {
-        UsuarioConfig usuarioConfig = new UsuarioConfig();
-        usuarioConfigService.salvarUsuarioConfig(usuarioConfig);
-        verify(usuarioConfigRepository, times(1)).save(usuarioConfig);
     }
 
     @Test
@@ -81,10 +71,10 @@ public class UsuarioConfigServiceTest {
     }
 
     @Test
-    void testGerarUsuarioConfig() {
+    void testCreateAndSaveUsuarioConfig() {
         Usuario usuario = new Usuario();
         usuario.setId(1L);
-        usuarioConfigService.gerarUsuarioConfig(usuario);
+        usuarioConfigService.createAndSaveUsuarioConfig(usuario);
 
         verify(usuarioConfigRepository, times(1)).save(any(UsuarioConfig.class));
     }
@@ -97,7 +87,7 @@ public class UsuarioConfigServiceTest {
         data.setDespesaNumeroMaxItemPagina(20);
         data.setDespesaValorMetaMensal(100.0);
         data.setDespesaDiaPadraoVencimento(15);
-        FormaPagamento formaPagamento = new FormaPagamento();
+        DespesaFormaPagamento formaPagamento = new DespesaFormaPagamento();
         data.setDespesaFormaPagamentoPadrao(formaPagamento);
 
         when(usuarioConfigRepository.findById(1L)).thenReturn(Optional.of(usuarioConfig));
