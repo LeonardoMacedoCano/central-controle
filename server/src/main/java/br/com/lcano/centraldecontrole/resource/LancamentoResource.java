@@ -1,8 +1,8 @@
-package br.com.lcano.centraldecontrole.resource.fluxocaixa;
+package br.com.lcano.centraldecontrole.resource;
 
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
-import br.com.lcano.centraldecontrole.service.fluxocaixa.FluxoCaixaService;
+import br.com.lcano.centraldecontrole.service.LancamentoService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @RestController
-@RequestMapping("/api/fluxo-caixa")
-public class FluxoCaixaResource {
+@RequestMapping("/api/lancamento")
+public class LancamentoResource {
     @Autowired
-    private final FluxoCaixaService fluxoCaixaService;
+    private final LancamentoService fluxoCaixaService;
 
-    public FluxoCaixaResource(FluxoCaixaService fluxoCaixaService) {
+    public LancamentoResource(LancamentoService fluxoCaixaService) {
         this.fluxoCaixaService = fluxoCaixaService;
     }
 
@@ -41,7 +41,7 @@ public class FluxoCaixaResource {
         return CustomSuccess.buildResponseEntity("Lançamento deletado com sucesso.");
     }
 
-    @GetMapping("/lancamentos")
+    @GetMapping
     public ResponseEntity<Page<LancamentoDTO>> getLancamentos(Pageable pageable,
                                                               @RequestParam(required = false) String descricao,
                                                               @RequestParam(required = false) TipoLancamentoEnum tipo,

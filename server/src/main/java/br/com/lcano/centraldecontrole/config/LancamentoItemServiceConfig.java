@@ -1,7 +1,8 @@
-package br.com.lcano.centraldecontrole.service.fluxocaixa;
+package br.com.lcano.centraldecontrole.config;
 
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.service.LancamentoItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

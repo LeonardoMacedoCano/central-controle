@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.service.fluxocaixa;
+package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;

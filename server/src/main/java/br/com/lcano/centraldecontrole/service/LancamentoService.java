@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.service.fluxocaixa;
+package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class FluxoCaixaService {
+public class LancamentoService {
     @Autowired
     LancamentoRepository lancamentoRepository;
     @Resource(name = "lancamentoItemServicesMap")

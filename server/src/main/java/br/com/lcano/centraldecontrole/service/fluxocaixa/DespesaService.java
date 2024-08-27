@@ -9,6 +9,7 @@ import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.DespesaCategoriaRepository;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.DespesaRepository;
+import br.com.lcano.centraldecontrole.service.LancamentoItemService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
