@@ -11,8 +11,12 @@ import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -57,6 +61,13 @@ public class FluxoCaixaService {
 
         lancamentoItemService.delete(id);
         lancamentoRepository.delete(lancamento);
+    }
+
+    public Page<LancamentoDTO> getLancamentos(Pageable pageable, String descricao, TipoLancamentoEnum tipo, Date dataInicio, Date dataFim) {
+        List<TipoLancamentoEnum> tipos = tipo != null ? List.of(tipo) : List.of(TipoLancamentoEnum.DESPESA, TipoLancamentoEnum.RECEITA, TipoLancamentoEnum.PASSIVO, TipoLancamentoEnum.ATIVO);
+
+        return lancamentoRepository.search(usuarioUtil.getUsuarioAutenticado().getId(), tipos, descricao, dataInicio, dataFim, pageable)
+                .map(LancamentoDTO::converterParaDTO);
     }
 
     public LancamentoDTO getLancamentoDTO(Long id) {

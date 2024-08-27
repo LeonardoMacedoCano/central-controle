@@ -38,4 +38,13 @@ public class LancamentoDTO {
         dto.setItemDTO(itemDTO);
         return dto;
     }
+
+    public static LancamentoDTO converterParaDTO(Lancamento lancamento) {
+        LancamentoDTO dto = new LancamentoDTO();
+        dto.setId(lancamento.getId());
+        dto.setDataLancamento(lancamento.getDataLancamento());
+        dto.setDescricao(lancamento.getDescricao());
+        dto.setTipo(lancamento.getTipo());
+        return dto;
+    }
 }
