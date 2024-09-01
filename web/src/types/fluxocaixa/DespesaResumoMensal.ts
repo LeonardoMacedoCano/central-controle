@@ -1,4 +1,4 @@
-import { Categoria } from "./Categoria";
+import { Categoria } from "../Categoria";
 
 export type DespesaResumoMensal = {
   id: number;

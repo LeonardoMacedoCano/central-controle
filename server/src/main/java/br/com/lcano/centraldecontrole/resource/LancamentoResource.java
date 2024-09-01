@@ -25,8 +25,8 @@ public class LancamentoResource {
 
     @PostMapping
     public ResponseEntity<Object> createLancamento(@RequestBody LancamentoDTO lancamentoDTO) {
-        this.fluxoCaixaService.createLancamento(lancamentoDTO);
-        return CustomSuccess.buildResponseEntity("Lançamento efetuado com sucesso.");
+        Long id = this.fluxoCaixaService.createLancamento(lancamentoDTO);
+        return CustomSuccess.buildResponseEntity("Lançamento efetuado com sucesso.", "id", id);
     }
 
     @PutMapping("/{id}")

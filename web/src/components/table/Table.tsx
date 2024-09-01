@@ -1,6 +1,10 @@
-import React, { ReactNode } from 'react';
-import * as C from './styles';
-import Button from '../../components/button/button/Button';
+import React, { ReactNode, useState, FC } from 'react';
+import styled from 'styled-components';
+import Container from '../container/Container';
+import SearchPagination from '../pagination/SearchPagination';
+import { PagedResponse } from '../../types/PagedResponse';
+import Button from '../button/button/Button';
+import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
 
 type ColumnProps<T> = {
   header: ReactNode;
@@ -11,143 +15,283 @@ export const Column = <T extends any>({}: ColumnProps<T>) => {
   return null;
 };
 
-interface TableToolbarProps {
-  handleAdd?: () => void;
-  handleEdit?: () => void;
-  handleDelete?: () => void;
-  handleMoney?: () => void;
-  isItemSelected: boolean;
+interface TableActionsProps {
+  onView?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  visible: boolean;
 }
 
-export const TableToolbar: React.FC<TableToolbarProps> = ({
-  handleAdd,
-  handleEdit,
-  handleDelete,
-  handleMoney,
-  isItemSelected,
-}) => {
+const TableActions: FC<TableActionsProps> = ({ onView, onEdit, onDelete, visible }) => {
+  const commonButtonStyles = {
+    borderRadius: '50%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    display: 'flex',
+    height: '30px',
+    width: '30px',
+  };
+
   return (
-    <>
-      {handleAdd && (
-        <Button 
-          variant='table-add' 
-          onClick={handleAdd} 
-          disabled={isItemSelected} 
-        />
-      )}
-      {handleEdit && (
-        <Button 
-          variant='table-edit' 
-          onClick={handleEdit} 
-          disabled={!isItemSelected} 
-        />
-      )}
-      {handleDelete && (
-        <Button 
-          variant='table-delete' 
-          onClick={handleDelete} 
-          disabled={!isItemSelected} 
-        />
-      )}
-      {handleMoney && (
-        <Button 
-          variant='table-money' 
-          onClick={handleMoney} 
-          disabled={!isItemSelected} 
-        />
-      )}
-    </>
+    <ActionsContainer>
+      <ActionsWrapper visible={visible}>
+        {onView && (
+          <Button 
+            onClick={onView}
+            variant='success'
+            icon={<FaEye />}
+            hint='Visualizar'
+            style={commonButtonStyles}
+          />
+        )}
+        {onEdit && (
+          <Button 
+            variant='info'
+            icon={<FaEdit />}
+            onClick={onEdit} 
+            style={commonButtonStyles}
+          />
+        )}
+        {onDelete && (
+          <Button 
+            variant='warning'
+            icon={<FaTrash />} 
+            onClick={onDelete} 
+            style={commonButtonStyles}
+          />
+        )}
+      </ActionsWrapper>
+    </ActionsContainer>
   );
 };
 
 interface TableProps<T> {
-  values: T[];
+  values: T[] | PagedResponse<T>;
   columns: ReactNode[];
   messageEmpty?: string;
   keyExtractor(item: T, index?: number): string | number;
-  onClickRow(item: T, index?: number): void;
+  onClickRow?(item: T, index?: number): void;
   rowSelected?(item: T): boolean;
   customHeader?: React.ReactNode;
+  loadPage?: (pageIndex: number, pageSize: number) => void;
+  onView?: (item: T) => void;
+  onEdit?: (item: T) => void;
+  onDelete?: (item: T) => void;
 }
 
 interface Indexable {
   [key: string]: any;
 }
 
+const getValues = (values: any[] | PagedResponse<any>): any[] => {
+  if ('content' in values) {
+    return (values as PagedResponse<any>).content || [];
+  }
+  return values as any[];
+};
+
+
 export const Table = <T extends Indexable>({
   values,
   columns,
-  messageEmpty = 'Nenhuma parcela encontrada.',
+  messageEmpty,
   keyExtractor,
   onClickRow,
   rowSelected,
   customHeader,
+  loadPage,
+  onView,
+  onEdit,
+  onDelete,
 }: TableProps<T>) => {
-  const renderTableHead = () => {
-    return (
-      <thead>
-        <C.TableHeadRow>
-          {columns.map((column, index) => {
-            if (React.isValidElement(column)) {
-              const columnProps = column.props as ColumnProps<T>;
-              return (
-                <C.TableHeadColumn key={index}>
-                  <C.TableColumnTitle>
-                    {columnProps.header}
-                  </C.TableColumnTitle>
-                </C.TableHeadColumn>
-              );
-            }
-            return null;
-          })}
-        </C.TableHeadRow>
-      </thead>
-    );
-  };
+  const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
+
+  const renderTableHead = () => (
+    <thead>
+      <TableHeadRow>
+        {columns.map((column, index) => {
+          if (React.isValidElement(column)) {
+            const columnProps = column.props as ColumnProps<T>;
+            return (
+              <TableHeadColumn key={index}>
+                <TableColumnTitle>{columnProps.header}</TableColumnTitle>
+              </TableHeadColumn>
+            );
+          }
+          return null;
+        })}
+      </TableHeadRow>
+    </thead>
+  );
 
   const renderTableBody = () => {
+    const data = getValues(values);
     return (
       <tbody>
-        {values.map((item, index) => (
-          <C.TableRow
-            key={keyExtractor(item, index)}
-            onClick={() => onClickRow(item, index)}
-          >
-            {columns.map((column, columnIndex) => {
-              if (React.isValidElement(column)) {
-                const columnProps = column.props as ColumnProps<T>;
-                return (
-                  <C.TableColumn
-                    key={columnIndex}
-                    isSelected={rowSelected ? rowSelected(item) : false}
-                  >
-                    {columnProps.value(item, index)}
-                  </C.TableColumn>
-                );
-              }
-              return null;
-            })}
-          </C.TableRow>
-        ))}
+        {data.length === 0 ? (
+          <tr>
+            <td colSpan={columns.length}>
+              <EmptyMessage>{messageEmpty}</EmptyMessage>
+            </td>
+          </tr>
+        ) : (
+          data.map((item, index) => (
+            <TableRow
+              key={keyExtractor(item, index)}
+              onClick={() => onClickRow && onClickRow(item, index)}
+              onMouseEnter={() => setHoveredRowIndex(index)}
+              onMouseLeave={() => setHoveredRowIndex(null)}
+            >
+              {columns.map((column, columnIndex) => {
+                if (React.isValidElement(column)) {
+                  const columnProps = column.props as ColumnProps<T>;
+                  return (
+                    <TableColumn key={columnIndex} isSelected={rowSelected ? rowSelected(item) : false}>
+                      {columnProps.value(item, index)}
+                    </TableColumn>
+                  );
+                }
+                return null;
+              })}
+              <ActionColumn>
+                <TableActions
+                  onView={onView ? () => onView(item) : undefined}
+                  onEdit={onEdit ? () => onEdit(item) : undefined}
+                  onDelete={onDelete ? () => onDelete(item) : undefined}
+                  visible={hoveredRowIndex === index}
+                />
+              </ActionColumn>
+            </TableRow>
+          ))
+        )}
       </tbody>
     );
   };
 
+  const renderPagination = () => {
+    if (loadPage && 'content' in values) {
+      return (
+        <SearchPagination
+          height='35px'
+          page={values}
+          loadPage={loadPage}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
-    <C.TableContainer>
-      {customHeader && (
-        <C.CustomHeader>
-          {customHeader}
-        </C.CustomHeader>
-      )}
-      {values.length === 0 ? (
-        <C.EmptyMessage>{messageEmpty}</C.EmptyMessage>
+    <Container backgroundColor="transparent" width="100%">
+      {customHeader && <CustomHeader>{customHeader}</CustomHeader>}
+      {getValues(values).length === 0 ? (
+        <EmptyMessage>{messageEmpty}</EmptyMessage>
       ) : (
-        <C.StyledTable>
+        <StyledTable>
           {renderTableHead()}
           {renderTableBody()}
-        </C.StyledTable>
+        </StyledTable>
       )}
-    </C.TableContainer>
+      {renderPagination()}
+    </Container>
   );
 };
+
+export default Table;
+
+const CustomHeader = styled.div`
+  width: 100%;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.quaternary};
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+const TableHeadRow = styled.tr`
+  width: 100%;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.quaternary};
+`;
+
+const TableHeadColumn = styled.th`
+  padding: 0 10px;
+  text-align: left;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  border-left: 1px solid ${({ theme }) => theme.colors.quaternary};
+  &:first-child {
+    border-left: none;
+  }
+`;
+
+const TableColumnTitle = styled.div`
+  height: 40px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  color: ${({ theme }) => theme.colors.quaternary};
+`;
+
+const TableRow = styled.tr<{ isSelected?: boolean }>`
+  background-color: ${({ theme }) => theme.colors.secondary};
+  &:nth-child(odd) {
+    background-color: ${({ theme }) => theme.colors.tertiary};
+  }
+  &:last-child {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.quaternary};
+  }
+`;
+
+const TableColumn = styled.td<{ isSelected?: boolean }>`
+  height: 35px;
+  padding: 0 10px;
+  text-align: left;
+  border-left: 1px solid ${({ theme }) => theme.colors.quaternary};
+  position: relative;
+  &:first-child::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 5px;
+    background-color: ${({ theme, isSelected }) => (isSelected ? theme.colors.quaternary : 'transparent')};
+  }
+  &:first-child {
+    border-left: none;
+  }
+`;
+
+const ActionColumn = styled(TableColumn)`
+  width: 150px;
+  padding: 0;
+  border-left: none;
+`;
+
+const EmptyMessage = styled.div`
+  padding: 10px;
+`;
+
+const ActionsContainer = styled.div`
+  position: relative;
+  height: 100%;
+`;
+
+const ActionsWrapper = styled.div<{ visible: boolean }>`
+  position: absolute;
+  top: 0;
+  right: 5px;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  opacity: ${props => (props.visible ? 1 : 0)};
+  pointer-events: ${props => (props.visible ? 'auto' : 'none')};
+  transition: opacity 0.2s ease-in-out;
+`;

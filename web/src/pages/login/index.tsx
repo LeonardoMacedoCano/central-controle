@@ -32,7 +32,7 @@ export const Login = () => {
   };
 
   const handleLogin = async () => {
-    if (username && senha) {
+    if (username) {
       const isLogged = await auth.login(username, senha);
       if (isLogged) {
         message.showSuccess('Login bem-sucedido!')

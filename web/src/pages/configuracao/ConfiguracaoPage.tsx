@@ -54,14 +54,6 @@ const ConfiguracaoPage: React.FC = () => {
     {
       label: 'Despesa',
       content: <DespesaConfigForm usuarioConfig={usuarioConfig} onUpdate={atualizarUsuarioConfig} />,
-    },
-    {
-      label: 'Teste 1',
-      content: <div>Teste 1</div>,
-    },
-    {
-      label: 'Teste 2',
-      content: <div>Teste 2</div>,
     }
   ];
 

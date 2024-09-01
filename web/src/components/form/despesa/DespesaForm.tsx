@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../contexts/auth/AuthContext';
 import { useMessage } from '../../../contexts/message/ContextMessageProvider';
-import DespesaService from '../../../service/DespesaService';
-import { Despesa } from '../../../types/Despesa';
+import DespesaService from '../../../service/fluxocaixa/DespesaService';
+import { Despesa } from '../../../types/fluxocaixa/Despesa';
 import { Categoria } from '../../../types/Categoria';
 import { formatarDataParaString } from '../../../utils/DateUtils';
 import { formatarValorParaReal } from '../../../utils/ValorUtils';

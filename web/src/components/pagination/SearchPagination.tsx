@@ -1,136 +1,137 @@
 import { Component } from 'react';
-import * as C from './styles';
+import styled from 'styled-components';
 import { PagedResponse } from '../../types/PagedResponse';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import FieldValue from '../fieldvalue/FieldValue';
-import { formatarNumeroComZerosAEsquerda } from '../../utils/ValorUtils';
 import FlexBox from '../../components/flexbox/FlexBox';
+import Container from '../container/Container';
 
 interface SearchPaginationProps {
   page: PagedResponse<any>;
   height?: string;
   width?: string;
-  carregarPagina: (indexPagina: number, registrosPorPagina: number) => void;
+  loadPage: (pageIndex: number, pageSize: number) => void;
 }
 
 interface SearchPaginationState {
-  indexPaginaAtual: number;
-  registrosPorPagina: number;
+  currentPageIndex: number;
+  pageSize: number;
 }
 
 class SearchPagination extends Component<SearchPaginationProps, SearchPaginationState> {
   constructor(props: SearchPaginationProps) {
     super(props);
 
-    let registrosPorPagina = this.props.page.size;
-    if (registrosPorPagina > this.props.page.totalElements) {
-      registrosPorPagina = this.props.page.totalElements;
+    let pageSize = this.props.page.size;
+    if (pageSize > this.props.page.totalElements) {
+      pageSize = this.props.page.totalElements;
     }
 
     this.state = {
-      indexPaginaAtual: this.props.page.number,
-      registrosPorPagina: registrosPorPagina
+      currentPageIndex: this.props.page.number,
+      pageSize: pageSize
     };
   }
 
-  carregarPagina = (indexPagina: number, registrosPorPagina: number) => {
-    const { carregarPagina } = this.props;
-    this.setState({ indexPaginaAtual: indexPagina, registrosPorPagina: registrosPorPagina });
-    carregarPagina(indexPagina, registrosPorPagina);
-  };
-
-  handleUpdateRegistrosPorPagina = (value: any) => {
-    if (typeof value === 'number') {
-      this.setState({ registrosPorPagina: value }, () => {
-        this.carregarPagina(0, this.state.registrosPorPagina);
-      });
-    }
+  loadPage = (pageIndex: number, pageSize: number) => {
+    const { loadPage } = this.props;
+    this.setState({ currentPageIndex: pageIndex, pageSize: pageSize });
+    loadPage(pageIndex, pageSize);
   };
 
   render() {
     const { page, height, width } = this.props;
-    const { indexPaginaAtual, registrosPorPagina } = this.state;
+    const { currentPageIndex } = this.state;
 
-    const numeroPaginaAtual = indexPaginaAtual + 1;
-    const numeroUltimaPagina = page.totalPages;
-    const isUltimaPagina = numeroPaginaAtual === numeroUltimaPagina;
-    const isPrimeiraPagina = indexPaginaAtual === 0;
-    const totalRegistros = page.totalElements;
+    const currentPageNumber = currentPageIndex + 1;
+    const lastPageNumber = page.totalPages;
+    const isLastPage = currentPageNumber === lastPageNumber;
+    const isFirstPage = currentPageIndex === 0;
 
     return (
-      <C.SearchPagination height={height} width={width}>
+      <Container 
+        height={height} 
+        width={width}
+        backgroundColor='transparent'  
+      >
         <FlexBox>
-          <FlexBox.Item borderRight width='160px'>
-            <FieldValue
-              description='Itens por pág: '
-              type='number'
-              value={formatarNumeroComZerosAEsquerda(registrosPorPagina, 3)}
-              inline={true}
-              maxHeight={height}
-              width='160px'
-              inputWidth='50px'
-              minValue={1}
-              maxValue={totalRegistros}
-              editable={true}
-              onUpdate={this.handleUpdateRegistrosPorPagina}
-            />
-          </FlexBox.Item>
           <FlexBox.Item alignCenter>
-            <C.ItemContainer>
-              <C.Item onClick={this.carregarPrimeiraPagina} disabled={isPrimeiraPagina}>
+            <PaginationControls>
+              <ControlItem onClick={this.goToFirstPage} disabled={isFirstPage}>
                 <FaAngleDoubleLeft />
-              </C.Item>
-              <C.Item onClick={this.carregarPaginaAnterior} disabled={isPrimeiraPagina}>
+              </ControlItem>
+              <ControlItem onClick={this.goToPreviousPage} disabled={isFirstPage}>
                 <FaAngleLeft />
-              </C.Item>
-              {numeroPaginaAtual} / {numeroUltimaPagina}
-              <C.Item onClick={this.carregarProximaPagina} disabled={isUltimaPagina}>
+              </ControlItem>
+              {currentPageNumber} / {lastPageNumber}
+              <ControlItem onClick={this.goToNextPage} disabled={isLastPage}>
                 <FaAngleRight />
-              </C.Item>
-              <C.Item onClick={this.carregarUltimaPagina} disabled={isUltimaPagina}>
+              </ControlItem>
+              <ControlItem onClick={this.goToLastPage} disabled={isLastPage}>
                 <FaAngleDoubleRight />
-              </C.Item>
-            </C.ItemContainer>
-          </FlexBox.Item>
-          <FlexBox.Item borderLeft width='160px' alignRight>
-            <FieldValue
-              description='Total de itens: '
-              type='number'
-              value={formatarNumeroComZerosAEsquerda(totalRegistros, 3)}
-              inline={true}
-              maxHeight={height}
-              width='160px'
-              inputWidth='50px'
-            />
+              </ControlItem>
+            </PaginationControls>
           </FlexBox.Item>
         </FlexBox>
-      </C.SearchPagination>
+      </Container>
     );
   }
 
-  private carregarPrimeiraPagina = () => {
-    if (this.state.indexPaginaAtual > 0) {
-      this.carregarPagina(0, this.state.registrosPorPagina);
+  private goToFirstPage = () => {
+    if (this.state.currentPageIndex > 0) {
+      this.loadPage(0, this.state.pageSize);
     }
   };
 
-  private carregarPaginaAnterior = () => {
-    if (this.state.indexPaginaAtual > 0) {
-      this.carregarPagina(this.state.indexPaginaAtual - 1, this.state.registrosPorPagina);
+  private goToPreviousPage = () => {
+    if (this.state.currentPageIndex > 0) {
+      this.loadPage(this.state.currentPageIndex - 1, this.state.pageSize);
     }
   };
 
-  private carregarProximaPagina = () => {
-    if (this.state.indexPaginaAtual < this.props.page.totalPages - 1) {
-      this.carregarPagina(this.state.indexPaginaAtual + 1, this.state.registrosPorPagina);
+  private goToNextPage = () => {
+    if (this.state.currentPageIndex < this.props.page.totalPages - 1) {
+      this.loadPage(this.state.currentPageIndex + 1, this.state.pageSize);
     }
   };
 
-  private carregarUltimaPagina = () => {
-    if (this.state.indexPaginaAtual < this.props.page.totalPages - 1) {
-      this.carregarPagina(this.props.page.totalPages - 1, this.state.registrosPorPagina);
+  private goToLastPage = () => {
+    if (this.state.currentPageIndex < this.props.page.totalPages - 1) {
+      this.loadPage(this.props.page.totalPages - 1, this.state.pageSize);
     }
   };
 }
+
+const PaginationControls = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${props => props.theme.colors.quaternary};
+`;
+
+interface ControlItemProps {
+  disabled?: boolean;
+}
+
+const ControlItem = styled.li<ControlItemProps>`
+  width: 35px;
+  height: 100%;
+  font-size: 20px;
+  color: ${props => props.theme.colors.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  opacity: ${props => (props.disabled ? '0.2' : '1')};
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:hover {
+    color: ${props => (props.disabled ? props.theme.colors.white : props.theme.colors.gray)};
+  }
+`;
 
 export default SearchPagination;

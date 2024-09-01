@@ -1,9 +1,9 @@
 import React from 'react';
-import * as C from './styles';
-import { FaPlus, FaEdit, FaTrash, FaDollarSign  } from 'react-icons/fa';
+import styled, { css } from 'styled-components';
+import { convertReactStyleToCSSObject } from '../../../utils/styledUtils';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'table-add' | 'table-edit' | 'table-delete' | 'table-money' | 'success' | 'info' | 'warning' | 'login';
+  variant?: 'success' | 'info' | 'warning' | 'login';
   width?: string;
   height?: string;
   icon?: React.ReactNode;
@@ -13,51 +13,83 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   style?: React.CSSProperties;
 }
 
-const getIconAndHint = (variant: ButtonProps['variant'], iconProp?: React.ReactNode, hintProp?: string) => {
-  let icon, hint;
-
-  switch (variant) {
-    case 'table-add':
-      icon = <FaPlus />;
-      hint = 'Adicionar';
-      break;
-    case 'table-edit':
-      icon = <FaEdit />;
-      hint = 'Editar';
-      break;
-    case 'table-delete':
-      icon = <FaTrash />;
-      hint = 'Deletar';
-      break;
-    case 'table-money':
-      icon = <FaDollarSign />;
-      hint = 'Alterar Situção';
-      break;
-    default:
-      icon = iconProp;
-      hint = hintProp;
-      break;
-  }
-
-  return { icon, hint };
-};
-
-const Button: React.FC<ButtonProps> = ({ variant, description, width, height, icon, hint, disabled, ...props }) => {
-  const { icon: computedIcon, hint: computedHint } = getIconAndHint(variant, icon, hint);
-
+const Button: React.FC<ButtonProps> = ({ 
+  variant, 
+  description, 
+  width, 
+  height, 
+  icon, 
+  hint, 
+  disabled, 
+  ...props 
+}) => {
   return (
-    <C.StyledButton 
+    <StyledButton 
       variant={variant} 
       width={width} 
       height={height} 
-      title={computedHint} 
+      title={hint} 
       disabled={disabled}
       {...props}
     >
-      {computedIcon && <span style={{ display: 'flex', alignItems: 'center' }}>{computedIcon}</span>}
+      {icon && <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>}
       {description && <span style={{ marginLeft: '8px' }}>{description}</span>}
-    </C.StyledButton>
+    </StyledButton>
   );
 };
 
 export default Button;
+
+interface StyledButtonProps {
+  variant?: 'success' | 'info' | 'warning' | 'login';
+  width?: string;
+  height?: string;
+  disabled?: boolean;
+  style?: React.CSSProperties;
+}
+
+const getButtonVariantStyles = (variant: StyledButtonProps['variant'], theme: any) => {
+  switch (variant) {
+    case 'success':
+    case 'info':
+    case 'warning':
+      return css`
+        background-color: ${theme.colors[variant]};
+        color: ${theme.colors.white};
+      `;
+    case 'login':
+      return css`
+        width: 98%;
+        background-color: ${theme.colors.quaternary};
+        font-weight: 800;
+        height: 50px;
+        border-radius: 5px;
+        font-size: 18px;
+      `;
+    default:
+      return css`
+        background-color: ${theme.colors.primary};
+        color: ${theme.colors.white};
+      `;
+  }
+};
+
+const StyledButton = styled.button<StyledButtonProps>`
+  border: none;
+  max-height: 100%;
+  max-width: 100%;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  outline: none;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  opacity: ${props => (props.disabled ? '0.3' : '1')};
+  width: ${props => props.width || 'auto'};
+  height: ${props => props.height || 'auto'};
+
+  &:hover {
+    opacity: 0.3;
+  }
+
+  ${({ variant, theme }) => getButtonVariantStyles(variant, theme)}
+
+  ${props => props.style && css`${convertReactStyleToCSSObject(props.style)}`}
+`;

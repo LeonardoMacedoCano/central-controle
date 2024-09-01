@@ -9,9 +9,9 @@ import { UsuarioConfigProvider } from './contexts/usuarioconfig/UsuarioConfigPro
 import { RequireAuth } from './contexts/auth/RequireAuth';
 import AppLayout from './components/applayout/AppLayout';
 import { Home } from './pages/home';
-import DespesaResumoMensalPage from './pages/controledespesas/DespesaResumoMensalPage';
-import DespesaPage from './pages/controledespesas/DespesaPage';
 import ConfiguracaoPage from './pages/configuracao/ConfiguracaoPage';
+import LancamentoListPage from './pages/fluxocaixa/Lancamento/LancamentoListPage';
+import LancamentoPage from './pages/fluxocaixa/Lancamento/LancamentoPage';
 
 const App: React.FC = () => {
   return (
@@ -25,8 +25,8 @@ const App: React.FC = () => {
                 <AppLayout>
                   <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/controledespesas" element={<DespesaResumoMensalPage />} />
-                    <Route path="/despesa/:idStr?" element={<DespesaPage />} />
+                    <Route path="/lancamentos" element={<LancamentoListPage />} />
+                    <Route path="/lancamento/:id?" element={<LancamentoPage />} />
                     <Route path="/configuracao" element={<ConfiguracaoPage />} />
                   </Routes>
                 </AppLayout>

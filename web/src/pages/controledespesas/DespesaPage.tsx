@@ -3,17 +3,17 @@ import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import { UsuarioConfigContext } from '../../contexts/usuarioconfig/UsuarioConfigContext';
 import { useMessage } from '../../contexts/message/ContextMessageProvider';
-import DespesaService from '../../service/DespesaService';
+import DespesaService from '../../service/fluxocaixa/DespesaService';
 import useConfirmModal from '../../hooks/useConfirmModal';
 import Panel from '../../components/panel/Panel';
-import { Table, Column, TableToolbar } from '../../components/table/Table';
+import { Table, Column } from '../../components/table/Table';
 import DespesaForm from '../../components/form/despesa/DespesaForm';
 import ParcelaForm from '../../components/form/despesa/ParcelaForm';
 import Container from '../../components/container/Container';
 import FloatingButton from '../../components/button/floatingbutton/FloatingButton';
 import { FaCheck } from 'react-icons/fa';
-import { Despesa, initialDespesaState } from '../../types/Despesa';
-import { Parcela } from '../../types/Parcela';
+import { Despesa, initialDespesaState } from '../../types/fluxocaixa/Despesa';
+import { Parcela } from '../../types/fluxocaixa/Parcela';
 import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
 import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
 
@@ -202,15 +202,6 @@ const DespesaPage: React.FC = () => {
               keyExtractor={(item) => item.id.toString()}
               onClickRow={handleClickRow}
               rowSelected={isRowSelected}
-              customHeader={
-                <TableToolbar
-                  handleAdd={adicionarNovaParcela}
-                  handleEdit={() => setShowParcelaForm(true)}
-                  handleDelete={handleDeletarParcela}
-                  handleMoney={alterarSituacaoParcela}
-                  isItemSelected={!!numeroParcelaSelecionada}
-                />
-              }
               columns={[
                 <Column<Parcela> header="Número" value={(item) => item.numero} />,
                 <Column<Parcela> header="Data Vencimento" value={(item) => formatarDataParaString(item.dataVencimento)} />,

@@ -32,7 +32,7 @@ public class LancamentoService {
     DateUtil dateUtil;
 
     @Transactional
-    public void createLancamento(LancamentoDTO lancamentoDTO) {
+    public Long createLancamento(LancamentoDTO lancamentoDTO) {
         Lancamento lancamento = new Lancamento();
         lancamento.setDataLancamento(dateUtil.getDataAtual());
         lancamento.setDescricao(lancamentoDTO.getDescricao());
@@ -42,6 +42,8 @@ public class LancamentoService {
 
         LancamentoItemService lancamentoItemService = getLancamentoItemService(lancamento.getTipo());
         lancamentoItemService.create(lancamentoDTO.getItemDTO(), lancamento);
+
+        return lancamento.getId();
     }
 
     @Transactional

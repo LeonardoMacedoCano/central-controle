@@ -1,5 +1,5 @@
-import { FormaPagamento } from '../types/FormaPagamento';
-import DefaultService from './DefaultService';
+import { FormaPagamento } from '../../types/fluxocaixa/FormaPagamento';
+import DefaultService from '../DefaultService';
 
 interface ParcelaApi {
   getValorTotalParcelasMensal: (token: string, ano: number, mes: number) => Promise<number | undefined>;

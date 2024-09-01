@@ -36,10 +36,9 @@ const AppSidebar: React.FC<AppSidebarProps> = ({
     { to: "/", Icon: FaHome, Text: "Home" },
     {
       Icon: FaDollarSign,
-      Text: "Controle de despesas",
+      Text: "Fluxo Caixa",
       submenu: [
-        { to: "/controledespesas", Text: "Resumo Mensal" },
-        { to: "/despesa", Text: "Formulário" },
+        { to: "/lancamentos", Text: "Lançamento" }
       ]
     },
     { to: "/configuracao", Icon: FaCog, Text: "Configuração" },

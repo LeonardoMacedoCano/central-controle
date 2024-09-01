@@ -2,16 +2,16 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import { useMessage } from '../../contexts/message/ContextMessageProvider';
-import DespesaService from '../../service/DespesaService';
-import ParcelaService from '../../service/ParcelaService';
+import DespesaService from '../../service/fluxocaixa/DespesaService';
+import ParcelaService from '../../service/fluxocaixa/ParcelaService';
 import useConfirmModal from '../../hooks/useConfirmModal';
-import { Table, Column, TableToolbar } from '../../components/table/Table';
+import { Table, Column } from '../../components/table/Table';
 import Panel from '../../components/panel/Panel';
 import Container from '../../components/container/Container';
 import FieldValue from '../../components/fieldvalue/FieldValue';
 import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
-import { DespesaResumoMensal } from '../../types/DespesaResumoMensal';
+import { DespesaResumoMensal } from '../../types/fluxocaixa/DespesaResumoMensal';
 import { PagedResponse } from '../../types/PagedResponse';
 import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
 import { formatarValorParaReal } from '../../utils/ValorUtils';
@@ -153,14 +153,6 @@ const DespesaResumoMensalPage: React.FC = () => {
           keyExtractor={(item) => item.id.toString()}
           onClickRow={handleClickRow}
           rowSelected={isRowSelected}
-          customHeader={
-            <TableToolbar
-              handleAdd={handleAddDespesa}
-              handleEdit={handleEditDespesa}
-              handleDelete={handleDeletarParcela}
-              isItemSelected={!!idDespesaSelecionada}
-            />
-          }
           columns={[
             <Column<DespesaResumoMensal> 
               header="Categoria" 

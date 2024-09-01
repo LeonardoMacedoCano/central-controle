@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../contexts/auth/AuthContext';
 import { useMessage } from '../../../contexts/message/ContextMessageProvider';
-import ParcelaService from '../../../service/ParcelaService';
+import ParcelaService from '../../../service/fluxocaixa/ParcelaService';
 import { formatarDataParaStringYMD } from '../../../utils/DateUtils';
-import { FormaPagamento } from '../../../types/FormaPagamento';
-import { Parcela } from '../../../types/Parcela';
+import { FormaPagamento } from '../../../types/fluxocaixa/FormaPagamento';
+import { Parcela } from '../../../types/fluxocaixa/Parcela';
 import FlexBox from '../../flexbox/FlexBox';
 import FieldValue from '../../fieldvalue/FieldValue';
 
