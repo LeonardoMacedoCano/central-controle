@@ -217,10 +217,10 @@ const TableHeadRow = styled.tr`
 `;
 
 const TableHeadColumn = styled.th`
-  padding: 0 10px;
+  padding: 0 2px;
   text-align: left;
   background-color: ${({ theme }) => theme.colors.secondary};
-  border-left: 1px solid ${({ theme }) => theme.colors.quaternary};
+  border-left: 1px solid ${({ theme }) => theme.colors.gray};
 
   &:first-child {
     border-left: none;
@@ -228,6 +228,7 @@ const TableHeadColumn = styled.th`
 `;
 
 const TableColumnTitle = styled.div`
+  font-size: 14px;
   height: 40px;
   text-align: left;
   display: flex;
@@ -244,16 +245,16 @@ const TableRow = styled.tr<{ isSelected?: boolean }>`
     background-color: ${({ theme }) => theme.colors.tertiary};
   }
   &:last-child {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.quaternary};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
   }
 `;
 
 const TableColumn = styled.td<{ isSelected?: boolean }>`
-  font-size: 13px; /* Adiciona ou ajusta o tamanho da fonte aqui */
+  font-size: 13px;
   height: 35px;
-  padding: 0 2px; /* Ajusta o padding para criar mais espaço */
+  padding: 0 2px;
   text-align: left;
-  border-left: 1px solid ${({ theme }) => theme.colors.quaternary};
+  border-left: 1px solid ${({ theme }) => theme.colors.gray};
   position: relative;
   max-width: 50px;
   white-space: nowrap;

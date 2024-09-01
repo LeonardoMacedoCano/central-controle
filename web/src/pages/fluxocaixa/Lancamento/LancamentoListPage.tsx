@@ -95,10 +95,6 @@ const LancamentoListPage: React.FC = () => {
             value={(item) => getTipoLancamentoDescricao(item.tipo)} 
           />,
           <Column<Lancamento> 
-            header="Tipo" 
-            value={(item) => getTipoLancamentoDescricao(item.tipo)} 
-          />,
-          <Column<Lancamento> 
             header="Descrição" 
             value={(item) => item.descricao} 
           />
