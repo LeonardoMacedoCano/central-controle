@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
-import * as C from './styles';
+import styled from 'styled-components';
+import Container from '../container/Container';
 
 interface PanelProps {
   title?: ReactNode;
@@ -11,24 +12,62 @@ interface PanelProps {
 
 const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth }) => {
   return (
-    <C.Panel width={width} maxWidth={maxWidth}>
+    <Container
+      width={width || '100%'} 
+      padding={'10px 0'}
+      margin='auto'
+      backgroundColor='transparent'
+      style={{maxWidth: maxWidth || 'none'}}
+    >
       {title && (
-        <C.Title>
+        <Title>
           <h2>{title}</h2>
-        </C.Title>
+        </Title>
       )}
-      <C.PanelContainer>
-        <C.Body>
+      <Container
+        width={'100%'} 
+        variantColor='secondary'
+        margin='20px 0 0 0'
+        style={{
+          boxShadow: '0 0 2px',
+          borderRadius: '5px'
+        }}
+      >
+        <Body>
           {children}
-        </C.Body>
+        </Body>
         {footer && (
-          <C.Footer>
+          <Footer>
             {footer}
-          </C.Footer>
+          </Footer>
         )}
-      </C.PanelContainer>
-    </C.Panel>
+      </Container>
+    </Container>
   );
 };
 
 export default Panel;
+
+export const Title = styled.div`
+  h2 {
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.white};
+    border-bottom: 2px solid ${({ theme }) => theme.colors.gray};
+  }
+`;
+
+const BaseBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Body = styled(BaseBox)`
+  justify-content: space-between;
+`;
+
+export const Footer = styled(BaseBox)`
+  height: 35px;
+  justify-content: center;
+`;

@@ -8,6 +8,7 @@ interface ContainerProps {
   margin?: string;
   padding?: string;
   backgroundColor?: string;
+  variantColor?: 'primary' | 'secondary' | 'tertiary' | 'quaternary';
   style?: CSSProperties;
 }
 
@@ -18,6 +19,7 @@ const Container: FC<ContainerProps> = ({
   margin, 
   padding, 
   backgroundColor,
+  variantColor,
   style 
 }) => (
   <StyledContainer 
@@ -26,6 +28,7 @@ const Container: FC<ContainerProps> = ({
     margin={margin} 
     padding={padding} 
     backgroundColor={backgroundColor} 
+    variantColor={variantColor}
     style={style}
   >
     {children}
@@ -39,5 +42,5 @@ const StyledContainer = styled.div<ContainerProps>`
   width: ${({ width }) => width || 'auto'};
   margin: ${({ margin }) => margin || '0'};
   padding: ${({ padding }) => padding || '0'};
-  background-color: ${({ backgroundColor, theme }) => backgroundColor || theme.colors.primary};
+  background-color: ${({ backgroundColor, theme, variantColor }) => variantColor && theme.colors[variantColor] || backgroundColor};
 `;

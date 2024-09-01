@@ -1,5 +1,6 @@
 import React from 'react';
-import * as C from './styles';
+import styled, { css } from 'styled-components';
+import { getVariantColor } from '../../utils/styledUtils';
 import { formatarDataParaAnoMes, formatarDataParaStringYMD, formatarStringParaData } from '../../utils/DateUtils';
 import { formatarNumeroComZerosAEsquerda } from '../../utils/ValorUtils';
 import { SelectValue } from '../../types/SelectValue';
@@ -83,14 +84,14 @@ const FieldValue: React.FC<FieldValueProps> = ({
   };
 
   return (
-    <C.FieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline} padding={padding}>
+    <StyledFieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline} padding={padding}>
       {description && 
-        <C.Label title={hint}>
+        <Label title={hint}>
           {description}
-        </C.Label>
+        </Label>
       }
       {type === 'select' ? (
-        <C.StyledSelect
+        <StyledSelect
           value={(typeof value === 'object' && value !== null) ? value.key : String(value)}
           onChange={(event) => handleInputChange(event)}
           disabled={!editable}
@@ -104,9 +105,9 @@ const FieldValue: React.FC<FieldValueProps> = ({
               {`${formatarNumeroComZerosAEsquerda(option.key, 2)} - ${option.value}`}
             </option>          
           ))}
-        </C.StyledSelect>
+        </StyledSelect>
       ) : type === 'boolean' ? (
-        <C.StyledSelect
+        <StyledSelect
           value={formatValue(value)}
           onChange={(event) => handleInputChange(event)}
           disabled={!editable}
@@ -116,15 +117,15 @@ const FieldValue: React.FC<FieldValueProps> = ({
         >
           <option value="true">Sim</option>
           <option value="false">Não</option>
-        </C.StyledSelect>
+        </StyledSelect>
       ) : (
         <>
           {icon && 
-            <C.Icon>
+            <Icon>
               {icon}
-            </C.Icon>
+            </Icon>
           }
-          <C.StyledInput
+          <StyledInput
             type={editable ? type : 'string'} 
             readOnly={!editable}
             value={formatValue(value)}
@@ -137,8 +138,88 @@ const FieldValue: React.FC<FieldValueProps> = ({
           />
         </>
       )}
-    </C.FieldValue>
+    </StyledFieldValue>
   );
 };
 
 export default FieldValue;
+
+interface StyledFieldValueProps {
+  width?: string;
+  maxWidth?: string;
+  maxHeight?: string;
+  inline?: boolean;
+  padding?: string;
+}
+
+export const StyledFieldValue = styled.div<StyledFieldValueProps>`
+  width: ${({ width }) => width || '100%'};
+  max-width: ${({ maxWidth }) => maxWidth || 'none'};
+  max-height: ${({ maxHeight }) => maxHeight || 'none'};
+  height: 100%;
+  padding: ${({ padding }) => padding || '5px'};
+  display: flex;
+  flex-direction: ${({ inline }) => (inline ? 'row' : 'column')};
+  align-items: ${({ inline }) => (inline ? 'center' : 'stretch')};
+`;
+
+export const Label = styled.span`
+  color: ${({ theme }) => theme.colors.quaternary};
+  font-weight: bold;
+  font-size: 15px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+interface StyledInputProps {
+  inputWidth?: string;
+  inline?: boolean;
+  readOnly?: boolean;
+  variant?: 'success' | 'info' | 'warning';
+}
+
+export const StyledInput = styled.input<StyledInputProps>`
+  width: ${({ inputWidth }) => inputWidth || '100%'};
+  font-size: 15px;
+  height: 100%;
+  outline: none;
+  background-color: transparent;
+  margin-left: ${({ inline }) => (inline ? '5px' : 'none')};
+  cursor: ${({ readOnly }) => (readOnly ? 'not-allowed' : 'pointer')};
+
+  &::-webkit-calendar-picker-indicator {
+    filter: invert(100%);
+  }
+
+  ${({ variant, theme }) =>
+    variant &&css`
+      color: ${getVariantColor(variant, theme)};
+    `
+  }
+`;
+
+export const StyledSelect = styled.select<StyledInputProps>`
+  width: ${({ inputWidth }) => inputWidth || '100%'};
+  font-size: 15px;
+  height: 100%;
+  outline: none;
+  background-color: transparent;
+  margin-left: ${({ inline }) => (inline ? '5px' : 'none')};
+
+  ${({ variant, theme }) =>
+    variant &&
+    css`
+      color: ${getVariantColor(variant, theme)};
+    `}
+
+  option {
+    color: ${({ theme }) => theme.colors.white};
+    background-color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+export const Icon = styled.div`
+  height: 100%;
+  width: auto;
+`;

@@ -101,6 +101,8 @@ class SearchPagination extends Component<SearchPaginationProps, SearchPagination
   };
 }
 
+export default SearchPagination;
+
 const PaginationControls = styled.div`
   width: 100%;
   height: 100%;
@@ -133,5 +135,3 @@ const ControlItem = styled.li<ControlItemProps>`
     color: ${props => (props.disabled ? props.theme.colors.white : props.theme.colors.gray)};
   }
 `;
-
-export default SearchPagination;
