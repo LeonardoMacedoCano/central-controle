@@ -13,12 +13,12 @@ import SearchPagination from '../../components/pagination/SearchPagination';
 import FlexBox from '../../components/flexbox/FlexBox';
 import { DespesaResumoMensal } from '../../types/fluxocaixa/DespesaResumoMensal';
 import { PagedResponse } from '../../types/PagedResponse';
-import { getDataAtual, formataraMesAnoParaData, formatarDataParaAnoMes } from '../../utils/DateUtils';
+import { getCurrentDate, parseYearMonthToDate, formatDateToYMString } from '../../utils/DateUtils';
 import { formatarValorParaReal } from '../../utils/ValorUtils';
 import { UsuarioConfigContext } from '../../contexts/usuarioconfig/UsuarioConfigContext';
 
 const DespesaResumoMensalPage: React.FC = () => {
-  const [dataSelecionada, setDataSelecionada] = useState(() => getDataAtual());
+  const [dataSelecionada, setDataSelecionada] = useState(() => getCurrentDate());
   const [idDespesaSelecionada, setIdDespesaSelecionada] = useState<number | null>(null);
   const [despesasPage, setDespesasPage] = useState<PagedResponse<DespesaResumoMensal> | undefined>(undefined);
   const [valorTotal, setValorTotal] = useState<number>(0); 
@@ -54,7 +54,7 @@ const DespesaResumoMensalPage: React.FC = () => {
   const carregarDespesaResumoMensal = async () => {
     if (!auth.usuario?.token || !registrosPorPagina) return;
 
-    const [anoStr, mesStr] = formatarDataParaAnoMes(dataSelecionada).split('-');
+    const [anoStr, mesStr] = formatDateToYMString(dataSelecionada).split('-');
     const ano = parseInt(anoStr);
     const mes = parseInt(mesStr);
 
@@ -83,7 +83,7 @@ const DespesaResumoMensalPage: React.FC = () => {
   };
 
   const atualizarDataVencimento = (value: string) => {
-    setDataSelecionada(formataraMesAnoParaData(value)); 
+    setDataSelecionada(parseYearMonthToDate(value)); 
   };
 
   const handleClickRow = (item: DespesaResumoMensal) => setIdDespesaSelecionada(prevId => prevId === item.id ? null : item.id);
@@ -114,7 +114,7 @@ const DespesaResumoMensalPage: React.FC = () => {
             <FieldValue 
               description='Data' 
               type='month' 
-              value={formatarDataParaAnoMes(dataSelecionada)} 
+              value={formatDateToYMString(dataSelecionada)} 
               editable={true}
               width='160px'
               inputWidth='150px'

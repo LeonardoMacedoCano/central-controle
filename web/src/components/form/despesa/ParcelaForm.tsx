@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../contexts/auth/AuthContext';
 import { useMessage } from '../../../contexts/message/ContextMessageProvider';
 import ParcelaService from '../../../service/fluxocaixa/ParcelaService';
-import { formatarDataParaStringYMD } from '../../../utils/DateUtils';
+import { formatDateToYMDString } from '../../../utils/DateUtils';
 import { FormaPagamento } from '../../../types/fluxocaixa/FormaPagamento';
 import { Parcela } from '../../../types/fluxocaixa/Parcela';
 import FlexBox from '../../flexbox/FlexBox';
@@ -83,7 +83,7 @@ const ParcelaForm: React.FC<ParcelaFormProps> = ({ parcela, onUpdate }) => {
           <FieldValue 
             description='Data Vencimento'
             type='date'
-            value={formatarDataParaStringYMD(parcela.dataVencimento)}
+            value={formatDateToYMDString(parcela.dataVencimento)}
             editable={true}
             onUpdate={handleUpdateDataVencimento}
           />

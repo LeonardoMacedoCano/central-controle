@@ -4,7 +4,7 @@ import { useMessage } from '../../../contexts/message/ContextMessageProvider';
 import DespesaService from '../../../service/fluxocaixa/DespesaService';
 import { Despesa } from '../../../types/fluxocaixa/Despesa';
 import { Categoria } from '../../../types/Categoria';
-import { formatarDataParaString } from '../../../utils/DateUtils';
+import { formatDateToShortString } from '../../../utils/DateUtils';
 import { formatarValorParaReal } from '../../../utils/ValorUtils';
 import FlexBox from '../../flexbox/FlexBox';
 import FieldValue from '../../fieldvalue/FieldValue';
@@ -65,7 +65,7 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, onUpdate }) => {
           <FieldValue 
             description='Data Lançamento'
             type='string'
-            value={formatarDataParaString(despesa.dataLancamento)}
+            value={formatDateToShortString(despesa.dataLancamento)}
           />
         </FlexBox.Item>
         <FlexBox.Item borderRight>

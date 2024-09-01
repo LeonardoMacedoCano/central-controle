@@ -28,8 +28,8 @@ const TableActions: FC<TableActionsProps> = ({ onView, onEdit, onDelete, visible
     justifyContent: 'center',
     alignItems: 'center',
     display: 'flex',
-    height: '30px',
-    width: '30px',
+    height: '25px',
+    width: '25px',
   };
 
   return (
@@ -90,7 +90,6 @@ const getValues = (values: any[] | PagedResponse<any>): any[] => {
   return values as any[];
 };
 
-
 export const Table = <T extends Indexable>({
   values,
   columns,
@@ -130,7 +129,7 @@ export const Table = <T extends Indexable>({
       <tbody>
         {data.length === 0 ? (
           <tr>
-            <td colSpan={columns.length}>
+            <td colSpan={columns.length + 1}>
               <EmptyMessage>{messageEmpty}</EmptyMessage>
             </td>
           </tr>
@@ -147,13 +146,13 @@ export const Table = <T extends Indexable>({
                   const columnProps = column.props as ColumnProps<T>;
                   return (
                     <TableColumn key={columnIndex} isSelected={rowSelected ? rowSelected(item) : false}>
-                      {columnProps.value(item, index)}
+                      <TruncatedContent>{columnProps.value(item, index)}</TruncatedContent>
                     </TableColumn>
                   );
                 }
                 return null;
               })}
-              <ActionColumn>
+              <ActionColumn visible={hoveredRowIndex === index}>
                 <TableActions
                   onView={onView ? () => onView(item) : undefined}
                   onEdit={onEdit ? () => onEdit(item) : undefined}
@@ -222,6 +221,7 @@ const TableHeadColumn = styled.th`
   text-align: left;
   background-color: ${({ theme }) => theme.colors.secondary};
   border-left: 1px solid ${({ theme }) => theme.colors.quaternary};
+
   &:first-child {
     border-left: none;
   }
@@ -238,6 +238,8 @@ const TableColumnTitle = styled.div`
 
 const TableRow = styled.tr<{ isSelected?: boolean }>`
   background-color: ${({ theme }) => theme.colors.secondary};
+  position: relative;
+  
   &:nth-child(odd) {
     background-color: ${({ theme }) => theme.colors.tertiary};
   }
@@ -247,11 +249,17 @@ const TableRow = styled.tr<{ isSelected?: boolean }>`
 `;
 
 const TableColumn = styled.td<{ isSelected?: boolean }>`
+  font-size: 13px; /* Adiciona ou ajusta o tamanho da fonte aqui */
   height: 35px;
-  padding: 0 10px;
+  padding: 0 2px; /* Ajusta o padding para criar mais espaço */
   text-align: left;
   border-left: 1px solid ${({ theme }) => theme.colors.quaternary};
   position: relative;
+  max-width: 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
   &:first-child::before {
     content: '';
     position: absolute;
@@ -261,15 +269,30 @@ const TableColumn = styled.td<{ isSelected?: boolean }>`
     width: 5px;
     background-color: ${({ theme, isSelected }) => (isSelected ? theme.colors.quaternary : 'transparent')};
   }
+
   &:first-child {
     border-left: none;
   }
 `;
 
-const ActionColumn = styled(TableColumn)`
-  width: 150px;
+const TruncatedContent = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const ActionColumn = styled.td<{ visible: boolean }>`
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
   padding: 0;
   border-left: none;
+  z-index: 1;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  display: ${props => (props.visible ? 'flex' : 'none')};
+  align-items: center;
+  justify-content: center;
 `;
 
 const EmptyMessage = styled.div`
@@ -286,7 +309,6 @@ const ActionsWrapper = styled.div<{ visible: boolean }>`
   top: 0;
   right: 5px;
   bottom: 0;
-  left: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;

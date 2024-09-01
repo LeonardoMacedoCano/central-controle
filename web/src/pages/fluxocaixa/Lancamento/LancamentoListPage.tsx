@@ -7,10 +7,12 @@ import { AuthContext } from '../../../contexts/auth/AuthContext';
 import { useMessage } from '../../../contexts/message/ContextMessageProvider';
 import LancamentoService from '../../../service/LancamentoService';
 import { Column, Table } from '../../../components/table/Table';
-import { formatarDataParaString } from '../../../utils/DateUtils';
+import { formatDateToShortString } from '../../../utils/DateUtils';
 import { useNavigate } from 'react-router-dom';
 import useConfirmModal from '../../../hooks/useConfirmModal';
 import { getTipoLancamentoDescricao } from '../../../types/TipoLancamentoEnum';
+import FloatingButton from '../../../components/button/floatingbutton/FloatingButton';
+import { FaPlus } from 'react-icons/fa';
 
 const LancamentoListPage: React.FC = () => {
   const [lancamentos, setLancamentos] = useState<PagedResponse<Lancamento> | undefined>(undefined);
@@ -76,29 +78,38 @@ const LancamentoListPage: React.FC = () => {
         title='Lançamentos'
       >
       <Table<Lancamento>
-          values={lancamentos || []}
-          messageEmpty="Nenhum lançamento encontrado."
-          keyExtractor={(item) => item.id.toString()}
-          onView={(item) => handleView(item.id)}
-          onEdit={(item) => handleEdit(item.id)}
-          onDelete={(item) => handleDelete(item.id)}
-          loadPage={loadPage}
-          columns={[
-            <Column<Lancamento> 
-              header="Data" 
-              value={(item) => formatarDataParaString(item.dataLancamento)} 
-            />,
-            <Column<Lancamento> 
-              header="Tipo" 
-              value={(item) => getTipoLancamentoDescricao(item.tipo)} 
-            />,
-            <Column<Lancamento> 
-              header="Descrição" 
-              value={(item) => item.descricao} 
-            />
-          ]}
-        />
+        values={lancamentos || []}
+        messageEmpty="Nenhum lançamento encontrado."
+        keyExtractor={(item) => item.id.toString()}
+        onView={(item) => handleView(item.id)}
+        onEdit={(item) => handleEdit(item.id)}
+        onDelete={(item) => handleDelete(item.id)}
+        loadPage={loadPage}
+        columns={[
+          <Column<Lancamento> 
+            header="Data" 
+            value={(item) => formatDateToShortString(item.dataLancamento)} 
+          />,
+          <Column<Lancamento> 
+            header="Tipo" 
+            value={(item) => getTipoLancamentoDescricao(item.tipo)} 
+          />,
+          <Column<Lancamento> 
+            header="Tipo" 
+            value={(item) => getTipoLancamentoDescricao(item.tipo)} 
+          />,
+          <Column<Lancamento> 
+            header="Descrição" 
+            value={(item) => item.descricao} 
+          />
+        ]}
+      />
       </Panel>
+      <FloatingButton
+        mainButtonIcon={<FaPlus />}
+        mainButtonHint={'Novo Lançamento'}
+        mainAction={() => {}}
+      />
     </Container>
   );
 };

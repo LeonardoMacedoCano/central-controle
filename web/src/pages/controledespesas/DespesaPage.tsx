@@ -14,7 +14,7 @@ import FloatingButton from '../../components/button/floatingbutton/FloatingButto
 import { FaCheck } from 'react-icons/fa';
 import { Despesa, initialDespesaState } from '../../types/fluxocaixa/Despesa';
 import { Parcela } from '../../types/fluxocaixa/Parcela';
-import { formatarDataParaString, getDataAtual } from '../../utils/DateUtils';
+import { formatDateToShortString, getCurrentDate } from '../../utils/DateUtils';
 import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
 
 const DespesaPage: React.FC = () => {
@@ -70,7 +70,7 @@ const DespesaPage: React.FC = () => {
   };
 
   const getDataVencimentoPadrao = (): Date => {
-    const dataAtual = getDataAtual();
+    const dataAtual = getCurrentDate();
     const anoAtual = dataAtual.getFullYear();
     const mesAtual = dataAtual.getMonth();
     const diaAtual = dataAtual.getDate();
@@ -204,7 +204,7 @@ const DespesaPage: React.FC = () => {
               rowSelected={isRowSelected}
               columns={[
                 <Column<Parcela> header="Número" value={(item) => item.numero} />,
-                <Column<Parcela> header="Data Vencimento" value={(item) => formatarDataParaString(item.dataVencimento)} />,
+                <Column<Parcela> header="Data Vencimento" value={(item) => formatDateToShortString(item.dataVencimento)} />,
                 <Column<Parcela> header="Valor" value={(item) => formatarValorParaReal(item.valor)} />,
                 <Column<Parcela> header="Situação" value={(item) => formatarDescricaoSituacaoParcela(item.pago)} />,
                 <Column<Parcela> header="Forma Pagamento" value={(item) => item.formaPagamento ? item.formaPagamento?.descricao : ""} />

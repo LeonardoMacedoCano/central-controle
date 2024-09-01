@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { getVariantColor } from '../../utils/styledUtils';
-import { formatarDataParaAnoMes, formatarDataParaStringYMD, formatarStringParaData } from '../../utils/DateUtils';
+import { formatDateToYMString, formatDateToYMDString, parseDateStringToDate } from '../../utils/DateUtils';
 import { formatarNumeroComZerosAEsquerda } from '../../utils/ValorUtils';
 import { SelectValue } from '../../types/SelectValue';
 
@@ -62,7 +62,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
       } else if (type === 'boolean') {
         formattedValue = event.target.value === 'true';
       } else if (type === 'date') {
-        formattedValue = formatarStringParaData(event.target.value);
+        formattedValue = parseDateStringToDate(event.target.value);
       }
 
       onUpdate(formattedValue);
@@ -73,9 +73,9 @@ const FieldValue: React.FC<FieldValueProps> = ({
     if ((type !== 'date') && (typeof val === 'string' || typeof val === 'number')) {
       return String(val);
     } else if (val instanceof Date && type === 'month') {
-      return formatarDataParaAnoMes(val);
+      return formatDateToYMString(val);
     } else if (typeof val === 'string' && type === 'date') {
-      return formatarDataParaStringYMD(formatarStringParaData(val));
+      return formatDateToYMDString(parseDateStringToDate(val));
     } else if (typeof val === 'boolean' && type === 'boolean') {
       return val ? 'true' : 'false';
     } else {

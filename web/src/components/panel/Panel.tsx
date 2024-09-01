@@ -50,7 +50,6 @@ export default Panel;
 
 export const Title = styled.div`
   h2 {
-    font-weight: bold;
     color: ${({ theme }) => theme.colors.white};
     border-bottom: 2px solid ${({ theme }) => theme.colors.gray};
   }

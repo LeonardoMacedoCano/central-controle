@@ -1,49 +1,49 @@
-export const getDataAtual = (): Date => {
+export const getCurrentDate = (): Date => {
   return new Date();
 };
 
-export const formatarDataParaString = (data: Date | undefined): string => {
-  if (!data) return '';
+export const formatDateToShortString = (date: Date | undefined): string => {
+  if (!date) return '';
 
-  const dataObj = new Date(data);
-  const dia = dataObj.getDate().toString().padStart(2, '0');
-  const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
-  const ano = dataObj.getFullYear().toString();
+  const dateObj = new Date(date);
+  const day = dateObj.getDate().toString().padStart(2, '0');
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0');
+  const year = dateObj.getFullYear().toString().slice(-2);
 
-  return `${dia}/${mes}/${ano}`;
+  return `${day}/${month}/${year}`;
 };
 
-export const formatarDataParaStringYMD = (data: Date | undefined): string => {
-  if (!data) return '';
+export const formatDateToYMDString = (date: Date | undefined): string => {
+  if (!date) return '';
 
-  const dataObj = new Date(data);
-  const dia = dataObj.getDate().toString().padStart(2, '0');
-  const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
-  const ano = dataObj.getFullYear().toString();
+  const dateObj = new Date(date);
+  const year = dateObj.getFullYear().toString(); 
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); 
+  const day = dateObj.getDate().toString().padStart(2, '0');
 
-  return `${ano}-${mes}-${dia}`;
+  return `${year}/${month}/${day}`;
 };
 
-export const formatarDataParaAnoMes = (data: Date | undefined): string => {
-  if (!data) return '';
+export const formatDateToYMString = (date: Date | undefined): string => {
+  if (!date) return '';
 
-  const dataObj = new Date(data);
-  const mes = (dataObj.getMonth() + 1).toString().padStart(2, '0');
-  const ano = dataObj.getFullYear().toString();
+  const dateObj = new Date(date);
+  const year = dateObj.getFullYear().toString(); 
+  const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); 
 
-  return `${ano}-${mes}`;
+  return `${year}-${month}`;
 };
 
-export const formataraMesAnoParaData = (mesAno: string): Date => {
-  const [anoStr, mesStr] = mesAno.split('-');
-  const ano = parseInt(anoStr);
-  const mesIndex = parseInt(mesStr) -1;
+export const parseYearMonthToDate = (yearMonth: string): Date => {
+  const [yearStr, monthStr] = yearMonth.split('-');
+  const year = parseInt(yearStr);
+  const monthIndex = parseInt(monthStr) - 1;
 
-  return new Date(ano, mesIndex);
+  return new Date(year, monthIndex);
 };
 
-export const formatarStringParaData = (dataStr: string): Date => {
-  const parts = dataStr.split('-');
+export const parseDateStringToDate = (dateStr: string): Date => {
+  const parts = dateStr.split('-');
   const year = parseInt(parts[0], 10);
   const month = parseInt(parts[1], 10) - 1;
   const day = parseInt(parts[2], 10);
