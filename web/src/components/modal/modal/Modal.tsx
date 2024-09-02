@@ -1,9 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { getVariantColor } from '../../../utils/styledUtils';
-import { FaTimes } from 'react-icons/fa';
-import Button from '../../button/button/Button';
-import { FaCheckCircle, FaExclamationCircle, FaExclamationTriangle } from 'react-icons/fa';
+import { 
+  FaCheckCircle,
+  FaExclamationCircle,
+  FaExclamationTriangle,
+  FaTimes
+} from 'react-icons/fa';
+import { getVariantColor } from '../../../utils';
+import { Button } from '../..';
+
 
 interface ModalProps {
   isOpen: boolean;

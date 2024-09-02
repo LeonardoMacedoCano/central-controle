@@ -1,9 +1,13 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { getVariantColor } from '../../utils/styledUtils';
-import { formatDateToYMString, formatDateToYMDString, parseDateStringToDate } from '../../utils/DateUtils';
-import { formatarNumeroComZerosAEsquerda } from '../../utils/ValorUtils';
-import { SelectValue } from '../../types/SelectValue';
+import { SelectValue } from '../../types';
+import { 
+  formatDateToYMString,
+  formatDateToYMDString,
+  parseDateStringToDate,
+  formatNumberWithLeadingZeros,
+  getVariantColor
+} from '../../utils';
 
 type FieldValueProps = {
   type: 'string' | 'number' | 'boolean' | 'date' | 'month' | 'select';
@@ -102,7 +106,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
           <option value=''>{placeholder || 'Selecione uma opção'}</option>
           {options?.map((option) => (
             <option key={option.key} value={String(option.key)}>
-              {`${formatarNumeroComZerosAEsquerda(option.key, 2)} - ${option.value}`}
+              {`${formatNumberWithLeadingZeros(option.key, 2)} - ${option.value}`}
             </option>          
           ))}
         </StyledSelect>

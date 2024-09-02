@@ -1,10 +1,12 @@
 import DefaultService from '../DefaultService';
-import { PagedResponse } from '../../types/PagedResponse';
-import { DespesaResumoMensal } from '../../types/fluxocaixa/DespesaResumoMensal';
-import { Despesa } from '../../types/fluxocaixa/Despesa';
-import { Categoria } from '../../types/Categoria';
-import { useMessage } from '../../contexts/message/ContextMessageProvider';
-import { formatDateToTimeZone } from '../../utils/DateUtils';
+import { 
+  PagedResponse,
+  DespesaResumoMensal,
+  Despesa,
+  Categoria
+} from '../../types';
+import { useMessage } from '../../contexts';
+import { formatDateToTimeZone } from '../../utils';
 
 interface DespesaApi {
   gerarDespesa: (token: string, data: Despesa) => Promise<{ idDespesa: number } | undefined>;

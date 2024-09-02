@@ -1,5 +1,5 @@
 import React, { ReactNode, createContext, useContext, useState, useEffect } from 'react';
-import NotificationBox from '../../components/notificationbox/NotificationBox';
+import { NotificationBox } from '../../components';
 
 export interface ContextMessageProps {
   showError: (message: string) => void;

@@ -1,14 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../contexts/auth/AuthContext';
-import { useMessage } from '../../contexts/message/ContextMessageProvider';
-import UsuarioConfigService from '../../service/UsuarioConfigService';
-import { UsuarioConfig, initialUsuarioConfigState } from '../../types/UsuarioConfig';
-import Container from '../../components/container/Container';
-import Panel from '../../components/panel/Panel';
-import Tabs from '../../components/tabs/Tabs';
-import DespesaConfigForm from '../../components/form/configuracao/DespesaConfigForm';
-import FloatingButton from '../../components/button/floatingbutton/FloatingButton';
 import { FaCheck } from 'react-icons/fa';
+import { 
+  AuthContext,
+  useMessage
+} from '../../contexts/';
+import { UsuarioConfigService } from '../../service';
+import { UsuarioConfig, initialUsuarioConfigState } from '../../types';
+import { 
+  Container,
+  Panel,
+  Tabs,
+  FloatingButton
+} from '../../components';
+import DespesaConfigForm from '../controledespesas/DespesaConfigForm';
 
 const ConfiguracaoPage: React.FC = () => {
   const [usuarioConfig, setUsuarioConfig] = useState<UsuarioConfig>(initialUsuarioConfigState);

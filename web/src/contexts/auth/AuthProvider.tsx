@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import AuthService from "../../service/AuthService";
-import { AuthContext } from "./AuthContext";
-import { Usuario } from "../../types/Usuario";
+import { AuthService } from "../../service";
+import { AuthContext } from "../";
+import { Usuario } from "../../types";
 
 export const AuthProvider = ({ children }: { children: JSX.Element }) => {
   const [usuario, setUsuario] = useState<Usuario | null>(null);

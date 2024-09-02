@@ -1,4 +1,4 @@
-import { FormaPagamento } from "./FormaPagamento";
+import { FormaPagamento } from "../";
 
 export type Parcela = {
   id: number;

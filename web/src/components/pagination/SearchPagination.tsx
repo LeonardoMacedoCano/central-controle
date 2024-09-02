@@ -1,9 +1,16 @@
 import { Component } from 'react';
 import styled from 'styled-components';
-import { PagedResponse } from '../../types/PagedResponse';
-import { FaAngleDoubleLeft, FaAngleDoubleRight, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import FlexBox from '../../components/flexbox/FlexBox';
-import Container from '../container/Container';
+import { 
+  FaAngleDoubleLeft,
+  FaAngleDoubleRight,
+  FaAngleLeft,
+  FaAngleRight
+} from 'react-icons/fa';
+import { PagedResponse } from '../../types';
+import { 
+  FlexBox,
+  Container
+} from '../../components';
 
 interface SearchPaginationProps {
   page: PagedResponse<any>;

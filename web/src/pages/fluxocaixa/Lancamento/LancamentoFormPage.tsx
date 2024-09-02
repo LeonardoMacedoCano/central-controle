@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from '../../../components';
 
-const LancamentoPage: React.FC = () => {
+const LancamentoFormPage: React.FC = () => {
 
   return (
     <Container>
@@ -10,4 +10,4 @@ const LancamentoPage: React.FC = () => {
   );
 };
 
-export default LancamentoPage;
+export default LancamentoFormPage;

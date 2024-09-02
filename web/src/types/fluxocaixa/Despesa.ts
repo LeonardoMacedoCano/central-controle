@@ -1,5 +1,7 @@
-import { Categoria } from "../Categoria";
-import { Parcela } from "./Parcela";
+import { 
+  Categoria,
+  Parcela
+} from "..";
 
 export type Despesa = {
   id: number;

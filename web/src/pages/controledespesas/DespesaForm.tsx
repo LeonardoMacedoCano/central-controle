@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../contexts/auth/AuthContext';
-import { useMessage } from '../../../contexts/message/ContextMessageProvider';
-import DespesaService from '../../../service/fluxocaixa/DespesaService';
-import { Despesa } from '../../../types/fluxocaixa/Despesa';
-import { Categoria } from '../../../types/Categoria';
-import { formatDateToShortString } from '../../../utils/DateUtils';
-import { formatarValorParaReal } from '../../../utils/ValorUtils';
-import FlexBox from '../../flexbox/FlexBox';
-import FieldValue from '../../fieldvalue/FieldValue';
+import { AuthContext } from '../../contexts/auth/AuthContext';
+import { useMessage } from '../../contexts/message/ContextMessageProvider';
+import DespesaService from '../../service/fluxocaixa/DespesaService';
+import { Despesa } from '../../types/fluxocaixa/Despesa';
+import { Categoria } from '../../types/Categoria';
+import { formatDateToShortString } from '../../utils/DateUtils';
+import { formatValueToBRL } from '../../utils/ValorUtils';
+import FlexBox from '../../components/flexbox/FlexBox';
+import FieldValue from '../../components/fieldvalue/FieldValue';
 
 interface DespesaFormProps {
   despesa: Despesa;
@@ -79,7 +79,7 @@ const DespesaForm: React.FC<DespesaFormProps> = ({ despesa, onUpdate }) => {
           <FieldValue 
             description='Valor Total'
             type='number'
-            value={formatarValorParaReal(despesa.valorTotal)}
+            value={formatValueToBRL(despesa.valorTotal)}
           />
         </FlexBox.Item>
       </FlexBox>

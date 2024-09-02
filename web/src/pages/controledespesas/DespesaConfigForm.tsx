@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../contexts/auth/AuthContext';
-import { useMessage } from '../../../contexts/message/ContextMessageProvider';
-import ParcelaService from '../../../service/fluxocaixa/ParcelaService';
-import { UsuarioConfig } from '../../../types/UsuarioConfig';
-import { FormaPagamento } from '../../../types/fluxocaixa/FormaPagamento';
-import FlexBox from '../../flexbox/FlexBox';
-import FieldValue from '../../fieldvalue/FieldValue';
+import { AuthContext } from '../../contexts/auth/AuthContext';
+import { useMessage } from '../../contexts/message/ContextMessageProvider';
+import ParcelaService from '../../service/fluxocaixa/ParcelaService';
+import { UsuarioConfig } from '../../types/UsuarioConfig';
+import { FormaPagamento } from '../../types/fluxocaixa/FormaPagamento';
+import FlexBox from '../../components/flexbox/FlexBox';
+import FieldValue from '../../components/fieldvalue/FieldValue';
 
 interface DespesaConfigFormProps {
   usuarioConfig: UsuarioConfig;

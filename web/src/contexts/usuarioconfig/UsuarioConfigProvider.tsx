@@ -1,9 +1,14 @@
 import { useContext, useEffect, useState, ReactNode } from "react";
-import UsuarioConfigService from "../../service/UsuarioConfigService";
-import { AuthContext } from "../auth/AuthContext";
-import { useMessage } from "../message/ContextMessageProvider";
-import { UsuarioConfig, initialUsuarioConfigState } from "../../types/UsuarioConfig";
-import { UsuarioConfigContext } from "./UsuarioConfigContext";
+import { UsuarioConfigService } from "../../service";
+import { 
+  AuthContext,
+  useMessage,
+  UsuarioConfigContext
+} from "../";
+import { 
+  UsuarioConfig,
+  initialUsuarioConfigState
+} from "../../types";
 
 interface UsuarioConfigProviderProps {
   children: ReactNode;

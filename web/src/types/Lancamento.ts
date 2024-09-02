@@ -1,7 +1,9 @@
-import { Despesa } from "./fluxocaixa/Despesa";
-import { TipoLancamentoEnum } from "./TipoLancamentoEnum";
+import { 
+  Despesa,
+  TipoLancamentoEnum 
+} from "./";
 
-export type LancamentoItemDTO = Despesa;
+type LancamentoItemDTO = Despesa;
 
 export type Lancamento = {
   id: number;

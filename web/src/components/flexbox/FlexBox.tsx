@@ -49,7 +49,7 @@ interface FlexBoxContainerProps {
   borderLeft?: boolean;
 }
 
-export const FlexBoxContainer = styled.div<FlexBoxContainerProps>`
+const FlexBoxContainer = styled.div<FlexBoxContainerProps>`
   width: ${({ width }) => width || '100%'};
   height: ${({ height }) => height || '100%'};
   display: flex;
@@ -77,7 +77,7 @@ interface FlexBoxItemProps {
   alignCenter?: boolean;
 }
 
-export const FlexBoxItem = styled.div<FlexBoxItemProps>`
+const FlexBoxItem = styled.div<FlexBoxItemProps>`
   width: ${({ width }) => width || '100%'};
   height: ${({ height }) => height || '100%'};
   ${({ alignRight }) => alignRight && 'margin-left: auto;'}

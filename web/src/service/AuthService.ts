@@ -1,6 +1,6 @@
 import DefaultService from './DefaultService';
-import { Usuario } from '../types/Usuario';
-import { useMessage } from '../contexts/message/ContextMessageProvider';
+import { Usuario } from '../types';
+import { useMessage } from '../contexts';
 
 interface AuthApi {
   validateToken: (token: string) => Promise<{ usuario: Usuario } | undefined>;

@@ -1,6 +1,8 @@
 import React from 'react';
-import Modal from '../modal/Modal';
-import Button from '../../button/button/Button';
+import { 
+  Button,
+  Modal
+} from '../../';
 
 interface ConfirmModalProps {
   isOpen: boolean;

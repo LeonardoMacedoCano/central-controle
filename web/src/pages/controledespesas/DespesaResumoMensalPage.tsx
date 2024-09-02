@@ -14,7 +14,7 @@ import FlexBox from '../../components/flexbox/FlexBox';
 import { DespesaResumoMensal } from '../../types/fluxocaixa/DespesaResumoMensal';
 import { PagedResponse } from '../../types/PagedResponse';
 import { getCurrentDate, parseYearMonthToDate, formatDateToYMString } from '../../utils/DateUtils';
-import { formatarValorParaReal } from '../../utils/ValorUtils';
+import { formatValueToBRL } from '../../utils/ValorUtils';
 import { UsuarioConfigContext } from '../../contexts/usuarioconfig/UsuarioConfigContext';
 
 const DespesaResumoMensalPage: React.FC = () => {
@@ -129,7 +129,7 @@ const DespesaResumoMensalPage: React.FC = () => {
             <FieldValue 
               description='Valor Total' 
               type='string' 
-              value={formatarValorParaReal(valorTotal)}
+              value={formatValueToBRL(valorTotal)}
               width='160px'
               inputWidth='150px' 
               variant={valorTotal > usuarioConfig.despesaValorMetaMensal ? 'warning': 'success'}
@@ -164,7 +164,7 @@ const DespesaResumoMensalPage: React.FC = () => {
             />,
             <Column<DespesaResumoMensal> 
               header="Valor" 
-              value={(item) => formatarValorParaReal(item.valorTotal)} 
+              value={(item) => formatValueToBRL(item.valorTotal)} 
             />,
             <Column<DespesaResumoMensal> 
               header="Situação" 

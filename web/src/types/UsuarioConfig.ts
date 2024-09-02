@@ -1,4 +1,4 @@
-import { FormaPagamento } from "./fluxocaixa/FormaPagamento";
+import { FormaPagamento } from "./";
 
 export type UsuarioConfig = {
   id: number;

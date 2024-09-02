@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import Button from '../button/button/Button';
+import { Button } from '..';
 import { FaTimes } from 'react-icons/fa';
 
 type MessageType = 'error' | 'success' | 'info';

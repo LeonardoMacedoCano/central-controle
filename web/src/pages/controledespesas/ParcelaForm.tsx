@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../../contexts/auth/AuthContext';
-import { useMessage } from '../../../contexts/message/ContextMessageProvider';
-import ParcelaService from '../../../service/fluxocaixa/ParcelaService';
-import { formatDateToYMDString } from '../../../utils/DateUtils';
-import { FormaPagamento } from '../../../types/fluxocaixa/FormaPagamento';
-import { Parcela } from '../../../types/fluxocaixa/Parcela';
-import FlexBox from '../../flexbox/FlexBox';
-import FieldValue from '../../fieldvalue/FieldValue';
+import { AuthContext } from '../../contexts/auth/AuthContext';
+import { useMessage } from '../../contexts/message/ContextMessageProvider';
+import ParcelaService from '../../service/fluxocaixa/ParcelaService';
+import { formatDateToYMDString } from '../../utils/DateUtils';
+import { FormaPagamento } from '../../types/fluxocaixa/FormaPagamento';
+import { Parcela } from '../../types/fluxocaixa/Parcela';
+import FlexBox from '../../components/flexbox/FlexBox';
+import FieldValue from '../../components/fieldvalue/FieldValue';
 
 interface ParcelaFormProps {
   parcela: Parcela;

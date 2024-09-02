@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-import Container from '../container/Container';
+import { Container } from '../';
 
 interface PanelProps {
   title?: ReactNode;
@@ -21,7 +21,7 @@ const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth 
     >
       {title && (
         <Title>
-          <h2>{title}</h2>
+          <h3>{title}</h3>
         </Title>
       )}
       <Container
@@ -49,7 +49,7 @@ const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth 
 export default Panel;
 
 export const Title = styled.div`
-  h2 {
+  h3 {
     color: ${({ theme }) => theme.colors.white};
     border-bottom: 2px solid ${({ theme }) => theme.colors.gray};
   }

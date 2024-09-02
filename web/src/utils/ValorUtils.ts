@@ -1,14 +1,14 @@
-export function formatarValorParaReal(valor: number): string {
+export function formatValueToBRL(value: number): string {
   return new Intl.NumberFormat('pt-BR', { 
     style: 'currency', 
     currency: 'BRL' 
-  }).format(valor);
+  }).format(value);
 };
 
-export const formatarNumeroComZerosAEsquerda = (numero: number, digitos: number): string => {
-  return numero.toString().padStart(digitos, '0');
+export const formatNumberWithLeadingZeros = (number: number, digits: number): string => {
+  return number.toString().padStart(digits, '0');
 };
 
-export const formatarDescricaoSituacaoParcela = (pago: boolean): string => {
+export const formatDescricaoSituacaoParcela = (pago: boolean): string => {
   return (pago ? 'Pago' : 'Não Pago');
 }

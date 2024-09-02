@@ -1,10 +1,17 @@
 import React, { ReactNode, useState, FC } from 'react';
 import styled from 'styled-components';
-import Container from '../container/Container';
-import SearchPagination from '../pagination/SearchPagination';
-import { PagedResponse } from '../../types/PagedResponse';
-import Button from '../button/button/Button';
-import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+import { 
+  FaEdit, 
+  FaEye, 
+  FaTrash 
+} from 'react-icons/fa';
+import { 
+  Container,
+  Button,
+  SearchPagination
+} from '../';
+import { PagedResponse } from '../../types';
+
 
 type ColumnProps<T> = {
   header: ReactNode;

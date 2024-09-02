@@ -1,6 +1,6 @@
-import { UsuarioConfig } from '../types/UsuarioConfig';
 import DefaultService from './DefaultService';
-import { useMessage } from '../contexts/message/ContextMessageProvider';
+import { UsuarioConfig } from '../types';
+import { useMessage } from '../contexts';
 
 interface UsuarioConfigApi {
   getUsuarioConfigByUsuario: (token: string) => Promise<UsuarioConfig | undefined>;

@@ -1,8 +1,10 @@
-import { useMessage } from "../contexts/message/ContextMessageProvider";
-import { Lancamento } from "../types/Lancamento";
-import { PagedResponse } from "../types/PagedResponse";
-import { TipoLancamentoEnum } from "../types/TipoLancamentoEnum";
 import DefaultService from "./DefaultService";
+import { useMessage } from "../contexts";
+import { 
+  Lancamento,
+  PagedResponse,
+  TipoLancamentoEnum
+} from "../types";
 
 interface LancamentoApi {
   createLancamento: (token: string, data: Lancamento) => Promise<{ id: number } | undefined>;

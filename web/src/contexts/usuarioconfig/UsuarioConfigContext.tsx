@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { UsuarioConfig, initialUsuarioConfigState } from '../../types/UsuarioConfig';
+import { UsuarioConfig, initialUsuarioConfigState } from '../../types';
 
-export type UsuarioConfigContextType = {
+type UsuarioConfigContextType = {
   usuarioConfig: UsuarioConfig;
 };
 

@@ -5,17 +5,20 @@ import { UsuarioConfigContext } from '../../contexts/usuarioconfig/UsuarioConfig
 import { useMessage } from '../../contexts/message/ContextMessageProvider';
 import DespesaService from '../../service/fluxocaixa/DespesaService';
 import useConfirmModal from '../../hooks/useConfirmModal';
-import Panel from '../../components/panel/Panel';
-import { Table, Column } from '../../components/table/Table';
-import DespesaForm from '../../components/form/despesa/DespesaForm';
-import ParcelaForm from '../../components/form/despesa/ParcelaForm';
-import Container from '../../components/container/Container';
-import FloatingButton from '../../components/button/floatingbutton/FloatingButton';
+import { 
+  Panel,
+  Table,
+  Column,
+  Container,
+  FloatingButton
+} from '../../components';
+import DespesaForm from './DespesaForm';
+import ParcelaForm from './ParcelaForm';
 import { FaCheck } from 'react-icons/fa';
 import { Despesa, initialDespesaState } from '../../types/fluxocaixa/Despesa';
 import { Parcela } from '../../types/fluxocaixa/Parcela';
 import { formatDateToShortString, getCurrentDate } from '../../utils/DateUtils';
-import { formatarValorParaReal, formatarDescricaoSituacaoParcela } from '../../utils/ValorUtils';
+import { formatValueToBRL, formatDescricaoSituacaoParcela } from '../../utils/ValorUtils';
 
 const DespesaPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
@@ -205,8 +208,8 @@ const DespesaPage: React.FC = () => {
               columns={[
                 <Column<Parcela> header="Número" value={(item) => item.numero} />,
                 <Column<Parcela> header="Data Vencimento" value={(item) => formatDateToShortString(item.dataVencimento)} />,
-                <Column<Parcela> header="Valor" value={(item) => formatarValorParaReal(item.valor)} />,
-                <Column<Parcela> header="Situação" value={(item) => formatarDescricaoSituacaoParcela(item.pago)} />,
+                <Column<Parcela> header="Valor" value={(item) => formatValueToBRL(item.valor)} />,
+                <Column<Parcela> header="Situação" value={(item) => formatDescricaoSituacaoParcela(item.pago)} />,
                 <Column<Parcela> header="Forma Pagamento" value={(item) => item.formaPagamento ? item.formaPagamento?.descricao : ""} />
               ]}
             />
