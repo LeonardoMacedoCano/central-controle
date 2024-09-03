@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import { FaBars, FaHome, FaCog, FaDollarSign, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
-import { AuthContext } from '../../contexts';
+import { sidebarItems } from '../routes';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -40,7 +40,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   }, [isMenuOpen]);
 
   return (
-    <div style={{display: 'flex', height: '100vh', overflow: 'hidden'}}>
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <div ref={sidebarRef}>
         <Sidebar 
           isOpen={isMenuOpen} 
@@ -76,27 +76,9 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubmenu, handleLinkClick }) => {
-  const auth = useContext(AuthContext);
-
-  const handleLogout = () => {
-    auth.signout();
-    handleLinkClick();
-  };
-
   const handleSubmenuToggle = (submenu: string) => {
     setActiveSubmenu(prev => (prev === submenu ? null : submenu));
   };
-
-  const sidebarItems = [
-    { to: "/", Icon: FaHome, Text: "Home" },
-    {
-      Icon: FaDollarSign,
-      Text: "Fluxo Caixa",
-      submenu: [{ to: "/lancamentos", Text: "Lançamento" }]
-    },
-    { to: "/configuracao", Icon: FaCog, Text: "Configuração" },
-    { to: "/", Icon: FaSignOutAlt, Text: "Sair", onClick: handleLogout }
-  ];
 
   return (
     <AppSidebarContainer isActive={isOpen}>
@@ -111,21 +93,23 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubme
               {isOpen && activeSubmenu === item.Text && (
                 <SubmenuContent>
                   {item.submenu.map((subItem, subIndex) => (
-                    <LinkSidebar key={`${index}-${subIndex}`} to={subItem.to} onClick={handleLinkClick}>
-                      <SubMenuItem>{subItem.Text}</SubMenuItem>
-                    </LinkSidebar>
+                    subItem.to ? (
+                      <LinkSidebar key={`${index}-${subIndex}`} to={subItem.to} onClick={handleLinkClick}>
+                        <SubMenuItem>{subItem.Text}</SubMenuItem>
+                      </LinkSidebar>
+                    ) : null
                   ))}
                 </SubmenuContent>
               )}
             </SubmenuContainer>
-          ) : (
-            <LinkSidebar key={index} to={item.to} onClick={item.onClick || handleLinkClick}>
+          ) : item.to ? (
+            <LinkSidebar key={index} to={item.to} onClick={item.onClick}>
               <MenuItem>
                 <item.Icon />
                 {isOpen && <span>{item.Text}</span>}
               </MenuItem>
             </LinkSidebar>
-          )
+          ) : null
         ))}
       </AppSidebar>
     </AppSidebarContainer>

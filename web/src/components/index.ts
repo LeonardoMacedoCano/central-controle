@@ -10,7 +10,6 @@ import SearchPagination from "./pagination/SearchPagination";
 import Panel from "./panel/Panel";
 import Table, { Column } from "./table/Table";
 import Tabs from "./tabs/Tabs";
-import AppLayout from "./applayout/AppLayout";
 
 export {
   Button, 
@@ -26,5 +25,4 @@ export {
   Table,
   Column,
   Tabs,
-  AppLayout
 };

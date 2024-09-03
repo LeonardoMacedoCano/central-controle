@@ -9,11 +9,8 @@ import {
   UsuarioConfigProvider,
   RequireAuth
 } from './contexts';
-import { AppLayout } from './components/';
-import { Home } from './pages/home/Home';
-import ConfiguracaoPage from './pages/configuracao/ConfiguracaoPage';
-import LancamentoListPage from './pages/fluxocaixa/Lancamento/LancamentoListPage';
-import LancamentoPage from './pages/fluxocaixa/Lancamento/LancamentoPage';
+import AppLayout from './menus/AppLayout';
+import { routes } from './routes';
 
 const App: React.FC = () => {
   return (
@@ -26,10 +23,9 @@ const App: React.FC = () => {
               <RequireAuth>
                 <AppLayout>
                   <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/lancamentos" element={<LancamentoListPage />} />
-                    <Route path="/lancamento/:id?" element={<LancamentoPage />} />
-                    <Route path="/configuracao" element={<ConfiguracaoPage />} />
+                    {routes.map((route, index) => (
+                      <Route key={index} path={route.path} element={route.element} />
+                    ))}
                   </Routes>
                 </AppLayout>
               </RequireAuth>
