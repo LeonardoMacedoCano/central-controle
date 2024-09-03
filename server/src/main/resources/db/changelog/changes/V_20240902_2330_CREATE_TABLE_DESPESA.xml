@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-despesa" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela despesa já existe">
+            <not>
+                <tableExists tableName="despesa"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="despesa">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="idlancamento" type="INT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="idcategoria" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="despesa"
+                                 baseColumnNames="idlancamento"
+                                 constraintName="fkdespesa_lancamento"
+                                 referencedTableName="lancamento"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="despesa"
+                                 baseColumnNames="idcategoria"
+                                 constraintName="fkdespesa_categoria"
+                                 referencedTableName="despesacategoria"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

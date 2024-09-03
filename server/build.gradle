@@ -34,6 +34,7 @@ dependencies {
 	implementation 'javax.servlet:javax.servlet-api:3.1.0'
 	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation 'me.paulschwarz:spring-dotenv:2.5.4'
+	implementation 'org.liquibase:liquibase-core'
 }
 
 tasks.named('test') {

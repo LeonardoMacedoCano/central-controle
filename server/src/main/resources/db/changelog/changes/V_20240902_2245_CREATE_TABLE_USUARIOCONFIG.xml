@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create-table-usuarioconfig" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela usuarioconfig já existe">
+            <not>
+                <tableExists tableName="usuarioconfig"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="usuarioconfig">
+            <column name="id" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="idusuario" type="INT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="despesanumeromaxitempagina" type="INT" defaultValue="10"/>
+            <column name="despesavalormetamensal" type="DECIMAL(10,2)"/>
+            <column name="despesadiapadraovencimento" type="INT" defaultValue="10"/>
+            <column name="despesaformapagamentopadrao" type="INT"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="usuarioconfig"
+                                 baseColumnNames="idusuario"
+                                 constraintName="fkusuarioconfig_usuario"
+                                 referencedTableName="usuario"
+                                 referencedColumnNames="id" />
+        <addForeignKeyConstraint baseTableName="usuarioconfig"
+                                 baseColumnNames="despesaformapagamentopadrao"
+                                 constraintName="fkdespesaformapagamentopadrao"
+                                 referencedTableName="despesaformapagamento"
+                                 referencedColumnNames="id" />
+    </changeSet>
+
+</databaseChangeLog>
