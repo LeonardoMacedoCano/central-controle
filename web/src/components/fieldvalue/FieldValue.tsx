@@ -103,10 +103,10 @@ const FieldValue: React.FC<FieldValueProps> = ({
           inline={inline}
           variant={variant}
         >
-          <option value=''>{placeholder || 'Selecione uma opção'}</option>
+          <option value=''>{placeholder || ' Selecione...'}</option>
           {options?.map((option) => (
             <option key={option.key} value={String(option.key)}>
-              {`${formatNumberWithLeadingZeros(option.key, 2)} - ${option.value}`}
+              {`${formatNumberWithLeadingZeros(option.key || 0, 2)} - ${option.value}`}
             </option>          
           ))}
         </StyledSelect>

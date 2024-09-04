@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyles from './GlobalStyles';
 import { darkOnyxAmber } from './themes';
@@ -10,7 +10,7 @@ import {
   RequireAuth
 } from './contexts';
 import AppLayout from './menus/AppLayout';
-import { routes } from './routes';
+import AppRoutes from './routes';
 
 const App: React.FC = () => {
   return (
@@ -22,11 +22,7 @@ const App: React.FC = () => {
               <GlobalStyles />
               <RequireAuth>
                 <AppLayout>
-                  <Routes>
-                    {routes.map((route, index) => (
-                      <Route key={index} path={route.path} element={route.element} />
-                    ))}
-                  </Routes>
+                  <AppRoutes />
                 </AppLayout>
               </RequireAuth>
             </BrowserRouter>

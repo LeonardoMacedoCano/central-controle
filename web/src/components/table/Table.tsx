@@ -175,7 +175,7 @@ export const Table = <T extends Indexable>({
   };
 
   const renderPagination = () => {
-    if (loadPage && 'content' in values) {
+    if (loadPage && 'content' in values && values.totalElements > 0) {
       return (
         <SearchPagination
           height='35px'

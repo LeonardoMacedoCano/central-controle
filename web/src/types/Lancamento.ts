@@ -9,6 +9,6 @@ export type Lancamento = {
   id: number;
   dataLancamento: Date;
   descricao: string;
-  tipo: TipoLancamentoEnum;
-  itemDTO: LancamentoItemDTO;
+  tipo?: TipoLancamentoEnum;
+  itemDTO?: LancamentoItemDTO;
 };

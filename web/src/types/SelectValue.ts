@@ -1,4 +1,4 @@
 export type SelectValue = {
-  key: number;
-  value: string;
+  key?: number;
+  value?: string;
 }

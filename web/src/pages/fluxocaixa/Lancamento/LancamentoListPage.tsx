@@ -52,9 +52,11 @@ const LancamentoListPage: React.FC = () => {
     setPageSize(pageSize);
   };
 
+  const handleAdd = () => navigate(`/lancamento/novo`);
+
   const handleView = (id: number) => navigate(`/lancamento/${id}`);
 
-  const handleEdit = (id: number) => navigate(`/lancamento/${id}`);
+  const handleEdit = (id: number) => navigate(`/lancamento/editar/${id}`);
 
   const handleDelete = async (id: number) => {
     const result = await confirm("Exclusão de Lançamento", `Tem certeza de que deseja excluir este lançamento? Esta ação não pode ser desfeita e o lançamento será removido permanentemente.`);
@@ -111,7 +113,7 @@ const LancamentoListPage: React.FC = () => {
       <FloatingButton
         mainButtonIcon={<FaPlus />}
         mainButtonHint={'Novo Lançamento'}
-        mainAction={() => {}}
+        mainAction={handleAdd}
       />
     </Container>
   );

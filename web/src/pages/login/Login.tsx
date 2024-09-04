@@ -56,7 +56,7 @@ export const Login = () => {
     >
       <StyledBody>
         <StyledTitle>
-          Control Center
+          Central de controle
         </StyledTitle>
         <FlexBox style={getInputStyle(theme)}>
           <FlexBox.Item>
@@ -111,13 +111,14 @@ const StyledBody = styled.div`
   );
   border-radius: 5px;
   box-shadow: 0 0 5px 1px;
+  max-width: calc(100% - 20px);
 `;
 
 const StyledTitle = styled.h1`
   color: ${props => props.theme.colors.white};
   font-family: 'Roboto Slab';
   font-size: 40px;
-  margin-bottom: 120px;
+  margin-bottom: 100px;
 `;
 
 const getIconStyle = (theme: any) => ({

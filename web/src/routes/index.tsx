@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { FaHome, FaCog, FaDollarSign, FaSignOutAlt } from 'react-icons/fa';
 import { Home } from '../pages/home/Home'; // Named export
 import ConfiguracaoPage from '../pages/configuracao/ConfiguracaoPage';
@@ -46,17 +46,21 @@ export const sidebarItems: SidebarItem[] = [
   }
 ];
 
-export const routes = [
+const defaultRoutes = [
   { path: "/", element: <Home /> },
   { path: "/configuracao", element: <ConfiguracaoPage /> },
 ];
 
-const AppRoutes = () => (
+const combinedRoutes = [
+  ...defaultRoutes,
+  ...FluxoCaixaRoutes,
+];
+
+const AppRoutes: React.FC = () => (
   <Routes>
-    {routes.map((route, index) => (
+    {combinedRoutes.map((route, index) => (
       <Route key={index} path={route.path} element={route.element} />
     ))}
-    <FluxoCaixaRoutes />
   </Routes>
 );
 
