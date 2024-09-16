@@ -23,7 +23,7 @@
             <column name="descricao" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="tipo" type="ENUM('DESPESA', 'RECEITA', 'PASSIVO', 'ATIVO')">
+            <column name="tipo" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
