@@ -1,6 +1,6 @@
 services:
   server:
-    container_name: central-controle-server
+    container_name: ServerCentralControle
     build:
       context: ./server
     environment:
@@ -8,16 +8,21 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - JWT_SECRET=${JWT_SECRET}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - TIME_ZONE=${TIME_ZONE}
+      - DATE_FORMAT=${DATE_FORMAT}
+      - SCHEMA=${SCHEMA}
 
   web:
-    container_name: central-controle-web
+    container_name: WebCentralControle
     build:
       context: ./web
     depends_on:
       - server
 
   nginx:
-    container_name: central-controle-nginx
+    container_name: NginxCentralControle
     image: nginx:latest
     ports:
       - "8081:80"
