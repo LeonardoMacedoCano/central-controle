@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import { FaBars } from 'react-icons/fa';
+import { FaBars, FaCog, FaDollarSign, FaHome, FaSignOutAlt } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
-import { sidebarItems } from '../routes';
+import { AuthContext } from '../contexts';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -75,10 +75,56 @@ interface SidebarProps {
   handleLinkClick: () => void;
 }
 
+interface SubmenuItem {
+  to: string;
+  Text: string;
+}
+
+interface SidebarItem {
+  to?: string;
+  Icon: React.ComponentType;
+  Text: string;
+  onClick?: () => void;
+  submenu?: SubmenuItem[];
+}
+
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubmenu, handleLinkClick }) => {
+  const auth = useContext(AuthContext);
+
+  const handleLogout = () => {
+    auth.signout();
+    handleLinkClick();
+  };
+
   const handleSubmenuToggle = (submenu: string) => {
     setActiveSubmenu(prev => (prev === submenu ? null : submenu));
   };
+
+  const sidebarItems: SidebarItem[] = [
+    {
+      to: "/",
+      Icon: FaHome,
+      Text: "Home"
+    },
+    {
+      Icon: FaDollarSign,
+      Text: "Fluxo Caixa",
+      submenu: [{
+        to: "/lancamentos",
+        Text: "Lançamento"
+      }],
+    },
+    {
+      to: "/configuracao",
+      Icon: FaCog,
+      Text: "Configuração"
+    },
+    {
+      to: "/",
+      Icon: FaSignOutAlt,
+      Text: "Sair",
+      onClick: handleLogout }
+  ];
 
   return (
     <AppSidebarContainer isActive={isOpen}>
