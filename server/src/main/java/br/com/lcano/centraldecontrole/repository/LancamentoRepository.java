@@ -1,29 +1,29 @@
 package br.com.lcano.centraldecontrole.repository;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
+import br.com.lcano.centraldecontrole.domain.LancamentoSpecifications;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
 
 @Repository
-public interface LancamentoRepository extends JpaRepository<Lancamento, Long> {
-    @Query("SELECT l FROM Lancamento l WHERE l.usuario.id = :usuarioId " +
-            "AND (:tipos IS NULL OR l.tipo IN :tipos) " +
-            "AND (:descricao IS NULL OR LOWER(l.descricao) LIKE LOWER(CONCAT('%', :descricao, '%'))) " +
-            "AND (:dataInicio IS NULL OR l.dataLancamento >= :dataInicio) " +
-            "AND (:dataFim IS NULL OR l.dataLancamento <= :dataFim)")
-    Page<Lancamento> search(
-            @Param("usuarioId") Long usuarioId,
-            @Param("tipos") List<TipoLancamentoEnum> tipos,
-            @Param("descricao") String descricao,
-            @Param("dataInicio") Date dataInicio,
-            @Param("dataFim") Date dataFim,
-            Pageable pageable);
+public interface LancamentoRepository extends JpaRepository<Lancamento, Long>, JpaSpecificationExecutor<Lancamento> {
+    default Page<Lancamento> search(Long usuarioId, List<TipoLancamentoEnum> tipos, String descricao,
+                                    Date dataInicio, Date dataFim, Pageable pageable) {
+        return findAll(
+                Specification.where(LancamentoSpecifications.hasUsuarioId(usuarioId))
+                        .and(LancamentoSpecifications.hasTipos(tipos))
+                        .and(LancamentoSpecifications.hasDescricaoLike(descricao))
+                        .and(LancamentoSpecifications.hasDataLancamentoAfter(dataInicio))
+                        .and(LancamentoSpecifications.hasDataLancamentoBefore(dataFim)),
+                pageable
+        );
+    }
 }
