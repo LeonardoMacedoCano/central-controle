@@ -10,6 +10,7 @@ import SearchPagination from "./pagination/SearchPagination";
 import Panel from "./panel/Panel";
 import Table, { Column } from "./table/Table";
 import Tabs from "./tabs/Tabs";
+import Loading from "./loading/Loading";
 
 export {
   Button, 
@@ -25,4 +26,5 @@ export {
   Table,
   Column,
   Tabs,
+  Loading
 };

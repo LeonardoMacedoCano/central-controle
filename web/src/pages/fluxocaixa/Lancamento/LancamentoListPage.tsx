@@ -6,7 +6,8 @@ import {
   Panel,
   Column, 
   Table,
-  FloatingButton
+  FloatingButton,
+  Loading
 } from '../../../components';
 import { 
   PagedResponse,
@@ -25,6 +26,7 @@ const LancamentoListPage: React.FC = () => {
   const [lancamentos, setLancamentos] = useState<PagedResponse<Lancamento> | undefined>(undefined);
   const [pageIndex, setPageIndex] = useState<number>(0); 
   const [pageSize, setPageSize] = useState<number | null>(10); 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { confirm, ConfirmModalComponent } = useConfirmModal();
   const lancamentoService = LancamentoService();
@@ -39,11 +41,14 @@ const LancamentoListPage: React.FC = () => {
   const loadLancamentos = async () => {
     if (!auth.usuario?.token || !pageSize) return;
 
+    setIsLoading(true);
     try {
       const result = await lancamentoService.getLancamentos(auth.usuario?.token, pageIndex, pageSize);
       setLancamentos(result);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar os lançamentos.', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -82,6 +87,7 @@ const LancamentoListPage: React.FC = () => {
   return (
     <Container>
       {ConfirmModalComponent}
+      <Loading isLoading={isLoading} />
       <Panel 
         maxWidth='1000px'
         title='Lançamentos'
