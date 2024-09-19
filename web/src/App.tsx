@@ -11,6 +11,7 @@ import {
 } from './contexts';
 import AppLayout from './menus/AppLayout';
 import AppRoutes from './routes';
+import { DynamicFavicon } from './components';
 
 const App: React.FC = () => {
   return (
@@ -25,6 +26,7 @@ const App: React.FC = () => {
                   <AppRoutes />
                 </AppLayout>
               </RequireAuth>
+              <DynamicFavicon />
             </BrowserRouter>
           </UsuarioConfigProvider>
         </AuthProvider>

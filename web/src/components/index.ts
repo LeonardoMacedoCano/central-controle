@@ -11,6 +11,7 @@ import Panel from "./panel/Panel";
 import Table, { Column } from "./table/Table";
 import Tabs from "./tabs/Tabs";
 import Loading from "./loading/Loading";
+import DynamicFavicon from "./dynamicfavicon/DynamicFavicon";
 
 export {
   Button, 
@@ -26,5 +27,6 @@ export {
   Table,
   Column,
   Tabs,
-  Loading
+  Loading,
+  DynamicFavicon
 };
