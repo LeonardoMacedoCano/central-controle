@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -17,27 +18,27 @@ import java.util.Date;
 @RequestMapping("/api/lancamento")
 public class LancamentoResource {
     @Autowired
-    private final LancamentoService fluxoCaixaService;
+    private final LancamentoService lancamentoService;
 
     public LancamentoResource(LancamentoService fluxoCaixaService) {
-        this.fluxoCaixaService = fluxoCaixaService;
+        this.lancamentoService = fluxoCaixaService;
     }
 
     @PostMapping
     public ResponseEntity<Object> createLancamento(@RequestBody LancamentoDTO lancamentoDTO) {
-        Long id = this.fluxoCaixaService.createLancamento(lancamentoDTO);
+        Long id = this.lancamentoService.createLancamento(lancamentoDTO);
         return CustomSuccess.buildResponseEntity("Lançamento efetuado com sucesso.", "id", id);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateLancamento(@PathVariable Long id, @RequestBody LancamentoDTO lancamentoDTO) {
-        this.fluxoCaixaService.updateLancamento(id, lancamentoDTO);
+        this.lancamentoService.updateLancamento(id, lancamentoDTO);
         return CustomSuccess.buildResponseEntity("Lançamento editado com sucesso.");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteLancamento(@PathVariable Long id) {
-        this.fluxoCaixaService.deleteLancamento(id);
+        this.lancamentoService.deleteLancamento(id);
         return CustomSuccess.buildResponseEntity("Lançamento deletado com sucesso.");
     }
 
@@ -47,11 +48,17 @@ public class LancamentoResource {
                                                               @RequestParam(required = false) TipoLancamentoEnum tipo,
                                                               @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataInicio,
                                                               @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataFim) {
-        return ResponseEntity.ok(fluxoCaixaService.getLancamentos(pageable, descricao, tipo, dataInicio, dataFim));
+        return ResponseEntity.ok(lancamentoService.getLancamentos(pageable, descricao, tipo, dataInicio, dataFim));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<LancamentoDTO> getLancamento(@PathVariable Long id) {
-        return ResponseEntity.ok(this.fluxoCaixaService.getLancamentoDTO(id));
+        return ResponseEntity.ok(this.lancamentoService.getLancamentoDTO(id));
+    }
+
+    @PostMapping("/import-extrato-fatura-cartao")
+    public ResponseEntity<Object> importExtratoFaturaCartao(@RequestParam MultipartFile file) throws Exception {
+        this.lancamentoService.importExtratoFaturaCartao(file);
+        return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
 }

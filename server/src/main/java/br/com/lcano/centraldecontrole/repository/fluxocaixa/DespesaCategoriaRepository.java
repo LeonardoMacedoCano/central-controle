@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DespesaCategoriaRepository extends JpaRepository<DespesaCategoria, Long> {
+    DespesaCategoria findByDescricao(String descricao);
 }

@@ -92,4 +92,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleLancamentoTipoNaoSuportado(LancamentoException.LancamentoTipoNaoSuportado ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
+
+    @ExceptionHandler({ArquivoException.ArquivoJaImportado.class})
+    protected ResponseEntity<Object> handleArquivoJaImportado(ArquivoException.ArquivoJaImportado ex) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler({ArquivoException.ArquivoNaoEncontrado.class})
+    protected ResponseEntity<Object> handleArquivoNaoEncontrado(ArquivoException.ArquivoNaoEncontrado ex) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
 }

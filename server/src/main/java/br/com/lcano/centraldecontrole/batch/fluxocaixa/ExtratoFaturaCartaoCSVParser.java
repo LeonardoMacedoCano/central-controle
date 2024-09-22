@@ -1,0 +1,55 @@
+package br.com.lcano.centraldecontrole.batch.fluxocaixa;
+
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoFaturaCartao;
+import com.opencsv.CSVReader;
+import org.springframework.stereotype.Component;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@Component
+public class ExtratoFaturaCartaoCSVParser {
+
+    public List<ExtratoFaturaCartao> parse(InputStream inputStream) throws Exception {
+        List<ExtratoFaturaCartao> transactions = new ArrayList<>();
+
+        try (CSVReader csvReader = new CSVReader(new InputStreamReader(inputStream))) {
+            String[] line;
+            boolean isFirstLine = true;
+
+            while ((line = csvReader.readNext()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+                transactions.add(parseTransaction(line));
+            }
+        }
+        return transactions;
+    }
+
+    private ExtratoFaturaCartao parseTransaction(String[] line) {
+        ExtratoFaturaCartao transaction = new ExtratoFaturaCartao();
+
+        transaction.setDataLancamento(parseDate(line[0]));
+        transaction.setCategoria(line[1]);
+        transaction.setDescricao(line[2]);
+        transaction.setValor(Double.valueOf(line[3]));
+
+        return transaction;
+    }
+
+    private Date parseDate(String dateStr) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return formatter.parse(dateStr);
+        } catch (ParseException e) {
+            throw new RuntimeException("Erro ao parsear a data: " + dateStr, e);
+        }
+    }
+}

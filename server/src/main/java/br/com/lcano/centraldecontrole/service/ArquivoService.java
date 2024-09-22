@@ -26,6 +26,11 @@ public class ArquivoService {
         return this.arquivoRepository.findByHash(hash);
     }
 
+    public Arquivo getArquivoById(Long id) {
+        return arquivoRepository.findById(id)
+                .orElseThrow(() -> new ArquivoException.ArquivoNaoEncontrado(id));
+    }
+
     public String calculateHash(InputStream is) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] bytesBuffer = new byte[1024];

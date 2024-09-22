@@ -25,4 +25,15 @@ public class DespesaCategoriaService {
         return this.despesaCategoriaRepository.findById(id)
             .orElseThrow(() -> new DespesaException.CategoriaNaoEncontradaById(id));
     }
+
+    public CategoriaDTO findOrCreateCategoria(String descricaoCategoria) {
+        DespesaCategoria categoria = despesaCategoriaRepository.findByDescricao(descricaoCategoria);
+
+        if (categoria == null) {
+            categoria = new DespesaCategoria(descricaoCategoria);
+            despesaCategoriaRepository.save(categoria);
+        }
+
+        return CategoriaDTO.converterParaDTO(categoria);
+    }
 }

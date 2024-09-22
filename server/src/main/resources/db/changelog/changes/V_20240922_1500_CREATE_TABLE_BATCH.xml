@@ -1,0 +1,208 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="create-sequente-batchstepexecution" author="lcano">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="BATCH_STEP_EXECUTION_SEQ"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="BATCH_STEP_EXECUTION_SEQ"/>
+
+    </changeSet>
+    <changeSet id="create-sequente-batchjobexecution" author="lcanox">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="BATCH_JOB_EXECUTION_SEQ"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="BATCH_JOB_EXECUTION_SEQ"/>
+    </changeSet>
+
+    <changeSet id="create-sequente-batchjobseq" author="lcano">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="BATCH_JOB_SEQ"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="BATCH_JOB_SEQ"/>
+    </changeSet>
+
+    <changeSet id="create-table-batchjobinstance" author="lcano">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BATCH_JOB_INSTANCE"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="BATCH_JOB_INSTANCE">
+            <column name="JOB_INSTANCE_ID" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="VERSION" type="${number_20}"/>
+            <column name="JOB_NAME" type="${varchar_100}"/>
+            <column name="JOB_KEY" type="${varchar_32}"/>
+        </createTable>
+
+        <addUniqueConstraint tableName="BATCH_JOB_INSTANCE" columnNames="JOB_NAME, JOB_KEY"
+                             constraintName="JOB_INST_UN"/>
+    </changeSet>
+
+
+    <changeSet id="create-table-batchjobexecution" author="lcano">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BATCH_JOB_EXECUTION"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="BATCH_JOB_EXECUTION">
+            <column name="JOB_EXECUTION_ID" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="VERSION" type="${number_20}"/>
+            <column name="JOB_INSTANCE_ID" type="INT"/>
+            <column name="CREATE_TIME" type="${timestamp}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="START_TIME" type="${timestamp}"/>
+            <column name="END_TIME" type="${timestamp}"/>
+            <column name="LAST_UPDATED" type="${timestamp}"/>
+            <column name="STATUS" type="${varchar_10}"/>
+            <column name="EXIT_CODE" type="${varchar_2500}"/>
+            <column name="EXIT_MESSAGE" type="${varchar_2500}"/>
+            <column name="JOB_CONFIGURATION_LOCATION" type="${varchar_2500}"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="JOB_INST_EXEC_FK"
+                baseTableName="BATCH_JOB_EXECUTION" baseColumnNames="JOB_INSTANCE_ID"
+                referencedTableName="BATCH_JOB_INSTANCE" referencedColumnNames="JOB_INSTANCE_ID"/>
+    </changeSet>
+
+    <changeSet id="create-table-batchjobexecutionparams" author="lcano">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BATCH_JOB_EXECUTION_PARAMS"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="BATCH_JOB_EXECUTION_PARAMS">
+            <column name="JOB_EXECUTION_ID" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PARAMETER_NAME" type="${varchar_100}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PARAMETER_TYPE" type="${varchar_100}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PARAMETER_VALUE" type="${varchar_2500}"/>
+            <column name="DOUBLE_VAL" type="${number}"/>
+            <column name="IDENTIFYING" type="${char_1}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="JOB_EXEC_PARAMS_FK"
+                baseTableName="BATCH_JOB_EXECUTION_PARAMS"
+                baseColumnNames="JOB_EXECUTION_ID"
+                referencedTableName="BATCH_JOB_EXECUTION"
+                referencedColumnNames="JOB_EXECUTION_ID"/>
+    </changeSet>
+
+    <changeSet id="create-table-batchstepexecution" author="lcano">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BATCH_STEP_EXECUTION"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="BATCH_STEP_EXECUTION">
+            <column name="STEP_EXECUTION_ID" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="VERSION" type="${number_20}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STEP_NAME" type="${varchar_100}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="JOB_EXECUTION_ID" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATE_TIME" type="${timestamp}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="START_TIME" type="${timestamp}"/>
+            <column name="END_TIME" type="${timestamp}" defaultValueDate="null"/>
+            <column name="STATUS" type="${varchar_10}"/>
+            <column name="COMMIT_COUNT" type="${number_20}"/>
+            <column name="READ_COUNT" type="${number_20}"/>
+            <column name="FILTER_COUNT" type="${number_20}"/>
+            <column name="WRITE_COUNT" type="${number_20}"/>
+            <column name="READ_SKIP_COUNT" type="${number_20}"/>
+            <column name="WRITE_SKIP_COUNT" type="${number_20}"/>
+            <column name="PROCESS_SKIP_COUNT" type="${number_20}"/>
+            <column name="ROLLBACK_COUNT" type="${number_20}"/>
+            <column name="EXIT_CODE" type="${varchar_2500}"/>
+            <column name="EXIT_MESSAGE" type="${varchar_2500}"/>
+            <column name="LAST_UPDATED" type="${timestamp}"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="JOB_EXEC_STEP_FK"
+                baseTableName="BATCH_STEP_EXECUTION" baseColumnNames="JOB_EXECUTION_ID"
+                referencedTableName="BATCH_JOB_EXECUTION" referencedColumnNames="JOB_EXECUTION_ID"/>
+    </changeSet>
+
+    <changeSet id="create-table-batchstepexecutioncontext" author="lcano">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BATCH_STEP_EXECUTION_CONTEXT"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="BATCH_STEP_EXECUTION_CONTEXT">
+            <column name="STEP_EXECUTION_ID" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="SHORT_CONTEXT" type="${varchar_2500}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SERIALIZED_CONTEXT" type="${payload}"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="STEP_EXEC_CTX_FK"
+                baseTableName="BATCH_STEP_EXECUTION_CONTEXT" baseColumnNames="STEP_EXECUTION_ID"
+                referencedTableName="BATCH_STEP_EXECUTION" referencedColumnNames="STEP_EXECUTION_ID"/>
+    </changeSet>
+
+    <changeSet id="create-table-batchjobexecution-context" author="lcano">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="BATCH_JOB_EXECUTION_CONTEXT"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="BATCH_JOB_EXECUTION_CONTEXT">
+            <column name="JOB_EXECUTION_ID" type="INT" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="SHORT_CONTEXT" type="${varchar_2500}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SERIALIZED_CONTEXT" type="${payload}"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="JOB_EXEC_CTX_FK"
+                baseTableName="BATCH_JOB_EXECUTION_CONTEXT" baseColumnNames="JOB_EXECUTION_ID"
+                referencedTableName="BATCH_JOB_EXECUTION" referencedColumnNames="JOB_EXECUTION_ID"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,11 +1,13 @@
 package br.com.lcano.centraldecontrole.service;
 
+import br.com.lcano.centraldecontrole.domain.Arquivo;
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.exception.LancamentoException;
 import br.com.lcano.centraldecontrole.repository.LancamentoRepository;
+import br.com.lcano.centraldecontrole.service.fluxocaixa.ImportacaoExtratoFaturaCartaoJobStarter;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import jakarta.annotation.Resource;
@@ -14,11 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class LancamentoService {
@@ -30,6 +30,10 @@ public class LancamentoService {
     UsuarioUtil usuarioUtil;
     @Autowired
     DateUtil dateUtil;
+    @Autowired
+    ArquivoService arquivoService;
+    @Autowired
+    ImportacaoExtratoFaturaCartaoJobStarter importacaoExtratoFaturaCartaoJobStarter;
 
     @Transactional
     public Long createLancamento(LancamentoDTO lancamentoDTO) {
@@ -89,4 +93,10 @@ public class LancamentoService {
         return Optional.ofNullable(lancamentoItemServices.get(tipo))
                 .orElseThrow(() -> new LancamentoException.LancamentoTipoNaoSuportado(tipo.getDescricao()));
     }
+
+    public void importExtratoFaturaCartao(MultipartFile file) throws Exception {
+        Arquivo arquivo = this.arquivoService.uploadArquivo(file);
+        importacaoExtratoFaturaCartaoJobStarter.startJob(arquivo.getId());
+    }
+
 }
