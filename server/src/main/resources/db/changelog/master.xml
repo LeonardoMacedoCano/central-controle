@@ -158,6 +158,9 @@
     <property name="payload" value="text" dbms="postgresql"/>
     <property name="payload" value="clob" dbms="oracle,h2"/>
 
+    <property name="binary" value="BYTEA" dbms="postgresql"/>
+    <property name="binary" value="BLOB" dbms="oracle, h2"/>
+
     <includeAll path="changes" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
