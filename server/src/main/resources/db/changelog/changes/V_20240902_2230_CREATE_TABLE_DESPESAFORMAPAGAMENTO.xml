@@ -11,10 +11,10 @@
         </preConditions>
 
         <createTable tableName="despesaformapagamento">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_despesaformapagamento"/>
             </column>
-            <column name="descricao" type="VARCHAR(100)">
+            <column name="descricao" type="${varchar_100}">
                 <constraints nullable="false"/>
             </column>
         </createTable>

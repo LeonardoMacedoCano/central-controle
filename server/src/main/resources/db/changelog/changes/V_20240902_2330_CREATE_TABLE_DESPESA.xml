@@ -11,25 +11,33 @@
         </preConditions>
 
         <createTable tableName="despesa">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_despesa"/>
             </column>
-            <column name="idlancamento" type="INT">
+            <column name="idlancamento" type="${integer}">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="idcategoria" type="INT">
+            <column name="idcategoria" type="${integer}">
                 <constraints nullable="false"/>
             </column>
+            <column name="idformapagamento" type="${integer}"/>
+            <column name="datavencimento" type="${date}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valor" type="${number_10_2}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="pago" type="${char_1}" defaultValue="N"/>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="despesa"
                                  baseColumnNames="idlancamento"
-                                 constraintName="fkdespesa_lancamento"
+                                 constraintName="fk_despesa_lancamento"
                                  referencedTableName="lancamento"
                                  referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="despesa"
                                  baseColumnNames="idcategoria"
-                                 constraintName="fkdespesa_categoria"
+                                 constraintName="fk_despesa_categoria"
                                  referencedTableName="despesacategoria"
                                  referencedColumnNames="id"/>
     </changeSet>

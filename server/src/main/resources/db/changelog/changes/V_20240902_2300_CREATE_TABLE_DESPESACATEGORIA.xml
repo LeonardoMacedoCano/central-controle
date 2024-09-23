@@ -11,11 +11,11 @@
         </preConditions>
 
         <createTable tableName="despesacategoria">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_despesacategoria"/>
             </column>
-            <column name="descricao" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+            <column name="descricao" type="${varchar_255}">
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
     </changeSet>

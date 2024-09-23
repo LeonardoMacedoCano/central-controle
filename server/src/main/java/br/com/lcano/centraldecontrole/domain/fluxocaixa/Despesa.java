@@ -1,14 +1,14 @@
 package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
+import br.com.lcano.centraldecontrole.util.BooleanToCharConverter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 @Table(name = "despesa")
 @Entity
@@ -33,6 +33,17 @@ public class Despesa implements Serializable {
     @JoinColumn(name = "idcategoria", nullable = false)
     private DespesaCategoria categoria;
 
-    @OneToMany(mappedBy = "despesa", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<DespesaParcela> parcelas = new ArrayList<>();
+    @Column(name = "datavencimento", nullable = false)
+    private Date dataVencimento;
+
+    @Column(nullable = false)
+    private double valor;
+
+    @Convert(converter = BooleanToCharConverter.class)
+    @Column(nullable = false)
+    private boolean pago;
+
+    @ManyToOne
+    @JoinColumn(name = "idformapagamento")
+    private DespesaFormaPagamento formaPagamento;
 }

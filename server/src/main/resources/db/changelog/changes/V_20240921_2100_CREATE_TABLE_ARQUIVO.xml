@@ -11,22 +11,22 @@
         </preConditions>
 
         <createTable tableName="arquivo">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_arquivo"/>
             </column>
-            <column name="nome" type="VARCHAR(255)">
+            <column name="nome" type="${varchar_255}">
                 <constraints nullable="false"/>
             </column>
-            <column name="extensao" type="VARCHAR(10)">
+            <column name="extensao" type="${varchar_10}">
                 <constraints nullable="false"/>
             </column>
-            <column name="conteudo" type="binary">
+            <column name="conteudo" type="${binary}">
                 <constraints nullable="false"/>
             </column>
-            <column name="hash" type="VARCHAR(64)">
+            <column name="hash" type="${varchar_64}">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="dataimportacao" type="DATE">
+            <column name="dataimportacao" type="${date}">
                 <constraints nullable="false"/>
             </column>
         </createTable>

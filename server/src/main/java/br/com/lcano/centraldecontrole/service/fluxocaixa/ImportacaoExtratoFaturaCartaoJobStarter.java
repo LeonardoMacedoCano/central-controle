@@ -8,22 +8,26 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class ImportacaoExtratoFaturaCartaoJobStarter {
 
     @Autowired
-    private JobLauncher jobLauncher;
+    JobLauncher jobLauncher;
 
     @Autowired
-    private Job importacaoExtratoFaturaCartaoJob;
+    Job importacaoExtratoFaturaCartaoJob;
 
     @Autowired
-    private DateUtil dateUtil;
+    DateUtil dateUtil;
 
-    public void startJob(Long arquivoId) throws Exception {
+    public void startJob(Long arquivoId, Long usuarioId, Date dataVencimento) throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("arquivoId", arquivoId)
+                .addLong("usuarioId", usuarioId)
                 .addDate("startDate", dateUtil.getDataAtual())
+                .addDate("dataVencimento", dataVencimento)
                 .toJobParameters();
         jobLauncher.run(importacaoExtratoFaturaCartaoJob, jobParameters);
     }

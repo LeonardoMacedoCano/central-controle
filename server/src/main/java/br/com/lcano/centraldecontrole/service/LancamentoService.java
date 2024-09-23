@@ -94,9 +94,9 @@ public class LancamentoService {
                 .orElseThrow(() -> new LancamentoException.LancamentoTipoNaoSuportado(tipo.getDescricao()));
     }
 
-    public void importExtratoFaturaCartao(MultipartFile file) throws Exception {
+    public void importExtratoFaturaCartao(MultipartFile file, Date dataVencimento) throws Exception {
         Arquivo arquivo = this.arquivoService.uploadArquivo(file);
-        importacaoExtratoFaturaCartaoJobStarter.startJob(arquivo.getId());
+        importacaoExtratoFaturaCartaoJobStarter.startJob(arquivo.getId(), usuarioUtil.getUsuarioAutenticado().getId(), dataVencimento);
     }
 
 }

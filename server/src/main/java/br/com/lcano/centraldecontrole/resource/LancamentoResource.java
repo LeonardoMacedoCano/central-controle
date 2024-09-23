@@ -57,8 +57,9 @@ public class LancamentoResource {
     }
 
     @PostMapping("/import-extrato-fatura-cartao")
-    public ResponseEntity<Object> importExtratoFaturaCartao(@RequestParam MultipartFile file) throws Exception {
-        this.lancamentoService.importExtratoFaturaCartao(file);
+    public ResponseEntity<Object> importExtratoFaturaCartao(@RequestParam MultipartFile file,
+                                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataVencimento) throws Exception {
+        this.lancamentoService.importExtratoFaturaCartao(file, dataVencimento);
         return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class ExtratoFaturaCartaoCSVParser {
 
     public List<ExtratoFaturaCartao> parse(InputStream inputStream) throws Exception {
-        List<ExtratoFaturaCartao> transactions = new ArrayList<>();
+        List<ExtratoFaturaCartao> extratos = new ArrayList<>();
 
         try (CSVReader csvReader = new CSVReader(new InputStreamReader(inputStream))) {
             String[] line;
@@ -27,21 +27,21 @@ public class ExtratoFaturaCartaoCSVParser {
                     isFirstLine = false;
                     continue;
                 }
-                transactions.add(parseTransaction(line));
+                extratos.add(parseExtrato(line));
             }
         }
-        return transactions;
+        return extratos;
     }
 
-    private ExtratoFaturaCartao parseTransaction(String[] line) {
-        ExtratoFaturaCartao transaction = new ExtratoFaturaCartao();
+    private ExtratoFaturaCartao parseExtrato(String[] line) {
+        ExtratoFaturaCartao extrato = new ExtratoFaturaCartao();
 
-        transaction.setDataLancamento(parseDate(line[0]));
-        transaction.setCategoria(line[1]);
-        transaction.setDescricao(line[2]);
-        transaction.setValor(Double.valueOf(line[3]));
+        extrato.setDataLancamento(parseDate(line[0]));
+        extrato.setCategoria(line[1]);
+        extrato.setDescricao(line[2]);
+        extrato.setValor(Double.valueOf(line[3]));
 
-        return transaction;
+        return extrato;
     }
 
     private Date parseDate(String dateStr) {

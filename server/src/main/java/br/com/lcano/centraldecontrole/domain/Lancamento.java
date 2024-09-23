@@ -1,5 +1,6 @@
 package br.com.lcano.centraldecontrole.domain;
 
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,4 +37,7 @@ public class Lancamento implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoLancamentoEnum tipo;
+
+    @OneToOne(mappedBy = "lancamento", cascade = CascadeType.ALL)
+    private Despesa despesa;
 }

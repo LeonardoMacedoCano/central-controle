@@ -20,9 +20,15 @@
     <property name="number_15_2" value="NUMERIC(15, 2)" dbms="oracle, postgresql, h2"/>
     <property name="number_5_2" value="NUMERIC(5, 2)" dbms="oracle, postgresql, h2"/>
     <property name="number_15_4" value="NUMERIC(15, 4)" dbms="oracle, postgresql, h2"/>
+    <property name="number_10_2" value="NUMERIC(10, 2)" dbms="oracle, postgresql, h2"/>
     <property name="number_10_6" value="NUMERIC(10, 6)" dbms="oracle, postgresql, h2"/>
     <property name="number_18_6" value="NUMERIC(18, 6)" dbms="oracle, postgresql, h2"/>
     <property name="number" value="NUMERIC" dbms="oracle, postgresql, h2"/>
+
+    <!-- Integer types -->
+    <property name="integer" value="INTEGER" dbms="oracle, postgresql, h2"/>
+    <property name="bigint" value="BIGINT" dbms="oracle, postgresql, h2"/>
+
 
     <!-- Date/Time types -->
     <property name="date" value="date" dbms="oracle, postgresql, h2"/>
@@ -98,6 +104,10 @@
     <property name="varchar_60" value="VARCHAR2(60)" dbms="oracle"/>
     <property name="varchar_60" value="CHARACTER VARYING(60)" dbms="postgresql"/>
     <property name="varchar_60" value="VARCHAR(60)" dbms="h2"/>
+
+    <property name="varchar_64" value="VARCHAR2(64)" dbms="oracle"/>
+    <property name="varchar_64" value="CHARACTER VARYING(64)" dbms="postgresql"/>
+    <property name="varchar_64" value="VARCHAR(64)" dbms="h2"/>
 
     <property name="varchar_70" value="VARCHAR2(70)" dbms="oracle"/>
     <property name="varchar_70" value="CHARACTER VARYING(70)" dbms="postgresql"/>

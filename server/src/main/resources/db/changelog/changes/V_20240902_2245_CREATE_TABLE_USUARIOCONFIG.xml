@@ -11,26 +11,26 @@
         </preConditions>
 
         <createTable tableName="usuarioconfig">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_usuarioconfig"/>
             </column>
-            <column name="idusuario" type="INT">
+            <column name="idusuario" type="${integer}">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="despesanumeromaxitempagina" type="INT" defaultValue="10"/>
-            <column name="despesavalormetamensal" type="DECIMAL(10,2)"/>
-            <column name="despesadiapadraovencimento" type="INT" defaultValue="10"/>
-            <column name="despesaformapagamentopadrao" type="INT"/>
+            <column name="despesanumeromaxitempagina" type="${integer}" defaultValue="10"/>
+            <column name="despesavalormetamensal" type="${number_10_2}"/>
+            <column name="despesadiapadraovencimento" type="${integer}" defaultValue="10"/>
+            <column name="despesaformapagamentopadrao" type="${integer}"/>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="usuarioconfig"
                                  baseColumnNames="idusuario"
-                                 constraintName="fkusuarioconfig_usuario"
+                                 constraintName="fk_usuarioconfig_usuario"
                                  referencedTableName="usuario"
                                  referencedColumnNames="id" />
         <addForeignKeyConstraint baseTableName="usuarioconfig"
                                  baseColumnNames="despesaformapagamentopadrao"
-                                 constraintName="fkdespesaformapagamentopadrao"
+                                 constraintName="fk_despesaformapagpadrao"
                                  referencedTableName="despesaformapagamento"
                                  referencedColumnNames="id" />
     </changeSet>

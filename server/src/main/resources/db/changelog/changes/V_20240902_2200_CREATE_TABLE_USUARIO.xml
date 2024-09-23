@@ -11,19 +11,19 @@
         </preConditions>
 
         <createTable tableName="usuario">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_usuario"/>
             </column>
-            <column name="username" type="VARCHAR(255)">
+            <column name="username" type="${varchar_255}">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="senha" type="VARCHAR(255)">
+            <column name="senha" type="${varchar_255}">
                 <constraints nullable="false"/>
             </column>
-            <column name="datainclusao" type="DATE">
+            <column name="datainclusao" type="${date}">
                 <constraints nullable="false"/>
             </column>
-            <column name="ativo" type="CHAR(1)" defaultValue="S"/>
+            <column name="ativo" type="${char_1}" defaultValue="S"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

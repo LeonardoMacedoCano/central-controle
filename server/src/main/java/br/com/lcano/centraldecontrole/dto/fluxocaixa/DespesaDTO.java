@@ -1,11 +1,16 @@
 package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
+import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import br.com.lcano.centraldecontrole.util.CustomDateDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
-import java.util.List;
+
+import java.util.Date;
 
 @Data
 public class DespesaDTO implements LancamentoItemDTO {
@@ -13,42 +18,55 @@ public class DespesaDTO implements LancamentoItemDTO {
 
     private CategoriaDTO categoria;
 
-    private Double valorTotal;
-
     private String situacao;
 
-    @JsonProperty("parcelas")
-    private List<DespesaParcelaDTO> parcelasDTO;
+    @JsonDeserialize(using = CustomDateDeserializer.class)
+    private Date dataVencimento;
+
+    private Double valor;
+
+    private Boolean pago;
+
+    private DespesaFormaPagamentoDTO formaPagamento;
 
     public static DespesaDTO converterParaDTO(Despesa despesa) {
         DespesaDTO dto = new DespesaDTO();
 
         dto.setId(despesa.getId());
         dto.setCategoria(CategoriaDTO.converterParaDTO(despesa.getCategoria()));
-        dto.setParcelasDTO(DespesaParcelaDTO.converterListaParaDTO(despesa.getParcelas()));
-        dto.setValorTotal(calcularValorTotal(dto.parcelasDTO));
-        dto.setSituacao(calcularSituacao(dto.parcelasDTO));
+        dto.setDataVencimento(despesa.getDataVencimento());
+        dto.setValor(despesa.getValor());
+        dto.setPago(despesa.isPago());
+        dto.setSituacao(calcularSituacao(despesa.isPago()));
+
+        if (despesa.getFormaPagamento() != null) {
+            dto.setFormaPagamento(DespesaFormaPagamentoDTO.converterParaDTO(despesa.getFormaPagamento()));
+        }
 
         return dto;
     }
 
-    static Double calcularValorTotal(List<DespesaParcelaDTO> parcelas) {
-        return parcelas.stream()
-                .mapToDouble(DespesaParcelaDTO::getValor)
-                .sum();
+    static String calcularSituacao(Boolean isPago) {
+        return isPago ? "Pago" : "Não pago";
     }
 
-    static String calcularSituacao(List<DespesaParcelaDTO> parcelas) {
-        boolean todasPagas = parcelas.stream()
-                .allMatch(DespesaParcelaDTO::getPago);
-        boolean todasNaoPagas = parcelas.stream()
-                .noneMatch(DespesaParcelaDTO::getPago);
-        if (todasPagas) {
-            return "Pago";
-        } else if (todasNaoPagas) {
-            return "Não pago";
-        } else {
-            return "Parcialmente pago";
-        }
+    public Despesa toEntity(Long id,
+                            Lancamento lancamento,
+                            DespesaCategoria despesaCategoria,
+                            Date dataVencimento,
+                            Double valor,
+                            boolean pago,
+                            DespesaFormaPagamento formaPagamento) {
+        Despesa despesa = new Despesa();
+
+        despesa.setId(id);
+        despesa.setLancamento(lancamento);
+        despesa.setCategoria(despesaCategoria);
+        despesa.setDataVencimento(dataVencimento);
+        despesa.setValor(valor);
+        despesa.setPago(pago);
+        despesa.setFormaPagamento(formaPagamento);
+
+        return despesa;
     }
 }

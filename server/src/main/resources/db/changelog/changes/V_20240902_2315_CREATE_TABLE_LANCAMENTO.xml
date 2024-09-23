@@ -11,26 +11,26 @@
         </preConditions>
 
         <createTable tableName="lancamento">
-            <column name="id" type="INT" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true"/>
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_lancamento"/>
             </column>
-            <column name="idusuario" type="INT">
+            <column name="idusuario" type="${integer}">
                 <constraints nullable="false"/>
             </column>
-            <column name="datalancamento" type="DATE">
+            <column name="datalancamento" type="${date}">
                 <constraints nullable="false"/>
             </column>
-            <column name="descricao" type="VARCHAR(255)">
+            <column name="descricao" type="${varchar_255}">
                 <constraints nullable="false"/>
             </column>
-            <column name="tipo" type="VARCHAR(255)">
+            <column name="tipo" type="${varchar_255}">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="lancamento"
                                  baseColumnNames="idusuario"
-                                 constraintName="fklancamento_usuario"
+                                 constraintName="fk_lancamento_usuario"
                                  referencedTableName="usuario"
                                  referencedColumnNames="id"/>
     </changeSet>

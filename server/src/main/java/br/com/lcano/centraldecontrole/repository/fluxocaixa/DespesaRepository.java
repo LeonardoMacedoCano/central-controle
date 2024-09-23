@@ -12,10 +12,4 @@ public interface DespesaRepository extends JpaRepository<Despesa, Long> {
 
     @Query("SELECT d FROM Despesa d WHERE d.lancamento.id = :lancamentoId")
     Optional<Despesa> findByLancamentoId(@Param("lancamentoId") Long lancamentoId);
-
-    @Query("SELECT d FROM Despesa d LEFT JOIN FETCH d.parcelas WHERE d.lancamento.id = :lancamentoId")
-    Optional<Despesa> findByLancamentoIdWithParcelas(@Param("lancamentoId") Long lancamentoId);
-
-    @Query("SELECT d FROM Despesa d LEFT JOIN FETCH d.parcelas WHERE d.id = :id")
-    Optional<Despesa> findByIdWithParcelas(@Param("id") Long id);
 }
