@@ -2,8 +2,6 @@ package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.Date;

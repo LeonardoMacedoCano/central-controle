@@ -3,8 +3,6 @@ package br.com.lcano.centraldecontrole.resource.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaService;
 import jakarta.servlet.http.HttpServletRequest;

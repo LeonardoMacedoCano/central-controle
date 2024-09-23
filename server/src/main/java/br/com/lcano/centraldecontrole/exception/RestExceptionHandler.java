@@ -73,11 +73,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({DespesaException.FormaPagamentoNaoEncontradaById.class})
-    protected ResponseEntity<Object> handleFormaPagamentoNaoEncontradaById(DespesaException.FormaPagamentoNaoEncontradaById ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
     @ExceptionHandler({DespesaException.DespesaNaoEncontradaByLancamentoId.class})
     protected ResponseEntity<Object> handleDespesaNaoEncontradaByLancamentoId(DespesaException.DespesaNaoEncontradaByLancamentoId ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());

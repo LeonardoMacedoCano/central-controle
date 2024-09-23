@@ -3,9 +3,9 @@ package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
+import br.com.lcano.centraldecontrole.enums.DespesaFormaPagamentoEnum;
 import br.com.lcano.centraldecontrole.util.CustomDateDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
@@ -27,7 +27,7 @@ public class DespesaDTO implements LancamentoItemDTO {
 
     private Boolean pago;
 
-    private DespesaFormaPagamentoDTO formaPagamento;
+    private DespesaFormaPagamentoEnum formaPagamento;
 
     public static DespesaDTO converterParaDTO(Despesa despesa) {
         DespesaDTO dto = new DespesaDTO();
@@ -38,10 +38,7 @@ public class DespesaDTO implements LancamentoItemDTO {
         dto.setValor(despesa.getValor());
         dto.setPago(despesa.isPago());
         dto.setSituacao(calcularSituacao(despesa.isPago()));
-
-        if (despesa.getFormaPagamento() != null) {
-            dto.setFormaPagamento(DespesaFormaPagamentoDTO.converterParaDTO(despesa.getFormaPagamento()));
-        }
+        if (despesa.getFormaPagamento() != null) dto.setFormaPagamento(despesa.getFormaPagamento());
 
         return dto;
     }
@@ -56,7 +53,7 @@ public class DespesaDTO implements LancamentoItemDTO {
                             Date dataVencimento,
                             Double valor,
                             boolean pago,
-                            DespesaFormaPagamento formaPagamento) {
+                            DespesaFormaPagamentoEnum formaPagamento) {
         Despesa despesa = new Despesa();
 
         despesa.setId(id);

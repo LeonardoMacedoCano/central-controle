@@ -4,6 +4,7 @@ import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
+import br.com.lcano.centraldecontrole.enums.DespesaFormaPagamentoEnum;
 import br.com.lcano.centraldecontrole.repository.LancamentoRepository;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
 import org.springframework.batch.item.Chunk;
@@ -37,7 +38,7 @@ public class ImportacaoExtratoFaturaCartaoWriter implements ItemWriter<Lancament
                     despesaDTO.getDataVencimento(),
                     despesaDTO.getValor(),
                     despesaDTO.getPago(),
-                    null // TODO - Passar fixo a forma pgto cartao de credito
+                    DespesaFormaPagamentoEnum.CARTAO_CREDITO
             );
 
             lancamento.setDespesa(despesa);

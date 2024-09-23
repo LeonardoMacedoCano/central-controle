@@ -39,7 +39,6 @@ public class UsuarioConfigService {
         usuarioConfigExistente.setDespesaNumeroMaxItemPagina(data.getDespesaNumeroMaxItemPagina());
         usuarioConfigExistente.setDespesaValorMetaMensal(data.getDespesaValorMetaMensal());
         usuarioConfigExistente.setDespesaDiaPadraoVencimento(data.getDespesaDiaPadraoVencimento());
-        usuarioConfigExistente.setDespesaFormaPagamentoPadrao(data.getDespesaFormaPagamentoPadrao());
 
         this.usuarioConfigRepository.save(usuarioConfigExistente);
     }

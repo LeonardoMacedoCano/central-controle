@@ -20,18 +20,12 @@
             <column name="despesanumeromaxitempagina" type="${integer}" defaultValue="10"/>
             <column name="despesavalormetamensal" type="${number_10_2}"/>
             <column name="despesadiapadraovencimento" type="${integer}" defaultValue="10"/>
-            <column name="despesaformapagamentopadrao" type="${integer}"/>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="usuarioconfig"
                                  baseColumnNames="idusuario"
                                  constraintName="fk_usuarioconfig_usuario"
                                  referencedTableName="usuario"
-                                 referencedColumnNames="id" />
-        <addForeignKeyConstraint baseTableName="usuarioconfig"
-                                 baseColumnNames="despesaformapagamentopadrao"
-                                 constraintName="fk_despesaformapagpadrao"
-                                 referencedTableName="despesaformapagamento"
                                  referencedColumnNames="id" />
     </changeSet>
 

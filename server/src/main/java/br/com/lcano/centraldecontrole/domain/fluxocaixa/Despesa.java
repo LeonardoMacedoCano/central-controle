@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
+import br.com.lcano.centraldecontrole.enums.DespesaFormaPagamentoEnum;
 import br.com.lcano.centraldecontrole.util.BooleanToCharConverter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -43,7 +44,7 @@ public class Despesa implements Serializable {
     @Column(nullable = false)
     private boolean pago;
 
-    @ManyToOne
-    @JoinColumn(name = "idformapagamento")
-    private DespesaFormaPagamento formaPagamento;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "formapagamento", nullable = false)
+    private DespesaFormaPagamentoEnum formaPagamento;
 }

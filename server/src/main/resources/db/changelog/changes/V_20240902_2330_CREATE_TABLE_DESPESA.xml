@@ -20,7 +20,9 @@
             <column name="idcategoria" type="${integer}">
                 <constraints nullable="false"/>
             </column>
-            <column name="idformapagamento" type="${integer}"/>
+            <column name="formapagamento" type="${varchar_255}">
+                <constraints nullable="false"/>
+            </column>
             <column name="datavencimento" type="${date}">
                 <constraints nullable="false"/>
             </column>

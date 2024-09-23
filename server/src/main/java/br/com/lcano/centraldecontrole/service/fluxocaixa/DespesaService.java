@@ -20,7 +20,6 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
     private final DespesaRepository despesaRepository;
     private final DespesaCategoriaRepository despesaCategoriaRepository;
     private final DespesaCategoriaService despesaCategoriaService;
-    private final DespesaFormaPagamentoService despesaFormaPagamentoService;
 
     @Override
     public void create(DespesaDTO itemDTO, Lancamento lancamento) {
@@ -31,8 +30,7 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
         novaDespesa.setDataVencimento(itemDTO.getDataVencimento());
         novaDespesa.setValor(itemDTO.getValor());
         novaDespesa.setPago(itemDTO.getPago());
-
-        if (itemDTO.getFormaPagamento() != null && itemDTO.getFormaPagamento().getId() != null) novaDespesa.setFormaPagamento(this.despesaFormaPagamentoService.getFormaPagamentoById(itemDTO.getFormaPagamento().getId()));
+        if (itemDTO.getFormaPagamento() != null) novaDespesa.setFormaPagamento((itemDTO.getFormaPagamento()));
 
         this.despesaRepository.save(novaDespesa);
     }
@@ -46,7 +44,7 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
         despesa.setValor(itemDTO.getValor());
         despesa.setPago(itemDTO.getPago());
 
-        if (itemDTO.getFormaPagamento() != null && itemDTO.getFormaPagamento().getId() != null) despesa.setFormaPagamento(this.despesaFormaPagamentoService.getFormaPagamentoById(itemDTO.getFormaPagamento().getId()));
+        if (itemDTO.getFormaPagamento() != null) despesa.setFormaPagamento((itemDTO.getFormaPagamento()));
         else despesa.setFormaPagamento(null);
 
         this.despesaRepository.save(despesa);

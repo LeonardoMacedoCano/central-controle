@@ -1,6 +1,5 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.UsuarioConfig;
 import br.com.lcano.centraldecontrole.dto.UsuarioConfigDTO;

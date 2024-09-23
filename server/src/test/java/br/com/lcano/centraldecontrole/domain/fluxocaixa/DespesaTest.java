@@ -25,17 +25,15 @@ public class DespesaTest {
         DespesaCategoria categoria = new DespesaCategoria();
         String descricao = "Teste";
         Date dataLancamento = new Date();
-        List<DespesaParcela> parcelas = new ArrayList<>();
 
         Lancamento lancamento = new Lancamento(1L, usuario, dataLancamento, descricao, TipoLancamentoEnum.DESPESA);
-        Despesa despesa = new Despesa(id, lancamento, categoria, parcelas);
+        Despesa despesa = new Despesa(id, lancamento, categoria);
 
         assertEquals(id, despesa.getId());
         assertEquals(usuario, lancamento.getUsuario());
         assertEquals(categoria, despesa.getCategoria());
         assertEquals(descricao, lancamento.getDescricao());
         assertEquals(dataLancamento, lancamento.getDataLancamento());
-        assertEquals(parcelas, despesa.getParcelas());
     }
 
     @Test

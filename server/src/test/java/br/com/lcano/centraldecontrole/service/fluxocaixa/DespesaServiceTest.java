@@ -3,7 +3,6 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaParcela;
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
@@ -33,8 +32,6 @@ class DespesaServiceTest {
     private DespesaCategoriaRepository despesaCategoriaRepository;
     @Mock
     private DespesaCategoriaService despesaCategoriaService;
-    @Mock
-    private DespesaFormaPagamentoService despesaFormaPagamentoService;
     @InjectMocks
     private DespesaService despesaService;
 
@@ -42,13 +39,12 @@ class DespesaServiceTest {
     private Lancamento lancamento;
     private DespesaCategoria categoriaAlimentacao;
     private Despesa despesaExistente;
-    private DespesaParcela parcela;
     private final Long lancamentoId = 1L;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        despesaService = new DespesaService(despesaRepository, despesaCategoriaRepository, despesaCategoriaService, despesaFormaPagamentoService);
+        despesaService = new DespesaService(despesaRepository, despesaCategoriaRepository, despesaCategoriaService);
 
         CategoriaDTO categoriaDTO = new CategoriaDTO();
         categoriaDTO.setId(1L);

@@ -1,6 +1,5 @@
 package br.com.lcano.centraldecontrole.domain;
 
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaFormaPagamento;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
