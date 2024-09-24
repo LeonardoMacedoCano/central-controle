@@ -12,6 +12,7 @@ import Table, { Column } from "./table/Table";
 import Tabs from "./tabs/Tabs";
 import Loading from "./loading/Loading";
 import DynamicFavicon from "./dynamicfavicon/DynamicFavicon";
+import DragDropFile from "./dragdropfile/DragDropFile";
 
 export {
   Button, 
@@ -28,5 +29,6 @@ export {
   Column,
   Tabs,
   Loading,
-  DynamicFavicon
+  DynamicFavicon,
+  DragDropFile
 };

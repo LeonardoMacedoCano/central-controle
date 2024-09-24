@@ -80,6 +80,8 @@ const FieldValue: React.FC<FieldValueProps> = ({
       return formatDateToYMString(val);
     } else if (typeof val === 'string' && type === 'date') {
       return formatDateToYMDString(parseDateStringToDate(val));
+    } else if (type === 'date') {
+      return formatDateToYMDString((val));
     } else if (typeof val === 'boolean' && type === 'boolean') {
       return val ? 'true' : 'false';
     } else {
