@@ -1,20 +1,19 @@
-import { 
-  Categoria,
-  Parcela
-} from "..";
+import { Categoria, DespesaFormaPagamentoEnum } from "..";
+import { getCurrentDate } from "../../utils";
 
 export type Despesa = {
-  id: number;
-  categoria: Categoria;
-  valorTotal: number;
+  id?: number;
+  categoria?: Categoria;
   situacao: string;
-  parcelas: Parcela[];
+  dataVencimento: Date;
+  valor: number;
+  pago: boolean;
+  formaPagamento?: DespesaFormaPagamentoEnum;
 }
 
 export const initialDespesaState: Despesa = {
-  id: 0,
-  categoria: { id: 0, descricao: '' },
-  valorTotal: 0,
-  situacao: '',
-  parcelas: []
+  situacao: "",
+  dataVencimento: getCurrentDate(),
+  valor: 0,
+  pago: false
 };

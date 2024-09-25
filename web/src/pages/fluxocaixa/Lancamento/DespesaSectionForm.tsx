@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FieldValue, FlexBox, Panel } from '../../../components';
-import { Categoria, Despesa } from '../../../types';
-import { formatValueToBRL } from '../../../utils';
+import { Categoria, Despesa, despesaFormaPagamentoOptions, getCodigoDespesaFormaPagamento, getDescricaoDespesaFormaPagamento, getDespesaFormaPagamentoByCodigo } from '../../../types';
+import { formatDateToYMDString } from '../../../utils';
 import { AuthContext, useMessage } from '../../../contexts';
-import { DespesaService } from '../../../service';
+import { CategoriaDespesaService } from '../../../service';
 
 interface DespesaSectionFormProps {
-  despesa: Despesa | undefined;
+  despesa: Despesa;
   onUpdate: (updatedDespesa: Despesa) => void;
 }
 const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpdate }) => {
@@ -14,14 +14,14 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
 
   const auth = useContext(AuthContext);
   const message = useMessage();
-  const despesaService = DespesaService();
+  const categoriaDespesaService = CategoriaDespesaService();
 
   useEffect(() => {
     const carregarCategoriasDespesa = async () => {
       if (!auth.usuario?.token) return;
   
       try {
-        const result = await despesaService.getTodasCategoriasDespesa(auth.usuario?.token);
+        const result = await categoriaDespesaService.getTodasCategoriasDespesa(auth.usuario?.token);
         setCategorias(result || []);
       } catch (error) {
         message.showErrorWithLog('Erro ao carregar as categorias de despesa.', error);
@@ -44,37 +44,95 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
     updateDespesa({ categoria: selectedCategoria });
   };
 
+  const handleUpdateDataVencimento = (value: any) => {
+    if (value instanceof Date) {
+      updateDespesa({ dataVencimento: value });
+    }
+  };
+
+  const handleUpdatePago = (value: any) => {
+    if (typeof value === 'boolean') {
+      updateDespesa({ pago: value });
+    }
+  };
+
+  const handleFormaPagamento = (value: any) => {
+    const selectedFormaPagamento = getDespesaFormaPagamentoByCodigo(Number(value)); 
+    updateDespesa({ formaPagamento: selectedFormaPagamento });
+  };
+
+  const handleUpdateValor = (value: any) => {
+    if (typeof value === 'number') {
+      updateDespesa({ valor: value });
+    }
+  };
+
   return (
     <Panel maxWidth='1000px' title='Despesa'>
       <FlexBox flexDirection="column">
-        <FlexBox flexDirection="row">
+        <FlexBox flexDirection="row" borderBottom>
           <FlexBox.Item borderRight>
             <FieldValue 
-              description='Situação'
-              type='string'
-              value={despesa?.situacao || ''}
+              description='Data Vencimento'
+              type='date'
+              value={formatDateToYMDString(despesa?.dataVencimento)}
+              editable={true}
+              onUpdate={handleUpdateDataVencimento}
             />
           </FlexBox.Item>
-          <FlexBox.Item>
-            <FieldValue 
-              description='Valor Total'
-              type='number'
-              value={formatValueToBRL(despesa?.valorTotal || 0)}
-            />
-          </FlexBox.Item>
-        </FlexBox>
-        <FlexBox flexDirection="row">
-          <FlexBox.Item borderTop borderRight>
+          <FlexBox.Item >
             <FieldValue 
               description='Categoria'
               type='select'
-              value={{ key: despesa?.categoria.id, value: despesa?.categoria.descricao }}
+              value={{ key: despesa?.categoria?.id, value: despesa?.categoria?.descricao }}
               editable={true}
               options={categorias.map(categoria => ({ key: categoria.id, value: categoria.descricao }))}
               onUpdate={handleUpdateCategoria}
             />
           </FlexBox.Item>
         </FlexBox>
+
+        <FlexBox flexDirection="row" borderBottom>
+          <FlexBox.Item borderRight >
+            <FieldValue 
+              description='Valor'
+              type='number'
+              value={despesa.valor}
+              editable={true}
+              onUpdate={handleUpdateValor}
+            />
+          </FlexBox.Item>
+          <FlexBox.Item >
+            <FieldValue 
+              description='Forma Pagamento'
+              type='select'
+              value={{ key: getCodigoDespesaFormaPagamento(despesa?.formaPagamento), value: getDescricaoDespesaFormaPagamento(despesa?.formaPagamento) }}
+              editable={true}
+              options={despesaFormaPagamentoOptions}
+              onUpdate={handleFormaPagamento}
+            />
+          </FlexBox.Item>
+        </FlexBox>
+
+        <FlexBox flexDirection="row">
+          <FlexBox.Item borderRight>
+            <FieldValue 
+              description='Pago'
+              type='boolean'
+              value={despesa?.pago || false}
+              editable={true}
+              onUpdate={handleUpdatePago}
+            />
+          </FlexBox.Item>
+          <FlexBox.Item >
+            <FieldValue 
+              description='Situação'
+              type='string'
+              value={despesa?.situacao || ''}
+            />
+          </FlexBox.Item>
+        </FlexBox>
+
       </FlexBox>
     </Panel>
   );

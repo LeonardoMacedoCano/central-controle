@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import { useMessage } from '../../contexts/message/ContextMessageProvider';
-import DespesaService from '../../service/fluxocaixa/DespesaService';
+import DespesaService from '../../service/fluxocaixa/CategoriaDespesaService';
 import { Despesa } from '../../types/fluxocaixa/Despesa';
 import { Categoria } from '../../types/Categoria';
 import { formatDateToShortString } from '../../utils/DateUtils';

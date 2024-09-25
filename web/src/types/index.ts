@@ -2,13 +2,26 @@ import { Categoria } from "./Categoria";
 import { Lancamento } from "./Lancamento";
 import { PagedResponse } from "./PagedResponse";
 import { SelectValue } from "./SelectValue";
-import { TipoLancamentoEnum, getTipoLancamentoDescricao } from "./TipoLancamentoEnum";
+import { 
+  TipoLancamentoEnum, 
+  getDescricaoTipoLancamento,
+  getCodigoTipoLancamento,
+  getTipoLancamentoByCodigo,
+  tipoLancamentoOptions
+} from "./TipoLancamentoEnum";
 import { Usuario } from "./Usuario";
 import { UsuarioConfig, initialUsuarioConfigState } from "./UsuarioConfig";
 import { Despesa } from "./fluxocaixa/Despesa";
 import { DespesaResumoMensal } from "./fluxocaixa/DespesaResumoMensal";
 import { FormaPagamento } from "./fluxocaixa/FormaPagamento";
 import { Parcela } from "./fluxocaixa/Parcela";
+import { 
+  DespesaFormaPagamentoEnum,
+  getDescricaoDespesaFormaPagamento,
+  getCodigoDespesaFormaPagamento,
+  getDespesaFormaPagamentoByCodigo,
+  despesaFormaPagamentoOptions
+} from "./fluxocaixa/DespesaFormaPagamentoEnum";
 
 export type {
   Categoria,
@@ -21,10 +34,18 @@ export type {
   Despesa,
   DespesaResumoMensal,
   FormaPagamento,
-  Parcela
+  Parcela,
+  DespesaFormaPagamentoEnum
 };
 
 export {
   initialUsuarioConfigState,
-  getTipoLancamentoDescricao
+  getDescricaoTipoLancamento,
+  getCodigoTipoLancamento,
+  getTipoLancamentoByCodigo,
+  tipoLancamentoOptions,
+  getDescricaoDespesaFormaPagamento,
+  getCodigoDespesaFormaPagamento,
+  getDespesaFormaPagamentoByCodigo,
+  despesaFormaPagamentoOptions
 };

@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, FieldValue, FlexBox, FloatingButton, Panel } from '../../../components';
-import { useParams } from 'react-router-dom';
-import { Lancamento } from '../../../types';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getCodigoTipoLancamento, getDescricaoTipoLancamento, getTipoLancamentoByCodigo, Lancamento, tipoLancamentoOptions } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
 import { formatDateToShortString, getCurrentDate } from '../../../utils';
-import { getTipoLancamentoByCodigo, getTipoLancamentoCodigo, getTipoLancamentoDescricao, tipoLancamentoOptions } from '../../../types/TipoLancamentoEnum';
 import { FaCheck } from 'react-icons/fa';
 import DespesaSectionForm from './DespesaSectionForm';
+import { initialDespesaState } from '../../../types/fluxocaixa/Despesa';
 
 const LancamentoFormPage: React.FC = () => {
   const { idStr } = useParams<{ idStr?: string }>();
@@ -20,6 +20,8 @@ const LancamentoFormPage: React.FC = () => {
   const auth = useContext(AuthContext);
   const message = useMessage();
   const lancamentoService = LancamentoService();
+  const navigate = useNavigate();
+
 
   const id = typeof idStr === 'string' ? parseInt(idStr, 10) : 0;
 
@@ -66,7 +68,12 @@ const LancamentoFormPage: React.FC = () => {
   const isRequiredFieldsFilled = (): boolean => {
     return (
       lancamento.descricao.trim() !== '' &&
-      lancamento.tipo !== undefined
+      lancamento.tipo !== undefined &&
+      (lancamento.tipo !== 'DESPESA' ||
+        (lancamento.itemDTO?.categoria !== undefined &&
+        lancamento.itemDTO?.formaPagamento !== undefined &&
+        lancamento.itemDTO?.valor > 0)
+      )
     );
   };
 
@@ -82,7 +89,7 @@ const LancamentoFormPage: React.FC = () => {
         const response = await lancamentoService.createLancamento(auth.usuario?.token, lancamento);
         if (response?.id) responseId = response.id;
       }
-      if (responseId > 0) loadLancamento(responseId);
+      if (responseId > 0) navigate(`/lancamento/${responseId}`);
     } catch (error) {
       message.showErrorWithLog('Erro ao salvar o lançamento.', error);
     }
@@ -110,7 +117,7 @@ const LancamentoFormPage: React.FC = () => {
               <FieldValue 
                 description='Tipo'
                 type='select'
-                value={{ key: getTipoLancamentoCodigo(lancamento.tipo), value: getTipoLancamentoDescricao(lancamento.tipo) }}
+                value={{ key: getCodigoTipoLancamento(lancamento.tipo), value: getDescricaoTipoLancamento(lancamento.tipo) }}
                 editable={true}
                 options={tipoLancamentoOptions}
                 onUpdate={handleUpdateTipo}
@@ -133,7 +140,7 @@ const LancamentoFormPage: React.FC = () => {
 
       {lancamento.tipo === 'DESPESA' && (
         <DespesaSectionForm 
-          despesa={lancamento.itemDTO} 
+          despesa={lancamento.itemDTO || initialDespesaState} 
           onUpdate={handleUpdateItem}  
         />
       )}

@@ -6,37 +6,37 @@ export interface TipoLancamentoInfo {
   codigo: number;
 }
 
-export const TipoLancamentoDescricoes: Record<TipoLancamentoEnum, TipoLancamentoInfo> = {
+export const TiposLancamentos: Record<TipoLancamentoEnum, TipoLancamentoInfo> = {
   DESPESA: { tipo: 'DESPESA', descricao: 'Despesa', codigo: 1 },
   RECEITA: { tipo: 'RECEITA', descricao: 'Receita', codigo: 2 },
   PASSIVO: { tipo: 'PASSIVO', descricao: 'Passivo', codigo: 3 },
   ATIVO: { tipo: 'ATIVO', descricao: 'Ativo', codigo: 4 },
 };
 
-export const getTipoLancamentoDescricao = (tipo?: TipoLancamentoEnum): string => {
+export const getDescricaoTipoLancamento = (tipo?: TipoLancamentoEnum): string => {
   if (tipo) {
-    return TipoLancamentoDescricoes[tipo].descricao;
+    return TiposLancamentos[tipo].descricao;
   } else {
     return '';
   };
 };
 
-export const getTipoLancamentoCodigo = (tipo?: TipoLancamentoEnum): number | undefined => {
+export const getCodigoTipoLancamento = (tipo?: TipoLancamentoEnum): number | undefined => {
   if (tipo) {
-    return TipoLancamentoDescricoes[tipo].codigo;
+    return TiposLancamentos[tipo].codigo;
   } else {
     return undefined
   };
 };
 
 export const getTipoLancamentoByCodigo = (codigo: number): TipoLancamentoEnum | undefined => {
-  const foundTipo = Object.values(TipoLancamentoDescricoes).find(info => info.codigo === codigo);
+  const foundTipo = Object.values(TiposLancamentos).find(info => info.codigo === codigo);
   return foundTipo ? foundTipo.tipo : undefined;
 };
 
 export const tipoLancamentoOptions = [
-  { key: getTipoLancamentoCodigo('DESPESA'), value: getTipoLancamentoDescricao('DESPESA') },
-  { key: getTipoLancamentoCodigo('RECEITA'), value: getTipoLancamentoDescricao('RECEITA') },
-  { key: getTipoLancamentoCodigo('PASSIVO'), value: getTipoLancamentoDescricao('PASSIVO') },
-  { key: getTipoLancamentoCodigo('ATIVO'), value: getTipoLancamentoDescricao('ATIVO') },
+  { key: getCodigoTipoLancamento('DESPESA'), value: getDescricaoTipoLancamento('DESPESA') },
+  { key: getCodigoTipoLancamento('RECEITA'), value: getDescricaoTipoLancamento('RECEITA') },
+  { key: getCodigoTipoLancamento('PASSIVO'), value: getDescricaoTipoLancamento('PASSIVO') },
+  { key: getCodigoTipoLancamento('ATIVO'), value: getDescricaoTipoLancamento('ATIVO') },
 ];

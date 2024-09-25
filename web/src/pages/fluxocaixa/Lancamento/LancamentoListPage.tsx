@@ -12,7 +12,7 @@ import {
 import { 
   PagedResponse,
   Lancamento,
-  getTipoLancamentoDescricao
+  getDescricaoTipoLancamento
 } from '../../../types';
 import { 
   AuthContext,
@@ -109,7 +109,7 @@ const LancamentoListPage: React.FC = () => {
           />,
           <Column<Lancamento> 
             header="Tipo" 
-            value={(item) => getTipoLancamentoDescricao(item.tipo)} 
+            value={(item) => getDescricaoTipoLancamento(item.tipo)} 
           />,
           <Column<Lancamento> 
             header="Descrição" 

@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import { UsuarioConfigContext } from '../../contexts/usuarioconfig/UsuarioConfigContext';
 import { useMessage } from '../../contexts/message/ContextMessageProvider';
-import DespesaService from '../../service/fluxocaixa/DespesaService';
+import DespesaService from '../../service/fluxocaixa/CategoriaDespesaService';
 import useConfirmModal from '../../hooks/useConfirmModal';
 import { 
   Panel,

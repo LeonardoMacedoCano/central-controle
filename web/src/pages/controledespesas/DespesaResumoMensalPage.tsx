@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/auth/AuthContext';
 import { useMessage } from '../../contexts/message/ContextMessageProvider';
-import DespesaService from '../../service/fluxocaixa/DespesaService';
+import DespesaService from '../../service/fluxocaixa/CategoriaDespesaService';
 import ParcelaService from '../../service/fluxocaixa/ParcelaService';
 import useConfirmModal from '../../hooks/useConfirmModal';
 import { Table, Column } from '../../components/table/Table';
