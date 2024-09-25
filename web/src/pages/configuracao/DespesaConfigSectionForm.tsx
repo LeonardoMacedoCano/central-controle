@@ -1,38 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { AuthContext } from '../../contexts/auth/AuthContext';
-import { useMessage } from '../../contexts/message/ContextMessageProvider';
-import ParcelaService from '../../service/fluxocaixa/ParcelaService';
+import React from 'react';
 import { UsuarioConfig } from '../../types/UsuarioConfig';
-import { FormaPagamento } from '../../types/fluxocaixa/FormaPagamento';
 import FlexBox from '../../components/flexbox/FlexBox';
 import FieldValue from '../../components/fieldvalue/FieldValue';
 
-interface DespesaConfigFormProps {
+interface DespesaConfigSectionFormProps {
   usuarioConfig: UsuarioConfig;
   onUpdate: (usuarioConfigAtualizado: UsuarioConfig) => void;
 }
 
-const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, onUpdate }) => {
-  const [formasPagamento, setFormasPagamento] = useState<FormaPagamento[]>([]);
-
-  const auth = useContext(AuthContext);
-  const message = useMessage();
-  const parcelaService = ParcelaService();
-
-  useEffect(() => {
-    const carregarCategoriasDespesa = async () => {
-      if (!auth.usuario?.token) return;
-  
-      try {
-        const result = await parcelaService.getTodasFormaPagamento(auth.usuario?.token);
-        setFormasPagamento(result || []);
-      } catch (error) {
-        message.showErrorWithLog('Erro ao carregar as formas de pagamento.', error);
-      }
-    };
-
-    carregarCategoriasDespesa();
-  }, []);
+const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ usuarioConfig, onUpdate }) => {
 
   const updateUsuarioConfig = (updatedFields: Partial<UsuarioConfig>) => {
     const usuarioConfigAtualizado: UsuarioConfig = {
@@ -58,12 +34,6 @@ const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, on
     if (typeof value === 'number') {
       updateUsuarioConfig({ despesaDiaPadraoVencimento: value });
     }
-  };
-
-  const handleFormaPagamento = (value: any) => {
-    const formaPagamentoId = String(value);
-    const formaPagamentoSelecionado = formaPagamentoId === '' ? null : formasPagamento.find(c => String(c.id) === formaPagamentoId); 
-    updateUsuarioConfig({ despesaFormaPagamentoPadrao: formaPagamentoSelecionado });
   };
 
   return (
@@ -96,7 +66,7 @@ const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, on
         <FlexBox.Item borderRight >
           <FieldValue 
             description='Dia Padrão Vencimento'
-            hint='Dia padrão para vencimento das parcelas'
+            hint='Dia padrão para vencimento'
             type='number'
             value={usuarioConfig.despesaDiaPadraoVencimento}
             editable={true}
@@ -105,20 +75,9 @@ const DespesaConfigForm: React.FC<DespesaConfigFormProps> = ({ usuarioConfig, on
             onUpdate={handleDiaPadraoVencimento}
           />
         </FlexBox.Item>
-        <FlexBox.Item >
-          <FieldValue 
-            description='Forma Pagamento Padrão'
-            hint='Forma padrão para pagamento das parcelas'
-            type='select'
-            value={{ key: usuarioConfig.despesaFormaPagamentoPadrao?.id || 0, value: usuarioConfig.despesaFormaPagamentoPadrao?.descricao || ''}}
-            editable={true}
-            options={formasPagamento.map(formaPagamento => ({ key: formaPagamento.id, value: formaPagamento.descricao }))}
-            onUpdate={handleFormaPagamento}
-          />
-        </FlexBox.Item>
       </FlexBox>
     </FlexBox>
   );
 }
 
-export default DespesaConfigForm;
+export default DespesaConfigSectionForm;

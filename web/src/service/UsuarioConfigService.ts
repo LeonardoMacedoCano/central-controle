@@ -16,7 +16,6 @@ const UsuarioConfigService = (): UsuarioConfigApi => {
     despesaNumeroMaxItemPagina: data.despesaNumeroMaxItemPagina,
     despesaValorMetaMensal: data.despesaValorMetaMensal,
     despesaDiaPadraoVencimento: data.despesaDiaPadraoVencimento,
-    despesaFormaPagamentoPadrao: data.despesaFormaPagamentoPadrao
   });
 
   const getUsuarioConfigByUsuario = async (token: string): Promise<UsuarioConfig | undefined> => {

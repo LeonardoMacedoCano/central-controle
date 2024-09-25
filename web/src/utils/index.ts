@@ -16,7 +16,6 @@ import {
 import { 
   formatValueToBRL,
   formatNumberWithLeadingZeros,
-  formatDescricaoSituacaoParcela
 } from "./ValorUtils";
 
 export {
@@ -30,6 +29,5 @@ export {
   convertReactStyleToCSSObject,
   getVariantColor,
   formatValueToBRL,
-  formatNumberWithLeadingZeros,
-  formatDescricaoSituacaoParcela
+  formatNumberWithLeadingZeros
 }

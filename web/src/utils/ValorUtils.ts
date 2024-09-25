@@ -8,7 +8,3 @@ export function formatValueToBRL(value: number): string {
 export const formatNumberWithLeadingZeros = (number: number, digits: number): string => {
   return number.toString().padStart(digits, '0');
 };
-
-export const formatDescricaoSituacaoParcela = (pago: boolean): string => {
-  return (pago ? 'Pago' : 'Não Pago');
-}

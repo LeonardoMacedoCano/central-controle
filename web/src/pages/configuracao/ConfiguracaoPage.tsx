@@ -12,7 +12,7 @@ import {
   Tabs,
   FloatingButton
 } from '../../components';
-import DespesaConfigForm from '../controledespesas/DespesaConfigForm';
+import DespesaConfigSectionForm from './DespesaConfigSectionForm';
 
 const ConfiguracaoPage: React.FC = () => {
   const [usuarioConfig, setUsuarioConfig] = useState<UsuarioConfig>(initialUsuarioConfigState);
@@ -57,7 +57,7 @@ const ConfiguracaoPage: React.FC = () => {
     },
     {
       label: 'Despesa',
-      content: <DespesaConfigForm usuarioConfig={usuarioConfig} onUpdate={atualizarUsuarioConfig} />,
+      content: <DespesaConfigSectionForm usuarioConfig={usuarioConfig} onUpdate={atualizarUsuarioConfig} />,
     }
   ];
 

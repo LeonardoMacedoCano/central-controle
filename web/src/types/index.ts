@@ -12,9 +12,6 @@ import {
 import { Usuario } from "./Usuario";
 import { UsuarioConfig, initialUsuarioConfigState } from "./UsuarioConfig";
 import { Despesa } from "./fluxocaixa/Despesa";
-import { DespesaResumoMensal } from "./fluxocaixa/DespesaResumoMensal";
-import { FormaPagamento } from "./fluxocaixa/FormaPagamento";
-import { Parcela } from "./fluxocaixa/Parcela";
 import { 
   DespesaFormaPagamentoEnum,
   getDescricaoDespesaFormaPagamento,
@@ -32,9 +29,6 @@ export type {
   Usuario,
   UsuarioConfig,
   Despesa,
-  DespesaResumoMensal,
-  FormaPagamento,
-  Parcela,
   DespesaFormaPagamentoEnum
 };
 

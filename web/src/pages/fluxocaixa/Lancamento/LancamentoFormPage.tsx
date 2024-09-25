@@ -10,7 +10,7 @@ import DespesaSectionForm from './DespesaSectionForm';
 import { initialDespesaState } from '../../../types/fluxocaixa/Despesa';
 
 const LancamentoFormPage: React.FC = () => {
-  const { idStr } = useParams<{ idStr?: string }>();
+  const { id } = useParams<{ idStr?: string }>();
   const [lancamento, setLancamento] = useState<Lancamento>({
     id: 0,
     dataLancamento: getCurrentDate(),
@@ -23,9 +23,10 @@ const LancamentoFormPage: React.FC = () => {
   const navigate = useNavigate();
 
 
-  const id = typeof idStr === 'string' ? parseInt(idStr, 10) : 0;
+  const id2 = typeof id === 'string' ? parseInt(id) : 0;
 
   useEffect(() => {
+    console.log(id)
     if (id > 0) {
       loadLancamento(id);
     }
