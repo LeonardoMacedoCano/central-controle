@@ -5,6 +5,7 @@ import { ExtratoFaturaCartaoDTO } from '../../../types/fluxocaixa/ExtratoFaturaC
 import { LancamentoService } from '../../../service';
 import { AuthContext, useMessage } from '../../../contexts';
 import { FaCheck } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const ExtratoFaturaCartaoFormPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -18,6 +19,7 @@ const ExtratoFaturaCartaoFormPage: React.FC = () => {
   const auth = useContext(AuthContext);
   const message = useMessage();
   const lancamentoService = LancamentoService();
+  const navigate = useNavigate();
 
   const importarExtratoFaturaCartao = async () => {
     if (!auth.usuario?.token) return;
@@ -29,6 +31,7 @@ const ExtratoFaturaCartaoFormPage: React.FC = () => {
       message.showErrorWithLog('Erro ao importar o extrato da fatura de cartão.', error);
     } finally {
       setIsLoading(false);
+      navigate(`/lancamentos`);
     }
   };
 

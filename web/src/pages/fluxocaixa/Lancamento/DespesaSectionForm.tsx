@@ -95,15 +95,6 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
         <FlexBox flexDirection="row" borderBottom>
           <FlexBox.Item borderRight >
             <FieldValue 
-              description='Valor'
-              type='number'
-              value={despesa.valor}
-              editable={true}
-              onUpdate={handleUpdateValor}
-            />
-          </FlexBox.Item>
-          <FlexBox.Item >
-            <FieldValue 
               description='Forma Pagamento'
               type='select'
               value={{ key: getCodigoDespesaFormaPagamento(despesa?.formaPagamento), value: getDescricaoDespesaFormaPagamento(despesa?.formaPagamento) }}
@@ -112,9 +103,7 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
               onUpdate={handleFormaPagamento}
             />
           </FlexBox.Item>
-        </FlexBox>
-
-        <FlexBox flexDirection="row">
+          <FlexBox.Item >
           <FlexBox.Item borderRight>
             <FieldValue 
               description='Pago'
@@ -124,13 +113,17 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
               onUpdate={handleUpdatePago}
             />
           </FlexBox.Item>
-          <FlexBox.Item >
-            <FieldValue 
-              description='Situação'
-              type='string'
-              value={despesa?.situacao || ''}
-            />
           </FlexBox.Item>
+        </FlexBox>
+
+        <FlexBox flexDirection="row">
+          <FieldValue 
+              description='Valor'
+              type='number'
+              value={despesa.valor}
+              editable={true}
+              onUpdate={handleUpdateValor}
+            />
         </FlexBox>
 
       </FlexBox>

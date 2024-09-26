@@ -13,17 +13,10 @@ import java.util.Date;
 @Data
 public class DespesaDTO implements LancamentoItemDTO {
     private Long id;
-
     private CategoriaDTO categoria;
-
-    private String situacao;
-
     private Date dataVencimento;
-
     private Double valor;
-
     private Boolean pago;
-
     private DespesaFormaPagamentoEnum formaPagamento;
 
     public static DespesaDTO converterParaDTO(Despesa despesa) {
@@ -34,14 +27,9 @@ public class DespesaDTO implements LancamentoItemDTO {
         dto.setDataVencimento(despesa.getDataVencimento());
         dto.setValor(despesa.getValor());
         dto.setPago(despesa.isPago());
-        dto.setSituacao(calcularSituacao(despesa.isPago()));
         if (despesa.getFormaPagamento() != null) dto.setFormaPagamento(despesa.getFormaPagamento());
 
         return dto;
-    }
-
-    static String calcularSituacao(Boolean isPago) {
-        return isPago ? "Pago" : "Não pago";
     }
 
     public Despesa toEntity(Long id,
