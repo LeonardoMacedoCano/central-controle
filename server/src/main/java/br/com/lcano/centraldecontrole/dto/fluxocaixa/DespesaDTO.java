@@ -6,8 +6,6 @@ import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import br.com.lcano.centraldecontrole.enums.DespesaFormaPagamentoEnum;
-import br.com.lcano.centraldecontrole.util.CustomDateDeserializer;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 
 import java.util.Date;
@@ -20,7 +18,6 @@ public class DespesaDTO implements LancamentoItemDTO {
 
     private String situacao;
 
-    @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date dataVencimento;
 
     private Double valor;

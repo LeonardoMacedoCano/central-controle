@@ -10,10 +10,10 @@ import { formatDateToYMDString } from "../utils";
 
 interface LancamentoApi {
   createLancamento: (token: string, data: Lancamento) => Promise<{ id: number } | undefined>;
-  updateLancamento: (token: string, id: number, data: Lancamento) => Promise<void | undefined>;
-  deleteLancamento: (token: string, id: number) => Promise<void | undefined>;
+  updateLancamento: (token: string, id: string, data: Lancamento) => Promise<void | undefined>;
+  deleteLancamento: (token: string, id: string) => Promise<void | undefined>;
   getLancamentos: (token: string, page: number, size: number, descricao?: string, tipo?: TipoLancamentoEnum, dataInicio?: string, dataFim?: string) => Promise<PagedResponse<Lancamento> | undefined>;
-  getLancamento: (token: string, id: number) => Promise<Lancamento | undefined>;
+  getLancamento: (token: string, id: string) => Promise<Lancamento | undefined>;
   importExtratoFaturaCartao: (token: string, extratoFaturaCartaoDTO: ExtratoFaturaCartaoDTO) => Promise<void | undefined>;
 }
 
@@ -35,7 +35,7 @@ const LancamentoService = (): LancamentoApi => {
     }
   };
 
-  const updateLancamento = async (token: string, id: number, data: Lancamento): Promise<void | undefined> => {
+  const updateLancamento = async (token: string, id: string, data: Lancamento): Promise<void | undefined> => {
     try {
       await request<undefined>('put', `lancamento/${id}`, token, message, lancamentoPayload(data));
     } catch (error) {
@@ -43,7 +43,7 @@ const LancamentoService = (): LancamentoApi => {
     }
   };
 
-  const deleteLancamento = async (token: string, id: number): Promise<void | undefined> => {
+  const deleteLancamento = async (token: string, id: string): Promise<void | undefined> => {
     try {
       await request<undefined>('delete', `lancamento/${id}`, token, message);
     } catch (error) {
@@ -67,7 +67,7 @@ const LancamentoService = (): LancamentoApi => {
     }
   };
 
-  const getLancamento = async (token: string, id: number): Promise<Lancamento | undefined> => {
+  const getLancamento = async (token: string, id: string): Promise<Lancamento | undefined> => {
     try {
       return await request<Lancamento>('get', `lancamento/${id}`, token);
     } catch (error) {

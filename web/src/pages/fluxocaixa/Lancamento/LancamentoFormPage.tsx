@@ -10,7 +10,7 @@ import DespesaSectionForm from './DespesaSectionForm';
 import { initialDespesaState } from '../../../types/fluxocaixa/Despesa';
 
 const LancamentoFormPage: React.FC = () => {
-  const { id } = useParams<{ idStr?: string }>();
+  const { id } = useParams<{ id?: string }>();
   const [lancamento, setLancamento] = useState<Lancamento>({
     id: 0,
     dataLancamento: getCurrentDate(),
@@ -22,17 +22,13 @@ const LancamentoFormPage: React.FC = () => {
   const lancamentoService = LancamentoService();
   const navigate = useNavigate();
 
-
-  const id2 = typeof id === 'string' ? parseInt(id) : 0;
-
   useEffect(() => {
-    console.log(id)
-    if (id > 0) {
+    if (id) {
       loadLancamento(id);
     }
   }, [auth.usuario?.token, id]);
 
-  const loadLancamento = async (id: number) => {
+  const loadLancamento = async (id: string) => {
     if (!auth.usuario?.token) return;
 
     try {
@@ -53,7 +49,7 @@ const LancamentoFormPage: React.FC = () => {
 
   const handleUpdateTipo = (value: any) => {
     const selectedTipo = getTipoLancamentoByCodigo(Number(value)); 
-    update({ tipo: selectedTipo });
+    update({ tipo: selectedTipo, itemDTO: undefined });
   };
 
   const handleUpdateDescricao = (value: any) => {
@@ -82,15 +78,15 @@ const LancamentoFormPage: React.FC = () => {
     if (!auth.usuario?.token) return;
 
     try {
-      let responseId = 0;
-      if (id > 0) {
+      let responseId;
+      if (id) {
         await lancamentoService.updateLancamento(auth.usuario?.token, id, lancamento);
         responseId = id;
       } else {
         const response = await lancamentoService.createLancamento(auth.usuario?.token, lancamento);
         if (response?.id) responseId = response.id;
       }
-      if (responseId > 0) navigate(`/lancamento/${responseId}`);
+      if (responseId) navigate(`/lancamento/${responseId}`);
     } catch (error) {
       message.showErrorWithLog('Erro ao salvar o lançamento.', error);
     }
