@@ -8,6 +8,7 @@ import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
+import br.com.lcano.centraldecontrole.util.StringUtil;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -77,7 +78,8 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
     private DespesaDTO buildDespesaDTO(ExtratoFaturaCartao extratoFaturaCartao) {
         DespesaDTO despesaDTO = new DespesaDTO();
 
-        despesaDTO.setCategoria(this.getDespesaCategoriaDTO(extratoFaturaCartao.getCategoria()));
+        String descricaoCategoriaFormatada = StringUtil.capitalizeFirstLetter(extratoFaturaCartao.getCategoria());
+        despesaDTO.setCategoria(this.getDespesaCategoriaDTO(descricaoCategoriaFormatada));
         despesaDTO.setDataVencimento(dataVencimento);
         despesaDTO.setValor(extratoFaturaCartao.getValor());
         despesaDTO.setPago(true);
