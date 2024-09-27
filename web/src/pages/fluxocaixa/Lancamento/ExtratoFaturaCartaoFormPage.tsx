@@ -76,7 +76,8 @@ const ExtratoFaturaCartaoFormPage: React.FC = () => {
             />
           </FlexBox>
           <FlexBox flexDirection="row">
-            <DragDropFile 
+            <DragDropFile
+              acceptedFileFormats={['text/csv']} 
               onFileChange={handleFileChange} 
             />
           </FlexBox>

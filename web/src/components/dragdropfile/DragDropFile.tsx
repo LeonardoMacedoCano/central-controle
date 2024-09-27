@@ -1,14 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { useDropzone } from 'react-dropzone';
+import { Accept, useDropzone } from 'react-dropzone';
 import { Container } from '../';
 import { FaEye, FaTrash, FaUpload } from 'react-icons/fa';
 
 interface DragDropFileProps {
   onFileChange: (file: File | null) => void;
+  acceptedFileFormats?: string[];
 }
 
-const DragDropFile: React.FC<DragDropFileProps> = ({ onFileChange }) => {
+const DragDropFile: React.FC<DragDropFileProps> = ({ onFileChange, acceptedFileFormats }) => {
   const [file, setFile] = useState<File | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
@@ -18,7 +19,18 @@ const DragDropFile: React.FC<DragDropFileProps> = ({ onFileChange }) => {
     }
   }, [onFileChange]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, multiple: false });
+  const accept: Accept | undefined = acceptedFileFormats && acceptedFileFormats.length > 0
+    ? acceptedFileFormats.reduce((acc, format) => {
+        acc[format] = [];
+        return acc;
+      }, {} as Accept)
+    : undefined;
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: false,
+    accept,
+  });
 
   const removeFile = () => {
     setFile(null);
@@ -47,6 +59,9 @@ const DragDropFile: React.FC<DragDropFileProps> = ({ onFileChange }) => {
               <FaUpload />
             </IconWrapper>
             <p>Clique ou arraste arquivos aqui.</p>
+            {acceptedFileFormats && acceptedFileFormats.length > 0 && (
+              <p>Formatos aceitos: {acceptedFileFormats.join(', ')}</p>
+            )}
           </DropzoneContent>
         </DropzoneContainer>
         {file && (
