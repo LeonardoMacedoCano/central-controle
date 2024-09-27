@@ -1,10 +1,7 @@
 import styled, { ThemeContext } from 'styled-components';
 import { useContext, useState } from 'react';
 import { MdAccountCircle, MdLock } from 'react-icons/md';
-import { 
-  AuthContext,
-  useMessage
-} from '../../contexts';
+import { AuthContext } from '../../contexts';
 import { 
   Button,
   FieldValue,
@@ -15,7 +12,6 @@ import {
 export const Login = () => {
   const auth = useContext(AuthContext);
   const theme = useContext(ThemeContext);
-  const message = useMessage();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -36,10 +32,7 @@ export const Login = () => {
 
   const handleLogin = async () => {
     if (username) {
-      const isLogged = await auth.login(username, password);
-      if (isLogged) {
-        message.showSuccess('Login successful!');
-      }
+      await auth.login(username, password);
     }
   }
 
