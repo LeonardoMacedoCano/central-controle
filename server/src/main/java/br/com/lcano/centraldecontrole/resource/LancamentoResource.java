@@ -1,9 +1,10 @@
 package br.com.lcano.centraldecontrole.resource;
 
+import br.com.lcano.centraldecontrole.dto.FilterDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.service.LancamentoService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,16 +14,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/lancamento")
 public class LancamentoResource {
     @Autowired
     private final LancamentoService lancamentoService;
-
-    public LancamentoResource(LancamentoService fluxoCaixaService) {
-        this.lancamentoService = fluxoCaixaService;
-    }
 
     @PostMapping
     public ResponseEntity<Object> createLancamento(@RequestBody LancamentoDTO lancamentoDTO) {
@@ -42,13 +41,10 @@ public class LancamentoResource {
         return CustomSuccess.buildResponseEntity("Lançamento deletado com sucesso.");
     }
 
-    @GetMapping
+    @PostMapping("/search")
     public ResponseEntity<Page<LancamentoDTO>> getLancamentos(Pageable pageable,
-                                                              @RequestParam(required = false) String descricao,
-                                                              @RequestParam(required = false) TipoLancamentoEnum tipo,
-                                                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataInicio,
-                                                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataFim) {
-        return ResponseEntity.ok(lancamentoService.getLancamentos(pageable, descricao, tipo, dataInicio, dataFim));
+                                                              @RequestBody(required = false) List<FilterDTO> filterDTOs) {
+        return ResponseEntity.ok(lancamentoService.getLancamentos(pageable, filterDTOs));
     }
 
     @GetMapping("/{id}")
