@@ -5,19 +5,17 @@ import br.com.lcano.centraldecontrole.dto.UsuarioConfigDTO;
 import br.com.lcano.centraldecontrole.service.UsuarioConfigService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/usuarioconfig")
 public class UsuarioConfigResource {
     @Autowired
     private final UsuarioConfigService usuarioConfigService;
-
-    public UsuarioConfigResource(UsuarioConfigService usuarioConfigService) {
-        this.usuarioConfigService = usuarioConfigService;
-    }
 
     @PutMapping("/{idUsuarioConfig}")
     public ResponseEntity<Object> editarUsuarioConfig(@PathVariable Long idUsuarioConfig, @RequestBody UsuarioConfigDTO data) {

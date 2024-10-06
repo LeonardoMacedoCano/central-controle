@@ -6,17 +6,15 @@ import br.com.lcano.centraldecontrole.dto.UsuarioConfigDTO;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.repository.UsuarioConfigRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class UsuarioConfigService {
     @Autowired
     private final UsuarioConfigRepository usuarioConfigRepository;
-
-    public UsuarioConfigService(UsuarioConfigRepository usuarioConfigRepository) {
-        this.usuarioConfigRepository = usuarioConfigRepository;
-    }
 
     public UsuarioConfig getUsuarioConfigById(Long id) {
         return this.usuarioConfigRepository.findById(id)

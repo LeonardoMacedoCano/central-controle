@@ -4,18 +4,16 @@ import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.DespesaCategoriaRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class DespesaCategoriaService {
     @Autowired
     private final DespesaCategoriaRepository despesaCategoriaRepository;
-
-    public DespesaCategoriaService(DespesaCategoriaRepository categoriaDespesaRepository) {
-        this.despesaCategoriaRepository = categoriaDespesaRepository;
-    }
 
     public List<CategoriaDTO> getTodasCategoriasDespesa() {
         return this.despesaCategoriaRepository.findAll().stream().map(CategoriaDTO::converterParaDTO).toList();

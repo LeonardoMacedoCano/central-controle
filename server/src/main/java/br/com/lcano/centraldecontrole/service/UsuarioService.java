@@ -5,24 +5,16 @@ import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final UsuarioConfigService usuarioConfigService;
     private final DateUtil dateUtil;
-
-    @Autowired
-    public UsuarioService(UsuarioRepository usuarioRepository,
-                          UsuarioConfigService usuarioConfigService,
-                          DateUtil dateUtil) {
-        this.usuarioRepository = usuarioRepository;
-        this.usuarioConfigService = usuarioConfigService;
-        this.dateUtil = dateUtil;
-    }
 
     @Transactional
     public void register(String username, String senha) {

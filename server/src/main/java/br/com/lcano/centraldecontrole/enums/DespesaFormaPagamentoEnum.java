@@ -1,5 +1,8 @@
 package br.com.lcano.centraldecontrole.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum DespesaFormaPagamentoEnum {
     DINHEIRO("Dinheiro"),
     PIX("PIX"),
@@ -10,9 +13,5 @@ public enum DespesaFormaPagamentoEnum {
 
     DespesaFormaPagamentoEnum(String descricao) {
         this.descricao = descricao;
-    }
-
-    public String getDescricao() {
-        return descricao;
     }
 }

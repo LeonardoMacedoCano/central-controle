@@ -3,8 +3,8 @@ package br.com.lcano.centraldecontrole.util;
 import br.com.lcano.centraldecontrole.config.PropertiesConfig;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -25,17 +25,13 @@ public class DateUtil {
         return PropertiesConfig.getDateFormat();
     }
 
-    public Date toDate(LocalDate localDate) {
-        return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    public static Date parseDate(String dateStr) {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
-    public LocalDate getPrimeiroDiaDoMes(Integer ano, Integer mes) {
-        return LocalDate.of(ano, mes, 1);
-    }
-
-    public LocalDate getUltimoDiaDoMes(Integer ano, Integer mes) {
-        return getPrimeiroDiaDoMes(ano, mes).plusMonths(1).minusDays(1);
-    }
-
 }
 

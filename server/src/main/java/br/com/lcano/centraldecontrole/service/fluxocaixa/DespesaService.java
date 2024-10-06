@@ -65,11 +65,6 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
         return TipoLancamentoEnum.DESPESA;
     }
 
-    public Despesa getDespesaById(Long id) {
-        return despesaRepository.findById(id)
-                .orElseThrow(() -> new DespesaException.DespesaNaoEncontradaById(id));
-    }
-
     public DespesaCategoria getCategoriaById(Long id) {
         return despesaCategoriaRepository.findById(id)
             .orElseThrow(() -> new DespesaException.CategoriaNaoEncontradaById(id));

@@ -5,6 +5,7 @@ import br.com.lcano.centraldecontrole.dto.LoginDTO;
 import br.com.lcano.centraldecontrole.dto.UsuarioDTO;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
 public class AuthorizationService implements UserDetailsService {
     @Autowired
@@ -22,12 +24,6 @@ public class AuthorizationService implements UserDetailsService {
     private final UsuarioService usuarioService;
     @Autowired
     private final TokenService tokenService;
-
-    public AuthorizationService(UsuarioRepository usuarioRepository, UsuarioService usuarioService, TokenService tokenService) {
-        this.usuarioRepository = usuarioRepository;
-        this.usuarioService = usuarioService;
-        this.tokenService = tokenService;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
