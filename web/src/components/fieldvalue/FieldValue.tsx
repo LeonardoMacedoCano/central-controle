@@ -5,7 +5,6 @@ import {
   formatDateToYMString,
   formatDateToYMDString,
   parseDateStringToDate,
-  formatNumberWithLeadingZeros,
   getVariantColor
 } from '../../utils';
 
@@ -108,7 +107,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
           <option value=''>{placeholder || ' Selecione...'}</option>
           {options?.map((option) => (
             <option key={option.key} value={String(option.key)}>
-              {`${formatNumberWithLeadingZeros(option.key || 0, 2)} - ${option.value}`}
+              {`${option.value}`}
             </option>          
           ))}
         </StyledSelect>

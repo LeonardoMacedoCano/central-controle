@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { 
   FaAngleDoubleLeft,
@@ -6,11 +6,12 @@ import {
   FaAngleLeft,
   FaAngleRight
 } from 'react-icons/fa';
-import { PagedResponse } from '../../types';
 import { 
   FlexBox,
   Container
 } from '../../components';
+import { PagedResponse } from '../../types';
+import { PAGE_SIZE } from '../../utils';
 
 interface SearchPaginationProps {
   page: PagedResponse<any>;
@@ -19,94 +20,68 @@ interface SearchPaginationProps {
   loadPage: (pageIndex: number, pageSize: number) => void;
 }
 
-interface SearchPaginationState {
-  currentPageIndex: number;
-  pageSize: number;
-}
+const SearchPagination: React.FC<SearchPaginationProps> = ({ page, height, width, loadPage }) => {
+  const [currentPageIndex, setCurrentPageIndex] = useState(page.number);
+  
+  const pageSize = PAGE_SIZE;
+  const lastPageNumber = page.totalPages;
+  const isLastPage = currentPageIndex === lastPageNumber - 1;
+  const isFirstPage = currentPageIndex === 0;
 
-class SearchPagination extends Component<SearchPaginationProps, SearchPaginationState> {
-  constructor(props: SearchPaginationProps) {
-    super(props);
+  useEffect(() => {
+    setCurrentPageIndex(page.number);
+  }, [page.number]);
 
-    let pageSize = this.props.page.size;
-    if (pageSize > this.props.page.totalElements) {
-      pageSize = this.props.page.totalElements;
-    }
+  return (
+    <Container 
+      height={height} 
+      width={width}
+      backgroundColor='transparent'  
+    >
+      <FlexBox>
+        <FlexBox.Item alignCenter>
+          <PaginationControls>
+            <ControlItem onClick={() => goToFirstPage(loadPage)} disabled={isFirstPage}>
+              <FaAngleDoubleLeft />
+            </ControlItem>
+            <ControlItem onClick={() => goToPreviousPage(loadPage)} disabled={isFirstPage}>
+              <FaAngleLeft />
+            </ControlItem>
+            {currentPageIndex + 1} / {lastPageNumber}
+            <ControlItem onClick={() => goToNextPage(loadPage)} disabled={isLastPage}>
+              <FaAngleRight />
+            </ControlItem>
+            <ControlItem onClick={() => goToLastPage(loadPage)} disabled={isLastPage}>
+              <FaAngleDoubleRight />
+            </ControlItem>
+          </PaginationControls>
+        </FlexBox.Item>
+      </FlexBox>
+    </Container>
+  );
 
-    this.state = {
-      currentPageIndex: this.props.page.number,
-      pageSize: pageSize
-    };
+  function goToFirstPage(loadPage: (pageIndex: number, pageSize: number) => void) {
+    loadPage(0, pageSize);
   }
 
-  loadPage = (pageIndex: number, pageSize: number) => {
-    const { loadPage } = this.props;
-    this.setState({ currentPageIndex: pageIndex, pageSize: pageSize });
-    loadPage(pageIndex, pageSize);
-  };
-
-  render() {
-    const { page, height, width } = this.props;
-    const { currentPageIndex } = this.state;
-
-    const currentPageNumber = currentPageIndex + 1;
-    const lastPageNumber = page.totalPages;
-    const isLastPage = currentPageNumber === lastPageNumber;
-    const isFirstPage = currentPageIndex === 0;
-
-    return (
-      <Container 
-        height={height} 
-        width={width}
-        backgroundColor='transparent'  
-      >
-        <FlexBox>
-          <FlexBox.Item alignCenter>
-            <PaginationControls>
-              <ControlItem onClick={this.goToFirstPage} disabled={isFirstPage}>
-                <FaAngleDoubleLeft />
-              </ControlItem>
-              <ControlItem onClick={this.goToPreviousPage} disabled={isFirstPage}>
-                <FaAngleLeft />
-              </ControlItem>
-              {currentPageNumber} / {lastPageNumber}
-              <ControlItem onClick={this.goToNextPage} disabled={isLastPage}>
-                <FaAngleRight />
-              </ControlItem>
-              <ControlItem onClick={this.goToLastPage} disabled={isLastPage}>
-                <FaAngleDoubleRight />
-              </ControlItem>
-            </PaginationControls>
-          </FlexBox.Item>
-        </FlexBox>
-      </Container>
-    );
+  function goToPreviousPage(loadPage: (pageIndex: number, pageSize: number) => void) {
+    if (currentPageIndex > 0) {
+      loadPage(currentPageIndex - 1, pageSize);
+    }
   }
 
-  private goToFirstPage = () => {
-    if (this.state.currentPageIndex > 0) {
-      this.loadPage(0, this.state.pageSize);
+  function goToNextPage(loadPage: (pageIndex: number, pageSize: number) => void) {
+    if (currentPageIndex < lastPageNumber - 1) {
+      loadPage(currentPageIndex + 1, pageSize);
     }
-  };
+  }
 
-  private goToPreviousPage = () => {
-    if (this.state.currentPageIndex > 0) {
-      this.loadPage(this.state.currentPageIndex - 1, this.state.pageSize);
+  function goToLastPage(loadPage: (pageIndex: number, pageSize: number) => void) {
+    if (currentPageIndex < lastPageNumber - 1) {
+      loadPage(lastPageNumber - 1, pageSize);
     }
-  };
-
-  private goToNextPage = () => {
-    if (this.state.currentPageIndex < this.props.page.totalPages - 1) {
-      this.loadPage(this.state.currentPageIndex + 1, this.state.pageSize);
-    }
-  };
-
-  private goToLastPage = () => {
-    if (this.state.currentPageIndex < this.props.page.totalPages - 1) {
-      this.loadPage(this.props.page.totalPages - 1, this.state.pageSize);
-    }
-  };
-}
+  }
+};
 
 export default SearchPagination;
 

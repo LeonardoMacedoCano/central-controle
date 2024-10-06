@@ -92,7 +92,7 @@ const Loading: React.FC<LoadingProps> = ({ isLoading }) => {
     <Container
       width="100vw"
       height="100vh"
-      backgroundColor="rgba(255, 255, 255, 0.2)"
+      backgroundColor="transparent"
       style={{
         position: 'fixed',
         top: 0,

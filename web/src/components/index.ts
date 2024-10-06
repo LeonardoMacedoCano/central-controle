@@ -13,6 +13,7 @@ import Tabs from "./tabs/Tabs";
 import Loading from "./loading/Loading";
 import DynamicFavicon from "./dynamicfavicon/DynamicFavicon";
 import DragDropFile from "./dragdropfile/DragDropFile";
+import SearchFilter from "./searchfilter/SearchFilter";
 
 export {
   Button, 
@@ -30,5 +31,6 @@ export {
   Tabs,
   Loading,
   DynamicFavicon,
-  DragDropFile
+  DragDropFile,
+  SearchFilter
 };
