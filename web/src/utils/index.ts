@@ -3,9 +3,7 @@ import {
   formatDateToShortString,
   formatDateToYMDString,
   formatDateToYMString,
-  parseYearMonthToDate,
   parseDateStringToDate,
-  formatDateToTimeZone
 } from "./DateUtils";
 
 import { 
@@ -14,20 +12,21 @@ import {
 } from "./StyledUtils";
 
 import { 
-  formatValueToBRL,
-  formatNumberWithLeadingZeros,
+  formatValueToBRL
 } from "./ValorUtils";
+
+import { 
+  buildFilterRsql
+} from "./FilterUtils";
 
 export {
   getCurrentDate,
   formatDateToShortString,
   formatDateToYMDString,
   formatDateToYMString,
-  parseYearMonthToDate,
   parseDateStringToDate,
-  formatDateToTimeZone,
   convertReactStyleToCSSObject,
   getVariantColor,
   formatValueToBRL,
-  formatNumberWithLeadingZeros
-}
+  buildFilterRsql
+};

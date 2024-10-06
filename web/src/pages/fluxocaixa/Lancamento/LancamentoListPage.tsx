@@ -2,48 +2,41 @@ import React, { useContext, useEffect, useState } from 'react';
 import { FaBars, FaFileImport, FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Container,
-  Panel,
-  Column, 
-  Table,
-  FloatingButton,
-  Loading
+  Container, Panel, Column, Table, FloatingButton, Loading, SearchFilter 
 } from '../../../components';
 import { 
-  PagedResponse,
-  Lancamento,
-  getDescricaoTipoLancamento
+  PagedResponse, Lancamento, getDescricaoTipoLancamento, tipoLancamentoFilters, 
+  PAGE_SIZE,
+  FilterDTO
 } from '../../../types';
-import { 
-  AuthContext,
-  useMessage 
-} from '../../../contexts';
+import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
 import { formatDateToShortString } from '../../../utils';
 import { useConfirmModal } from '../../../hooks';
 
 const LancamentoListPage: React.FC = () => {
-  const [lancamentos, setLancamentos] = useState<PagedResponse<Lancamento> | undefined>(undefined);
-  const [pageIndex, setPageIndex] = useState<number>(0); 
-  const [pageSize, setPageSize] = useState<number | null>(10); 
+  const [lancamentos, setLancamentos] = useState<PagedResponse<Lancamento>>();
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(PAGE_SIZE);
+  const [filters, setFilters] = useState<FilterDTO[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { confirm, ConfirmModalComponent } = useConfirmModal();
-  const lancamentoService = LancamentoService();
-  const auth = useContext(AuthContext);
+  const { usuario } = useContext(AuthContext);
   const message = useMessage();
   const navigate = useNavigate();
+  const lancamentoService = LancamentoService();
 
   useEffect(() => {
-    loadLancamentos();
-  }, [auth.usuario?.token, pageIndex, pageSize]);
+    loadLancamentos(filters);
+  }, [usuario?.token, pageIndex, filters]);
 
-  const loadLancamentos = async () => {
-    if (!auth.usuario?.token || !pageSize) return;
+  const loadLancamentos = async (filters?: FilterDTO[]) => {
+    if (!usuario?.token) return;
 
     setIsLoading(true);
     try {
-      const result = await lancamentoService.getLancamentos(auth.usuario?.token, pageIndex, pageSize);
+      const result = await lancamentoService.getLancamentos(usuario.token, pageIndex, pageSize, filters);
       setLancamentos(result);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar os lançamentos.', error);
@@ -52,85 +45,69 @@ const LancamentoListPage: React.FC = () => {
     }
   };
 
-  const loadPage = (pageIndex: number, pageSize: number) => {
-    setPageIndex(pageIndex);
-    setPageSize(pageSize);
-  };
-
-  const handleAdd = () => navigate(`/lancamento/novo`);
-
-  const handleImportarExtrato = () => navigate(`/extrato-fatura-cartao`);
-
-  const handleView = (id: number) => navigate(`/lancamento/${id}`);
-
-  const handleEdit = (id: number) => navigate(`/lancamento/editar/${id}`);
+  const handleNavigation = (path: string) => navigate(path);
 
   const handleDelete = async (id: number) => {
-    const result = await confirm("Exclusão de Lançamento", `Tem certeza de que deseja excluir este lançamento? Esta ação não pode ser desfeita e o lançamento será removido permanentemente.`);
+    const confirmed = await confirm(
+      "Exclusão de Lançamento", 
+      "Tem certeza de que deseja excluir este lançamento? Esta ação não pode ser desfeita."
+    );
 
-    if (result) {
-      deleteLancamento(id);
+    if (confirmed) {
+      try {
+        await lancamentoService.deleteLancamento(usuario?.token!, id);
+        loadLancamentos(filters);
+      } catch (error) {
+        message.showErrorWithLog('Erro ao excluir lançamento.', error);
+      }
     } else {
       message.showInfo('Ação cancelada!');
     }
   };
 
-  const deleteLancamento = async (id: number) => {
-    if (auth.usuario?.token && id) {
-      try {
-        await lancamentoService.deleteLancamento(auth.usuario?.token, id);
-        loadLancamentos();
-      } catch (error) {
-        message.showErrorWithLog('Erro ao excluir lançamento.', error);
-      }
-    }
+  const search = (newFilters: FilterDTO[]) => {
+    setPageIndex(0);
+    setFilters(newFilters);
+  };
+
+  const loadPage = (pageIndex: number, pageSize: number) => {
+    setPageIndex(pageIndex);
+    setPageSize(pageSize);
   };
 
   return (
     <Container>
       {ConfirmModalComponent}
       <Loading isLoading={isLoading} />
-      <Panel 
-        maxWidth='1000px'
-        title='Lançamentos'
-      >
-      <Table<Lancamento>
-        values={lancamentos || []}
-        messageEmpty="Nenhum lançamento encontrado."
-        keyExtractor={(item) => item.id.toString()}
-        onView={(item) => handleView(item.id)}
-        onEdit={(item) => handleEdit(item.id)}
-        onDelete={(item) => handleDelete(item.id)}
-        loadPage={loadPage}
-        columns={[
-          <Column<Lancamento> 
-            header="Data" 
-            value={(item) => formatDateToShortString(item.dataLancamento)} 
-          />,
-          <Column<Lancamento> 
-            header="Tipo" 
-            value={(item) => getDescricaoTipoLancamento(item.tipo)} 
-          />,
-          <Column<Lancamento> 
-            header="Descrição" 
-            value={(item) => item.descricao} 
-          />
+      <SearchFilter 
+        fields={[
+          { label: 'Data Lançamento', name: 'dataLancamento', type: 'DATE' },
+          { label: 'Tipo', name: 'tipo', type: 'SELECT', options: tipoLancamentoFilters },
+          { label: 'Descrição', name: 'descricao', type: 'STRING' },
         ]}
+        search={search}
       />
+      <Panel maxWidth='1000px' title='Lançamentos'>
+        <Table<Lancamento>
+          values={lancamentos || []}
+          messageEmpty="Nenhum lançamento encontrado."
+          keyExtractor={(item) => item.id.toString()}
+          onView={(item) => handleNavigation(`/lancamento/${item.id}`)}
+          onEdit={(item) => handleNavigation(`/lancamento/editar/${item.id}`)}
+          onDelete={(item) => handleDelete(item.id)}
+          loadPage={loadPage}
+          columns={[
+            <Column<Lancamento> header="Data" value={(item) => formatDateToShortString(item.dataLancamento)} />,
+            <Column<Lancamento> header="Tipo" value={(item) => getDescricaoTipoLancamento(item.tipo)} />,
+            <Column<Lancamento> header="Descrição" value={(item) => item.descricao} />
+          ]}
+        />
       </Panel>
       <FloatingButton
         mainButtonIcon={<FaBars />}
         options={[
-          {
-            icon: <FaFileImport />,
-            hint: 'Importar Extrato Fatura Cartão',
-            action: handleImportarExtrato
-          },
-          {
-            icon: <FaPlus />,
-            hint: 'Lançamento Manual',
-            action: handleAdd
-          }
+          { icon: <FaFileImport />, hint: 'Importar Extrato Fatura Cartão', action: () => handleNavigation('/extrato-fatura-cartao') },
+          { icon: <FaPlus />, hint: 'Lançamento Manual', action: () => handleNavigation('/lancamento/novo') }
         ]}
       />
     </Container>

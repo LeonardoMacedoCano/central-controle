@@ -48,7 +48,7 @@ const LancamentoFormPage: React.FC = () => {
   };
 
   const handleUpdateTipo = (value: any) => {
-    const selectedTipo = getTipoLancamentoByCodigo(Number(value)); 
+    const selectedTipo = getTipoLancamentoByCodigo(String(value)); 
     update({ tipo: selectedTipo, itemDTO: undefined });
   };
 

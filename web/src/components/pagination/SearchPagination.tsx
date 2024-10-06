@@ -10,8 +10,7 @@ import {
   FlexBox,
   Container
 } from '../../components';
-import { PagedResponse } from '../../types';
-import { PAGE_SIZE } from '../../utils';
+import { PAGE_SIZE, PagedResponse } from '../../types';
 
 interface SearchPaginationProps {
   page: PagedResponse<any>;

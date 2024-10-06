@@ -3,16 +3,16 @@ import { useMessage } from "../contexts";
 import { 
   Lancamento,
   PagedResponse,
-  TipoLancamentoEnum
 } from "../types";
 import { ExtratoFaturaCartaoDTO } from "../types/fluxocaixa/ExtratoFaturaCartao";
 import { formatDateToYMDString } from "../utils";
+import { FilterDTO } from "../types/Filters";
 
 interface LancamentoApi {
   createLancamento: (token: string, data: Lancamento) => Promise<{ id: number } | undefined>;
   updateLancamento: (token: string, id: string | number, data: Lancamento) => Promise<void | undefined>;
   deleteLancamento: (token: string, id: string | number) => Promise<void | undefined>;
-  getLancamentos: (token: string, page: number, size: number, descricao?: string, tipo?: TipoLancamentoEnum, dataInicio?: string, dataFim?: string) => Promise<PagedResponse<Lancamento> | undefined>;
+  getLancamentos: (token: string, page: number, size: number, filters?: FilterDTO[]) => Promise<PagedResponse<Lancamento> | undefined>;
   getLancamento: (token: string, id: string | number) => Promise<Lancamento | undefined>;
   importExtratoFaturaCartao: (token: string, extratoFaturaCartaoDTO: ExtratoFaturaCartaoDTO) => Promise<void | undefined>;
 }
@@ -51,17 +51,9 @@ const LancamentoService = (): LancamentoApi => {
     }
   };
 
-  const getLancamentos = async (token: string, page: number, size: number, descricao?: string, tipo?: TipoLancamentoEnum, dataInicio?: string, dataFim?: string): Promise<PagedResponse<Lancamento> | undefined> => {
+  const getLancamentos = async (token: string, page: number, size: number, filters?: FilterDTO[]): Promise<PagedResponse<Lancamento> | undefined> => {
     try {
-      const params = new URLSearchParams();
-      params.append('page', page.toString());
-      params.append('size', size.toString());
-      if (descricao !== undefined) params.append('descricao', descricao);
-      if (tipo !== undefined) params.append('tipo', tipo);
-      if (dataInicio !== undefined) params.append('dataInicio', dataInicio);
-      if (dataFim !== undefined) params.append('dataFim', dataFim);
-
-      return await request<PagedResponse<Lancamento>>('get', `lancamento?${params.toString()}`, token);
+      return await request<PagedResponse<Lancamento>>('post', `lancamento/search?page=${page}&size=${size}`, token, undefined, filters || []);
     } catch (error) {
       return undefined;
     }

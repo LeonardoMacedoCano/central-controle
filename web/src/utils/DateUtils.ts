@@ -34,14 +34,6 @@ export const formatDateToYMString = (date: Date | undefined): string => {
   return `${year}-${month}`;
 };
 
-export const parseYearMonthToDate = (yearMonth: string): Date => {
-  const [yearStr, monthStr] = yearMonth.split('-');
-  const year = parseInt(yearStr);
-  const monthIndex = parseInt(monthStr) - 1;
-
-  return new Date(year, monthIndex);
-};
-
 export const parseDateStringToDate = (dateStr: string): Date => {
   const parts = dateStr.split('-');
   const year = parseInt(parts[0], 10);
@@ -50,7 +42,4 @@ export const parseDateStringToDate = (dateStr: string): Date => {
 
   return new Date(year, month, day);
 };
-
-export const formatDateToTimeZone = (date: Date, timeZone: string, formatOptions: Intl.DateTimeFormatOptions) => {
-  return new Intl.DateTimeFormat('en-GB', { ...formatOptions, timeZone }).format(date);
-};
+  

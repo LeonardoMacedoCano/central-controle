@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import FieldValue from '../fieldvalue/FieldValue';
-import { Field, Operator, OPERATORS, parseDateStringToDate, formatDateToYMDString, getCurrentDate } from '../../utils';
-import { FilterDTO } from '../../utils/Filters';
+import { parseDateStringToDate, formatDateToYMDString, getCurrentDate } from '../../utils';
+import { Field, FilterDTO, Operator, OPERATORS } from '../../types';
 
 type Props = {
   fields: Field[];

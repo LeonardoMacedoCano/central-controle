@@ -7,7 +7,8 @@ import {
   getDescricaoTipoLancamento,
   getCodigoTipoLancamento,
   getTipoLancamentoByCodigo,
-  tipoLancamentoOptions
+  tipoLancamentoOptions,
+  tipoLancamentoFilters
 } from "./TipoLancamentoEnum";
 import { Usuario } from "./Usuario";
 import { UsuarioConfig, initialUsuarioConfigState } from "./UsuarioConfig";
@@ -19,6 +20,15 @@ import {
   getDespesaFormaPagamentoByCodigo,
   despesaFormaPagamentoOptions
 } from "./fluxocaixa/DespesaFormaPagamentoEnum";
+import { 
+  Field,
+  Operator,
+  Filters,
+  OPERATORS,
+  PAGE_SIZE,
+  FilterItem,
+  FilterDTO,
+} from "../types/Filters";
 
 export type {
   Categoria,
@@ -29,7 +39,12 @@ export type {
   Usuario,
   UsuarioConfig,
   Despesa,
-  DespesaFormaPagamentoEnum
+  DespesaFormaPagamentoEnum,
+  Field,
+  Operator,
+  Filters,
+  FilterItem,
+  FilterDTO
 };
 
 export {
@@ -41,5 +56,8 @@ export {
   getDescricaoDespesaFormaPagamento,
   getCodigoDespesaFormaPagamento,
   getDespesaFormaPagamentoByCodigo,
-  despesaFormaPagamentoOptions
+  despesaFormaPagamentoOptions,
+  tipoLancamentoFilters,
+  OPERATORS,
+  PAGE_SIZE
 };
