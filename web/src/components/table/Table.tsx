@@ -79,7 +79,6 @@ interface TableProps<T> {
   keyExtractor(item: T, index?: number): string | number;
   onClickRow?(item: T, index?: number): void;
   rowSelected?(item: T): boolean;
-  customHeader?: React.ReactNode;
   loadPage?: (pageIndex: number, pageSize: number) => void;
   onView?: (item: T) => void;
   onEdit?: (item: T) => void;
@@ -104,7 +103,6 @@ export const Table = <T extends Indexable>({
   keyExtractor,
   onClickRow,
   rowSelected,
-  customHeader,
   loadPage,
   onView,
   onEdit,
@@ -189,7 +187,6 @@ export const Table = <T extends Indexable>({
 
   return (
     <Container backgroundColor="transparent" width="100%">
-      {customHeader && <CustomHeader>{customHeader}</CustomHeader>}
       {getValues(values).length === 0 ? (
         <EmptyMessage>{messageEmpty}</EmptyMessage>
       ) : (
@@ -205,14 +202,6 @@ export const Table = <T extends Indexable>({
 
 export default Table;
 
-const CustomHeader = styled.div`
-  width: 100%;
-  height: 45px;
-  display: flex;
-  align-items: center;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.quaternary};
-`;
-
 const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
@@ -226,7 +215,7 @@ const TableHeadRow = styled.tr`
 const TableHeadColumn = styled.th`
   padding: 0 2px;
   text-align: left;
-  background-color: ${({ theme }) => theme.colors.secondary};
+  background-color: transparent;
   border-left: 1px solid ${({ theme }) => theme.colors.gray};
 
   &:first-child {

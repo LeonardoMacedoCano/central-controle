@@ -3,14 +3,14 @@ export type DespesaFormaPagamentoEnum = 'DINHEIRO' | 'PIX' | 'CARTAO_CREDITO' | 
 export interface DespesaFormaPagamentoInfo {
   tipo: DespesaFormaPagamentoEnum;
   descricao: string;
-  codigo: number;
+  codigo: string;
 }
 
 export const DespesaFormasPagamentos: Record<DespesaFormaPagamentoEnum, DespesaFormaPagamentoInfo> = {
-  DINHEIRO: { tipo: 'DINHEIRO', descricao: 'Dinheiro', codigo: 1 },
-  PIX: { tipo: 'PIX', descricao: 'PIX', codigo: 2 },
-  CARTAO_CREDITO: { tipo: 'CARTAO_CREDITO', descricao: 'Cartão de Crédito', codigo: 3 },
-  CARTAO_DEBITO: { tipo: 'CARTAO_DEBITO', descricao: 'Cartão de Débito', codigo: 4 },
+  DINHEIRO: { tipo: 'DINHEIRO', descricao: 'Dinheiro', codigo: '1' },
+  PIX: { tipo: 'PIX', descricao: 'PIX', codigo: '2' },
+  CARTAO_CREDITO: { tipo: 'CARTAO_CREDITO', descricao: 'Cartão de Crédito', codigo: '3' },
+  CARTAO_DEBITO: { tipo: 'CARTAO_DEBITO', descricao: 'Cartão de Débito', codigo: '4' },
 };
 
 export const getDescricaoDespesaFormaPagamento = (tipo?: DespesaFormaPagamentoEnum): string => {
@@ -21,7 +21,7 @@ export const getDescricaoDespesaFormaPagamento = (tipo?: DespesaFormaPagamentoEn
   };
 };
 
-export const getCodigoDespesaFormaPagamento = (tipo?: DespesaFormaPagamentoEnum): number | undefined => {
+export const getCodigoDespesaFormaPagamento = (tipo?: DespesaFormaPagamentoEnum): string | undefined => {
   if (tipo) {
     return DespesaFormasPagamentos[tipo].codigo;
   } else {
@@ -29,7 +29,7 @@ export const getCodigoDespesaFormaPagamento = (tipo?: DespesaFormaPagamentoEnum)
   };
 };
 
-export const getDespesaFormaPagamentoByCodigo = (codigo: number): DespesaFormaPagamentoEnum | undefined => {
+export const getDespesaFormaPagamentoByCodigo = (codigo: string): DespesaFormaPagamentoEnum | undefined => {
   const foundTipo = Object.values(DespesaFormasPagamentos).find(info => info.codigo === codigo);
   return foundTipo ? foundTipo.tipo : undefined;
 };

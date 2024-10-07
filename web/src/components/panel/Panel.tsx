@@ -8,13 +8,14 @@ interface PanelProps {
   footer?: ReactNode;
   width?: string;
   maxWidth?: string;
+  padding?: string;
 }
 
-const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth }) => {
+const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth, padding }) => {
   return (
     <Container
       width={width || '100%'} 
-      padding={'10px 0'}
+      padding={padding}
       margin='auto'
       backgroundColor='transparent'
       style={{maxWidth: maxWidth || 'none'}}
@@ -48,7 +49,7 @@ const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth 
 
 export default Panel;
 
-export const Title = styled.div`
+const Title = styled.div`
   h3 {
     color: ${({ theme }) => theme.colors.white};
     border-bottom: 2px solid ${({ theme }) => theme.colors.gray};
@@ -62,11 +63,11 @@ const BaseBox = styled.div`
   align-items: center;
 `;
 
-export const Body = styled(BaseBox)`
+const Body = styled(BaseBox)`
   justify-content: space-between;
 `;
 
-export const Footer = styled(BaseBox)`
+const Footer = styled(BaseBox)`
   height: 35px;
   justify-content: center;
 `;

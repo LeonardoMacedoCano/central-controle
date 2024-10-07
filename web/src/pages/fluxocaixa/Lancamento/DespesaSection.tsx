@@ -8,7 +8,7 @@ interface DespesaSectionProps {
 }
 const DespesaSection: React.FC<DespesaSectionProps> = ({ despesa }) => {
   return (
-    <Panel maxWidth='1000px' title='Despesa'>
+    <Panel maxWidth='1000px' title='Despesa' padding='15px 0 0 0'>
       <FlexBox flexDirection="column">
         <FlexBox flexDirection="row" borderBottom>
           <FlexBox.Item borderRight>
@@ -35,13 +35,11 @@ const DespesaSection: React.FC<DespesaSectionProps> = ({ despesa }) => {
             />
           </FlexBox.Item>
           <FlexBox.Item >
-          <FlexBox.Item borderRight>
             <FieldValue 
               description='Pago'
               type='string'
               value={despesa?.pago ? 'Sim' : 'Não'}
             />
-          </FlexBox.Item>
           </FlexBox.Item>
         </FlexBox>
         <FlexBox flexDirection="row">

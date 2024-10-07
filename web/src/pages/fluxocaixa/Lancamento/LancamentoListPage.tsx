@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { FaBars, FaFileImport, FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Container, Panel, Column, Table, FloatingButton, Loading, SearchFilter 
+  Container, Panel, Column, Table, FloatingButton, Loading, SearchFilter
 } from '../../../components';
 import { 
   PagedResponse, Lancamento, getDescricaoTipoLancamento, tipoLancamentoFilters, 
@@ -79,15 +79,17 @@ const LancamentoListPage: React.FC = () => {
     <Container>
       {ConfirmModalComponent}
       <Loading isLoading={isLoading} />
-      <SearchFilter 
-        fields={[
-          { label: 'Data Lançamento', name: 'dataLancamento', type: 'DATE' },
-          { label: 'Tipo', name: 'tipo', type: 'SELECT', options: tipoLancamentoFilters },
-          { label: 'Descrição', name: 'descricao', type: 'STRING' },
-        ]}
-        search={search}
-      />
       <Panel maxWidth='1000px' title='Lançamentos'>
+        <SearchFilter 
+          fields={[
+            { label: 'Data', name: 'dataLancamento', type: 'DATE' },
+            { label: 'Tipo', name: 'tipo', type: 'SELECT', options: tipoLancamentoFilters },
+            { label: 'Descrição', name: 'descricao', type: 'STRING' },
+          ]}
+          search={search}
+        />
+      </Panel>
+      <Panel maxWidth='1000px'>
         <Table<Lancamento>
           values={lancamentos || []}
           messageEmpty="Nenhum lançamento encontrado."

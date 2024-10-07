@@ -55,10 +55,10 @@ const FlexBoxContainer = styled.div<FlexBoxContainerProps>`
   display: flex;
   flex-direction: ${({ flexDirection }) => flexDirection || 'row'};
   
-  border-top: ${({ borderTop, theme }) => borderTop ? `1px solid ${theme.colors.white}` : 'none'};
-  border-bottom: ${({ borderBottom, theme }) => borderBottom ? `1px solid ${theme.colors.white}` : 'none'};
-  border-left: ${({ borderLeft, theme }) => borderLeft ? `1px solid ${theme.colors.white}` : 'none'};
-  border-right: ${({ borderRight, theme }) => borderRight ? `1px solid ${theme.colors.white}` : 'none'};
+  border-top: ${({ borderTop, theme }) => borderTop ? `1px solid ${theme.colors.gray}` : 'none'};
+  border-bottom: ${({ borderBottom, theme }) => borderBottom ? `1px solid ${theme.colors.gray}` : 'none'};
+  border-left: ${({ borderLeft, theme }) => borderLeft ? `1px solid ${theme.colors.gray}` : 'none'};
+  border-right: ${({ borderRight, theme }) => borderRight ? `1px solid ${theme.colors.gray}` : 'none'};
   
   border-top-left-radius: ${({ borderTop, borderLeft }) => (borderTop && borderLeft ? '5px' : '0')};
   border-top-right-radius: ${({ borderTop, borderRight }) => (borderTop && borderRight ? '5px' : '0')};
@@ -82,8 +82,8 @@ const FlexBoxItem = styled.div<FlexBoxItemProps>`
   height: ${({ height }) => height || '100%'};
   ${({ alignRight }) => alignRight && 'margin-left: auto;'}
   ${({ alignCenter }) => alignCenter && 'margin: 0 auto;'}
-  border-top: ${({ borderTop, theme }) => borderTop ? `1px solid ${theme.colors.white}` : 'none'};
-  border-bottom: ${({ borderBottom, theme }) => borderBottom ? `1px solid ${theme.colors.white}` : 'none'};
-  border-left: ${({ borderLeft, theme }) => borderLeft ? `1px solid ${theme.colors.white}` : 'none'};
-  border-right: ${({ borderRight, theme }) => borderRight ? `1px solid ${theme.colors.white}` : 'none'};
+  border-top: ${({ borderTop, theme }) => borderTop ? `1px solid ${theme.colors.gray}` : 'none'};
+  border-bottom: ${({ borderBottom, theme }) => borderBottom ? `1px solid ${theme.colors.gray}` : 'none'};
+  border-left: ${({ borderLeft, theme }) => borderLeft ? `1px solid ${theme.colors.gray}` : 'none'};
+  border-right: ${({ borderRight, theme }) => borderRight ? `1px solid ${theme.colors.gray}` : 'none'};
 `;

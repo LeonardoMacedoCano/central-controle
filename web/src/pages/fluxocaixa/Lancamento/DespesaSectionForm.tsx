@@ -57,7 +57,7 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
   };
 
   const handleFormaPagamento = (value: any) => {
-    const selectedFormaPagamento = getDespesaFormaPagamentoByCodigo(Number(value)); 
+    const selectedFormaPagamento = getDespesaFormaPagamentoByCodigo(value); 
     updateDespesa({ formaPagamento: selectedFormaPagamento });
   };
 
@@ -68,7 +68,7 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
   };
 
   return (
-    <Panel maxWidth='1000px' title='Despesa'>
+    <Panel maxWidth='1000px' title='Despesa' padding='10px 0 0 0'>
       <FlexBox flexDirection="column">
         <FlexBox flexDirection="row" borderBottom>
           <FlexBox.Item borderRight>
@@ -84,9 +84,9 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
             <FieldValue 
               description='Categoria'
               type='select'
-              value={{ key: despesa?.categoria?.id, value: despesa?.categoria?.descricao }}
+              value={{ key: String(despesa?.categoria?.id), value: despesa?.categoria?.descricao }}
               editable={true}
-              options={categorias.map(categoria => ({ key: categoria.id, value: categoria.descricao }))}
+              options={categorias.map(categoria => ({ key: String(categoria.id), value: categoria.descricao }))}
               onUpdate={handleUpdateCategoria}
             />
           </FlexBox.Item>
@@ -104,7 +104,6 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
             />
           </FlexBox.Item>
           <FlexBox.Item >
-          <FlexBox.Item borderRight>
             <FieldValue 
               description='Pago'
               type='boolean'
@@ -112,7 +111,6 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
               editable={true}
               onUpdate={handleUpdatePago}
             />
-          </FlexBox.Item>
           </FlexBox.Item>
         </FlexBox>
 

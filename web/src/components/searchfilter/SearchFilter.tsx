@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import FieldValue from '../fieldvalue/FieldValue';
 import { parseDateStringToDate, formatDateToYMDString, getCurrentDate } from '../../utils';
 import { Field, FilterDTO, Operator, OPERATORS } from '../../types';
+import FlexBox from '../flexbox/FlexBox';
+import Button from '../button/button/Button';
+import { FaPlus, FaTrash } from 'react-icons/fa';
+import Container from '../container/Container';
 
 type Props = {
   fields: Field[];
@@ -87,93 +92,118 @@ const SearchFilter: React.FC<Props> = ({ fields, search }) => {
   };
 
   return (
-    <div style={styles.searchFilter}>
-      <div style={styles.filterControls}>
-        <FieldValue
-          type="select"
-          value={selectedField?.name || ''}
-          options={fields.map(field => ({ key: field.name, value: field.label }))}
-          placeholder="Selecione o campo"
-          onUpdate={handleFieldChange}
-          editable
-        />
+    <Container backgroundColor="transparent" width="100%">
+      <FilterControls>
+        <FlexBox flexDirection="row">
+          <FlexBox.Item borderRight>
+            <FieldValue
+              type="select"
+              value={selectedField?.name || ''}
+              options={fields.map(field => ({ key: field.name, value: field.label }))}
+              placeholder="Selecione..."
+              onUpdate={handleFieldChange}
+              editable
+            />
+          </FlexBox.Item>
+          <FlexBox.Item borderRight>
+            <FieldValue
+              type="select"
+              value={selectedOperator?.name || ''}
+              options={
+                selectedField
+                  ? OPERATORS[selectedField.type].map(op => ({ key: op.name, value: op.name }))
+                  : []
+              }
+              placeholder="Selecione..."
+              onUpdate={handleOperatorChange}
+              editable
+            />
+          </FlexBox.Item>
+          <FlexBox.Item borderRight>
+            <FieldValue
+              type={selectedField?.type.toLowerCase() as 'string' | 'number' | 'boolean' | 'date' | 'select'}
+              value={searchValue || ''}
+              onUpdate={handleValueChange}
+              options={selectedField?.type === 'SELECT' && selectedField?.options ? selectedField?.options : undefined}
+              editable
+              placeholder={
+                selectedField?.type.toLowerCase() === 'date' || selectedField?.type.toLowerCase() === 'select'
+                  ? 'Selecione...'
+                  : 'Digite...'
+              }
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  onAddFilter();
+                }
+              }}
+            />
+          </FlexBox.Item>
+            <Button 
+              onClick={onAddFilter}
+              icon={<FaPlus />}
+              hint='Adicionar'
+              width='100px'
+              height='40px'
+              style={{
+                borderTopRightRadius: '5px',
+                justifyContent: 'center',
+                alignItems: 'center',
+                display: 'flex',
+                backgroundColor: 'transparent'
+              }}
+            />
+        </FlexBox>
+      </FilterControls>
 
-        <FieldValue
-          type="select"
-          value={selectedOperator?.name || ''}
-          options={
-            selectedField
-              ? OPERATORS[selectedField.type].map(op => ({ key: op.name, value: op.name }))
-              : []
-          }
-          placeholder="Selecione o operador"
-          onUpdate={handleOperatorChange}
-          editable
-        />
-
-        <FieldValue
-          type={selectedField?.type.toLowerCase() as 'string' | 'number' | 'boolean' | 'date' | 'select'}
-          value={searchValue || ''}
-          onUpdate={handleValueChange}
-          options={selectedField?.type === 'SELECT' && selectedField?.options ? selectedField?.options : undefined}
-          editable
-          placeholder="Digite o valor"
-        />
-
-        <button style={styles.filterButton} onClick={onAddFilter}>
-          Filtrar
-        </button>
-      </div>
-
-      <div style={styles.panelFilterTags}>
+      <PanelFilterTags>
         {filters.map((filter, index) => (
-          <div key={index} style={styles.filterTag}>
-            <span>{fields.find(f => f.name === filter.field)?.label} {filter.operadorDescr} {filter.value}</span>
-            <button style={styles.removeButton} onClick={() => onRemove(index)}>Remover</button>
-          </div>
+          <FilterTag key={index}>
+                <span>{fields.find(f => f.name === filter.field)?.label} {filter.operadorDescr} {filter.value}</span>
+              <Button 
+                  onClick={() => onRemove(index)}
+                  icon={<FaTrash />}
+                  variant='warning'
+                  hint='Excluir'
+                  height='20px'
+                  width='20px'
+                  style={{
+                    borderRadius: '50%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    display: 'flex',
+                    padding: '5px'
+                  }}
+                />
+          </FilterTag>
         ))}
-      </div>
-    </div>
+      </PanelFilterTags>
+    </Container>
   );
 };
 
-const styles = {
-  searchFilter: {
-    display: 'flex',
-    flexDirection: 'column' as const,
-    gap: '8px',
-  },
-  filterControls: {
-    display: 'flex',
-    gap: '8px',
-    alignItems: 'center' as const,
-  },
-  panelFilterTags: {
-    display: 'flex',
-    flexWrap: 'wrap' as const,
-    gap: '8px',
-  },
-  filterTag: {
-    display: 'flex',
-    gap: '8px',
-    padding: '4px 8px',
-    backgroundColor: '#3d3d3d',
-    borderRadius: '4px',
-  },
-  removeButton: {
-    background: 'none',
-    border: 'none',
-    color: 'red',
-    cursor: 'pointer',
-  },
-  filterButton: {
-    padding: '4px 8px',
-    cursor: 'pointer',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-  },
-};
-
 export default SearchFilter;
+
+const FilterControls = styled.div`
+  height: 40px;
+  background-color: transparent;
+`;
+
+const PanelFilterTags = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  background-color: ${({ theme }) => theme.colors.tertiary};
+`;
+
+const FilterTag = styled.div`
+  height: 30px;
+  margin: 10px;
+  display: flex;
+  gap: 8px;
+  padding: 5px 8px;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  border-radius: 5px;
+
+  justify-content: 'center';
+  align-items: 'center';
+  display: 'flex';
+`;
