@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from '../container/Container';
 import { useTheme } from 'styled-components';
 
@@ -18,10 +18,28 @@ const svgAnimation = `
   }
 `;
 
+const LOADING_DELAY = 100;
+
 const Loading: React.FC<LoadingProps> = ({ isLoading }) => {
+  const [shouldDisplay, setShouldDisplay] = useState(false);
   const theme = useTheme();
 
-  if (!isLoading) return null;
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    if (isLoading) {
+      timer = setTimeout(() => {
+        setShouldDisplay(true);
+      }, LOADING_DELAY);
+    } else {
+      setShouldDisplay(false);
+    }
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isLoading]);
+
+  if (!shouldDisplay) return null;
 
   const svgContent = `
     <style>${svgAnimation}</style>

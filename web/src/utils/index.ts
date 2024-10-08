@@ -4,6 +4,7 @@ import {
   formatDateToYMDString,
   formatDateToYMString,
   parseDateStringToDate,
+  isDateValid
 } from "./DateUtils";
 
 import { 
@@ -25,6 +26,7 @@ export {
   formatDateToYMDString,
   formatDateToYMString,
   parseDateStringToDate,
+  isDateValid,
   convertReactStyleToCSSObject,
   getVariantColor,
   formatValueToBRL,

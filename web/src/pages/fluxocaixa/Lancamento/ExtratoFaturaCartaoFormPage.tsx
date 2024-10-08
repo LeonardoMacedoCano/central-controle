@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Container, DragDropFile, FieldValue, FlexBox, FloatingButton, Loading, Panel } from '../../../components';
-import { formatDateToYMDString, getCurrentDate } from '../../../utils';
+import { formatDateToYMDString, getCurrentDate, isDateValid } from '../../../utils';
 import { ExtratoFaturaCartaoDTO } from '../../../types/fluxocaixa/ExtratoFaturaCartao';
 import { LancamentoService } from '../../../service';
 import { AuthContext, useMessage } from '../../../contexts';
@@ -53,6 +53,8 @@ const ExtratoFaturaCartaoFormPage: React.FC = () => {
     updateExtratoDTO({ file: value });
   };
 
+  const isRequiredFieldsFilled = (): boolean => isDateValid(extratoDTO.dataVencimento) && extratoDTO.file !== null;
+
   return (
     <Container>
       <Loading isLoading={isLoading} />
@@ -60,6 +62,7 @@ const ExtratoFaturaCartaoFormPage: React.FC = () => {
         mainButtonIcon={<FaCheck />}
         mainButtonHint={'Importar Extrato Fatura Cartão'}
         mainAction={importarExtratoFaturaCartao}
+        disabled={!isRequiredFieldsFilled()}
       />
       <Panel
         maxWidth='1000px'

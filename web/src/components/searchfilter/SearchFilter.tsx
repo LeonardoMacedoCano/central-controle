@@ -93,7 +93,7 @@ const SearchFilter: React.FC<Props> = ({ fields, search }) => {
 
   return (
     <Container backgroundColor="transparent" width="100%">
-      <FilterControls>
+      <FilterControls hasFilters={filters.length > 0}>
         <FlexBox flexDirection="row">
           <FlexBox.Item borderRight>
             <FieldValue
@@ -141,15 +141,16 @@ const SearchFilter: React.FC<Props> = ({ fields, search }) => {
             <Button 
               onClick={onAddFilter}
               icon={<FaPlus />}
+              variant='success'
               hint='Adicionar'
               width='100px'
               height='40px'
               style={{
                 borderTopRightRadius: '5px',
+                borderBottomRightRadius: filters.length > 0 ? '0px' : '5px',
                 justifyContent: 'center',
                 alignItems: 'center',
                 display: 'flex',
-                backgroundColor: 'transparent'
               }}
             />
         </FlexBox>
@@ -158,22 +159,22 @@ const SearchFilter: React.FC<Props> = ({ fields, search }) => {
       <PanelFilterTags>
         {filters.map((filter, index) => (
           <FilterTag key={index}>
-                <span>{fields.find(f => f.name === filter.field)?.label} {filter.operadorDescr} {filter.value}</span>
-              <Button 
-                  onClick={() => onRemove(index)}
-                  icon={<FaTrash />}
-                  variant='warning'
-                  hint='Excluir'
-                  height='20px'
-                  width='20px'
-                  style={{
-                    borderRadius: '50%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    display: 'flex',
-                    padding: '5px'
-                  }}
-                />
+            <span>{fields.find(f => f.name === filter.field)?.label} {filter.operadorDescr} {filter.value}</span>
+            <Button 
+                onClick={() => onRemove(index)}
+                icon={<FaTrash />}
+                variant='warning'
+                hint='Excluir'
+                height='20px'
+                width='20px'
+                style={{
+                  borderRadius: '50%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                  padding: '5px'
+                }}
+              />
           </FilterTag>
         ))}
       </PanelFilterTags>
@@ -183,9 +184,10 @@ const SearchFilter: React.FC<Props> = ({ fields, search }) => {
 
 export default SearchFilter;
 
-const FilterControls = styled.div`
+const FilterControls = styled.div<{ hasFilters: boolean }>`
   height: 40px;
   background-color: transparent;
+  border-bottom: ${({ hasFilters, theme }) => (hasFilters ? `1px solid ${theme.colors.gray}` : 'none')};
 `;
 
 const PanelFilterTags = styled.div`
@@ -196,14 +198,12 @@ const PanelFilterTags = styled.div`
 
 const FilterTag = styled.div`
   height: 30px;
-  margin: 10px;
+  margin: 5px;
   display: flex;
   gap: 8px;
-  padding: 5px 8px;
+  padding: 5px;
   background-color: ${({ theme }) => theme.colors.secondary};
   border-radius: 5px;
-
-  justify-content: 'center';
-  align-items: 'center';
-  display: 'flex';
+  font-size: 14px;
 `;
+
