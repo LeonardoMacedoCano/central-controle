@@ -29,6 +29,7 @@ import {
   FilterItem,
   FilterDTO,
 } from "../types/Filters";
+import { Servico } from "./servicos/Servico";
 
 export type {
   Categoria,
@@ -44,7 +45,8 @@ export type {
   Operator,
   Filters,
   FilterItem,
-  FilterDTO
+  FilterDTO,
+  Servico
 };
 
 export {

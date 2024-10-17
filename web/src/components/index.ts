@@ -14,6 +14,7 @@ import Loading from "./loading/Loading";
 import DynamicFavicon from "./dynamicfavicon/DynamicFavicon";
 import DragDropFile from "./dragdropfile/DragDropFile";
 import SearchFilter from "./searchfilter/SearchFilter";
+import Card from "./card/Card";
 
 export {
   Button, 
@@ -32,5 +33,6 @@ export {
   Loading,
   DynamicFavicon,
   DragDropFile,
-  SearchFilter
+  SearchFilter,
+  Card
 };

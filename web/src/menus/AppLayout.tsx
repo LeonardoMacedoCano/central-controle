@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import { FaBars, FaCog, FaDollarSign, FaHome, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaCog, FaDollarSign, FaHome, FaServer, FaSignOutAlt } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
 import { AuthContext } from '../contexts';
 
@@ -105,6 +105,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubme
       to: "/",
       Icon: FaHome,
       Text: "Home"
+    },
+    {
+      to: "/servicos",
+      Icon: FaServer,
+      Text: "Serviços"
     },
     {
       Icon: FaDollarSign,
