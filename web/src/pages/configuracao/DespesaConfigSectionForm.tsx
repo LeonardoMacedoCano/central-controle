@@ -18,38 +18,15 @@ const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ usu
     onUpdate(usuarioConfigAtualizado);
   };
 
-  const handleNumeroMaxItemPagina = (value: any) => {
-    if (typeof value === 'number') {
-      updateUsuarioConfig({ despesaNumeroMaxItemPagina: value });
-    }
-  };
-
   const handleValorMetaMensal = (value: any) => {
     if (typeof value === 'number') {
       updateUsuarioConfig({ despesaValorMetaMensal: value });
     }
   };
 
-  const handleDiaPadraoVencimento = (value: any) => {
-    if (typeof value === 'number') {
-      updateUsuarioConfig({ despesaDiaPadraoVencimento: value });
-    }
-  };
-
   return (
     <FlexBox flexDirection="column" borderTop borderBottom borderLeft borderRight>
       <FlexBox flexDirection="row" >
-        <FlexBox.Item borderRight >
-          <FieldValue 
-            description='Número Itens Página'
-            hint='Número máximo de itens por página'
-            type='number'
-            value={usuarioConfig.despesaNumeroMaxItemPagina}
-            minValue={1}
-            editable={true}
-            onUpdate={handleNumeroMaxItemPagina}
-          />
-        </FlexBox.Item>
         <FlexBox.Item >
           <FieldValue 
             description='Valor Meta Mensal'
@@ -59,20 +36,6 @@ const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ usu
             editable={true}
             minValue={0}
             onUpdate={handleValorMetaMensal}
-          />
-        </FlexBox.Item>
-      </FlexBox>
-      <FlexBox flexDirection="row" borderTop>
-        <FlexBox.Item borderRight >
-          <FieldValue 
-            description='Dia Padrão Vencimento'
-            hint='Dia padrão para vencimento'
-            type='number'
-            value={usuarioConfig.despesaDiaPadraoVencimento}
-            editable={true}
-            minValue={1}
-            maxValue={28}
-            onUpdate={handleDiaPadraoVencimento}
           />
         </FlexBox.Item>
       </FlexBox>

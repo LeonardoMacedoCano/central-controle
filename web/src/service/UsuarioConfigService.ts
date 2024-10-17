@@ -13,9 +13,7 @@ const UsuarioConfigService = (): UsuarioConfigApi => {
 
   const usuarioConfigPayload = (data: UsuarioConfig) => ({
     id: data.id,
-    despesaNumeroMaxItemPagina: data.despesaNumeroMaxItemPagina,
     despesaValorMetaMensal: data.despesaValorMetaMensal,
-    despesaDiaPadraoVencimento: data.despesaDiaPadraoVencimento,
   });
 
   const getUsuarioConfigByUsuario = async (token: string): Promise<UsuarioConfig | undefined> => {

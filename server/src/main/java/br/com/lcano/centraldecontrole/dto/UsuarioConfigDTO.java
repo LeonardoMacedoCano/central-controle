@@ -18,9 +18,7 @@ public class UsuarioConfigDTO {
         UsuarioConfigDTO dto = new UsuarioConfigDTO();
 
         dto.setId(usuarioConfig.getId());
-        dto.setDespesaNumeroMaxItemPagina(usuarioConfig.getDespesaNumeroMaxItemPagina());
         dto.setDespesaValorMetaMensal(usuarioConfig.getDespesaValorMetaMensal());
-        dto.setDespesaDiaPadraoVencimento(usuarioConfig.getDespesaDiaPadraoVencimento());
 
         return dto;
     }

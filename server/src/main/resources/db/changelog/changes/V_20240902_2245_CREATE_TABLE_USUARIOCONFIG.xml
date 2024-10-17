@@ -17,9 +17,7 @@
             <column name="idusuario" type="${integer}">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="despesanumeromaxitempagina" type="${integer}" defaultValue="10"/>
             <column name="despesavalormetamensal" type="${number_10_2}"/>
-            <column name="despesadiapadraovencimento" type="${integer}" defaultValue="10"/>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="usuarioconfig"
