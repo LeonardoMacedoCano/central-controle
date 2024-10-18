@@ -1,17 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Color from 'color';
-import { Servico } from '../../types';
+import { Servico, ServidorConfig } from '../../types';
 import { AuthContext, useMessage } from '../../contexts';
-import ArquivoService from '../../service/ArquivoService';
 import Button from '../button/button/Button';
 import { FaLink } from 'react-icons/fa';
+import { ArquivoService } from '../../service';
 
 interface CardProps {
   servico: Servico;
+  servidorConfig: ServidorConfig;
 }
 
-const Card: React.FC<CardProps> = ({ servico }) => {
+const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
   const { usuario } = useContext(AuthContext);
   const message = useMessage();
   const arquivoService = ArquivoService();
@@ -38,6 +39,16 @@ const Card: React.FC<CardProps> = ({ servico }) => {
     }
   };
 
+  const copyLink = () => {
+    try {
+      const link = `http://${servidorConfig.ipExterno}:${servico.porta}`;
+      navigator.clipboard.writeText(link);
+      message.showSuccess('Link copiado com sucesso!');
+    } catch (error) {
+      message.showErrorWithLog('Erro ao copiar o link.', error);
+    }
+  };
+
   return (
     <CardContainer>
       <CardInner>
@@ -47,7 +58,7 @@ const Card: React.FC<CardProps> = ({ servico }) => {
             <CardPort>
               {servico.porta}
               <Button 
-                onClick={() => {}} 
+                onClick={copyLink}
                 variant='info'
                 icon={<FaLink />}
                 hint='Copiar Link'

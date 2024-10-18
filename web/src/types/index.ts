@@ -31,6 +31,7 @@ import {
 } from "../types/Filters";
 import { Servico } from "./servicos/Servico";
 import { Arquivo } from "./Arquivo";
+import { ServidorConfig } from "./servicos/ServidorConfig";
 
 export type {
   Categoria,
@@ -48,7 +49,8 @@ export type {
   FilterItem,
   FilterDTO,
   Servico,
-  Arquivo
+  Arquivo,
+  ServidorConfig
 };
 
 export {
