@@ -43,7 +43,7 @@ public class ImportacaoExtratoFaturaCartaoReader implements ItemReader<ExtratoFa
     }
 
     private Arquivo loadArquivo() {
-        return this.arquivoService.getArquivoById(arquivoId);
+        return this.arquivoService.findByIdwithValidation(arquivoId);
     }
 
     private List<ExtratoFaturaCartao> parseExtratos(byte[] arquivoConteudo) throws Exception {

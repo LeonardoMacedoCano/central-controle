@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.resource.servicos;
 
 import br.com.lcano.centraldecontrole.domain.servicos.Servico;
+import br.com.lcano.centraldecontrole.dto.servicos.ServicoDTO;
 import br.com.lcano.centraldecontrole.service.servicos.ServicoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class ServicoResource {
     private final ServicoService servicoService;
 
     @GetMapping
-    public List<Servico> getAllServicos() {
-        return servicoService.findAll();
+    public List<ServicoDTO> getAllServicos() {
+        return servicoService.getAllServicos();
     }
 
     @GetMapping("/{id}")

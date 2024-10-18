@@ -25,9 +25,13 @@ public class ArquivoService {
         return this.arquivoRepository.findByHash(hash);
     }
 
-    public Arquivo getArquivoById(Long id) {
+    public Arquivo findByIdwithValidation(Long id) {
         return arquivoRepository.findById(id)
                 .orElseThrow(() -> new ArquivoException.ArquivoNaoEncontrado(id));
+    }
+
+    public Optional<Arquivo> findById(Long id) {
+        return arquivoRepository.findById(id);
     }
 
     public String calculateHash(InputStream is) throws Exception {
