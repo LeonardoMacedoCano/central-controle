@@ -34,11 +34,12 @@ export const RequestApi = async <T>(
   url: string,
   token?: string,
   contextMessage?: ContextMessageProps,
-  data?: Record<string, any>
+  data?: Record<string, any>,
+  responseType: 'json' | 'blob' = 'json'
 ): Promise<T | undefined> => {
   try {
     const headers: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
-    const config = { headers, data };
+    const config = { headers, data, responseType };
 
     const response = await api.request({
       method,
