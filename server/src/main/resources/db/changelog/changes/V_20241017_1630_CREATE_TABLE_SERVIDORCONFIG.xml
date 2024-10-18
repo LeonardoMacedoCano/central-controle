@@ -14,7 +14,7 @@
             <column name="id" type="${integer}">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_servidorconfig"/>
             </column>
-            <column name="ipexterno" type="${varchar_50}">
+            <column name="ipexterno" type="${varchar_20}">
                 <constraints nullable="false"/>
             </column>
         </createTable>

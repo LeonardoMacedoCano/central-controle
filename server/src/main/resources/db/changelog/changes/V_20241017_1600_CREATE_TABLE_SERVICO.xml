@@ -14,10 +14,10 @@
             <column name="id" type="${integer}" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_servico"/>
             </column>
-            <column name="nome" type="${varchar_100}">
+            <column name="nome" type="${varchar_20}">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="descricao" type="${varchar_255}">
+            <column name="descricao" type="${varchar_100}">
                 <constraints nullable="false"/>
             </column>
             <column name="porta" type="${integer}">
