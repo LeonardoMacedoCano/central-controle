@@ -1,84 +1,219 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useContext, useEffect, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
+import Color from 'color';
 import { Servico } from '../../types';
+import { AuthContext, useMessage } from '../../contexts';
+import ArquivoService from '../../service/ArquivoService';
+import Button from '../button/button/Button';
+import { FaLink } from 'react-icons/fa';
 
 interface CardProps {
   servico: Servico;
 }
 
 const Card: React.FC<CardProps> = ({ servico }) => {
+  const { usuario } = useContext(AuthContext);
+  const message = useMessage();
+  const arquivoService = ArquivoService();
+
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (servico.idarquivo) {
+      loadArquivo();
+    }
+  }, [servico.idarquivo, usuario?.token]);
+
+  const loadArquivo = async () => {
+    if (!usuario?.token || !servico.idarquivo) return;
+
+    try {
+      const result = await arquivoService.getArquivoById(usuario.token, servico.idarquivo);
+      if (result) {
+        const url = URL.createObjectURL(result);
+        setImageUrl(url);
+      }
+    } catch (error) {
+      message.showErrorWithLog('Erro ao carregar os serviços.', error);
+    }
+  };
+
   return (
     <CardContainer>
-      <CardHeader>
-        <CardTitle>{servico.nome}</CardTitle>
-        {servico.porta && <CardPort>{servico.porta}</CardPort>}
-      </CardHeader>
-      <CardImageContainer>
-        {servico.arquivo ? (
-          <CardImage src={`/api/arquivos/${servico.arquivo}`} alt={servico.nome} />
-        ) : (
-          <CardImagePlaceholder>No Image</CardImagePlaceholder>
-        )}
-      </CardImageContainer>
-      <CardDescription>{servico.descricao}</CardDescription>
+      <CardInner>
+        <CardHeader>
+          <CardTitle>{servico.nome}</CardTitle>
+          {servico.porta && (
+            <CardPort>
+              {servico.porta}
+              <Button 
+                onClick={() => {}} 
+                variant='info'
+                icon={<FaLink />}
+                hint='Copiar Link'
+                style={{
+                  borderRadius: '50%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                  height: '25px',
+                  width: '25px',
+                  marginLeft: '5px'
+                }}
+              />
+            </CardPort>
+          )}
+        </CardHeader>
+        <CardImageContainer>
+          {imageUrl ? (
+            <CardImage src={imageUrl} alt={servico.nome} />
+          ) : (
+            <CardImagePlaceholder>Sem Imagem</CardImagePlaceholder>
+          )}
+        </CardImageContainer>
+        <CardInfoBox>
+          <CardDescription>{servico.descricao}</CardDescription>
+        </CardInfoBox>
+      </CardInner>
     </CardContainer>
   );
 };
 
 export default Card;
 
+const holographicShine = keyframes`
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+`;
+
+const imageShine = keyframes`
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+`;
+
 const CardContainer = styled.div`
-  width: 250px;
-  background-color: #f8f8f8;
-  border: 2px solid #dcdcdc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
+  width: 270px;
+  height: 370px;
+  background: ${({ theme }) => {
+    const quaternary = Color(theme.colors.quaternary);
+    return `linear-gradient(
+      135deg,
+      ${quaternary.darken(0.2).hex()} 0%,
+      ${quaternary.darken(0.4).hex()} 25%,
+      ${quaternary.darken(0.6).hex()} 50%,
+      ${quaternary.darken(0.4).hex()} 75%,
+      ${quaternary.darken(0.2).hex()} 100%
+    )`;
+  }};
+  background-size: 200% 200%;
+  animation: ${holographicShine} 3s linear infinite;
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
   margin: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+
+  &:hover {
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6);
+  }
+`;
+
+const CardInner = styled.div`
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  border-radius: 15px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
 `;
 
 const CardHeader = styled.div`
+  background: ${({ theme }) => {
+    const quaternary = Color(theme.colors.quaternary);
+    return `linear-gradient(
+      135deg,
+      ${quaternary.darken(0.2).hex()} 0%,
+      ${quaternary.darken(0.4).hex()} 25%,
+      ${quaternary.darken(0.6).hex()} 50%,
+      ${quaternary.darken(0.4).hex()} 75%,
+      ${quaternary.darken(0.2).hex()} 100%
+    )`;
+  }};
+  background-size: 200% 200%;
+  animation: ${holographicShine} 3s linear infinite;
+  padding: 10px;
   display: flex;
   justify-content: space-between;
-  background-color: #ffd700; /* Cor inspirada no estilo Pokémon */
-  padding: 10px;
-  font-weight: bold;
-  font-size: 1.1rem;
+  align-items: center;
+  border-radius: 15px 15px 0 0;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
 `;
 
 const CardTitle = styled.span`
-  color: #333;
+  color: ${({ theme }) => theme.colors.black};
+  font-weight: bold;
+  font-size: 1.3rem;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 `;
 
 const CardPort = styled.span`
-  color: #333;
+  color: ${({ theme }) => theme.colors.black};
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
 `;
 
 const CardImageContainer = styled.div`
+  border: 4px solid ${({ theme }) => Color(theme.colors.quaternary).lighten(0.3).hex()};
+  margin: 10px;
+  height: 150px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 150px;
-  background-color: #f0f0f0;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
 `;
 
 const CardImage = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: ${imageShine} 3s linear infinite;
 `;
 
 const CardImagePlaceholder = styled.div`
-  font-size: 0.9rem;
-  color: #888;
+  font-size: 1rem;
+  color: ${({ theme }) => theme.colors.black};
+  text-align: center;
+  padding: 10px;
+`;
+
+const CardInfoBox = styled.div`
+  background: ${({ theme }) => Color(theme.colors.quaternary).alpha(0.3).string()};
+  margin: 0 10px 10px 10px;
+  padding: 5px;
+  flex-grow: 1;
+  border-radius: 8px;
+  height: 90px;
 `;
 
 const CardDescription = styled.div`
-  padding: 10px;
-  text-align: center;
+  height: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 0.9rem;
-  color: #555;
+  color: ${({ theme }) => theme.colors.black};
+  text-align: center;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
 `;

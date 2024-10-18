@@ -3,5 +3,5 @@ export type Servico = {
   nome: string;
   descricao: string;
 	porta?: string;
-	arquivo?: string;
+	idarquivo?: number;
 }

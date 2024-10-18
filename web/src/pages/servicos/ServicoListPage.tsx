@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { Card, Container, Loading, Panel } from '../../components';
 import { Servico } from '../../types';
 import { AuthContext, useMessage } from '../../contexts';
@@ -31,17 +32,31 @@ const ServicoListPage: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container style={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      flexWrap: 'wrap', 
+      maxWidth: '100%', 
+      margin: 'auto' 
+    }}>
       <Loading isLoading={isLoading} />
       <Panel maxWidth='1000px' title='Serviços'>
-        {servicos.map(servico => (
-          <Card
-            servico={servico}
-          />
-        ))}
+        <CardContainer>
+          {servicos.map(servico => (
+            <Card key={servico.id} servico={servico} />
+          ))}
+        </CardContainer>
       </Panel>
     </Container>
   );
 };
-
 export default ServicoListPage;
+
+const CardContainer = styled.div`
+  display: flex; 
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 10px;
+  gap: 20px;
+`;
+

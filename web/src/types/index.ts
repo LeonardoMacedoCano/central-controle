@@ -30,6 +30,7 @@ import {
   FilterDTO,
 } from "../types/Filters";
 import { Servico } from "./servicos/Servico";
+import { Arquivo } from "./Arquivo";
 
 export type {
   Categoria,
@@ -46,7 +47,8 @@ export type {
   Filters,
   FilterItem,
   FilterDTO,
-  Servico
+  Servico,
+  Arquivo
 };
 
 export {
