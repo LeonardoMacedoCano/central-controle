@@ -13,6 +13,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   description?: string;
   hint?: string;
   disabled?: boolean;
+  disabledHover?: boolean;
   style?: React.CSSProperties;
 }
 
@@ -23,7 +24,8 @@ const Button: React.FC<ButtonProps> = ({
   height, 
   icon, 
   hint, 
-  disabled, 
+  disabled,
+  disabledHover,
   ...props 
 }) => {
   return (
@@ -33,9 +35,10 @@ const Button: React.FC<ButtonProps> = ({
       height={height} 
       title={hint} 
       disabled={disabled}
+      disabledHover={disabledHover}
       {...props}
     >
-      {icon && <span style={{ display: 'flex', alignItems: 'center' }}>{icon}</span>}
+      {icon && <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',}}>{icon}</span>}
       {description && <span style={{ marginLeft: '8px' }}>{description}</span>}
     </StyledButton>
   );
@@ -48,6 +51,7 @@ interface StyledButtonProps {
   width?: string;
   height?: string;
   disabled?: boolean;
+  disabledHover?: boolean;
   style?: React.CSSProperties;
 }
 
@@ -89,7 +93,7 @@ const StyledButton = styled.button<StyledButtonProps>`
   height: ${props => props.height || 'auto'};
 
   &:hover {
-    opacity: 0.3;
+    opacity: ${props => (props.disabledHover ? '1' : '0.3')};
   }
 
   ${({ variant, theme }) => getButtonVariantStyles(variant, theme)}

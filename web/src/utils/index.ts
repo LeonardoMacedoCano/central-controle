@@ -20,6 +20,8 @@ import {
   buildFilterRsql
 } from "./FilterUtils";
 
+import { getIconByName } from "./IconUtils";
+
 export {
   getCurrentDate,
   formatDateToShortString,
@@ -30,5 +32,6 @@ export {
   convertReactStyleToCSSObject,
   getVariantColor,
   formatValueToBRL,
-  buildFilterRsql
+  buildFilterRsql,
+  getIconByName
 };

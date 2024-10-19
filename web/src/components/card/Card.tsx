@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Color from 'color';
-import { Servico, ServidorConfig } from '../../types';
+import { Servico, ServicoCategoria, ServidorConfig } from '../../types';
 import { AuthContext, useMessage } from '../../contexts';
 import Button from '../button/button/Button';
 import { FaLink } from 'react-icons/fa';
-import { ArquivoService } from '../../service';
+import { ArquivoService, ServicoCategoriaService } from '../../service';
+import ServicoCategoriaIcon from '../icon/ServicoCategoriaIcon';
 
 interface CardProps {
   servico: Servico;
@@ -13,27 +14,44 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [categorias, setCategorias] = useState<ServicoCategoria[]>([]);
+
   const { usuario } = useContext(AuthContext);
   const message = useMessage();
   const arquivoService = ArquivoService();
-
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const servicoCategoriaService = ServicoCategoriaService();
 
   useEffect(() => {
-    if (servico.idarquivo) {
-      loadArquivo();
+    loadData();
+  }, [usuario?.token]);
+
+  const loadData = async () => {
+    try {
+      await Promise.all([loadArquivo(), loadCategorias()]);
+    } catch (error) {
+      console.error('Erro ao carregar dados:', error);
     }
-  }, [servico.idarquivo, usuario?.token]);
+  };
 
   const loadArquivo = async () => {
     if (!usuario?.token || !servico.idarquivo) return;
-
     try {
       const result = await arquivoService.getArquivoById(usuario.token, servico.idarquivo);
       if (result) {
         const url = URL.createObjectURL(result);
         setImageUrl(url);
       }
+    } catch (error) {
+      message.showErrorWithLog('Erro ao carregar os serviços.', error);
+    }
+  };
+
+  const loadCategorias = async () => {
+    if (!usuario?.token) return;
+    try {
+      const result = await servicoCategoriaService.getCategoriasByServicoId(usuario.token, servico.id);
+      setCategorias(result || []);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar os serviços.', error);
     }
@@ -60,15 +78,13 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
               <Button 
                 onClick={copyLink}
                 variant='info'
+                disabledHover
                 icon={<FaLink />}
                 hint='Copiar Link'
                 style={{
                   borderRadius: '50%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  display: 'flex',
-                  height: '25px',
-                  width: '25px',
+                  height: '30px',
+                  width: '30px',
                   marginLeft: '5px'
                 }}
               />
@@ -84,6 +100,36 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
         </CardImageContainer>
         <CardInfoBox>
           <CardDescription>{servico.descricao}</CardDescription>
+          {categorias.length > 0 && (
+            <CardCategorias>
+              <ButtonContainer>
+                {categorias.map((categoria, index) => (
+                  <Button 
+                    key={index}
+                    variant='success'
+                    disabledHover
+                    icon={<ServicoCategoriaIcon servicoCategoria={categoria} />}
+                    style={{
+                      borderRadius: '50%',
+                      height: '25px',
+                      width: '25px',
+                      margin: '0 2px',
+                      cursor: 'default',
+                    }}
+                  />
+                ))}
+                <CardCategoryTitle>Categorias</CardCategoryTitle>
+              </ButtonContainer>
+              <Descriptions>
+                {categorias.map((categoria, index) => (
+                  <CardCategoryDescricao key={categoria.id || index}>
+                    {categoria.descricao}
+                    {index < categorias.length - 1 && ' | '}
+                  </CardCategoryDescricao>
+                ))}
+              </Descriptions>
+            </CardCategorias>
+          )}
         </CardInfoBox>
       </CardInner>
     </CardContainer>
@@ -216,15 +262,48 @@ const CardInfoBox = styled.div`
   padding: 5px;
   flex-grow: 1;
   border-radius: 8px;
-  height: 90px;
+  height: 50px;
+`;
+
+const ButtonContainer = styled.div`
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const Descriptions = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  color: ${({ theme }) => theme.colors.black};
 `;
 
 const CardDescription = styled.div`
-  height: 90px;
+  height: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.9rem;
   color: ${({ theme }) => theme.colors.black};
   text-align: center;
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+`;
+
+const CardCategorias = styled.div`
+  margin-top: 5px;
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.colors.black};
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const CardCategoryTitle = styled.h3`
+  margin: 2px 0 0 10px ;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.black};
+`;
+
+const CardCategoryDescricao = styled.span`
+  margin: 0 2px;
+  color: ${({ theme }) => theme.colors.black};
 `;

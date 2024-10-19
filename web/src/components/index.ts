@@ -15,6 +15,7 @@ import DynamicFavicon from "./dynamicfavicon/DynamicFavicon";
 import DragDropFile from "./dragdropfile/DragDropFile";
 import SearchFilter from "./searchfilter/SearchFilter";
 import Card from "./card/Card";
+import ServicoCategoriaIcon from "./icon/ServicoCategoriaIcon";
 
 export {
   Button, 
@@ -34,5 +35,6 @@ export {
   DynamicFavicon,
   DragDropFile,
   SearchFilter,
-  Card
+  Card,
+  ServicoCategoriaIcon
 };
