@@ -16,6 +16,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [categorias, setCategorias] = useState<ServicoCategoria[]>([]);
+  const ativo = true;
 
   const { usuario } = useContext(AuthContext);
   const message = useMessage();
@@ -71,7 +72,21 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
     <CardContainer>
       <CardInner>
         <CardHeader>
-          <CardTitle>{servico.nome}</CardTitle>
+          <CardTitle>
+            <Button 
+              variant={ativo ? 'success' : 'warning'}
+              hint={ativo ? 'Ligado' : 'Desligado'}
+              disabledHover
+              style={{
+                borderRadius: '50%',
+                height: '10px',
+                width: '10px',
+                margin: '0 2px',
+                cursor: 'default',
+              }}
+            />
+            {servico.nome}
+            </CardTitle>
           {servico.porta && (
             <CardPort>
               {servico.porta}

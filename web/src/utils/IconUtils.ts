@@ -1,21 +1,39 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { 
   IconDefinition,
+  faNetworkWired,
+  faDatabase,
+  faRobot,
+  faMusic,
+  faPlay,
+  faFilm,
+  faBook,
   faGamepad,
-  faUser,
-  faCog,
-  faStar,
-  faPlay 
+  faTools
 } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faGamepad, faUser, faCog, faStar, faPlay);
+library.add(
+  faNetworkWired,
+  faDatabase,
+  faRobot,
+  faMusic,
+  faPlay,
+  faFilm,
+  faBook,
+  faGamepad,
+  faTools
+);
 
 const iconMap: Record<string, IconDefinition> = {
-  gamepad: faGamepad,
-  user: faUser,
-  cog: faCog,
-  star: faStar,
+  networkWired: faNetworkWired,
+  database: faDatabase,
+  robot: faRobot,
+  music: faMusic,
   play: faPlay,
+  film: faFilm,
+  book: faBook,
+  gamepad: faGamepad,
+  tools: faTools
 };
 
 export const getIconByName = (iconName: string): IconDefinition | null => {
