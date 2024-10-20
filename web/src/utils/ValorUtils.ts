@@ -4,3 +4,7 @@ export function formatValueToBRL(value: number): string {
     currency: 'BRL' 
   }).format(value);
 };
+
+export const formatNumberWithLeadingZeros = (number: number, digits: number): string => {
+  return number.toString().padStart(digits, '0');
+};

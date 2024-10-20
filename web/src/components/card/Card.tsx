@@ -7,6 +7,7 @@ import Button from '../button/button/Button';
 import { FaLink } from 'react-icons/fa';
 import { ArquivoService, ServicoCategoriaService } from '../../service';
 import ServicoCategoriaIcon from '../icon/ServicoCategoriaIcon';
+import { copyLinkToClipboard, formatNumberWithLeadingZeros } from '../../utils';
 
 interface CardProps {
   servico: Servico;
@@ -58,10 +59,10 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
     }
   };
 
-  const copyLink = () => {
+  const copyLink = async () => {
     try {
       const link = `http://${servidorConfig.ipExterno}:${servico.porta}`;
-      navigator.clipboard.writeText(link);
+      await copyLinkToClipboard(link);
       message.showSuccess('Link copiado com sucesso!');
     } catch (error) {
       message.showErrorWithLog('Erro ao copiar o link.', error);
@@ -72,7 +73,7 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
     <CardContainer>
       <CardInner>
         <CardHeader>
-          <CardTitle>
+          <StatusWrapper>
             <Button 
               variant={ativo ? 'success' : 'warning'}
               hint={ativo ? 'Ligado' : 'Desligado'}
@@ -83,28 +84,30 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
                 width: '10px',
                 margin: '0 2px',
                 cursor: 'default',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
+                border: '1px solid rgba(0, 0, 0, 0.3)'
               }}
             />
-            {servico.nome}
-            </CardTitle>
-          {servico.porta && (
-            <CardPort>
-              {servico.porta}
-              <Button 
-                onClick={copyLink}
-                variant='info'
-                disabledHover
-                icon={<FaLink />}
-                hint='Copiar Link'
-                style={{
-                  borderRadius: '50%',
-                  height: '30px',
-                  width: '30px',
-                  marginLeft: '5px'
-                }}
-              />
-            </CardPort>
-          )}
+          </StatusWrapper>
+          <CardTitle>{servico.nome}</CardTitle>
+          <PortWrapper>
+            {servico.porta}
+            <Button 
+              onClick={copyLink}
+              variant='info'
+              disabledHover
+              icon={<FaLink />}
+              hint='Copiar Link'
+              style={{
+                borderRadius: '50%',
+                height: '22px',
+                width: '22px',
+                marginLeft: '2px',
+                marginBottom: '2px',
+                border: '1px solid rgba(0, 0, 0, 0.3)'
+              }}
+            />
+          </PortWrapper>
         </CardHeader>
         <CardImageContainer>
           {imageUrl ? (
@@ -113,6 +116,7 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
             <CardImagePlaceholder>Sem Imagem</CardImagePlaceholder>
           )}
         </CardImageContainer>
+        <CardId>Nº {formatNumberWithLeadingZeros(servico.id, 3)}</CardId>
         <CardInfoBox>
           <CardDescription>{servico.descricao}</CardDescription>
           {categorias.length > 0 && (
@@ -126,10 +130,13 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
                     icon={<ServicoCategoriaIcon servicoCategoria={categoria} />}
                     style={{
                       borderRadius: '50%',
-                      height: '25px',
-                      width: '25px',
+                      height: '20px',
+                      width: '20px',
                       margin: '0 2px',
                       cursor: 'default',
+                      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+                      fontSize: '0.7rem',
+                      border: '1px solid rgba(0, 0, 0, 0.3)'
                     }}
                   />
                 ))}
@@ -155,14 +162,16 @@ export default Card;
 
 const holographicShine = keyframes`
   0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  25% { background-position: 100% 50%; }
+  50% { background-position: 0% 50%; }
+  75% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 `;
 
 const imageShine = keyframes`
-  0% { opacity: 0.6; }
+  0% { opacity: 0.8; }
   50% { opacity: 1; }
-  100% { opacity: 0.6; }
+  100% { opacity: 0.8; }
 `;
 
 const CardContainer = styled.div`
@@ -172,16 +181,16 @@ const CardContainer = styled.div`
     const quaternary = Color(theme.colors.quaternary);
     return `linear-gradient(
       135deg,
-      ${quaternary.darken(0.2).hex()} 0%,
-      ${quaternary.darken(0.4).hex()} 25%,
-      ${quaternary.darken(0.6).hex()} 50%,
-      ${quaternary.darken(0.4).hex()} 75%,
-      ${quaternary.darken(0.2).hex()} 100%
+      ${quaternary.lighten(0.15).hex()} 0%,
+      ${quaternary.lighten(0.3).hex()} 25%,
+      ${quaternary.lighten(0.45).hex()} 50%,
+      ${quaternary.lighten(0.3).hex()} 75%,
+      ${quaternary.lighten(0.15).hex()} 100%
     )`;
   }};
   background-size: 200% 200%;
-  animation: ${holographicShine} 3s linear infinite;
-  border-radius: 20px;
+  animation: ${holographicShine} 6s linear infinite;
+  border-radius: 10px;
   padding: 10px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
   margin: 10px;
@@ -198,70 +207,76 @@ const CardContainer = styled.div`
 const CardInner = styled.div`
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  border-radius: 15px;
+  border: 2px solid ${({ theme }) => Color(theme.colors.quaternary).darken(0.2).hex()};
+  border-radius: 6px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
-`;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  animation: ${holographicShine} 6s linear infinite;
 
-const CardHeader = styled.div`
   background: ${({ theme }) => {
     const quaternary = Color(theme.colors.quaternary);
     return `linear-gradient(
       135deg,
-      ${quaternary.darken(0.2).hex()} 0%,
-      ${quaternary.darken(0.4).hex()} 25%,
-      ${quaternary.darken(0.6).hex()} 50%,
-      ${quaternary.darken(0.4).hex()} 75%,
-      ${quaternary.darken(0.2).hex()} 100%
+      ${quaternary.darken(0.0).hex()} 0%,
+      ${quaternary.darken(0.15).hex()} 25%,
+      ${quaternary.darken(0.3).hex()} 50%,
+      ${quaternary.darken(0.15).hex()} 75%,
+      ${quaternary.darken(0.0).hex()} 100%
     )`;
   }};
   background-size: 200% 200%;
-  animation: ${holographicShine} 3s linear infinite;
-  padding: 10px;
+`;
+
+const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: 15px 15px 0 0;
-  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+  border-bottom: 5px ridge ${({ theme }) => theme.colors.gray};
 `;
 
-const CardTitle = styled.span`
-  color: ${({ theme }) => theme.colors.black};
-  font-weight: bold;
-  font-size: 1.3rem;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-`;
-
-const CardPort = styled.span`
-  color: ${({ theme }) => theme.colors.black};
+const StatusWrapper = styled.div`
   font-weight: bold;
   font-size: 0.8rem;
-  text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  color: ${({ theme }) => theme.colors.black};
+`;
+
+const CardTitle = styled.div`
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.black};
+  font-size: 1.0rem;
+  margin-left: 5px;
+  flex-grow: 1;
+`;
+
+const PortWrapper = styled.div`
+  font-weight: bold;
   display: flex;
   align-items: center;
+  font-size: 0.9rem;
+  color: ${({ theme }) => theme.colors.black};
 `;
 
 const CardImageContainer = styled.div`
-  border: 4px solid ${({ theme }) => Color(theme.colors.quaternary).lighten(0.3).hex()};
-  margin: 10px;
-  height: 150px;
+  border-left: 5px solid ${({ theme }) => Color(theme.colors.gray).darken(0.4).hex()};
+  border-right: 5px solid ${({ theme }) => Color(theme.colors.gray).darken(0.4).hex()};
+  margin: 0 5px 0 5px;
+  height: 140px;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  border-radius: 8px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 `;
 
 const CardImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  animation: ${imageShine} 3s linear infinite;
+  animation: ${imageShine} 2s ease-in-out infinite;
 `;
 
 const CardImagePlaceholder = styled.div`
@@ -271,13 +286,42 @@ const CardImagePlaceholder = styled.div`
   padding: 10px;
 `;
 
+const CardId = styled.div`
+  background: ${({ theme }) => theme.colors.gray};
+  height: 15px;
+  text-align: center;
+  font-size: 0.6rem;
+  color: ${({ theme }) => Color(theme.colors.black).lighten(0.4).hex()};
+  border-top: 2px solid ${({ theme }) => Color(theme.colors.gray).darken(0.4).hex()};
+  border-bottom: 2px solid ${({ theme }) => Color(theme.colors.gray).darken(0.4).hex()};
+  border-left: 5px solid ${({ theme }) => Color(theme.colors.gray).darken(0.4).hex()};
+  border-right: 5px solid ${({ theme }) => Color(theme.colors.gray).darken(0.4).hex()};
+  border-radius: 50px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 10px;
+`;
+
 const CardInfoBox = styled.div`
-  background: ${({ theme }) => Color(theme.colors.quaternary).alpha(0.3).string()};
-  margin: 0 10px 10px 10px;
-  padding: 5px;
+  padding: 10px;
   flex-grow: 1;
-  border-radius: 8px;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+`;
+
+const CardDescription = styled.div`
   height: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.colors.black};
+  text-align: justify;
+  margin-bottom: 10px;
+`;
+
+const CardCategorias = styled.div`
+  font-size: 0.85rem;
+  color: ${({ theme }) => theme.colors.black};
+  text-align: center;
 `;
 
 const ButtonContainer = styled.div`
@@ -286,39 +330,22 @@ const ButtonContainer = styled.div`
   flex-wrap: wrap;
 `;
 
+const CardCategoryTitle = styled.h3`
+  margin: 2px 0 2px 8px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.black};
+  font-size: 0.9rem;
+`;
+
 const Descriptions = styled.div`
+  margin-top: 5px;
   display: flex;
   flex-wrap: wrap;
-  color: ${({ theme }) => theme.colors.black};
-`;
-
-const CardDescription = styled.div`
-  height: 50px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 0.9rem;
-  color: ${({ theme }) => theme.colors.black};
-  text-align: center;
-  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
-`;
-
-const CardCategorias = styled.div`
-  margin-top: 5px;
-  font-size: 0.85rem;
-  color: ${({ theme }) => theme.colors.black};
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`;
-
-const CardCategoryTitle = styled.h3`
-  margin: 2px 0 0 10px ;
-  font-weight: bold;
   color: ${({ theme }) => theme.colors.black};
 `;
 
 const CardCategoryDescricao = styled.span`
   margin: 0 2px;
   color: ${({ theme }) => theme.colors.black};
+  font-size: 0.8rem;
 `;

@@ -13,14 +13,21 @@ import {
 } from "./StyledUtils";
 
 import { 
-  formatValueToBRL
+  formatValueToBRL,
+  formatNumberWithLeadingZeros
 } from "./ValorUtils";
 
 import { 
   buildFilterRsql
 } from "./FilterUtils";
 
-import { getIconByName } from "./IconUtils";
+import {
+  getIconByName
+} from "./IconUtils";
+
+import {
+  copyLinkToClipboard
+} from "./TextUtils";
 
 export {
   getCurrentDate,
@@ -33,5 +40,7 @@ export {
   getVariantColor,
   formatValueToBRL,
   buildFilterRsql,
-  getIconByName
+  getIconByName,
+  formatNumberWithLeadingZeros,
+  copyLinkToClipboard
 };
