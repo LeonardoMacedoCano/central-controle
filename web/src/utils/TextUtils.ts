@@ -1,16 +1,29 @@
-export const copyLinkToClipboard = async (link: string) => {
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    await navigator.clipboard.writeText(link);
-  } else {
-    const textArea = document.createElement('textarea');
-    textArea.value = link;
-    textArea.style.position = 'fixed';
-    textArea.style.opacity = '0';
-    document.body.appendChild(textArea);
-    textArea.select();
-    textArea.setSelectionRange(0, textArea.value.length);
+import ClipboardJS from 'clipboard';
 
-    document.body.removeChild(textArea);
+const createHiddenButton = (): HTMLButtonElement => {
+  const button = document.createElement('button');
+  button.style.position = 'fixed';
+  button.style.top = '-9999px';
+  button.style.left = '-9999px';
+  button.textContent = 'copy';
+  document.body.appendChild(button);
+  return button;
+};
+
+export const copyLinkToClipboard = async (link: string) => {
+  const button = createHiddenButton();
+  const clipboard = new ClipboardJS(button, { text: () => link, });
+
+  button.click();
+
+  clipboard.on('success', () => {
+    clipboard.destroy();
+    document.body.removeChild(button);
+  });
+
+  clipboard.on('error', () => {
+    clipboard.destroy();
+    document.body.removeChild(button);
     throw new Error('Clipboard API não suportada');
-  }
+  });
 };
