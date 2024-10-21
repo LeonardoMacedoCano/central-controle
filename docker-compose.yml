@@ -13,6 +13,8 @@ services:
       - TIME_ZONE=${TIME_ZONE}
       - DATE_FORMAT=${DATE_FORMAT}
       - SCHEMA=${SCHEMA}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
   web:
     container_name: WebCentralControle
