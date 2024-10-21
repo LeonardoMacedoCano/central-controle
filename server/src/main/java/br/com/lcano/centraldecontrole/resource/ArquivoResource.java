@@ -2,6 +2,7 @@ package br.com.lcano.centraldecontrole.resource;
 
 import br.com.lcano.centraldecontrole.domain.Arquivo;
 import br.com.lcano.centraldecontrole.service.ArquivoService;
+import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -32,12 +33,8 @@ public class ArquivoResource {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadArquivo(@RequestParam("file") MultipartFile file) {
-        try {
-            Arquivo arquivo = arquivoService.uploadArquivo(file);
-            return new ResponseEntity<>("Arquivo salvo com sucesso! ID: " + arquivo.getId(), HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Erro ao salvar o arquivo.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<Object> uploadArquivo(@RequestParam("file") MultipartFile file) throws Exception {
+        Arquivo arquivo = arquivoService.uploadArquivo(file);
+        return CustomSuccess.buildResponseEntity(String.format("Arquivo salvo com sucesso! ID: %d", arquivo.getId()));
     }
 }
