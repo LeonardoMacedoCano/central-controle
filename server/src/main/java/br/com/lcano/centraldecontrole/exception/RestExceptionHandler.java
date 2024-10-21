@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.exception;
 
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
+import br.com.lcano.centraldecontrole.exception.servicos.DockerException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -90,6 +91,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ArquivoException.ArquivoNaoEncontrado.class})
     protected ResponseEntity<Object> handleArquivoNaoEncontrado(ArquivoException.ArquivoNaoEncontrado ex) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler({DockerException.DockerNaoEncontradoByName.class})
+    protected ResponseEntity<Object> handleDockerNaoEncontradoByName(DockerException.DockerNaoEncontradoByName ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({DockerException.DockerErroAlterarStatus.class})
+    protected ResponseEntity<Object> handleDockerErroAlterarStatus(DockerException.DockerErroAlterarStatus ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 }

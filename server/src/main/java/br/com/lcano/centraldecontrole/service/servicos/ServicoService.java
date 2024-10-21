@@ -33,7 +33,7 @@ public class ServicoService {
                 .collect(Collectors.toList());
     }
 
-    public DockerStatusEnum changeContainerStatusByName(String name, ContainerActionEnum action) {
-        return dockerService.changeContainerStatusByName(name, action);
+    public void changeContainerStatusByName(String name, ContainerActionEnum action) {
+        this.dockerService.changeContainerStatusByName(name, action);
     }
 }

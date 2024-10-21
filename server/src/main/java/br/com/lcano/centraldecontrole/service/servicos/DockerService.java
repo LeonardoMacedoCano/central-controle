@@ -2,6 +2,7 @@ package br.com.lcano.centraldecontrole.service.servicos;
 
 import br.com.lcano.centraldecontrole.enums.servicos.ContainerActionEnum;
 import br.com.lcano.centraldecontrole.enums.servicos.DockerStatusEnum;
+import br.com.lcano.centraldecontrole.exception.servicos.DockerException;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.Container;
@@ -25,34 +26,36 @@ public class DockerService {
         this.dockerClient = DockerClientBuilder.getInstance(config).build();
     }
 
-    public DockerStatusEnum changeContainerStatusByName(String containerName, ContainerActionEnum action) {
+    public void changeContainerStatusByName(String containerName, ContainerActionEnum action) {
+        final Container container = getContainerByName(containerName);
+
         try {
-            Container container = getContainerByName(containerName);
-            return switch (action) {
-                case START -> {
-                    dockerClient.startContainerCmd(container.getId()).exec();
-                    yield DockerStatusEnum.RUNNING;
-                }
-                case STOP -> {
-                    dockerClient.stopContainerCmd(container.getId()).exec();
-                    yield DockerStatusEnum.STOPPED;
-                }
-                case RESTART -> {
-                    dockerClient.restartContainerCmd(container.getId()).exec();
-                    yield DockerStatusEnum.RUNNING;
-                }
-            };
+            switch (action) {
+                case START -> dockerClient.startContainerCmd(container.getId()).exec();
+                case STOP -> dockerClient.stopContainerCmd(container.getId()).exec();
+                case RESTART -> dockerClient.restartContainerCmd(container.getId()).exec();
+                default -> throw new IllegalArgumentException("Ação inválida: " + action);
+            }
         } catch (NotFoundException e) {
-            return DockerStatusEnum.NOT_FOUND;
+            throw new DockerException.DockerNaoEncontradoByName(containerName);
         } catch (Exception e) {
-            return DockerStatusEnum.ERROR;
+            throw new DockerException.DockerErroAlterarStatus(containerName, e.getMessage());
         }
     }
 
     public DockerStatusEnum getContainerStatusByName(String containerName) {
         try {
             Container container = getContainerByName(containerName);
-            return container.getState().equals("running") ? DockerStatusEnum.RUNNING : DockerStatusEnum.STOPPED;
+            String state = container.getState().toLowerCase();
+
+            return switch (state) {
+                case "running" -> DockerStatusEnum.RUNNING;
+                case "exited", "stopped" -> DockerStatusEnum.STOPPED;
+                case "paused" -> DockerStatusEnum.PAUSED;
+                case "restarting" -> DockerStatusEnum.RESTARTING;
+                case "dead" -> DockerStatusEnum.DEAD;
+                default -> DockerStatusEnum.UNKNOWN;
+            };
         } catch (NotFoundException e) {
             return DockerStatusEnum.NOT_FOUND;
         } catch (Exception e) {
@@ -65,6 +68,6 @@ public class DockerService {
         return containers.stream()
                 .filter(container -> container.getNames()[0].equals("/" + containerName))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("Contêiner não encontrado: " + containerName));
+                .orElseThrow(() -> new DockerException.DockerNaoEncontradoByName(containerName));
     }
 }
