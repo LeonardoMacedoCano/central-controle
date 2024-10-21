@@ -4,7 +4,7 @@ import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
-import br.com.lcano.centraldecontrole.enums.DespesaFormaPagamentoEnum;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
 import br.com.lcano.centraldecontrole.repository.LancamentoRepository;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
 import org.springframework.batch.item.Chunk;

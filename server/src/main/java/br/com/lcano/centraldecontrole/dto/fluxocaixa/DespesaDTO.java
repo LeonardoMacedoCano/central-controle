@@ -5,7 +5,7 @@ import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
-import br.com.lcano.centraldecontrole.enums.DespesaFormaPagamentoEnum;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
 import lombok.Data;
 
 import java.util.Date;

@@ -1,63 +1,44 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Color from 'color';
-import { Servico, ServicoCategoria, ServidorConfig } from '../../types';
-import { AuthContext, useMessage } from '../../contexts';
+import { DockerStatusEnum, getDockerStatusDescription, Servico, ServicoCategoria, ServidorConfig } from '../../types';
 import Button from '../button/button/Button';
 import { FaLink } from 'react-icons/fa';
-import { ArquivoService, ServicoCategoriaService } from '../../service';
 import ServicoCategoriaIcon from '../icon/ServicoCategoriaIcon';
 import { copyLinkToClipboard, formatNumberWithLeadingZeros } from '../../utils';
+import { useMessage } from '../../contexts';
 
-interface CardProps {
+interface CardServicoProps {
   servico: Servico;
   servidorConfig: ServidorConfig;
+  onCardClick: () => void;
+  loadArquivo: (idarquivo: number) => Promise<string | null>;
+  loadCategorias: (servicoId: number) => Promise<ServicoCategoria[]>;
 }
 
-const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
+const CardServico: React.FC<CardServicoProps> = ({ 
+  servico, 
+  servidorConfig, 
+  onCardClick,
+  loadArquivo,
+  loadCategorias
+}) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [categorias, setCategorias] = useState<ServicoCategoria[]>([]);
-  const ativo = true;
 
-  const { usuario } = useContext(AuthContext);
   const message = useMessage();
-  const arquivoService = ArquivoService();
-  const servicoCategoriaService = ServicoCategoriaService();
 
   useEffect(() => {
-    loadData();
-  }, [usuario?.token]);
-
-  const loadData = async () => {
-    try {
-      await Promise.all([loadArquivo(), loadCategorias()]);
-    } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-    }
-  };
-
-  const loadArquivo = async () => {
-    if (!usuario?.token || !servico.idarquivo) return;
-    try {
-      const result = await arquivoService.getArquivoById(usuario.token, servico.idarquivo);
-      if (result) {
-        const url = URL.createObjectURL(result);
+    const fetchData = async () => {
+      if (servico.idarquivo) {
+        const url = await loadArquivo(servico.idarquivo);
         setImageUrl(url);
       }
-    } catch (error) {
-      message.showErrorWithLog('Erro ao carregar os serviços.', error);
-    }
-  };
-
-  const loadCategorias = async () => {
-    if (!usuario?.token) return;
-    try {
-      const result = await servicoCategoriaService.getCategoriasByServicoId(usuario.token, servico.id);
-      setCategorias(result || []);
-    } catch (error) {
-      message.showErrorWithLog('Erro ao carregar os serviços.', error);
-    }
-  };
+      const cats = await loadCategorias(servico.id);
+      setCategorias(cats);
+    };
+    fetchData();
+  }, [servico]);
 
   const copyLink = async () => {
     try {
@@ -70,13 +51,13 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
   };
 
   return (
-    <CardContainer>
+    <CardContainer onClick={onCardClick}>
       <CardInner>
         <CardHeader>
           <StatusWrapper>
             <Button 
-              variant={ativo ? 'success' : 'warning'}
-              hint={ativo ? 'Ligado' : 'Desligado'}
+              variant={servico.status === DockerStatusEnum.RUNNING ? 'success' : servico.status === DockerStatusEnum.STOPPED ? 'warning' : 'info'}
+              hint={getDockerStatusDescription(servico.status)}
               disabledHover
               style={{
                 borderRadius: '50%',
@@ -85,7 +66,7 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
                 margin: '0 2px',
                 cursor: 'default',
                 boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
-                border: '1px solid rgba(0, 0, 0, 0.3)'
+                border: '1px solid rgba(0, 0, 0, 0.3)',
               }}
             />
           </StatusWrapper>
@@ -93,7 +74,10 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
           <PortWrapper>
             {servico.porta}
             <Button 
-              onClick={copyLink}
+              onClick={(e) => {
+                e.stopPropagation();
+                copyLink();
+              }}
               variant='info'
               disabledHover
               icon={<FaLink />}
@@ -158,7 +142,7 @@ const Card: React.FC<CardProps> = ({ servico, servidorConfig }) => {
   );
 };
 
-export default Card;
+export default CardServico;
 
 const holographicShine = keyframes`
   0% { background-position: 0% 50%; }

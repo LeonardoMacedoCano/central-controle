@@ -67,7 +67,10 @@ const Modal: React.FC<ModalProps> = ({
         height={modalHeight}
       >
         <ModalHeader variant={variant}>
-          {computedIcon && <span style={{ display: 'flex', alignItems: 'center' }}>{computedIcon}</span>}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            {computedIcon && <span>{computedIcon}</span>}
+            <ModalTitle variant={variant}>{title}</ModalTitle>
+          </div>
           {showCloseButton && (
             <Button 
               width={closeButtonSize} 
@@ -79,13 +82,12 @@ const Modal: React.FC<ModalProps> = ({
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              icon={<FaTimes/>}
+              icon={<FaTimes />}
               hint='Fechar'
               onClick={onClose}
             />
           )}
         </ModalHeader>
-        <ModalTitle variant={variant}>{title}</ModalTitle>
         <ModalContent>{content}</ModalContent>
         {actions && <ModalActions>{actions}</ModalActions>}
       </ModalContainer>
@@ -138,8 +140,8 @@ export const ModalHeader = styled.div<ModalHeaderProps>`
 
 export const ModalTitle = styled.div<ModalHeaderProps>`
   margin: 0;
-  color: ${({ variant, theme }) => getVariantColor(variant, theme)};
-  padding: 10px 20px;
+  color: ${({ theme }) => theme.colors.white};
+  padding: 5px 10px;
 `;
 
 export const ModalContent = styled.div`

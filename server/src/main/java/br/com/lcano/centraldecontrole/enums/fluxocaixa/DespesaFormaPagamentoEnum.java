@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.enums;
+package br.com.lcano.centraldecontrole.enums.fluxocaixa;
 
 import lombok.Getter;
 

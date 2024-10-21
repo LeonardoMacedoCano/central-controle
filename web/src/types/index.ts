@@ -33,6 +33,11 @@ import { Servico } from "./servicos/Servico";
 import { Arquivo } from "./Arquivo";
 import { ServidorConfig } from "./servicos/ServidorConfig";
 import { ServicoCategoria } from "./servicos/ServicoCategoria";
+import { 
+  DockerStatusEnum,
+  getDockerStatusDescription
+} from "./servicos/DockerStatusEnum";
+import { ContainerActionEnum } from "./servicos/ContainerActionEnum";
 
 export type {
   Categoria,
@@ -67,5 +72,8 @@ export {
   despesaFormaPagamentoOptions,
   tipoLancamentoFilters,
   OPERATORS,
-  PAGE_SIZE
+  PAGE_SIZE,
+  DockerStatusEnum,
+  ContainerActionEnum,
+  getDockerStatusDescription
 };
