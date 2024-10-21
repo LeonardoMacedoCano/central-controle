@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 import Color from 'color';
 import { DockerStatusEnum, getDockerStatusDescription, Servico, ServicoCategoria, ServidorConfig } from '../../types';
 import Button from '../button/button/Button';
-import { FaLink } from 'react-icons/fa';
+import { FaAlignLeft, FaLink } from 'react-icons/fa';
 import ServicoCategoriaIcon from '../icon/ServicoCategoriaIcon';
 import { copyLinkToClipboard, formatNumberWithLeadingZeros } from '../../utils';
 import { useMessage } from '../../contexts';
@@ -64,7 +64,6 @@ const CardServico: React.FC<CardServicoProps> = ({
                 height: '10px',
                 width: '10px',
                 margin: '0 2px',
-                cursor: 'default',
                 boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
                 border: '1px solid rgba(0, 0, 0, 0.3)',
               }}
@@ -102,38 +101,58 @@ const CardServico: React.FC<CardServicoProps> = ({
         </CardImageContainer>
         <CardId>Nº {formatNumberWithLeadingZeros(servico.id, 3)}</CardId>
         <CardInfoBox>
+          <TitleInfoBoxContainer>
+            <ButtonGroup>
+              <Button 
+                variant='info'
+                disabledHover
+                icon={<FaAlignLeft />}
+                style={{
+                  borderRadius: '50%',
+                  height: '20px',
+                  width: '20px',
+                  margin: '0 2px',
+                  boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+                  fontSize: '0.7rem',
+                  border: '1px solid rgba(0, 0, 0, 0.3)'
+                }}
+              />
+            </ButtonGroup>
+            <CardTitleInfoBox>Descrição</CardTitleInfoBox>
+          </TitleInfoBoxContainer>
           <CardDescription>{servico.descricao}</CardDescription>
           {categorias.length > 0 && (
             <CardCategorias>
-              <ButtonContainer>
-                {categorias.map((categoria, index) => (
-                  <Button 
-                    key={index}
-                    variant='success'
-                    disabledHover
-                    icon={<ServicoCategoriaIcon servicoCategoria={categoria} />}
-                    style={{
-                      borderRadius: '50%',
-                      height: '20px',
-                      width: '20px',
-                      margin: '0 2px',
-                      cursor: 'default',
-                      boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
-                      fontSize: '0.7rem',
-                      border: '1px solid rgba(0, 0, 0, 0.3)'
-                    }}
-                  />
-                ))}
-                <CardCategoryTitle>Categorias</CardCategoryTitle>
-              </ButtonContainer>
-              <Descriptions>
+              <TitleInfoBoxContainer>
+                <ButtonGroup>
+                  {categorias.map((categoria, index) => (
+                    <Button 
+                      key={index}
+                      variant='success'
+                      disabledHover
+                      icon={<ServicoCategoriaIcon servicoCategoria={categoria} />}
+                      style={{
+                        borderRadius: '50%',
+                        height: '20px',
+                        width: '20px',
+                        margin: '0 2px',
+                        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+                        fontSize: '0.7rem',
+                        border: '1px solid rgba(0, 0, 0, 0.3)'
+                      }}
+                    />
+                  ))}
+                </ButtonGroup>
+                <CardTitleInfoBox>Categorias</CardTitleInfoBox>
+              </TitleInfoBoxContainer>
+              <CardDescription>
                 {categorias.map((categoria, index) => (
                   <CardCategoryDescricao key={categoria.id || index}>
                     {categoria.descricao}
                     {index < categorias.length - 1 && ' | '}
                   </CardCategoryDescricao>
                 ))}
-              </Descriptions>
+              </CardDescription>
             </CardCategorias>
           )}
         </CardInfoBox>
@@ -181,6 +200,7 @@ const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.05) rotate(2deg);
@@ -282,7 +302,7 @@ const CardId = styled.div`
   border-right: 5px solid ${({ theme }) => Color(theme.colors.gray).darken(0.4).hex()};
   border-radius: 50px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 
 const CardInfoBox = styled.div`
@@ -293,13 +313,12 @@ const CardInfoBox = styled.div`
 `;
 
 const CardDescription = styled.div`
-  height: 50px;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.85rem;
   color: ${({ theme }) => theme.colors.black};
   text-align: justify;
-  margin-bottom: 10px;
+  margin: 5px 0 10px 0;
 `;
 
 const CardCategorias = styled.div`
@@ -308,24 +327,26 @@ const CardCategorias = styled.div`
   text-align: center;
 `;
 
-const ButtonContainer = styled.div`
-  margin-top: 10px;
+const TitleInfoBoxContainer = styled.div`
   display: flex;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
 `;
 
-const CardCategoryTitle = styled.h3`
-  margin: 2px 0 2px 8px;
+const ButtonGroup = styled.div`
+  display: flex;
+  position: absolute;
+  left: 0;
+`;
+
+const CardTitleInfoBox = styled.h3`
   font-weight: bold;
   color: ${({ theme }) => theme.colors.black};
   font-size: 0.9rem;
-`;
-
-const Descriptions = styled.div`
-  margin-top: 5px;
-  display: flex;
-  flex-wrap: wrap;
-  color: ${({ theme }) => theme.colors.black};
+  text-align: center;
+  flex: 1;
 `;
 
 const CardCategoryDescricao = styled.span`

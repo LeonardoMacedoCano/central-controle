@@ -7,4 +7,5 @@ export type Servico = {
 	porta?: string;
 	idarquivo?: number;
   status: DockerStatusEnum;
+  permissao: boolean;
 }

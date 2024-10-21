@@ -19,13 +19,16 @@ public class ServicoService {
     private final ServicoRepository servicoRepository;
     @Autowired
     private final DockerService dockerService;
+    @Autowired
+    private final UsuarioServicoService usuarioServicoService;
 
     public List<ServicoDTO> getAllServicos() {
         List<Servico> servicos = servicoRepository.findAll();
         return servicos.stream()
                 .map(servico -> {
                     DockerStatusEnum status = dockerService.getContainerStatusByName(servico.getNome());
-                    return ServicoDTO.converterParaDTO(servico, status);
+                    Boolean hasPermission = usuarioServicoService.hasPermissionForService(servico.getId());
+                    return ServicoDTO.converterParaDTO(servico, status, hasPermission);
                 })
                 .collect(Collectors.toList());
     }

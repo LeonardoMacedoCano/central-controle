@@ -12,8 +12,9 @@ public class ServicoDTO {
     private Integer porta;
     private Long idarquivo;
     private DockerStatusEnum status;
+    private Boolean permissao;
 
-    public static ServicoDTO converterParaDTO(Servico servico, DockerStatusEnum status) {
+    public static ServicoDTO converterParaDTO(Servico servico, DockerStatusEnum status, Boolean permissao) {
         ServicoDTO dto = new ServicoDTO();
         dto.setId(servico.getId());
         dto.setNome(servico.getNome());
@@ -21,6 +22,7 @@ public class ServicoDTO {
         dto.setPorta(servico.getPorta());
         if (null != servico.getArquivo()) dto.setIdarquivo(servico.getArquivo().getId());
         dto.setStatus(status);
+        dto.setPermissao(permissao);
         return dto;
     }
 }

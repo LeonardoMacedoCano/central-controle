@@ -108,6 +108,10 @@ const ServicoListPage: React.FC = () => {
     const statusDescription = getDockerStatusDescription(selectedServico.status);
     let content = `O serviço ${selectedServico.nome} está atualmente ${statusDescription}.`;
 
+    if (!selectedServico.permissao) {
+      return <p><b>Acesso negado</b>: seu usuário não tem permissão para alterar o status deste serviço. Para mais informações, entre em contato com o administrador.</p>;
+    }
+
     if (selectedServico.status === DockerStatusEnum.RUNNING) {
       content += ' Abaixo estão as opções disponíveis para você:';
     } else if (selectedServico.status === DockerStatusEnum.STOPPED) {
@@ -119,8 +123,28 @@ const ServicoListPage: React.FC = () => {
     return <p>{content}</p>;
   };
 
+  const OkButtonModal = () => (
+    <Button 
+      variant="info"
+      width="100px"
+      height="30px"
+      style={{
+        borderRadius: '5px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      description="Ok"
+      onClick={() => setShowModal(false)}
+    />
+  );
+
   const renderModalActions = () => {
     if (!selectedServico) return null;
+
+    if (!selectedServico.permissao) {
+      return OkButtonModal();
+    }
 
     switch (selectedServico.status) {
       case DockerStatusEnum.RUNNING:
@@ -171,7 +195,7 @@ const ServicoListPage: React.FC = () => {
           />
         );
       default:
-        return null;
+        return OkButtonModal();
     }
   };
 
