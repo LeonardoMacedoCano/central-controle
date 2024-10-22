@@ -1,4 +1,5 @@
 import { DockerStatusEnum } from "./DockerStatusEnum";
+import { ServicoCategoria } from "./ServicoCategoria";
 
 export type Servico = {
   id: number;
@@ -8,4 +9,5 @@ export type Servico = {
 	idarquivo?: number;
   status: DockerStatusEnum;
   permissao: boolean;
+  categorias: ServicoCategoria[];
 }

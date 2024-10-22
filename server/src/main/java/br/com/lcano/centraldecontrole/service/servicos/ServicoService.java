@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.service.servicos;
 
 import br.com.lcano.centraldecontrole.domain.servicos.Servico;
+import br.com.lcano.centraldecontrole.dto.servicos.ServicoCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.servicos.ServicoDTO;
 import br.com.lcano.centraldecontrole.enums.servicos.ContainerActionEnum;
 import br.com.lcano.centraldecontrole.enums.servicos.DockerStatusEnum;
@@ -21,6 +22,8 @@ public class ServicoService {
     private final DockerService dockerService;
     @Autowired
     private final UsuarioServicoService usuarioServicoService;
+    @Autowired
+    private final ServicoCategoriaService servicoCategoriaService;
 
     public List<ServicoDTO> getAllServicos() {
         List<Servico> servicos = servicoRepository.findAll();
@@ -28,7 +31,8 @@ public class ServicoService {
                 .map(servico -> {
                     DockerStatusEnum status = dockerService.getContainerStatusByName(servico.getNome());
                     Boolean hasPermission = usuarioServicoService.hasPermissionForService(servico.getId());
-                    return ServicoDTO.converterParaDTO(servico, status, hasPermission);
+                    List<ServicoCategoriaDTO> categorias = servicoCategoriaService.findByServicoId(servico.getId());
+                    return ServicoDTO.converterParaDTO(servico, status, hasPermission, categorias);
                 })
                 .collect(Collectors.toList());
     }

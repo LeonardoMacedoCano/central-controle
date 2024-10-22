@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { CardServico, Container, Loading, Panel, Modal, Button } from '../../components';
-import { Servico, ServidorConfig, DockerStatusEnum, ContainerActionEnum, getDockerStatusDescription, ServicoCategoria } from '../../types';
+import { Servico, ServidorConfig, DockerStatusEnum, ContainerActionEnum, getDockerStatusDescription } from '../../types';
 import { AuthContext, useMessage } from '../../contexts';
-import { ServicoService, ServidorConfigService, ArquivoService, ServicoCategoriaService } from '../../service';
+import { ServicoService, ServidorConfigService, ArquivoService } from '../../service';
 
 const ServicoListPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -20,7 +20,6 @@ const ServicoListPage: React.FC = () => {
   const servicoService = ServicoService();
   const servidorConfigService = ServidorConfigService();
   const arquivoService = ArquivoService();
-  const servicoCategoriaService = ServicoCategoriaService();
 
   useEffect(() => {
     if (usuario?.token) {
@@ -70,17 +69,6 @@ const ServicoListPage: React.FC = () => {
       message.showErrorWithLog('Erro ao carregar o arquivo.', error);
     }
     return null;
-  };
-
-  const loadCategorias = async (servicoId: number): Promise<ServicoCategoria[]> => {
-    if (!usuario?.token) return [];
-    try {
-      const categorias = await servicoCategoriaService.getCategoriasByServicoId(usuario.token, servicoId);
-      return categorias || [];
-    } catch (error) {
-      message.showErrorWithLog('Erro ao carregar as categorias.', error);
-      return [];
-    }
   };
   
   const changeContainerStatusByName = async (servicoNome: string, action: string) => {
@@ -217,7 +205,6 @@ const ServicoListPage: React.FC = () => {
               servidorConfig={servidorConfig}
               onCardClick={() => handleCardClick(servico)}
               loadArquivo={loadArquivo}
-              loadCategorias={loadCategorias}
             />
           ))}
         </CardContainer>

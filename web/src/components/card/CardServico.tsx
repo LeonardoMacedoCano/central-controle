@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Color from 'color';
-import { DockerStatusEnum, getDockerStatusDescription, Servico, ServicoCategoria, ServidorConfig } from '../../types';
+import { DockerStatusEnum, getDockerStatusDescription, Servico, ServidorConfig } from '../../types';
 import Button from '../button/button/Button';
 import { FaAlignLeft, FaLink } from 'react-icons/fa';
 import ServicoCategoriaIcon from '../icon/ServicoCategoriaIcon';
@@ -13,19 +13,15 @@ interface CardServicoProps {
   servidorConfig: ServidorConfig;
   onCardClick: () => void;
   loadArquivo: (idarquivo: number) => Promise<string | null>;
-  loadCategorias: (servicoId: number) => Promise<ServicoCategoria[]>;
 }
 
 const CardServico: React.FC<CardServicoProps> = ({ 
   servico, 
   servidorConfig, 
   onCardClick,
-  loadArquivo,
-  loadCategorias
+  loadArquivo
 }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [categorias, setCategorias] = useState<ServicoCategoria[]>([]);
-
   const message = useMessage();
 
   useEffect(() => {
@@ -34,8 +30,6 @@ const CardServico: React.FC<CardServicoProps> = ({
         const url = await loadArquivo(servico.idarquivo);
         setImageUrl(url);
       }
-      const cats = await loadCategorias(servico.id);
-      setCategorias(cats);
     };
     fetchData();
   }, [servico]);
@@ -121,11 +115,11 @@ const CardServico: React.FC<CardServicoProps> = ({
             <CardTitleInfoBox>Descrição</CardTitleInfoBox>
           </TitleInfoBoxContainer>
           <CardDescription>{servico.descricao}</CardDescription>
-          {categorias.length > 0 && (
+          {servico.categorias.length > 0 && (
             <CardCategorias>
               <TitleInfoBoxContainer>
                 <ButtonGroup>
-                  {categorias.map((categoria, index) => (
+                  {servico.categorias.map((categoria, index) => (
                     <Button 
                       key={index}
                       variant='success'
@@ -146,10 +140,10 @@ const CardServico: React.FC<CardServicoProps> = ({
                 <CardTitleInfoBox>Categorias</CardTitleInfoBox>
               </TitleInfoBoxContainer>
               <CardDescription>
-                {categorias.map((categoria, index) => (
+                {servico.categorias.map((categoria, index) => (
                   <CardCategoryDescricao key={categoria.id || index}>
                     {categoria.descricao}
-                    {index < categorias.length - 1 && ' | '}
+                    {index < servico.categorias.length - 1 && ' | '}
                   </CardCategoryDescricao>
                 ))}
               </CardDescription>
