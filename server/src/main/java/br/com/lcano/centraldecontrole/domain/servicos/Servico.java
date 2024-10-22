@@ -6,6 +6,8 @@ import jakarta.persistence.Table;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Table(name = "servico")
 @Entity
 @Data
@@ -30,4 +32,7 @@ public class Servico {
     @ManyToOne
     @JoinColumn(name = "idarquivo")
     private Arquivo arquivo;
+
+    @OneToMany(mappedBy = "servico", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ServicoCategoriaRel> servicoCategoriaRel;
 }

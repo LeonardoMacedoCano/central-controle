@@ -2,6 +2,7 @@ package br.com.lcano.centraldecontrole.repository.servicos;
 
 import br.com.lcano.centraldecontrole.domain.servicos.Servico;
 import br.com.lcano.centraldecontrole.domain.servicos.ServicoCategoria;
+import br.com.lcano.centraldecontrole.domain.servicos.ServicoCategoriaRel;
 import jakarta.persistence.criteria.Join;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -56,21 +57,24 @@ public class ServicoSpecifications {
 
     public static Specification<Servico> hasCategorias(String descricao) {
         return (root, query, criteriaBuilder) -> {
-            Join<Servico, ServicoCategoria> categoriaJoin = root.join("categorias");
+            Join<Servico, ServicoCategoriaRel> categoriaRelJoin = root.join("servicoCategoriaRel");
+            Join<ServicoCategoriaRel, ServicoCategoria> categoriaJoin = categoriaRelJoin.join("servicoCategoria");
             return criteriaBuilder.equal(categoriaJoin.get("descricao"), descricao);
         };
     }
 
     public static Specification<Servico> hasCategoriasNot(String descricao) {
         return (root, query, criteriaBuilder) -> {
-            Join<Servico, ServicoCategoria> categoriaJoin = root.join("categorias");
+            Join<Servico, ServicoCategoriaRel> categoriaRelJoin = root.join("servicoCategoriaRel");
+            Join<ServicoCategoriaRel, ServicoCategoria> categoriaJoin = categoriaRelJoin.join("servicoCategoria");
             return criteriaBuilder.notEqual(categoriaJoin.get("descricao"), descricao);
         };
     }
 
     public static Specification<Servico> hasCategoriasLike(String descricao) {
         return (root, query, criteriaBuilder) -> {
-            Join<Servico, ServicoCategoria> categoriaJoin = root.join("categorias");
+            Join<Servico, ServicoCategoriaRel> categoriaRelJoin = root.join("servicoCategoriaRel");
+            Join<ServicoCategoriaRel, ServicoCategoria> categoriaJoin = categoriaRelJoin.join("servicoCategoria");
             return criteriaBuilder.like(categoriaJoin.get("descricao"), "%" + descricao + "%");
         };
     }
