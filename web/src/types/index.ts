@@ -35,7 +35,7 @@ import { ServidorConfig } from "./servicos/ServidorConfig";
 import { ServicoCategoria } from "./servicos/ServicoCategoria";
 import { 
   DockerStatusEnum,
-  getDockerStatusDescription
+  getDescricaoDockerStatus
 } from "./servicos/DockerStatusEnum";
 import { ContainerActionEnum } from "./servicos/ContainerActionEnum";
 
@@ -75,5 +75,5 @@ export {
   PAGE_SIZE,
   DockerStatusEnum,
   ContainerActionEnum,
-  getDockerStatusDescription
+  getDescricaoDockerStatus
 };

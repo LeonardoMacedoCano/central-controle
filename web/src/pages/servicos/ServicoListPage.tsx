@@ -1,17 +1,32 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { CardServico, Container, Loading, Panel, Modal, Button } from '../../components';
-import { Servico, ServidorConfig, DockerStatusEnum, ContainerActionEnum, getDockerStatusDescription } from '../../types';
+import { CardServico, Container, Loading, Panel, Modal, Button, SearchFilter, SearchPagination } from '../../components';
+import { Servico, ServidorConfig, DockerStatusEnum, ContainerActionEnum, PagedResponse, FilterDTO, getDescricaoDockerStatus } from '../../types';
 import { AuthContext, useMessage } from '../../contexts';
 import { ServicoService, ServidorConfigService, ArquivoService } from '../../service';
 
+const calculatePageSize = (): number => {
+  const screenWidth = window.innerWidth;
+  
+  if (screenWidth > 1000) {
+    return 3;
+  } else if (screenWidth > 700) {
+    return 2;
+  } else {
+    return 1;
+  }
+};
+
 const ServicoListPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [servicos, setServicos] = useState<Servico[]>([]);
+  const [servicos, setServicos] = useState<PagedResponse<Servico>>();
   const [servidorConfig, setServidorConfig] = useState<ServidorConfig>({
     id: 1,
     ipExterno: '0.0.0.0'
   });
+  const [filters, setFilters] = useState<FilterDTO[]>([]);
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(calculatePageSize());
   const [selectedServico, setSelectedServico] = useState<Servico | null>(null);
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -23,31 +38,26 @@ const ServicoListPage: React.FC = () => {
 
   useEffect(() => {
     if (usuario?.token) {
-      loadData();
+      loadServidorConfig();
     }
   }, [usuario?.token]);
-  
-  const loadData = async () => {
-    setIsLoading(true);
-    try {
-      await Promise.all([loadServicos(), loadServidorConfig()]);
-    } catch (error) {
-      console.error('Erro ao carregar dados:', error);
-    } finally {
-      setIsLoading(false);
+
+  useEffect(() => {
+    if (usuario?.token) {
+      loadServicos();
     }
-  };
-  
-  const loadServicos = async () => {
-    if (!usuario?.token) return;
-    try {
-      const result = await servicoService.getAllServicos(usuario.token);
-      if (result) setServicos(result);
-    } catch (error) {
-      message.showErrorWithLog('Erro ao carregar os serviços.', error);
-    }
-  };
-  
+  }, [usuario?.token, pageIndex, pageSize, filters]);
+
+  useEffect(() => {
+    const updatePageSize = () => {
+      setPageSize(calculatePageSize());
+    };
+
+    updatePageSize();
+    window.addEventListener('resize', updatePageSize);
+    return () => window.removeEventListener('resize', updatePageSize);
+  }, []);
+
   const loadServidorConfig = async () => {
     if (!usuario?.token) return;
     try {
@@ -55,6 +65,16 @@ const ServicoListPage: React.FC = () => {
       if (result) setServidorConfig(result);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar a configuração do servidor.', error);
+    }
+  };
+  
+  const loadServicos = async () => {
+    if (!usuario?.token) return;
+    try {
+      const result = await servicoService.getServicos(usuario.token, pageIndex, pageSize, filters);
+      if (result) setServicos(result);
+    } catch (error) {
+      message.showErrorWithLog('Erro ao carregar os serviços.', error);
     }
   };
 
@@ -70,6 +90,15 @@ const ServicoListPage: React.FC = () => {
     }
     return null;
   };
+
+  const search = (newFilters: FilterDTO[]) => {
+    setPageIndex(0);
+    setFilters(newFilters);
+  };
+
+  const loadPage = (pageIndex: number) => {
+    setPageIndex(pageIndex);
+  };
   
   const changeContainerStatusByName = async (servicoNome: string, action: string) => {
     if (!usuario?.token) return;
@@ -77,7 +106,7 @@ const ServicoListPage: React.FC = () => {
     try {
       await servicoService.changeContainerStatusByName(usuario.token, servicoNome, action);
       setShowModal(false);
-      await loadData();
+      await loadServicos();
     } catch (error) {
       message.showErrorWithLog('Erro ao alterar o status do container.', error);
     } finally {
@@ -93,7 +122,7 @@ const ServicoListPage: React.FC = () => {
   const renderModalContent = () => {
     if (!selectedServico) return null;
 
-    const statusDescription = getDockerStatusDescription(selectedServico.status);
+    const statusDescription = getDescricaoDockerStatus(selectedServico.status);
     let content = `O serviço ${selectedServico.nome} está atualmente ${statusDescription}.`;
 
     if (!selectedServico.permissao) {
@@ -187,18 +216,39 @@ const ServicoListPage: React.FC = () => {
     }
   };
 
+  const renderPagination = () => {
+    if (servicos) {
+      return (
+        <SearchPagination
+          height='35px'
+          page={servicos}
+          loadPage={loadPage}
+        />
+      );
+    }
+    return null;
+  };
+
   return (
-    <Container style={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      flexWrap: 'wrap', 
-      maxWidth: '100%', 
-      margin: 'auto' 
-    }}>
+    <Container>
       <Loading isLoading={isLoading} />
       <Panel maxWidth='1000px' title='Serviços'>
+        <SearchFilter 
+          fields={[
+            { label: 'Nome', name: 'nome', type: 'STRING' },
+            { label: 'Descrição', name: 'descricao', type: 'STRING' },
+            { label: 'Categoria', name: 'categorias', type: 'STRING' },
+            { label: 'Porta', name: 'porta', type: 'NUMBER' },
+          ]}
+          search={search}
+        />
+      </Panel>
+      <Panel 
+        maxWidth='1000px' 
+        footer={renderPagination()}
+      >
         <CardContainer>
-          {servicos.map(servico => (
+          {servicos && servicos.content.map(servico => (
             <CardServico 
               key={servico.id} 
               servico={servico} 

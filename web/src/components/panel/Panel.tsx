@@ -70,4 +70,5 @@ const Body = styled(BaseBox)`
 const Footer = styled(BaseBox)`
   height: 35px;
   justify-content: center;
+  border-top: 1px solid ${({ theme }) => theme.colors.gray};
 `;

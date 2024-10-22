@@ -1,9 +1,9 @@
 import { useMessage } from "../../contexts";
-import { Servico } from "../../types";
+import { FilterDTO, PagedResponse, Servico } from "../../types";
 import DefaultService from "../DefaultService";
 
 interface ServicoApi {
-  getAllServicos: (token: string) => Promise<Servico[] | undefined>;
+  getServicos: (token: string, page: number, size: number, filters?: FilterDTO[]) => Promise<PagedResponse<Servico> | undefined>;
   changeContainerStatusByName: (token: string, name: string, action: string) => Promise<void | undefined>;
 }
 
@@ -11,9 +11,10 @@ const ServicoService = (): ServicoApi => {
   const { request } = DefaultService();
   const message = useMessage();
 
-  const getAllServicos = async (token: string): Promise<Servico[] | undefined> => {
+  const getServicos = async (token: string, page: number, size: number, filters?: FilterDTO[]): Promise<PagedResponse<Servico> | undefined> => {
     try {
-      return await request<Servico[]>('get', 'servico', token);
+      const sort = 'id,asc';
+      return await request<PagedResponse<Servico>>('post', `servico/search?page=${page}&size=${size}&sort=${sort}`, token, undefined, filters || []);
     } catch (error) {
       return undefined;
     }
@@ -29,7 +30,7 @@ const ServicoService = (): ServicoApi => {
   };
 
   return {
-    getAllServicos,
+    getServicos,
     changeContainerStatusByName
   };
 };

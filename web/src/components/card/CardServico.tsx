@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Color from 'color';
-import { DockerStatusEnum, getDockerStatusDescription, Servico, ServidorConfig } from '../../types';
+import { DockerStatusEnum, getDescricaoDockerStatus, Servico, ServidorConfig } from '../../types';
 import Button from '../button/button/Button';
 import { FaAlignLeft, FaLink } from 'react-icons/fa';
 import ServicoCategoriaIcon from '../icon/ServicoCategoriaIcon';
@@ -51,7 +51,7 @@ const CardServico: React.FC<CardServicoProps> = ({
           <StatusWrapper>
             <Button 
               variant={servico.status === DockerStatusEnum.RUNNING ? 'success' : servico.status === DockerStatusEnum.STOPPED ? 'warning' : 'info'}
-              hint={getDockerStatusDescription(servico.status)}
+              hint={getDescricaoDockerStatus(servico.status)}
               disabledHover
               style={{
                 borderRadius: '50%',

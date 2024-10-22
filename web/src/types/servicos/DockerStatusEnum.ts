@@ -9,7 +9,7 @@ export enum DockerStatusEnum {
   UNKNOWN = "UNKNOWN",
 }
 
-export const getDockerStatusDescription = (status?: DockerStatusEnum): string => {
+export const getDescricaoDockerStatus = (status?: DockerStatusEnum): string => {
   if (!status) {
     return "desconhecido";
   }
