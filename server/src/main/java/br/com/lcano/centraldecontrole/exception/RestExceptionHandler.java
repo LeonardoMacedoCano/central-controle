@@ -84,6 +84,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler({LancamentoException.ErroIniciarImportacaoExtrato.class})
+    protected ResponseEntity<Object> handleErroIniciarImportacaoExtrato(LancamentoException.ErroIniciarImportacaoExtrato ex) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
     @ExceptionHandler({ArquivoException.ArquivoJaImportado.class})
     protected ResponseEntity<Object> handleArquivoJaImportado(ArquivoException.ArquivoJaImportado ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());

@@ -66,4 +66,9 @@ public class ArquivoService {
         return arquivoRepository.save(arquivo);
     }
 
+    public void deleteArquivoIfExists(Long arquivoId) {
+        Optional<Arquivo> arquivoOptional = this.findById(arquivoId);
+        arquivoOptional.ifPresent(arquivo -> this.arquivoRepository.delete(arquivo));
+    }
+
 }

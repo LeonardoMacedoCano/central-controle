@@ -155,6 +155,12 @@ public class LancamentoService {
 
     public void importExtratoFaturaCartao(MultipartFile file, Date dataVencimento) throws Exception {
         Arquivo arquivo = arquivoService.uploadArquivo(file);
-        importacaoExtratoFaturaCartaoJobStarter.startJob(arquivo.getId(), usuarioUtil.getUsuarioAutenticado().getId(), dataVencimento);
+
+        try {
+            importacaoExtratoFaturaCartaoJobStarter.startJob(arquivo.getId(), usuarioUtil.getUsuarioAutenticado().getId(), dataVencimento);
+        } catch (Exception e) {
+            arquivoService.deleteArquivoIfExists(arquivo.getId());
+            throw new LancamentoException.ErroIniciarImportacaoExtrato(e);
+        }
     }
 }
