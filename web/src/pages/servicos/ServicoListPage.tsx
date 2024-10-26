@@ -29,42 +29,54 @@ const ServicoListPage: React.FC = () => {
 
   const loadServidorConfig = useCallback(async () => {
     if (!usuario?.token) return;
+    setIsLoading(true);
     try {
       const result = await servidorConfigService.getServidorConfig(usuario.token);
       result && setServidorConfig(result);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar a configuração do servidor.', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [usuario?.token, servidorConfigService, message]);
 
   const loadServicos = useCallback(async () => {
     if (!usuario?.token) return;
+    setIsLoading(true);
     try {
       const result = await servicoService.getServicos(usuario.token, pageIndex, pageSize, filters);
       result && setServicos(result);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar os serviços.', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [usuario?.token, pageIndex, pageSize, filters, servicoService, message]);
 
   const loadArquivo = useCallback(async (idarquivo: number) => {
     if (!usuario?.token) return null;
+    setIsLoading(true);
     try {
       const result = await arquivoService.getArquivoById(usuario.token, idarquivo);
       return result ? URL.createObjectURL(result) : null;
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar o arquivo.', error);
       return null;
+    } finally {
+      setIsLoading(false);
     }
   }, [usuario?.token, arquivoService, message]);
 
   const loadServicoCategorias = useCallback(async () => {
     if (!usuario?.token) return;
+    setIsLoading(true);
     try {
       const result = await servicoService.getAllServicoCategoria(usuario.token);
       result && setServicoCategorias(result);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar as categorias de serviço.', error);
+    } finally {
+      setIsLoading(false);
     }
   }, [usuario?.token, servicoService, message]);
 
