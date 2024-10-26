@@ -65,25 +65,28 @@ const CardServico: React.FC<CardServicoProps> = ({
           </StatusWrapper>
           <CardTitle>{servico.nome}</CardTitle>
           <PortWrapper>
-            {servico.porta}
-            <Button 
-              onClick={(e) => {
-                e.stopPropagation();
-                copyLink();
-              }}
-              variant='info'
-              disabledHover
-              icon={<FaLink />}
-              hint='Copiar Link'
-              style={{
-                borderRadius: '50%',
-                height: '22px',
-                width: '22px',
-                marginLeft: '2px',
-                marginBottom: '2px',
-                border: '1px solid rgba(0, 0, 0, 0.3)'
-              }}
-            />
+            {servico.porta && (
+              <>
+                {servico.porta}
+                <Button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    copyLink();
+                  }}
+                  variant='info'
+                  disabledHover
+                  icon={<FaLink />}
+                  hint='Copiar Link'
+                  style={{
+                    borderRadius: '50%',
+                    height: '22px',
+                    width: '22px',
+                    marginLeft: '2px',
+                    border: '1px solid rgba(0, 0, 0, 0.3)'
+                  }}
+                />
+              </>
+            )}
           </PortWrapper>
         </CardHeader>
         <CardImageContainer>
@@ -256,6 +259,7 @@ const PortWrapper = styled.div`
   align-items: center;
   font-size: 0.9rem;
   color: ${({ theme }) => theme.colors.black};
+  margin-bottom: 2px;
 `;
 
 const CardImageContainer = styled.div`
