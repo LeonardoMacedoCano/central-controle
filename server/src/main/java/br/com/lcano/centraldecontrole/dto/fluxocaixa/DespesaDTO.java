@@ -16,7 +16,6 @@ public class DespesaDTO implements LancamentoItemDTO {
     private CategoriaDTO categoria;
     private Date dataVencimento;
     private Double valor;
-    private Boolean pago;
     private DespesaFormaPagamentoEnum formaPagamento;
 
     public static DespesaDTO converterParaDTO(Despesa despesa) {
@@ -26,7 +25,6 @@ public class DespesaDTO implements LancamentoItemDTO {
         dto.setCategoria(CategoriaDTO.converterParaDTO(despesa.getCategoria()));
         dto.setDataVencimento(despesa.getDataVencimento());
         dto.setValor(despesa.getValor());
-        dto.setPago(despesa.isPago());
         if (despesa.getFormaPagamento() != null) dto.setFormaPagamento(despesa.getFormaPagamento());
 
         return dto;
@@ -37,7 +35,6 @@ public class DespesaDTO implements LancamentoItemDTO {
                             DespesaCategoria despesaCategoria,
                             Date dataVencimento,
                             Double valor,
-                            boolean pago,
                             DespesaFormaPagamentoEnum formaPagamento) {
         Despesa despesa = new Despesa();
 
@@ -46,7 +43,6 @@ public class DespesaDTO implements LancamentoItemDTO {
         despesa.setCategoria(despesaCategoria);
         despesa.setDataVencimento(dataVencimento);
         despesa.setValor(valor);
-        despesa.setPago(pago);
         despesa.setFormaPagamento(formaPagamento);
 
         return despesa;

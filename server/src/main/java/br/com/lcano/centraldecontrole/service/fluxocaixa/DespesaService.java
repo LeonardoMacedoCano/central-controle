@@ -29,7 +29,6 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
 
         novaDespesa.setDataVencimento(itemDTO.getDataVencimento());
         novaDespesa.setValor(itemDTO.getValor());
-        novaDespesa.setPago(itemDTO.getPago());
         if (itemDTO.getFormaPagamento() != null) novaDespesa.setFormaPagamento((itemDTO.getFormaPagamento()));
 
         this.despesaRepository.save(novaDespesa);
@@ -42,7 +41,6 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
         despesa.setCategoria(this.getCategoriaById(itemDTO.getCategoria().getId()));
         despesa.setDataVencimento(itemDTO.getDataVencimento());
         despesa.setValor(itemDTO.getValor());
-        despesa.setPago(itemDTO.getPago());
 
         if (itemDTO.getFormaPagamento() != null) despesa.setFormaPagamento((itemDTO.getFormaPagamento()));
         else despesa.setFormaPagamento(null);

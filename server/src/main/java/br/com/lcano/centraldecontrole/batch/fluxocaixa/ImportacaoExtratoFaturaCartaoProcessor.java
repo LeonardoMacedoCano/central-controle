@@ -82,7 +82,6 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
         despesaDTO.setCategoria(this.getDespesaCategoriaDTO(descricaoCategoriaFormatada));
         despesaDTO.setDataVencimento(dataVencimento);
         despesaDTO.setValor(extratoFaturaCartao.getValor());
-        despesaDTO.setPago(true);
 
         return despesaDTO;
     }

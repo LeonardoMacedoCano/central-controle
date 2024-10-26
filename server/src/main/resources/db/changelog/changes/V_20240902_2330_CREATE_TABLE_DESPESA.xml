@@ -31,7 +31,6 @@
             <column name="valor" type="${number_10_2}">
                 <constraints nullable="false"/>
             </column>
-            <column name="pago" type="${char_1}" defaultValue="N"/>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="despesa"

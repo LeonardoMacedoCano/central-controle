@@ -40,10 +40,6 @@ public class Despesa implements Serializable {
     @Column(nullable = false)
     private double valor;
 
-    @Convert(converter = BooleanToCharConverter.class)
-    @Column(nullable = false)
-    private boolean pago;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "formapagamento", nullable = false)
     private DespesaFormaPagamentoEnum formaPagamento;

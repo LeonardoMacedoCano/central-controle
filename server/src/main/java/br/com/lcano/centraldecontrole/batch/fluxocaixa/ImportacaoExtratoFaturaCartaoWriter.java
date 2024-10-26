@@ -37,7 +37,6 @@ public class ImportacaoExtratoFaturaCartaoWriter implements ItemWriter<Lancament
                     despesaCategoriaService.getCategoriaDespesaById(despesaDTO.getCategoria().getId()),
                     despesaDTO.getDataVencimento(),
                     despesaDTO.getValor(),
-                    despesaDTO.getPago(),
                     DespesaFormaPagamentoEnum.CARTAO_CREDITO
             );
 

@@ -6,12 +6,10 @@ export type Despesa = {
   categoria?: Categoria;
   dataVencimento: Date;
   valor: number;
-  pago: boolean;
   formaPagamento?: DespesaFormaPagamentoEnum;
 }
 
 export const initialDespesaState: Despesa = {
   dataVencimento: getCurrentDate(),
-  valor: 0,
-  pago: false
+  valor: 0
 };

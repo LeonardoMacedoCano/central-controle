@@ -26,7 +26,7 @@ const DespesaSection: React.FC<DespesaSectionProps> = ({ despesa }) => {
             />
           </FlexBox.Item>
         </FlexBox>
-        <FlexBox flexDirection="row" borderBottom>
+        <FlexBox flexDirection="row">
           <FlexBox.Item borderRight >
             <FieldValue 
               description='Forma Pagamento'
@@ -36,18 +36,11 @@ const DespesaSection: React.FC<DespesaSectionProps> = ({ despesa }) => {
           </FlexBox.Item>
           <FlexBox.Item >
             <FieldValue 
-              description='Pago'
-              type='string'
-              value={despesa?.pago ? 'Sim' : 'Não'}
-            />
+                description='Valor'
+                type='string'
+                value={formatValueToBRL(despesa.valor)}
+              />
           </FlexBox.Item>
-        </FlexBox>
-        <FlexBox flexDirection="row">
-          <FieldValue 
-              description='Valor'
-              type='string'
-              value={formatValueToBRL(despesa.valor)}
-            />
         </FlexBox>
       </FlexBox>
     </Panel>
