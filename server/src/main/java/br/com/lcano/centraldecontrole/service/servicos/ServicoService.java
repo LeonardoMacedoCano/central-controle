@@ -46,6 +46,10 @@ public class ServicoService {
         this.dockerService.changeContainerStatusByName(name, action);
     }
 
+    public List<ServicoCategoriaDTO> getAllServicoCategoria() {
+        return servicoCategoriaService.getAll();
+    }
+
     private Specification<Servico> applyFieldSpecification(FilterDTO filterDTO) {
         String field = filterDTO.getField();
         String operator = filterDTO.getOperator();
@@ -103,7 +107,6 @@ public class ServicoService {
         return switch (filterEnum) {
             case IGUAL -> ServicoSpecifications.hasCategorias(value);
             case DIFERENTE -> ServicoSpecifications.hasCategoriasNot(value);
-            case CONTEM -> ServicoSpecifications.hasCategoriasLike(value);
             default -> null;
         };
     }

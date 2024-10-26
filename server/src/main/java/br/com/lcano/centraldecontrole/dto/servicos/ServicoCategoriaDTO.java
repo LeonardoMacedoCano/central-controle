@@ -19,4 +19,12 @@ public class ServicoCategoriaDTO {
         dto.setIcone(servicoCategoria.getIcone());
         return dto;
     }
+
+    public static ServicoCategoriaDTO converterParaDTO(ServicoCategoria servicoCategoria) {
+        ServicoCategoriaDTO dto = new ServicoCategoriaDTO();
+        dto.setId(servicoCategoria.getId());
+        dto.setDescricao(servicoCategoria.getDescricao());
+        dto.setIcone(servicoCategoria.getIcone());
+        return dto;
+    }
 }

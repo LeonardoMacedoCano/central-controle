@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.resource.servicos;
 
 import br.com.lcano.centraldecontrole.dto.FilterDTO;
+import br.com.lcano.centraldecontrole.dto.servicos.ServicoCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.servicos.ServicoDTO;
 import br.com.lcano.centraldecontrole.enums.servicos.ContainerActionEnum;
 import br.com.lcano.centraldecontrole.service.servicos.ServicoService;
@@ -30,5 +31,10 @@ public class ServicoResource {
     public ResponseEntity<Object> changeContainerStatusByName(@PathVariable String name, @PathVariable ContainerActionEnum action) {
         this.servicoService.changeContainerStatusByName(name, action);
         return CustomSuccess.buildResponseEntity(String.format("Serviço %s com sucesso.", action.getDescricao()));
+    }
+
+    @GetMapping("/categorias")
+    public ResponseEntity<List<ServicoCategoriaDTO>> getAllServicoCategoria() {
+        return ResponseEntity.ok(servicoService.getAllServicoCategoria());
     }
 }

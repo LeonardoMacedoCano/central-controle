@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { CardServico, Container, Loading, Panel, Modal, Button, SearchFilter, SearchPagination } from '../../components';
-import { Servico, ServidorConfig, DockerStatusEnum, ContainerActionEnum, PagedResponse, FilterDTO, getDescricaoDockerStatus } from '../../types';
+import { Servico, ServidorConfig, DockerStatusEnum, ContainerActionEnum, PagedResponse, FilterDTO, getDescricaoDockerStatus, ServicoCategoria, convertToOptions } from '../../types';
 import { AuthContext, useMessage } from '../../contexts';
 import { ServicoService, ServidorConfigService, ArquivoService } from '../../service';
 
@@ -14,6 +14,7 @@ const ServicoListPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [servicos, setServicos] = useState<PagedResponse<Servico>>();
   const [servidorConfig, setServidorConfig] = useState<ServidorConfig>({ id: 1, ipExterno: '0.0.0.0' });
+  const [servicoCategorias, setServicoCategorias] = useState<ServicoCategoria[]>();
   const [filters, setFilters] = useState<FilterDTO[]>([]);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(calculatePageSize());
@@ -57,16 +58,35 @@ const ServicoListPage: React.FC = () => {
     }
   }, [usuario?.token, arquivoService, message]);
 
+  const loadServicoCategorias = useCallback(async () => {
+    if (!usuario?.token) return;
+    try {
+      const result = await servicoService.getAllServicoCategoria(usuario.token);
+      result && setServicoCategorias(result);
+    } catch (error) {
+      message.showErrorWithLog('Erro ao carregar as categorias de serviço.', error);
+    }
+  }, [usuario?.token, servicoService, message]);
+
   useEffect(() => {
-    usuario?.token && loadServidorConfig();
+    if (usuario?.token) {
+      loadServidorConfig();
+      loadServicoCategorias()
+    }
   }, [usuario?.token]);
 
   useEffect(() => {
-    usuario?.token && loadServicos();
-  }, [usuario?.token]);
+    if (usuario?.token) {
+      loadServicos();
+    }
+  }, [usuario?.token, pageIndex, pageSize, filters]);
 
   useEffect(() => {
-    const updatePageSize = () => setPageSize(calculatePageSize());
+    const updatePageSize = () => {
+      setPageSize(calculatePageSize());
+    };
+
+    updatePageSize();
     window.addEventListener('resize', updatePageSize);
     return () => window.removeEventListener('resize', updatePageSize);
   }, []);
@@ -173,7 +193,7 @@ const ServicoListPage: React.FC = () => {
           fields={[
             { label: 'Nome', name: 'nome', type: 'STRING' },
             { label: 'Descrição', name: 'descricao', type: 'STRING' },
-            { label: 'Categoria', name: 'categorias', type: 'STRING' },
+            { label: 'Categoria', name: 'categorias', type: 'SELECT', options: convertToOptions(servicoCategorias || []) },
             { label: 'Porta', name: 'porta', type: 'NUMBER' },
           ]}
           search={(newFilters) => {
@@ -196,7 +216,7 @@ const ServicoListPage: React.FC = () => {
             ))}
           </CardContainer>
         ) : (
-          <EmptyMessage>Nenhum serviço foi encontrado</EmptyMessage>
+          <EmptyMessage>Nenhum serviço encontrado.</EmptyMessage>
         )}
       </Panel>
       {showModal && selectedServico && (
@@ -221,10 +241,13 @@ const CardContainer = styled.div`
   width: 100%;
   display: flex; 
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  gap: 20px;
 `;
 
 const EmptyMessage = styled.p`
   text-align: center;
-  padding: 20px;
+  padding: 10px;
 `;

@@ -28,11 +28,15 @@ import {
   PAGE_SIZE,
   FilterItem,
   FilterDTO,
+  Option
 } from "../types/Filters";
 import { Servico } from "./servicos/Servico";
 import { Arquivo } from "./Arquivo";
 import { ServidorConfig } from "./servicos/ServidorConfig";
-import { ServicoCategoria } from "./servicos/ServicoCategoria";
+import { 
+  ServicoCategoria,
+  convertToOptions 
+} from "./servicos/ServicoCategoria";
 import { 
   DockerStatusEnum,
   getDescricaoDockerStatus
@@ -54,6 +58,7 @@ export type {
   Filters,
   FilterItem,
   FilterDTO,
+  Option,
   Servico,
   Arquivo,
   ServidorConfig,
@@ -75,5 +80,6 @@ export {
   PAGE_SIZE,
   DockerStatusEnum,
   ContainerActionEnum,
-  getDescricaoDockerStatus
+  getDescricaoDockerStatus,
+  convertToOptions
 };

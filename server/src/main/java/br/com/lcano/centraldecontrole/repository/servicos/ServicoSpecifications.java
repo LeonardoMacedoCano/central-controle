@@ -4,6 +4,7 @@ import br.com.lcano.centraldecontrole.domain.servicos.Servico;
 import br.com.lcano.centraldecontrole.domain.servicos.ServicoCategoria;
 import br.com.lcano.centraldecontrole.domain.servicos.ServicoCategoriaRel;
 import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ServicoSpecifications {
@@ -65,17 +66,14 @@ public class ServicoSpecifications {
 
     public static Specification<Servico> hasCategoriasNot(String descricao) {
         return (root, query, criteriaBuilder) -> {
-            Join<Servico, ServicoCategoriaRel> categoriaRelJoin = root.join("servicoCategoriaRel");
-            Join<ServicoCategoriaRel, ServicoCategoria> categoriaJoin = categoriaRelJoin.join("servicoCategoria");
-            return criteriaBuilder.notEqual(categoriaJoin.get("descricao"), descricao);
-        };
-    }
+            Subquery<Long> subquery = query.subquery(Long.class);
+            var categoriaRelRoot = subquery.from(ServicoCategoriaRel.class);
+            Join<ServicoCategoriaRel, ServicoCategoria> categoriaJoin = categoriaRelRoot.join("servicoCategoria");
 
-    public static Specification<Servico> hasCategoriasLike(String descricao) {
-        return (root, query, criteriaBuilder) -> {
-            Join<Servico, ServicoCategoriaRel> categoriaRelJoin = root.join("servicoCategoriaRel");
-            Join<ServicoCategoriaRel, ServicoCategoria> categoriaJoin = categoriaRelJoin.join("servicoCategoria");
-            return criteriaBuilder.like(categoriaJoin.get("descricao"), "%" + descricao + "%");
+            subquery.select(categoriaRelRoot.get("servico").get("id"))
+                    .where(criteriaBuilder.equal(categoriaJoin.get("descricao"), descricao));
+
+            return criteriaBuilder.not(root.get("id").in(subquery));
         };
     }
 }

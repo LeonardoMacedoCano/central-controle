@@ -11,7 +11,7 @@
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_servicocategoria"/>
             </column>
             <column name="descricao" type="${varchar_20}">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="icone" type="${varchar_50}">
                 <constraints nullable="false"/>
