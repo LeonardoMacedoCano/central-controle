@@ -36,7 +36,7 @@ const CardServico: React.FC<CardServicoProps> = ({
 
   const copyLink = async () => {
     try {
-      const link = `http://${servidorConfig.ipExterno}:${servico.porta}`;
+      const link = `${servidorConfig.ipExterno}:${servico.porta}`;
       await copyLinkToClipboard(link);
       message.showSuccess('Link copiado com sucesso!');
     } catch (error) {
