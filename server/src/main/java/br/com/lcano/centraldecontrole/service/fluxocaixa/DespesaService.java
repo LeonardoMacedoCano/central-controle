@@ -25,7 +25,7 @@ public class DespesaService implements LancamentoItemService<DespesaDTO> {
     public void create(DespesaDTO itemDTO, Lancamento lancamento) {
         Despesa novaDespesa = new Despesa();
         novaDespesa.setLancamento(lancamento);
-        novaDespesa.setCategoria(this.despesaCategoriaService.getCategoriaDespesaById(itemDTO.getCategoria().getId()));
+        novaDespesa.setCategoria(this.despesaCategoriaService.getCategoriaById(itemDTO.getCategoria().getId()));
 
         novaDespesa.setDataVencimento(itemDTO.getDataVencimento());
         novaDespesa.setValor(itemDTO.getValor());

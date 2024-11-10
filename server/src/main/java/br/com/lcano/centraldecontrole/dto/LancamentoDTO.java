@@ -3,6 +3,7 @@ package br.com.lcano.centraldecontrole.dto;
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.util.CustomDateDeserializer;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -28,7 +29,7 @@ public class LancamentoDTO {
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "tipo")
     @JsonSubTypes({
             @JsonSubTypes.Type(value = DespesaDTO.class, name = "DESPESA"),
-            // TODO - Add outros tipos conforme necessário
+            @JsonSubTypes.Type(value = ReceitaDTO.class, name = "RECEITA"),
     })
     private LancamentoItemDTO itemDTO;
 

@@ -85,16 +85,12 @@ public class LancamentoService {
         String operator = filterDTO.getOperator();
         String value = filterDTO.getValue();
 
-        switch (field) {
-            case "descricao":
-                return applyDescricaoSpecification(operator, value);
-            case "tipo":
-                return applyTipoSpecification(operator, value);
-            case "dataLancamento":
-                return applyDataSpecification(operator, value);
-            default:
-                return null;
-        }
+        return switch (field) {
+            case "descricao" -> applyDescricaoSpecification(operator, value);
+            case "tipo" -> applyTipoSpecification(operator, value);
+            case "dataLancamento" -> applyDataSpecification(operator, value);
+            default -> null;
+        };
     }
 
     private Specification<Lancamento> applyDescricaoSpecification(String operator, String value) {

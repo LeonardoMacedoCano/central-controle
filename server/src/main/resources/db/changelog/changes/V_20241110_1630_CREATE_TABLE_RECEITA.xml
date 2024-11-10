@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="create-table-receitacategoria" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela receitacategoria já existe">
+            <not>
+                <tableExists tableName="receitacategoria"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="receitacategoria">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_receitacategoria"/>
+            </column>
+            <column name="descricao" type="${varchar_255}">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-receita" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela receita já existe">
+            <not>
+                <tableExists tableName="receita"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="receita">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_receita"/>
+            </column>
+            <column name="idlancamento" type="${integer}">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="idcategoria" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valor" type="${number_10_2}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="receita"
+                                 baseColumnNames="idlancamento"
+                                 constraintName="fk_receita_lancamento"
+                                 referencedTableName="lancamento"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="receita"
+                                 baseColumnNames="idcategoria"
+                                 constraintName="fk_receita_categoria"
+                                 referencedTableName="receitacategoria"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

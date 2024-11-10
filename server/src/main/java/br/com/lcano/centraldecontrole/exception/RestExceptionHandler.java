@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.exception;
 
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
+import br.com.lcano.centraldecontrole.exception.fluxocaixa.ReceitaException;
 import br.com.lcano.centraldecontrole.exception.servicos.DockerException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({DespesaException.DespesaNaoEncontradaByLancamentoId.class})
     protected ResponseEntity<Object> handleDespesaNaoEncontradaByLancamentoId(DespesaException.DespesaNaoEncontradaByLancamentoId ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({ReceitaException.CategoriaNaoEncontradaById.class})
+    protected ResponseEntity<Object> handleReceitaCategoriaNaoEncontradaById(ReceitaException.CategoriaNaoEncontradaById ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({ReceitaException.ReceitaNaoEncontradaByLancamentoId.class})
+    protected ResponseEntity<Object> handleReceitaNaoEncontradaByLancamentoId(ReceitaException.ReceitaNaoEncontradaByLancamentoId ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 

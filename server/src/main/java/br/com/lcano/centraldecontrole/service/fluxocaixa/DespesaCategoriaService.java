@@ -15,11 +15,11 @@ public class DespesaCategoriaService {
     @Autowired
     private final DespesaCategoriaRepository despesaCategoriaRepository;
 
-    public List<CategoriaDTO> getTodasCategoriasDespesa() {
+    public List<CategoriaDTO> getTodasCategorias() {
         return this.despesaCategoriaRepository.findAll().stream().map(CategoriaDTO::converterParaDTO).toList();
     }
 
-    public DespesaCategoria getCategoriaDespesaById(Long id) {
+    public DespesaCategoria getCategoriaById(Long id) {
         return this.despesaCategoriaRepository.findById(id)
             .orElseThrow(() -> new DespesaException.CategoriaNaoEncontradaById(id));
     }
