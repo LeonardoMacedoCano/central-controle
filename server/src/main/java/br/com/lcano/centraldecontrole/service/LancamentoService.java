@@ -14,9 +14,8 @@ import br.com.lcano.centraldecontrole.service.fluxocaixa.ImportacaoExtratoFatura
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import br.com.lcano.centraldecontrole.util.FilterUtil;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
-import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,52 +25,61 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.*;
 
 @Service
+@AllArgsConstructor
 public class LancamentoService {
-    @Autowired
-    LancamentoRepository lancamentoRepository;
-    @Resource(name = "lancamentoItemServicesMap")
-    Map<TipoLancamentoEnum, LancamentoItemService<? extends LancamentoItemDTO>> lancamentoItemServices;
-    @Autowired
-    UsuarioUtil usuarioUtil;
-    @Autowired
-    DateUtil dateUtil;
-    @Autowired
-    ArquivoService arquivoService;
-    @Autowired
-    ImportacaoExtratoFaturaCartaoJobStarter importacaoExtratoFaturaCartaoJobStarter;
+    private final LancamentoRepository lancamentoRepository;
+    private final Map<TipoLancamentoEnum, LancamentoItemService<? extends LancamentoItemDTO>> lancamentoItemServices;
+    private final UsuarioUtil usuarioUtil;
+    private final DateUtil dateUtil;
+    private final ArquivoService arquivoService;
+    private final ImportacaoExtratoFaturaCartaoJobStarter importacaoExtratoFaturaCartaoJobStarter;
 
     @Transactional
     public Long createLancamento(LancamentoDTO lancamentoDTO) {
-        Lancamento lancamento = new Lancamento();
+        var lancamento = new Lancamento();
         lancamento.setDataLancamento(dateUtil.getDataAtual());
         lancamento.setDescricao(lancamentoDTO.getDescricao());
         lancamento.setTipo(lancamentoDTO.getTipo());
         lancamento.setUsuario(usuarioUtil.getUsuarioAutenticado());
         lancamento = lancamentoRepository.save(lancamento);
 
-        LancamentoItemService lancamentoItemService = getLancamentoItemService(lancamento.getTipo());
-        lancamentoItemService.create(lancamentoDTO.getItemDTO(), lancamento);
+        getLancamentoItemService(lancamento.getTipo())
+                .create(lancamentoDTO.getItemDTO(), lancamento);
 
         return lancamento.getId();
     }
 
     @Transactional
     public void updateLancamento(Long id, LancamentoDTO lancamentoDTO) {
-        Lancamento lancamento = getLancamentoById(id);
+        var lancamento = getLancamentoById(id);
         lancamento.setDescricao(lancamentoDTO.getDescricao());
-        lancamento = lancamentoRepository.save(lancamento);
+        lancamentoRepository.save(lancamento);
 
-        LancamentoItemService lancamentoItemService = getLancamentoItemService(lancamento.getTipo());
-        lancamentoItemService.update(id, lancamentoDTO.getItemDTO());
+        getLancamentoItemService(lancamento.getTipo())
+                .update(id, lancamentoDTO.getItemDTO());
     }
 
     @Transactional
     public void deleteLancamento(Long id) {
-        Lancamento lancamento = getLancamentoById(id);
-        LancamentoItemService lancamentoItemService = getLancamentoItemService(lancamento.getTipo());
-
-        lancamentoItemService.delete(id);
+        var lancamento = getLancamentoById(id);
+        getLancamentoItemService(lancamento.getTipo()).delete(id);
         lancamentoRepository.delete(lancamento);
+    }
+
+    public LancamentoDTO getLancamentoDTO(Long id) {
+        var lancamento = getLancamentoById(id);
+        var itemDTO = getLancamentoItemService(lancamento.getTipo()).get(id);
+        return LancamentoDTO.converterParaDTO(lancamento, itemDTO);
+    }
+
+    private LancamentoItemService<LancamentoItemDTO> getLancamentoItemService(TipoLancamentoEnum tipo) {
+        return (LancamentoItemService<LancamentoItemDTO>) Optional.ofNullable(lancamentoItemServices.get(tipo))
+                .orElseThrow(() -> new LancamentoException.LancamentoTipoNaoSuportado(tipo.getDescricao()));
+    }
+
+    private Lancamento getLancamentoById(Long id) {
+        return lancamentoRepository.findById(id)
+                .orElseThrow(() -> new LancamentoException.LancamentoNaoEncontradoById(id));
     }
 
     public Page<LancamentoDTO> getLancamentos(Pageable pageable, List<FilterDTO> filterDTOs) {
@@ -129,24 +137,6 @@ public class LancamentoService {
             case MENOR_OU_IGUAL -> LancamentoSpecifications.hasDataLancamentoLessOrEqual(date);
             default -> null;
         };
-    }
-
-    public LancamentoDTO getLancamentoDTO(Long id) {
-        Lancamento lancamento = getLancamentoById(id);
-        LancamentoItemService lancamentoItemService = getLancamentoItemService(lancamento.getTipo());
-        LancamentoItemDTO itemDTO = lancamentoItemService.get(id);
-
-        return LancamentoDTO.converterParaDTO(lancamento, itemDTO);
-    }
-
-    private Lancamento getLancamentoById(Long id) {
-        return lancamentoRepository.findById(id)
-                .orElseThrow(() -> new LancamentoException.LancamentoNaoEncontradoById(id));
-    }
-
-    private LancamentoItemService<? extends LancamentoItemDTO> getLancamentoItemService(TipoLancamentoEnum tipo) {
-        return Optional.ofNullable(lancamentoItemServices.get(tipo))
-                .orElseThrow(() -> new LancamentoException.LancamentoTipoNaoSuportado(tipo.getDescricao()));
     }
 
     public void importExtratoFaturaCartao(MultipartFile file, Date dataVencimento) throws Exception {
