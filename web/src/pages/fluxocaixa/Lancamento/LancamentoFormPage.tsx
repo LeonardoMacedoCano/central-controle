@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, FieldValue, FlexBox, FloatingButton, Panel } from '../../../components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCodigoTipoLancamento, getDescricaoTipoLancamento, getTipoLancamentoByCodigo, Lancamento, tipoLancamentoOptions } from '../../../types';
+import { getCodigoTipoLancamento, getDescricaoTipoLancamento, getTipoLancamentoByCodigo, initialReceitaState, Lancamento, tipoLancamentoOptions } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
 import { formatDateToShortString, getCurrentDate } from '../../../utils';
 import { FaCheck } from 'react-icons/fa';
 import DespesaSectionForm from './DespesaSectionForm';
 import { initialDespesaState } from '../../../types/fluxocaixa/Despesa';
+import ReceitaSectionForm from './ReceitaSectionForm';
 
 const LancamentoFormPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -92,6 +93,19 @@ const LancamentoFormPage: React.FC = () => {
     }
   };
 
+  const renderLancamentoSection = () => {
+    if (!lancamento || !lancamento.tipo) return null;
+  
+    switch (lancamento.tipo) {
+      case 'DESPESA':
+        return <DespesaSectionForm despesa={lancamento.itemDTO || initialDespesaState} onUpdate={handleUpdateItem} />;
+      case 'RECEITA':
+        return <ReceitaSectionForm receita={lancamento.itemDTO || initialReceitaState} onUpdate={handleUpdateItem} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Container>
       <FloatingButton
@@ -135,12 +149,7 @@ const LancamentoFormPage: React.FC = () => {
         </FlexBox>
       </Panel>
 
-      {lancamento.tipo === 'DESPESA' && (
-        <DespesaSectionForm 
-          despesa={lancamento.itemDTO || initialDespesaState} 
-          onUpdate={handleUpdateItem}  
-        />
-      )}
+      {renderLancamentoSection()}
     </Container>
   );
 };

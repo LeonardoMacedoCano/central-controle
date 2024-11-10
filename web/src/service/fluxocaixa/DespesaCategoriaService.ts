@@ -1,11 +1,11 @@
 import DefaultService from '../DefaultService';
 import { Categoria } from '../../types';
 
-interface CategoriaDespesaApi {
+interface DespesaCategoriaApi {
   getTodasCategoriasDespesa: (token: string) => Promise<Categoria[] | undefined>;
 }
 
-const CategoriaDespesaService = (): CategoriaDespesaApi => {
+const DespesaCategoriaService = (): DespesaCategoriaApi => {
   const { request } = DefaultService();
 
   const getTodasCategoriasDespesa = async (token: string): Promise<Categoria[] | undefined> => {
@@ -21,4 +21,4 @@ const CategoriaDespesaService = (): CategoriaDespesaApi => {
   };
 };
 
-export default CategoriaDespesaService;
+export default DespesaCategoriaService;

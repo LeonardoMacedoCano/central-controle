@@ -6,6 +6,7 @@ import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
 import { formatDateToShortString } from '../../../utils';
 import DespesaSection from './DespesaSection';
+import ReceitaSection from './ReceitaSection';
 
 const LancamentoPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -32,6 +33,19 @@ const LancamentoPage: React.FC = () => {
       if (result) setLancamento(result);
     } catch (error) {
       message.showErrorWithLog('Erro ao carregar o lançamento.', error);
+    }
+  };
+
+  const renderLancamentoSection = () => {
+    if (!lancamento || !lancamento.tipo) return null;
+  
+    switch (lancamento.tipo) {
+      case 'DESPESA':
+        return <DespesaSection despesa={lancamento.itemDTO!} />;
+      case 'RECEITA':
+        return <ReceitaSection receita={lancamento.itemDTO!} />;
+      default:
+        return null;
     }
   };
 
@@ -69,11 +83,7 @@ const LancamentoPage: React.FC = () => {
         </FlexBox>
       </Panel>
       )}
-      {lancamento && lancamento.tipo && lancamento.tipo === 'DESPESA' && (
-        <DespesaSection
-          despesa={lancamento.itemDTO!} 
-        />
-      )}
+      {renderLancamentoSection()}
     </Container>
   );
 };

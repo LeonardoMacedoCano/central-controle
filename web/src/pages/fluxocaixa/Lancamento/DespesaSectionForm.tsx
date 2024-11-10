@@ -3,7 +3,7 @@ import { FieldValue, FlexBox, Panel } from '../../../components';
 import { Categoria, Despesa, despesaFormaPagamentoOptions, getCodigoDespesaFormaPagamento, getDescricaoDespesaFormaPagamento, getDespesaFormaPagamentoByCodigo } from '../../../types';
 import { formatDateToYMDString } from '../../../utils';
 import { AuthContext, useMessage } from '../../../contexts';
-import { CategoriaDespesaService } from '../../../service';
+import { DespesaCategoriaService } from '../../../service';
 
 interface DespesaSectionFormProps {
   despesa: Despesa;
@@ -14,14 +14,14 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
 
   const auth = useContext(AuthContext);
   const message = useMessage();
-  const categoriaDespesaService = CategoriaDespesaService();
+  const despesaCategoriaService = DespesaCategoriaService();
 
   useEffect(() => {
     const carregarCategoriasDespesa = async () => {
       if (!auth.usuario?.token) return;
   
       try {
-        const result = await categoriaDespesaService.getTodasCategoriasDespesa(auth.usuario?.token);
+        const result = await despesaCategoriaService.getTodasCategoriasDespesa(auth.usuario?.token);
         setCategorias(result || []);
       } catch (error) {
         message.showErrorWithLog('Erro ao carregar as categorias de despesa.', error);

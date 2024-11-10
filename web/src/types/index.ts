@@ -42,6 +42,10 @@ import {
   getDescricaoDockerStatus
 } from "./servicos/DockerStatusEnum";
 import { ContainerActionEnum } from "./servicos/ContainerActionEnum";
+import { 
+  Receita,
+  initialReceitaState
+} from "./fluxocaixa/Receita";
 
 export type {
   Categoria,
@@ -62,7 +66,8 @@ export type {
   Servico,
   Arquivo,
   ServidorConfig,
-  ServicoCategoria
+  ServicoCategoria,
+  Receita
 };
 
 export {
@@ -81,5 +86,6 @@ export {
   DockerStatusEnum,
   ContainerActionEnum,
   getDescricaoDockerStatus,
-  convertToOptions
+  convertToOptions,
+  initialReceitaState
 };
