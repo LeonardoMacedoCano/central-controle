@@ -7,12 +7,14 @@ import {
 import { 
   PagedResponse, Lancamento, getDescricaoTipoLancamento, tipoLancamentoFilters, 
   PAGE_SIZE,
-  FilterDTO
+  FilterDTO,
+  TipoLancamentoEnum
 } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
 import { formatDateToShortString } from '../../../utils';
 import { useConfirmModal } from '../../../hooks';
+import Card from '../../../components/card/Card';
 
 const LancamentoListPage: React.FC = () => {
   const [lancamentos, setLancamentos] = useState<PagedResponse<Lancamento>>();
@@ -99,9 +101,31 @@ const LancamentoListPage: React.FC = () => {
           onDelete={(item) => handleDelete(item.id)}
           loadPage={loadPage}
           columns={[
-            <Column<Lancamento> header="Data" value={(item) => formatDateToShortString(item.dataLancamento)} />,
-            <Column<Lancamento> header="Tipo" value={(item) => getDescricaoTipoLancamento(item.tipo)} />,
-            <Column<Lancamento> header="Descrição" value={(item) => item.descricao} />
+            <Column<Lancamento>
+              header="Tipo"
+              width="100px"
+              align="center"
+              value={(item) => (
+                <Card
+                  variant={getTipoVariant(item.tipo!)}
+                  width='75px'
+                  height='25px'
+                  style={{textAlign: 'center'}}
+                >
+                  {getDescricaoTipoLancamento(item.tipo)}
+                </Card>
+              )}
+            />,
+            <Column<Lancamento> 
+              header="Data" 
+              align="center" 
+              width='100px'
+              value={(item) => formatDateToShortString(item.dataLancamento)}
+            />,
+            <Column<Lancamento> 
+              header="Descrição" 
+              value={(item) => item.descricao} 
+            />
           ]}
         />
       </Panel>
@@ -117,3 +141,16 @@ const LancamentoListPage: React.FC = () => {
 };
 
 export default LancamentoListPage;
+
+const getTipoVariant = (tipo: TipoLancamentoEnum): 'success' | 'info' | 'warning' => {
+  switch (tipo) {
+    case 'DESPESA':
+      return 'warning';
+    case 'RECEITA':
+      return 'success';
+    case 'ATIVO':
+      return 'info';
+    default:
+      return 'info';
+  }
+};

@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import ConfirmModal from '../components/modal/confirmmodal/ConfirmModal';
+import ConfirmModal from '../components/modal/ConfirmModal';
 
 const useConfirmModal = () => {
   const [isOpen, setIsOpen] = useState(false);

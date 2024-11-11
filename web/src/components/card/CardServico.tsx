@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Color from 'color';
 import { DockerStatusEnum, getDescricaoDockerStatus, Servico, ServidorConfig } from '../../types';
-import Button from '../button/button/Button';
+import Button from '../button/Button';
 import { FaAlignLeft, FaLink } from 'react-icons/fa';
 import ServicoCategoriaIcon from '../icon/ServicoCategoriaIcon';
 import { copyLinkToClipboard, formatNumberWithLeadingZeros } from '../../utils';

@@ -199,7 +199,7 @@ export const StyledInput = styled.input<StyledInputProps>`
 
   ${({ variant, theme }) =>
     variant &&css`
-      color: ${getVariantColor(variant, theme)};
+      color: ${getVariantColor(theme, variant)};
     `
   }
 `;
@@ -215,7 +215,7 @@ export const StyledSelect = styled.select<StyledInputProps>`
   ${({ variant, theme }) =>
     variant &&
     css`
-      color: ${getVariantColor(variant, theme)};
+      color: ${getVariantColor(theme, variant)};
     `}
 
   option {

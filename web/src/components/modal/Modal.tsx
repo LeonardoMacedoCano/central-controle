@@ -6,8 +6,8 @@ import {
   FaExclamationTriangle,
   FaTimes
 } from 'react-icons/fa';
-import { getVariantColor } from '../../../utils';
-import { Button } from '../..';
+import { getVariantColor } from '../../utils';
+import { Button } from '../';
 
 
 interface ModalProps {
@@ -128,7 +128,7 @@ interface ModalHeaderProps {
 }
 export const ModalHeader = styled.div<ModalHeaderProps>`
   color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ variant, theme }) => getVariantColor(variant, theme)};
+  background-color: ${({ variant, theme }) => getVariantColor(theme, variant)};
   display: flex;
   justify-content: space-between;
   align-items: center;

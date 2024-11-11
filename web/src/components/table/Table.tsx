@@ -16,6 +16,8 @@ import { PagedResponse } from '../../types';
 type ColumnProps<T> = {
   header: ReactNode;
   value(value: T, index: number): ReactNode;
+  width?: string;
+  align?: 'left' | 'center' | 'right';
 };
 
 export const Column = <T extends any>({}: ColumnProps<T>) => {
@@ -150,7 +152,12 @@ export const Table = <T extends Indexable>({
                 if (React.isValidElement(column)) {
                   const columnProps = column.props as ColumnProps<T>;
                   return (
-                    <TableColumn key={columnIndex} isSelected={rowSelected ? rowSelected(item) : false}>
+                    <TableColumn
+                      key={columnIndex}
+                      isSelected={rowSelected ? rowSelected(item) : false}
+                      width={columnProps.width}
+                      align={columnProps.align}
+                    >
                       <TruncatedContent>{columnProps.value(item, index)}</TruncatedContent>
                     </TableColumn>
                   );
@@ -213,7 +220,7 @@ const TableHeadRow = styled.tr`
 `;
 
 const TableHeadColumn = styled.th`
-  padding: 0 2px;
+  padding: 0 3px;
   text-align: left;
   background-color: transparent;
   border-left: 1px solid ${({ theme }) => theme.colors.gray};
@@ -245,17 +252,17 @@ const TableRow = styled.tr<{ isSelected?: boolean }>`
   }
 `;
 
-const TableColumn = styled.td<{ isSelected?: boolean }>`
+const TableColumn = styled.td<{ isSelected?: boolean; width?: string; align?: string }>`
   font-size: 13px;
   height: 35px;
-  padding: 0 2px;
-  text-align: left;
+  padding: 0 3px;
+  text-align: ${({ align }) => align || 'left'};
   border-left: 1px solid ${({ theme }) => theme.colors.gray};
   position: relative;
-  max-width: 50px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  width: ${({ width }) => width || 'auto'};
 
   &:first-child::before {
     content: '';
@@ -271,6 +278,7 @@ const TableColumn = styled.td<{ isSelected?: boolean }>`
     border-left: none;
   }
 `;
+
 
 const TruncatedContent = styled.div`
   white-space: nowrap;

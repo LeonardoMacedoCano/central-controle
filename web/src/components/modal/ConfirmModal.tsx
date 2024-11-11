@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Button,
   Modal
-} from '../../';
+} from '../';
 
 interface ConfirmModalProps {
   isOpen: boolean;

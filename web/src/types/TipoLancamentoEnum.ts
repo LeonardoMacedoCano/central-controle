@@ -1,4 +1,4 @@
-export type TipoLancamentoEnum = 'DESPESA' | 'RECEITA' | 'PASSIVO' | 'ATIVO';
+export type TipoLancamentoEnum = 'DESPESA' | 'RECEITA' | 'ATIVO';
 
 export interface TipoLancamentoInfo {
   tipo: TipoLancamentoEnum;
@@ -9,8 +9,7 @@ export interface TipoLancamentoInfo {
 export const TiposLancamentos: Record<TipoLancamentoEnum, TipoLancamentoInfo> = {
   DESPESA: { tipo: 'DESPESA', descricao: 'Despesa', codigo: '1' },
   RECEITA: { tipo: 'RECEITA', descricao: 'Receita', codigo: '2' },
-  PASSIVO: { tipo: 'PASSIVO', descricao: 'Passivo', codigo: '3' },
-  ATIVO: { tipo: 'ATIVO', descricao: 'Ativo', codigo: '4' },
+  ATIVO: { tipo: 'ATIVO', descricao: 'Ativo', codigo: '3' },
 };
 
 export const getDescricaoTipoLancamento = (tipo?: TipoLancamentoEnum): string => {
@@ -37,13 +36,11 @@ export const getTipoLancamentoByCodigo = (codigo: string): TipoLancamentoEnum | 
 export const tipoLancamentoOptions = [
   { key: getCodigoTipoLancamento('DESPESA'), value: getDescricaoTipoLancamento('DESPESA') },
   { key: getCodigoTipoLancamento('RECEITA'), value: getDescricaoTipoLancamento('RECEITA') },
-  { key: getCodigoTipoLancamento('PASSIVO'), value: getDescricaoTipoLancamento('PASSIVO') },
   { key: getCodigoTipoLancamento('ATIVO'), value: getDescricaoTipoLancamento('ATIVO') },
 ];
 
 export const tipoLancamentoFilters = [
   { key: 'DESPESA', value: getDescricaoTipoLancamento('DESPESA') },
   { key: 'RECEITA', value: getDescricaoTipoLancamento('RECEITA') },
-  { key: 'PASSIVO', value: getDescricaoTipoLancamento('PASSIVO') },
   { key: 'ATIVO', value: getDescricaoTipoLancamento('ATIVO') },
 ];

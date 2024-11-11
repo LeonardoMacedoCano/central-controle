@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import { 
   convertReactStyleToCSSObject,
   getVariantColor
-} from '../../../utils';
+} from '../../utils';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'success' | 'info' | 'warning' | 'login';
@@ -61,7 +61,7 @@ const getButtonVariantStyles = (variant: StyledButtonProps['variant'], theme: an
     case 'info':
     case 'warning':
       return css`
-        background-color: ${getVariantColor(variant, theme)};
+        background-color: ${getVariantColor(theme, variant)};
         color: ${theme.colors.white};
       `;
     case 'login':

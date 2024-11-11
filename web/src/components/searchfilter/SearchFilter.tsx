@@ -4,7 +4,7 @@ import FieldValue from '../fieldvalue/FieldValue';
 import { parseDateStringToDate, formatDateToYMDString, getCurrentDate } from '../../utils';
 import { Field, FilterDTO, Operator, OPERATORS } from '../../types';
 import FlexBox from '../flexbox/FlexBox';
-import Button from '../button/button/Button';
+import Button from '../button/Button';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import Container from '../container/Container';
 

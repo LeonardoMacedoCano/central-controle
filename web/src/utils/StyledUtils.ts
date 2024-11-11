@@ -10,15 +10,17 @@ interface VariantProps {
   variant: 'success' | 'info' | 'warning';
 }
 
-export const getVariantColor = (variant: VariantProps['variant'], theme: any) => {
+export const getVariantColor = (theme: any, variant?: VariantProps['variant']) => {
   const colors = theme.colors;
 
-  switch (variant) {
+  const validVariant = variant || 'info';
+
+  switch (validVariant) {
     case 'success':
     case 'info':
     case 'warning':
-      return colors[variant];
+      return colors[validVariant];
     default:
-      return colors.defaultColor; 
+      return colors.defaultColor;
   }
-}
+};
