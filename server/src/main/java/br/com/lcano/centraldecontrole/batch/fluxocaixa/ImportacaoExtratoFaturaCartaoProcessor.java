@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Component
@@ -61,7 +62,7 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
     }
 
     private Boolean isDespesa(ExtratoFaturaCartao extratoFaturaCartao) {
-        return extratoFaturaCartao.getValor().compareTo(0.00) > 0;
+        return extratoFaturaCartao.getValor().compareTo(BigDecimal.valueOf(0.00)) > 0;
     }
 
     private LancamentoDTO buildLancamentoDTO(ExtratoFaturaCartao extratoFaturaCartao) {

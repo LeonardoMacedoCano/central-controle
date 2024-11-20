@@ -8,6 +8,7 @@ import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -15,7 +16,7 @@ public class DespesaDTO implements LancamentoItemDTO {
     private Long id;
     private CategoriaDTO categoria;
     private Date dataVencimento;
-    private Double valor;
+    private BigDecimal valor;
     private DespesaFormaPagamentoEnum formaPagamento;
 
     public static DespesaDTO converterParaDTO(Despesa despesa) {
@@ -34,7 +35,7 @@ public class DespesaDTO implements LancamentoItemDTO {
                             Lancamento lancamento,
                             DespesaCategoria despesaCategoria,
                             Date dataVencimento,
-                            Double valor,
+                            BigDecimal valor,
                             DespesaFormaPagamentoEnum formaPagamento) {
         Despesa despesa = new Despesa();
 

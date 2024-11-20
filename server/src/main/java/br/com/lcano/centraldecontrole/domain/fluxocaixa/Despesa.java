@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Table(name = "despesa")
@@ -38,7 +39,7 @@ public class Despesa implements Serializable {
     private Date dataVencimento;
 
     @Column(nullable = false)
-    private double valor;
+    private BigDecimal valor;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "formapagamento", nullable = false)

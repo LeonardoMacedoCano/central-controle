@@ -5,11 +5,13 @@ import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 public class ReceitaDTO implements LancamentoItemDTO {
     private Long id;
     private CategoriaDTO categoria;
-    private Double valor;
+    private BigDecimal valor;
 
     public static ReceitaDTO converterParaDTO(Receita receita) {
         ReceitaDTO dto = new ReceitaDTO();

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class ExtratoFaturaCartaoCSVParser {
         extrato.setDataLancamento(parseDate(line[0]));
         extrato.setCategoria(line[1]);
         extrato.setDescricao(line[2]);
-        extrato.setValor(Double.valueOf(line[3]));
+        extrato.setValor(BigDecimal.valueOf(Long.parseLong(line[3])));
 
         return extrato;
     }

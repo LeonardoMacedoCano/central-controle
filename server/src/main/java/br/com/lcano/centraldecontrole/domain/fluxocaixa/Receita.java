@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Table(name = "receita")
 @Entity
@@ -31,5 +32,5 @@ public class Receita implements Serializable {
     private ReceitaCategoria categoria;
 
     @Column(nullable = false)
-    private double valor;
+    private BigDecimal valor;
 }

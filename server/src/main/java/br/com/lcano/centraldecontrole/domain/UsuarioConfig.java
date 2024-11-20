@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Table(name = "usuarioconfig")
 @Entity
@@ -25,10 +26,10 @@ public class UsuarioConfig implements Serializable {
     private Usuario usuario;
 
     @Column(name = "despesavalormetamensal")
-    private double despesaValorMetaMensal;
+    private BigDecimal despesaValorMetaMensal;
 
     public UsuarioConfig(Usuario usuario) {
         this.usuario = usuario;
-        this.despesaValorMetaMensal = 0.0;
+        this.despesaValorMetaMensal = BigDecimal.ZERO;
     }
 }
