@@ -1,5 +1,6 @@
 package br.com.lcano.centraldecontrole.exception;
 
+import br.com.lcano.centraldecontrole.exception.fluxocaixa.AtivoException;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.ReceitaException;
 import br.com.lcano.centraldecontrole.exception.servicos.DockerException;
@@ -82,6 +83,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ReceitaException.ReceitaNaoEncontradaByLancamentoId.class})
     protected ResponseEntity<Object> handleReceitaNaoEncontradaByLancamentoId(ReceitaException.ReceitaNaoEncontradaByLancamentoId ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({AtivoException.CategoriaNaoEncontradaById.class})
+    protected ResponseEntity<Object> handleAtivoCategoriaNaoEncontradaById(AtivoException.CategoriaNaoEncontradaById ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({AtivoException.AtivoNaoEncontradaByLancamentoId.class})
+    protected ResponseEntity<Object> handleAtivoNaoEncontradaByLancamentoId(AtivoException.AtivoNaoEncontradaByLancamentoId ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 

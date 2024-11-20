@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="create-table-ativocategoria" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela ativocategoria já existe">
+            <not>
+                <tableExists tableName="ativocategoria"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="ativocategoria">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ativocategoria"/>
+            </column>
+            <column name="descricao" type="${varchar_255}">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <insert tableName="ativocategoria">
+            <column name="descricao" value="Ação Nacional"/>
+        </insert>
+        <insert tableName="ativocategoria">
+            <column name="descricao" value="Ação Internacional"/>
+        </insert>
+        <insert tableName="ativocategoria">
+            <column name="descricao" value="Fundo Imobiliário"/>
+        </insert>
+        <insert tableName="ativocategoria">
+            <column name="descricao" value="ETF"/>
+        </insert>
+        <insert tableName="ativocategoria">
+            <column name="descricao" value="Criptomoeda"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="create-table-ativo" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela ativo já existe">
+            <not>
+                <tableExists tableName="ativo"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="ativo">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ativo"/>
+            </column>
+            <column name="idlancamento" type="${integer}">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="idcategoria" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ticker" type="${varchar_255}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="operacao" type="${varchar_6}">
+                <constraints nullable="false" checkConstraint="operacao IN ('COMPRA', 'VENDA')"/>
+            </column>
+            <column name="quantidade" type="${number_18_6}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="precounitario" type="${number_10_2}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datamovimento" type="${date}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="ativo"
+                                 baseColumnNames="idlancamento"
+                                 constraintName="fk_ativo_lancamento"
+                                 referencedTableName="lancamento"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="ativo"
+                                 baseColumnNames="idcategoria"
+                                 constraintName="fk_ativo_categoria"
+                                 referencedTableName="ativocategoria"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

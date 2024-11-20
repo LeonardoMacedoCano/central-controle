@@ -2,6 +2,7 @@ package br.com.lcano.centraldecontrole.dto;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.AtivoDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
@@ -30,6 +31,7 @@ public class LancamentoDTO {
     @JsonSubTypes({
             @JsonSubTypes.Type(value = DespesaDTO.class, name = "DESPESA"),
             @JsonSubTypes.Type(value = ReceitaDTO.class, name = "RECEITA"),
+            @JsonSubTypes.Type(value = AtivoDTO.class, name = "ATIVO"),
     })
     private LancamentoItemDTO itemDTO;
 
