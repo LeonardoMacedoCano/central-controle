@@ -52,16 +52,13 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
   };
 
   const handleUpdatePrecoUnitario = (value: any) => {
-    if (typeof value === 'number') {
-      updateAtivo({ precoUnitario: value });
-    }
+    updateAtivo({ precoUnitario: value });
   };
 
   const handleUpdateQuantidade = (value: any) => {
-    if (typeof value === 'number') {
-      updateAtivo({ quantidade: value });
-    }
+    updateAtivo({ quantidade: value });
   };
+  
 
   const handleUpdateOperacao = (value: any) => {
     const selectedOperacao = getAtivoOperacaoByCodigo(value); 
@@ -135,6 +132,7 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
               type='number'
               value={ativo.quantidade}
               editable={true}
+              maxDecimalPlaces={6}
               onUpdate={handleUpdateQuantidade}
             />
           </FlexBox.Item>

@@ -26,6 +26,7 @@ type FieldValueProps = {
   icon?: React.ReactNode;
   padding?: string;
   placeholder?: string;
+  maxDecimalPlaces?: number;
   onUpdate?: (value: any) => void;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 };
@@ -48,46 +49,63 @@ const FieldValue: React.FC<FieldValueProps> = ({
   icon,
   padding,
   placeholder,
+  maxDecimalPlaces = 2,
   onUpdate,
   onKeyDown,
 }) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
     if (onUpdate) {
       let formattedValue: any = event.target.value;
-
+  
       if (type === 'number') {
-        formattedValue = parseFloat(event.target.value);
-        if ((minValue || minValue == 0) && formattedValue < minValue) {
-          formattedValue = minValue;
-        } else if (maxValue && formattedValue > maxValue) {
-          formattedValue = maxValue;
+        const [integerPart, decimalPart] = formattedValue.split('.');
+        if (decimalPart && decimalPart.length > maxDecimalPlaces) {
+          formattedValue = `${integerPart}.${decimalPart.slice(0, maxDecimalPlaces)}`;
+        }
+  
+        if ((minValue || minValue == 0) && parseFloat(formattedValue) < minValue) {
+          formattedValue = minValue.toString();
+        } else if (maxValue && parseFloat(formattedValue) > maxValue) {
+          formattedValue = maxValue.toString();
         }
       } else if (type === 'boolean') {
         formattedValue = event.target.value === 'true';
       } else if (type === 'date') {
         formattedValue = parseDateStringToDate(event.target.value);
       }
-
+  
       onUpdate(formattedValue);
     }
   };
-
+  
+  
   const formatValue = (val: any) => {
-    if ((type !== 'date') && (typeof val === 'string' || typeof val === 'number')) {
+    if (typeof val === 'string' || typeof val === 'number') {
+      if (type === 'number' && typeof val === 'string') {
+        return val;
+      }
       return String(val);
-    } else if (val instanceof Date && type === 'month') {
-      return formatDateToYMString(val);
-    } else if (typeof val === 'string' && type === 'date') {
-      return formatDateToYMDString(parseDateStringToDate(val));
-    } else if (type === 'date') {
-      return formatDateToYMDString((val));
-    } else if (typeof val === 'boolean' && type === 'boolean') {
-      return val ? 'true' : 'false';
-    } else {
-      return '';
     }
+  
+    if (val instanceof Date && type === 'month') {
+      return formatDateToYMString(val);
+    }
+  
+    if (typeof val === 'string' && type === 'date') {
+      return formatDateToYMDString(parseDateStringToDate(val));
+    }
+  
+    if (type === 'date') {
+      return formatDateToYMDString(val);
+    }
+  
+    if (typeof val === 'boolean' && type === 'boolean') {
+      return val ? 'true' : 'false';
+    }
+  
+    return '';
   };
-
+  
   return (
     <StyledFieldValue width={width} maxWidth={maxWidth} maxHeight={maxHeight} inline={inline} padding={padding}>
       {description && 
