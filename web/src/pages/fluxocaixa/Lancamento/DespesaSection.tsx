@@ -36,10 +36,10 @@ const DespesaSection: React.FC<DespesaSectionProps> = ({ despesa }) => {
           </FlexBox.Item>
           <FlexBox.Item >
             <FieldValue 
-                description='Valor'
-                type='string'
-                value={formatValueToBRL(despesa.valor)}
-              />
+              description='Valor'
+              type='string'
+              value={formatValueToBRL(despesa.valor)}
+            />
           </FlexBox.Item>
         </FlexBox>
       </FlexBox>

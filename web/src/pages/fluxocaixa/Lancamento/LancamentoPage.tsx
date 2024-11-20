@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, FieldValue, FlexBox, Loading, Panel } from '../../../components';
 import { useParams } from 'react-router-dom';
-import { getDescricaoTipoLancamento, Lancamento } from '../../../types';
+import { Ativo, Despesa, getDescricaoTipoLancamento, Lancamento, Receita } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
 import { formatDateToShortString } from '../../../utils';
 import DespesaSection from './DespesaSection';
 import ReceitaSection from './ReceitaSection';
+import AtivoSection from './AtivoSection';
 
 const LancamentoPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -37,13 +38,15 @@ const LancamentoPage: React.FC = () => {
   };
 
   const renderLancamentoSection = () => {
-    if (!lancamento || !lancamento.tipo) return null;
+    if (!lancamento || !lancamento.tipo || !lancamento.itemDTO) return null;
   
     switch (lancamento.tipo) {
       case 'DESPESA':
-        return <DespesaSection despesa={lancamento.itemDTO!} />;
+        return <DespesaSection despesa={lancamento.itemDTO as Despesa} />;
       case 'RECEITA':
-        return <ReceitaSection receita={lancamento.itemDTO!} />;
+        return <ReceitaSection receita={lancamento.itemDTO as Receita} />;
+      case 'ATIVO':
+        return <AtivoSection ativo={lancamento.itemDTO as Ativo} />;
       default:
         return null;
     }

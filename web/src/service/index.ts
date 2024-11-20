@@ -6,6 +6,7 @@ import ServicoService from "./servicos/ServicoService";
 import ServidorConfigService from "./servicos/ServidorConfigService";
 import ArquivoService from "./ArquivoService";
 import ReceitaCategoriaService from "./fluxocaixa/ReceitaCategoriaService";
+import AtivoCategoriaService from "./fluxocaixa/AtivoCategoriaService";
 
 export {
   AuthService,
@@ -15,5 +16,6 @@ export {
   ServicoService,
   ServidorConfigService,
   ArquivoService,
-  ReceitaCategoriaService
+  ReceitaCategoriaService,
+  AtivoCategoriaService
 }

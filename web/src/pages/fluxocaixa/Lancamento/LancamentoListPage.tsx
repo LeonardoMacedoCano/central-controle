@@ -150,7 +150,5 @@ const getTipoVariant = (tipo: TipoLancamentoEnum): 'success' | 'info' | 'warning
       return 'success';
     case 'ATIVO':
       return 'info';
-    default:
-      return 'info';
   }
 };

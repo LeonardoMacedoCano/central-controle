@@ -1,12 +1,12 @@
 export type DespesaFormaPagamentoEnum = 'DINHEIRO' | 'PIX' | 'CARTAO_CREDITO' | 'CARTAO_DEBITO';
 
-export interface DespesaFormaPagamentoInfo {
+interface DespesaFormaPagamentoInfo {
   tipo: DespesaFormaPagamentoEnum;
   descricao: string;
   codigo: string;
 }
 
-export const DespesaFormasPagamentos: Record<DespesaFormaPagamentoEnum, DespesaFormaPagamentoInfo> = {
+const DespesaFormasPagamentos: Record<DespesaFormaPagamentoEnum, DespesaFormaPagamentoInfo> = {
   DINHEIRO: { tipo: 'DINHEIRO', descricao: 'Dinheiro', codigo: '1' },
   PIX: { tipo: 'PIX', descricao: 'PIX', codigo: '2' },
   CARTAO_CREDITO: { tipo: 'CARTAO_CREDITO', descricao: 'Cartão de Crédito', codigo: '3' },

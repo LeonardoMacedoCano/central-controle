@@ -46,6 +46,17 @@ import {
   Receita,
   initialReceitaState
 } from "./fluxocaixa/Receita";
+import { 
+  AtivoOperacaoEnum,
+  getDescricaoAtivoOperacao,
+  getCodigoAtivoOperacao,
+  getAtivoOperacaoByCodigo,
+  ativoOperacaoOptions
+} from "./fluxocaixa/AtivoOperacaoEnum";
+import { 
+  Ativo,
+  initialAtivoState
+} from "./fluxocaixa/Ativo";
 
 export type {
   Categoria,
@@ -67,7 +78,9 @@ export type {
   Arquivo,
   ServidorConfig,
   ServicoCategoria,
-  Receita
+  Receita,
+  AtivoOperacaoEnum,
+  Ativo,
 };
 
 export {
@@ -87,5 +100,10 @@ export {
   ContainerActionEnum,
   getDescricaoDockerStatus,
   convertToOptions,
-  initialReceitaState
+  initialReceitaState,
+  getDescricaoAtivoOperacao,
+  getCodigoAtivoOperacao,
+  getAtivoOperacaoByCodigo,
+  ativoOperacaoOptions,
+  initialAtivoState,
 };

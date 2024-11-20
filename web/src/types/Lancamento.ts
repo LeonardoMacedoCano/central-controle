@@ -1,9 +1,11 @@
 import { 
+  Ativo,
   Despesa,
+  Receita,
   TipoLancamentoEnum 
 } from "./";
 
-type LancamentoItemDTO = Despesa;
+type LancamentoItemDTO = Despesa | Receita | Ativo;
 
 export type Lancamento = {
   id: number;

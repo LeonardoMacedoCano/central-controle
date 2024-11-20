@@ -14,7 +14,8 @@ import {
 
 import { 
   formatValueToBRL,
-  formatNumberWithLeadingZeros
+  formatNumberWithLeadingZeros,
+  formatNumberWithTrailingZeros
 } from "./ValorUtils";
 
 import { 
@@ -42,5 +43,6 @@ export {
   buildFilterRsql,
   getIconByName,
   formatNumberWithLeadingZeros,
-  copyLinkToClipboard
+  copyLinkToClipboard,
+  formatNumberWithTrailingZeros
 };

@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, FieldValue, FlexBox, FloatingButton, Panel } from '../../../components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCodigoTipoLancamento, getDescricaoTipoLancamento, getTipoLancamentoByCodigo, initialReceitaState, Lancamento, tipoLancamentoOptions } from '../../../types';
+import { Ativo, getCodigoTipoLancamento, getDescricaoTipoLancamento, getTipoLancamentoByCodigo, initialAtivoState, initialReceitaState, Lancamento, Receita, tipoLancamentoOptions } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
 import { formatDateToShortString, getCurrentDate } from '../../../utils';
 import { FaCheck } from 'react-icons/fa';
 import DespesaSectionForm from './DespesaSectionForm';
-import { initialDespesaState } from '../../../types/fluxocaixa/Despesa';
+import { Despesa, initialDespesaState } from '../../../types/fluxocaixa/Despesa';
 import ReceitaSectionForm from './ReceitaSectionForm';
+import AtivoSectionForm from './AtivoSectionForm';
 
 const LancamentoFormPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
@@ -64,15 +65,41 @@ const LancamentoFormPage: React.FC = () => {
   };
 
   const isRequiredFieldsFilled = (): boolean => {
-    return (
-      lancamento.descricao.trim() !== '' &&
-      lancamento.tipo !== undefined &&
-      (lancamento.tipo !== 'DESPESA' ||
-        (lancamento.itemDTO?.categoria !== undefined &&
-        lancamento.itemDTO?.formaPagamento !== undefined &&
-        lancamento.itemDTO?.valor > 0)
-      )
-    );
+    if (!lancamento.descricao.trim() || !lancamento.tipo || !lancamento.itemDTO) return false;
+  
+    const { tipo, itemDTO } = lancamento;
+  
+    if (tipo === 'DESPESA') {
+      const despesa = itemDTO as Despesa;
+      return (
+        !!despesa.categoria && 
+        !!despesa.formaPagamento && 
+        despesa.valor > 0 &&
+        despesa.dataVencimento instanceof Date && !isNaN(despesa.dataVencimento.getTime())
+      );
+    }
+  
+    if (tipo === 'RECEITA') {
+      const receita = itemDTO as Receita;
+      return (
+        !!receita.categoria && 
+        receita.valor > 0
+      );
+    }
+  
+    if (tipo === 'ATIVO') {
+      const ativo = itemDTO as Ativo;
+      return (
+        !!ativo.categoria &&
+        !!ativo.ticker &&
+        ativo.quantidade > 0 &&
+        ativo.precoUnitario > 0 &&
+        !!ativo.operacao &&
+        ativo.dataMovimento instanceof Date && !isNaN(ativo.dataMovimento.getTime())
+      );      
+    }
+  
+    return false;
   };
 
   const saveLancamento = async () => {
@@ -98,9 +125,11 @@ const LancamentoFormPage: React.FC = () => {
   
     switch (lancamento.tipo) {
       case 'DESPESA':
-        return <DespesaSectionForm despesa={lancamento.itemDTO || initialDespesaState} onUpdate={handleUpdateItem} />;
+        return <DespesaSectionForm despesa={lancamento.itemDTO as Despesa || initialDespesaState} onUpdate={handleUpdateItem} />;
       case 'RECEITA':
-        return <ReceitaSectionForm receita={lancamento.itemDTO || initialReceitaState} onUpdate={handleUpdateItem} />;
+        return <ReceitaSectionForm receita={lancamento.itemDTO as Receita || initialReceitaState} onUpdate={handleUpdateItem} />;
+      case 'ATIVO':
+        return <AtivoSectionForm ativo={lancamento.itemDTO as Ativo || initialAtivoState} onUpdate={handleUpdateItem} />;
       default:
         return null;
     }
