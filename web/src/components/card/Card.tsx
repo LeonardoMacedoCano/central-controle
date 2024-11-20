@@ -17,7 +17,7 @@ const Card: React.FC<CardProps> = ({
   height = '100%', 
   style, 
   children, 
-  hasBorder = true
+  hasBorder = false
 }) => {
   return (
     <OuterContainer>
@@ -44,6 +44,7 @@ const InnerCardContainer = styled.div<CardProps>`
   align-items: center;
   border-radius: 50px;
   background-color: transparent;
+  font-weight: bold;
 
   ${({ width, height }) => css`
     width: ${width};
@@ -53,7 +54,7 @@ const InnerCardContainer = styled.div<CardProps>`
   color: ${({ variant, theme }) => getVariantColor(theme, variant)};
   
   ${({ hasBorder, variant, theme }) => hasBorder && css`
-    border: 2px solid ${getVariantColor(theme, variant)};
+    border: 1px solid ${getVariantColor(theme, variant)};
   `}
 
   text-align: center;

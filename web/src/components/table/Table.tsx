@@ -18,6 +18,7 @@ type ColumnProps<T> = {
   value(value: T, index: number): ReactNode;
   width?: string;
   align?: 'left' | 'center' | 'right';
+  titleAlign?: 'left' | 'center' | 'right';
 };
 
 export const Column = <T extends any>({}: ColumnProps<T>) => {
@@ -120,7 +121,9 @@ export const Table = <T extends Indexable>({
             const columnProps = column.props as ColumnProps<T>;
             return (
               <TableHeadColumn key={index}>
-                <TableColumnTitle>{columnProps.header}</TableColumnTitle>
+                <TableColumnTitle align={columnProps.titleAlign || 'center'}>
+                  {columnProps.header}
+                </TableColumnTitle>
               </TableHeadColumn>
             );
           }
@@ -230,12 +233,13 @@ const TableHeadColumn = styled.th`
   }
 `;
 
-const TableColumnTitle = styled.div`
+const TableColumnTitle = styled.div<{ align?: string }>`
   font-size: 14px;
   height: 40px;
-  text-align: left;
+  text-align: ${({ align }) => align};
   display: flex;
   align-items: center;
+  justify-content: ${({ align }) => align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center'};
   box-sizing: border-box;
   color: ${({ theme }) => theme.colors.quaternary};
 `;
@@ -255,7 +259,7 @@ const TableRow = styled.tr<{ isSelected?: boolean }>`
 const TableColumn = styled.td<{ isSelected?: boolean; width?: string; align?: string }>`
   font-size: 13px;
   height: 35px;
-  padding: 0 3px;
+  padding: 0 5px;
   text-align: ${({ align }) => align || 'left'};
   border-left: 1px solid ${({ theme }) => theme.colors.gray};
   position: relative;
