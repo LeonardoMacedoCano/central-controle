@@ -40,7 +40,7 @@ public class ExtratoFaturaCartaoCSVParser {
         extrato.setDataLancamento(parseDate(line[0]));
         extrato.setCategoria(line[1]);
         extrato.setDescricao(line[2]);
-        extrato.setValor(BigDecimal.valueOf(Long.parseLong(line[3])));
+        extrato.setValor(new BigDecimal(line[3]));
 
         return extrato;
     }
