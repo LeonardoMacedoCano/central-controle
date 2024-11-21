@@ -1,7 +1,7 @@
 import React from 'react';
 import { FieldValue, FlexBox, Panel } from '../../../components';
 import { Receita } from '../../../types';
-import { formatValueToBRL } from '../../../utils';
+import { formatDateToShortString, formatValueToBRL } from '../../../utils';
 
 interface ReceitaSectionProps {
   receita: Receita;
@@ -11,6 +11,13 @@ const ReceitaSection: React.FC<ReceitaSectionProps> = ({ receita }) => {
     <Panel maxWidth='1000px' title='Receita' padding='15px 0 0 0'>
       <FlexBox flexDirection="column">
         <FlexBox flexDirection="row" borderBottom>
+          <FlexBox.Item borderRight>
+            <FieldValue 
+              description='Data Recebimento'
+              type='string'
+                value={formatDateToShortString(receita.dataRecebimento)}
+            />
+          </FlexBox.Item>
           <FlexBox.Item >
             <FieldValue 
               description='Categoria'

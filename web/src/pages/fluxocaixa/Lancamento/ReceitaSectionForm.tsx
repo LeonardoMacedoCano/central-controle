@@ -3,6 +3,7 @@ import { FieldValue, FlexBox, Panel } from '../../../components';
 import { Categoria, Receita } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { ReceitaCategoriaService } from '../../../service';
+import { formatDateToYMDString } from '../../../utils';
 
 interface ReceitaSectionFormProps {
   receita: Receita;
@@ -49,10 +50,25 @@ const ReceitaSectionForm: React.FC<ReceitaSectionFormProps> = ({ receita, onUpda
     }
   };
 
+  const handleUpdateDataRecebimento = (value: any) => {
+    if (value instanceof Date) {
+      updateReceita({ dataRecebimento: value });
+    }
+  };
+
   return (
-    <Panel maxWidth='1000px' title='Receita' padding='10px 0 0 0'>
+    <Panel maxWidth='1000px' title='Receita' padding='15px 0 0 0'>
       <FlexBox flexDirection="column">
         <FlexBox flexDirection="row" borderBottom>
+          <FlexBox.Item borderRight>
+            <FieldValue 
+              description='Data Recebimento'
+              type='date'
+              value={formatDateToYMDString(receita?.dataRecebimento)}
+              editable={true}
+              onUpdate={handleUpdateDataRecebimento}
+            />
+          </FlexBox.Item>
           <FlexBox.Item >
             <FieldValue 
               description='Categoria'

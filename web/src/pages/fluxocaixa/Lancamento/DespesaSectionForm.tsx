@@ -62,7 +62,7 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
   };
 
   return (
-    <Panel maxWidth='1000px' title='Despesa' padding='10px 0 0 0'>
+    <Panel maxWidth='1000px' title='Despesa' padding='15px 0 0 0'>
       <FlexBox flexDirection="column">
         <FlexBox flexDirection="row" borderBottom>
           <FlexBox.Item borderRight>

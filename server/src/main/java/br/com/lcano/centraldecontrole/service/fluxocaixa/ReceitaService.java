@@ -26,6 +26,7 @@ public class ReceitaService implements LancamentoItemService<ReceitaDTO>  {
         receita.setLancamento(lancamento);
         receita.setCategoria(this.receitaCategoriaService.getCategoriaById(itemDTO.getCategoria().getId()));
         receita.setValor(itemDTO.getValor());
+        receita.setDataRecebimento(itemDTO.getDataRecebimento());
         this.receitaRepository.save(receita);
     }
 
@@ -35,6 +36,7 @@ public class ReceitaService implements LancamentoItemService<ReceitaDTO>  {
         Receita receita = this.getReceitaByLancamentoId(id);
         receita.setCategoria(this.getCategoriaById(itemDTO.getCategoria().getId()));
         receita.setValor(itemDTO.getValor());
+        receita.setDataRecebimento(itemDTO.getDataRecebimento());
         this.receitaRepository.save(receita);
     }
 

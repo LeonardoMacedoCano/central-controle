@@ -7,6 +7,7 @@ import lombok.*;
 import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 @Table(name = "receita")
 @Entity
@@ -33,4 +34,7 @@ public class Receita implements Serializable {
 
     @Column(nullable = false)
     private BigDecimal valor;
+
+    @Column(name = "datarecebimento", nullable = false)
+    private Date dataRecebimento;
 }
