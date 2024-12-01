@@ -56,9 +56,7 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
   };
 
   const handleUpdateValor = (value: any) => {
-    if (typeof value === 'number') {
-      updateDespesa({ valor: value });
-    }
+    updateDespesa({ valor: value });
   };
 
   return (

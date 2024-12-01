@@ -133,6 +133,7 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
               value={ativo.quantidade}
               editable={true}
               maxDecimalPlaces={6}
+              maxIntegerDigits={12}
               onUpdate={handleUpdateQuantidade}
             />
           </FlexBox.Item>

@@ -45,9 +45,7 @@ const ReceitaSectionForm: React.FC<ReceitaSectionFormProps> = ({ receita, onUpda
   };
 
   const handleUpdateValor = (value: any) => {
-    if (typeof value === 'number') {
-      updateReceita({ valor: value });
-    }
+    updateReceita({ valor: value });
   };
 
   const handleUpdateDataRecebimento = (value: any) => {
