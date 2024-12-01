@@ -107,17 +107,17 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubme
       Text: "Home"
     },
     {
-      to: "/servicos",
-      Icon: FaServer,
-      Text: "Serviços"
-    },
-    {
       Icon: FaDollarSign,
       Text: "Fluxo Caixa",
       submenu: [{
         to: "/lancamentos",
         Text: "Lançamento"
       }],
+    },
+    {
+      to: "/servicos",
+      Icon: FaServer,
+      Text: "Serviços"
     },
     {
       to: "/configuracao",
