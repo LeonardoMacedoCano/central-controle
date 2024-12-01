@@ -27,6 +27,7 @@ type FieldValueProps = {
   padding?: string;
   placeholder?: string;
   maxDecimalPlaces?: number;
+  maxIntegerDigits?: number;
   onUpdate?: (value: any) => void;
   onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>;
 };
@@ -50,34 +51,60 @@ const FieldValue: React.FC<FieldValueProps> = ({
   padding,
   placeholder,
   maxDecimalPlaces = 2,
+  maxIntegerDigits = 8,
   onUpdate,
   onKeyDown,
 }) => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLSelectElement>) => {
-    if (onUpdate) {
-      let formattedValue: any = event.target.value;
-  
-      if (type === 'number') {
-        const [integerPart, decimalPart] = formattedValue.split('.');
-        if (decimalPart && decimalPart.length > maxDecimalPlaces) {
-          formattedValue = `${integerPart}.${decimalPart.slice(0, maxDecimalPlaces)}`;
-        }
-  
-        if ((minValue || minValue == 0) && parseFloat(formattedValue) < minValue) {
-          formattedValue = minValue.toString();
-        } else if (maxValue && parseFloat(formattedValue) > maxValue) {
-          formattedValue = maxValue.toString();
-        }
-      } else if (type === 'boolean') {
+    if (!onUpdate) return;
+
+    let formattedValue: any = event.target.value;
+
+    switch (type) {
+      case 'number':
+      case 'string':
+        formattedValue = validateNumericInput(formattedValue);
+        formattedValue = validateMinValue(formattedValue);
+        formattedValue = validateMaxValue(formattedValue);
+        break;
+      case 'boolean':
         formattedValue = event.target.value === 'true';
-      } else if (type === 'date') {
+        break;
+      case 'date':
         formattedValue = parseDateStringToDate(event.target.value);
-      }
-  
-      onUpdate(formattedValue);
+        break;
     }
+
+    onUpdate(formattedValue);
+  };
+
+  const validateNumericInput = (value: string): string => {
+    const [integerPart, decimalPart] = value.split('.');
+    
+    if (integerPart.length > maxIntegerDigits) {
+      value = `${integerPart.slice(0, maxIntegerDigits)}${decimalPart ? '.' + decimalPart : ''}`;
+    }
+  
+    if (type === 'number' && decimalPart && decimalPart.length > maxDecimalPlaces) {
+      value = `${integerPart}.${decimalPart.slice(0, maxDecimalPlaces)}`;
+    }
+  
+    return value;
   };
   
+  const validateMinValue = (value: string): string => {
+    if ((minValue || minValue === 0) && parseFloat(value) < minValue) {
+      return minValue.toString();
+    }
+    return value;
+  };
+  
+  const validateMaxValue = (value: string): string => {
+    if (maxValue && parseFloat(value) > maxValue) {
+      return maxValue.toString();
+    }
+    return value;
+  };
   
   const formatValue = (val: any) => {
     if (typeof val === 'string' || typeof val === 'number') {
