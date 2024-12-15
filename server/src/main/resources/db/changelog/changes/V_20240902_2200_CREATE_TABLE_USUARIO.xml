@@ -25,7 +25,9 @@
             <column name="datainclusao" type="${date}">
                 <constraints nullable="false"/>
             </column>
-            <column name="ativo" type="${char_1}" defaultValue="S"/>
+            <column name="ativo" type="${char_1}" defaultValue="S">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 </databaseChangeLog>
