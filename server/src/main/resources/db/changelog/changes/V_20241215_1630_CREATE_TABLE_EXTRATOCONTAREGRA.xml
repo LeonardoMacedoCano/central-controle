@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="create-extratocontaregra" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela extratocontaregra já existe">
+            <not>
+                <tableExists tableName="extratocontaregra"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="extratocontaregra">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_extratocontaregra"/>
+            </column>
+            <column name="idusuario" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tiporegra" type="${varchar_15}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="descricaomatch" type="${varchar_255}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idcategoria" type="${integer}"/>
+            <column name="prioridade" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ativo" type="${char_1}" defaultValue="S"/>
+        </createTable>
+
+        <addUniqueConstraint tableName="extratocontaregra"
+                             columnNames="idusuario, prioridade"
+                             constraintName="uq_extratocontaregra_usupr"/>
+
+        <addForeignKeyConstraint baseTableName="extratocontaregra"
+                                 baseColumnNames="idusuario"
+                                 constraintName="fk_extratocontaregra_usuario"
+                                 referencedTableName="usuario"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
