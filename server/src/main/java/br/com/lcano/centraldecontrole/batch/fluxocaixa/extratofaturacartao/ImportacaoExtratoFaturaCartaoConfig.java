@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.batch.fluxocaixa;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoFaturaCartao;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
