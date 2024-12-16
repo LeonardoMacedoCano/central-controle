@@ -1,7 +1,7 @@
 package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
 
 import br.com.lcano.centraldecontrole.domain.Usuario;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoFaturaCartao;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoFaturaCartaoDTO;
 import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
@@ -24,7 +24,7 @@ import java.util.Date;
 
 @Component
 @StepScope
-public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<ExtratoFaturaCartao, LancamentoDTO>, StepExecutionListener {
+public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<ExtratoFaturaCartaoDTO, LancamentoDTO>, StepExecutionListener {
 
     @Autowired
     UsuarioService usuarioService;
@@ -50,7 +50,7 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
     }
 
     @Override
-    public LancamentoDTO process(ExtratoFaturaCartao extratoFaturaCartao) {
+    public LancamentoDTO process(ExtratoFaturaCartaoDTO extratoFaturaCartao) {
         if (this.isDespesa(extratoFaturaCartao)) {
             LancamentoDTO lancamentoDTO = this.buildLancamentoDTO(extratoFaturaCartao);
             DespesaDTO despesaDTO = this.buildDespesaDTO(extratoFaturaCartao);
@@ -62,11 +62,11 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
         return null;
     }
 
-    private Boolean isDespesa(ExtratoFaturaCartao extratoFaturaCartao) {
+    private Boolean isDespesa(ExtratoFaturaCartaoDTO extratoFaturaCartao) {
         return extratoFaturaCartao.getValor().compareTo(BigDecimal.valueOf(0.00)) > 0;
     }
 
-    private LancamentoDTO buildLancamentoDTO(ExtratoFaturaCartao extratoFaturaCartao) {
+    private LancamentoDTO buildLancamentoDTO(ExtratoFaturaCartaoDTO extratoFaturaCartao) {
         LancamentoDTO lancamentoDTO = new LancamentoDTO();
 
         lancamentoDTO.setDataLancamento(extratoFaturaCartao.getDataLancamento());
@@ -77,7 +77,7 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
         return lancamentoDTO;
     }
 
-    private DespesaDTO buildDespesaDTO(ExtratoFaturaCartao extratoFaturaCartao) {
+    private DespesaDTO buildDespesaDTO(ExtratoFaturaCartaoDTO extratoFaturaCartao) {
         DespesaDTO despesaDTO = new DespesaDTO();
 
         String descricaoCategoriaFormatada = StringUtil.capitalizeFirstLetter(extratoFaturaCartao.getCategoria());

@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
 
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoFaturaCartao;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoFaturaCartaoDTO;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import com.opencsv.CSVReader;
 import org.springframework.stereotype.Component;
@@ -14,8 +14,8 @@ import java.util.List;
 @Component
 public class ExtratoFaturaCartaoCSVParser {
 
-    public List<ExtratoFaturaCartao> parse(InputStream inputStream) throws Exception {
-        List<ExtratoFaturaCartao> extratos = new ArrayList<>();
+    public List<ExtratoFaturaCartaoDTO> parse(InputStream inputStream) throws Exception {
+        List<ExtratoFaturaCartaoDTO> extratos = new ArrayList<>();
 
         try (CSVReader csvReader = new CSVReader(new InputStreamReader(inputStream))) {
             String[] line;
@@ -32,8 +32,8 @@ public class ExtratoFaturaCartaoCSVParser {
         return extratos;
     }
 
-    private ExtratoFaturaCartao parseExtrato(String[] line) {
-        ExtratoFaturaCartao extrato = new ExtratoFaturaCartao();
+    private ExtratoFaturaCartaoDTO parseExtrato(String[] line) {
+        ExtratoFaturaCartaoDTO extrato = new ExtratoFaturaCartaoDTO();
 
         extrato.setDataLancamento(DateUtil.parseDate(line[0]));
         extrato.setCategoria(line[1]);
