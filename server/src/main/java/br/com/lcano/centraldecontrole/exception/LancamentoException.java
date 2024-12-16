@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.exception;
 public class LancamentoException extends RuntimeException {
     private static final String MSG_LANCAMENTO_NAO_ENCONTRADO_BY_ID = "Lançamento %d não encontrado.";
     private static final String MSG_LANCAMENTO_TIPO_NAO_SUPORTADO = "Tipo de lançamento %s não suportado";
-    private static final String MSG_ERRO_INICIAR_IMPORTACAO_EXTRATO = "Não foi possível iniciar a importação do extrato da fatura do cartão. Tente novamente mais tarde.";
+    private static final String MSG_ERRO_INICIAR_IMPORTACAO_EXTRATO = "Não foi possível iniciar a importação do extrato. Tente novamente mais tarde.";
 
     public static class LancamentoNaoEncontradoById extends RuntimeException {
         public LancamentoNaoEncontradoById(Long id) {

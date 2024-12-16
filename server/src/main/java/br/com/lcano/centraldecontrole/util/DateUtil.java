@@ -26,11 +26,14 @@ public class DateUtil {
     }
 
     public static Date parseDate(String dateStr) {
+        return parseDate(dateStr, "yyyy-MM-dd");
+    }
+
+    public static Date parseDate(String dateStr, String format) throws IllegalArgumentException {
         try {
-            return new SimpleDateFormat("yyyy-MM-dd").parse(dateStr);
+            return new SimpleDateFormat(format).parse(dateStr);
         } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
+            throw new IllegalArgumentException("Erro ao converter a data: " + dateStr + " com o formato: " + format, e);
         }
     }
 }

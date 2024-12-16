@@ -6,6 +6,7 @@ import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
 import br.com.lcano.centraldecontrole.util.StringUtil;
@@ -83,6 +84,7 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
         despesaDTO.setCategoria(this.getDespesaCategoriaDTO(descricaoCategoriaFormatada));
         despesaDTO.setDataVencimento(dataVencimento);
         despesaDTO.setValor(extratoFaturaCartao.getValor());
+        despesaDTO.setFormaPagamento(DespesaFormaPagamentoEnum.CARTAO_CREDITO);
 
         return despesaDTO;
     }
