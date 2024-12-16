@@ -1,7 +1,7 @@
-package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratoconta;
 
 import br.com.lcano.centraldecontrole.domain.Arquivo;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoFaturaCartao;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaDTO;
 import br.com.lcano.centraldecontrole.service.ArquivoService;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
@@ -15,21 +15,21 @@ import java.util.List;
 
 @Component
 @StepScope
-public class ImportacaoExtratoFaturaCartaoReader implements ItemReader<ExtratoFaturaCartao> {
+public class ImportacaoExtratoContaReader implements ItemReader<ExtratoContaDTO> {
 
     private final ArquivoService arquivoService;
     private final Long arquivoId;
-    private Iterator<ExtratoFaturaCartao> extratoIterator;
+    private Iterator<ExtratoContaDTO> extratoIterator;
 
     @Autowired
-    public ImportacaoExtratoFaturaCartaoReader(ArquivoService arquivoService,
-                                               @Value("#{jobParameters['arquivoId']}") Long arquivoId) {
+    public ImportacaoExtratoContaReader(ArquivoService arquivoService,
+                                        @Value("#{jobParameters['arquivoId']}") Long arquivoId) {
         this.arquivoService = arquivoService;
         this.arquivoId = arquivoId;
     }
 
     @Override
-    public ExtratoFaturaCartao read() throws Exception {
+    public ExtratoContaDTO read() throws Exception {
         if (extratoIterator == null) {
             this.initializeExtratoIterator();
         }
@@ -38,16 +38,16 @@ public class ImportacaoExtratoFaturaCartaoReader implements ItemReader<ExtratoFa
 
     private void initializeExtratoIterator() throws Exception {
         Arquivo arquivo = this.arquivoService.findByIdwithValidation(arquivoId);
-        List<ExtratoFaturaCartao> extratos = this.parseExtratos(arquivo.getConteudo());
+        List<ExtratoContaDTO> extratos = this.parseExtratos(arquivo.getConteudo());
         extratoIterator = extratos.iterator();
     }
 
-    private List<ExtratoFaturaCartao> parseExtratos(byte[] arquivoConteudo) throws Exception {
-        ExtratoFaturaCartaoCSVParser extratoFaturaCartaoCSVParser = new ExtratoFaturaCartaoCSVParser();
-        return extratoFaturaCartaoCSVParser.parse(new ByteArrayInputStream(arquivoConteudo));
+    private List<ExtratoContaDTO> parseExtratos(byte[] arquivoConteudo) throws Exception {
+        ExtratoContaCSVParser extratoContaCSVParser = new ExtratoContaCSVParser();
+        return extratoContaCSVParser.parse(new ByteArrayInputStream(arquivoConteudo));
     }
 
-    private ExtratoFaturaCartao getNextExtrato() {
+    private ExtratoContaDTO getNextExtrato() {
         if (extratoIterator != null && extratoIterator.hasNext()) {
             return extratoIterator.next();
         } else {

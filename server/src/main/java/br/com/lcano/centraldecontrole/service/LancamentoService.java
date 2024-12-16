@@ -10,6 +10,7 @@ import br.com.lcano.centraldecontrole.enums.OperatorFilterEnum;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.exception.LancamentoException;
 import br.com.lcano.centraldecontrole.repository.LancamentoRepository;
+import br.com.lcano.centraldecontrole.service.fluxocaixa.ImportacaoExtratoContaJobStarter;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.ImportacaoExtratoFaturaCartaoJobStarter;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import br.com.lcano.centraldecontrole.util.FilterUtil;
@@ -33,6 +34,7 @@ public class LancamentoService {
     private final DateUtil dateUtil;
     private final ArquivoService arquivoService;
     private final ImportacaoExtratoFaturaCartaoJobStarter importacaoExtratoFaturaCartaoJobStarter;
+    private final ImportacaoExtratoContaJobStarter importacaoExtratoContaJobStarter;
 
     @Transactional
     public Long createLancamento(LancamentoDTO lancamentoDTO) {
@@ -144,6 +146,17 @@ public class LancamentoService {
 
         try {
             importacaoExtratoFaturaCartaoJobStarter.startJob(arquivo.getId(), usuarioUtil.getUsuarioAutenticado().getId(), dataVencimento);
+        } catch (Exception e) {
+            arquivoService.deleteArquivoIfExists(arquivo.getId());
+            throw new LancamentoException.ErroIniciarImportacaoExtrato(e);
+        }
+    }
+
+    public void importExtratoConta(MultipartFile file) throws Exception {
+        Arquivo arquivo = arquivoService.uploadArquivo(file);
+
+        try {
+            importacaoExtratoContaJobStarter.startJob(arquivo.getId(), usuarioUtil.getUsuarioAutenticado().getId());
         } catch (Exception e) {
             arquivoService.deleteArquivoIfExists(arquivo.getId());
             throw new LancamentoException.ErroIniciarImportacaoExtrato(e);

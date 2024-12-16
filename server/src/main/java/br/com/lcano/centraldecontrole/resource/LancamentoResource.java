@@ -58,4 +58,10 @@ public class LancamentoResource {
         this.lancamentoService.importExtratoFaturaCartao(file, dataVencimento);
         return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
+
+    @PostMapping("/import-extrato-conta")
+    public ResponseEntity<Object> importExtratoConta(@RequestParam MultipartFile file) throws Exception {
+        this.lancamentoService.importExtratoConta(file);
+        return CustomSuccess.buildResponseEntity("Importação iniciada.");
+    }
 }

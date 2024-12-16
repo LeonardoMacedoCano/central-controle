@@ -25,7 +25,8 @@
             <column name="descricaomatch" type="${varchar_255}">
                 <constraints nullable="false"/>
             </column>
-            <column name="idcategoria" type="${integer}"/>
+            <column name="descricaodestino" type="${varchar_255}"/>
+            <column name="idcategoriadestino" type="${integer}"/>
             <column name="prioridade" type="${integer}">
                 <constraints nullable="false"/>
             </column>
