@@ -56,16 +56,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
-    @ExceptionHandler({UsuarioException.UsuarioConfigNaoEncontradoById.class})
-    protected ResponseEntity<Object> handleUsuarioConfigNaoEncontradoById(UsuarioException.UsuarioConfigNaoEncontradoById ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler({UsuarioException.UsuarioConfigNaoEncontrado.class})
-    protected ResponseEntity<Object> handleUsuarioConfigNaoEncontrado(UsuarioException.UsuarioConfigNaoEncontrado ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
     @ExceptionHandler({DespesaException.CategoriaNaoEncontradaById.class})
     protected ResponseEntity<Object> handleDespesaCategoriaNaoEncontradaById(DespesaException.CategoriaNaoEncontradaById ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());

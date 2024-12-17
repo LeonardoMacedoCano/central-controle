@@ -6,7 +6,6 @@ import { darkOnyxAmber } from './themes';
 import { 
   AuthProvider,
   ContextMessageProvider,
-  UsuarioConfigProvider,
   RequireAuth
 } from './contexts';
 import AppLayout from './menus/AppLayout';
@@ -18,17 +17,15 @@ const App: React.FC = () => {
     <ThemeProvider theme={darkOnyxAmber}>
       <ContextMessageProvider>
         <AuthProvider>
-          <UsuarioConfigProvider>
-            <BrowserRouter>
-              <GlobalStyles />
-              <RequireAuth>
-                <AppLayout>
-                  <AppRoutes />
-                </AppLayout>
-              </RequireAuth>
-              <DynamicFavicon />
-            </BrowserRouter>
-          </UsuarioConfigProvider>
+          <BrowserRouter>
+            <GlobalStyles />
+            <RequireAuth>
+              <AppLayout>
+                <AppRoutes />
+              </AppLayout>
+            </RequireAuth>
+            <DynamicFavicon />
+          </BrowserRouter>
         </AuthProvider>
       </ContextMessageProvider>
     </ThemeProvider>

@@ -35,9 +35,6 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private boolean ativo;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
-    private UsuarioConfig usuarioConfig;
-
     public Usuario(String username, String senha, Date dataInclusao) {
         this.username = username;
         this.senha = senha;

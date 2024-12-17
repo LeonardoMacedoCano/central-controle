@@ -13,14 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
-    private final UsuarioConfigService usuarioConfigService;
     private final DateUtil dateUtil;
 
     @Transactional
     public void register(String username, String senha) {
         Usuario novoUsuario = new Usuario(username, senha, dateUtil.getDataAtual());
         this.usuarioRepository.save(novoUsuario);
-        this.usuarioConfigService.createAndSaveUsuarioConfig(novoUsuario);
     }
 
     public UserDetails findByUsername(String username) {

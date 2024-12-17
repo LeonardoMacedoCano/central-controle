@@ -11,7 +11,6 @@ import {
   tipoLancamentoFilters
 } from "./TipoLancamentoEnum";
 import { Usuario } from "./Usuario";
-import { UsuarioConfig, initialUsuarioConfigState } from "./UsuarioConfig";
 import { Despesa } from "./fluxocaixa/Despesa";
 import { 
   DespesaFormaPagamentoEnum,
@@ -65,7 +64,6 @@ export type {
   SelectValue,
   TipoLancamentoEnum,
   Usuario,
-  UsuarioConfig,
   Despesa,
   DespesaFormaPagamentoEnum,
   Field,
@@ -84,7 +82,6 @@ export type {
 };
 
 export {
-  initialUsuarioConfigState,
   getDescricaoTipoLancamento,
   getCodigoTipoLancamento,
   getTipoLancamentoByCodigo,
