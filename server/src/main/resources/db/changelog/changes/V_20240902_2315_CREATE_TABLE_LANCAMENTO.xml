@@ -14,7 +14,7 @@
 
         <createTable tableName="lancamento">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_lancamento"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pklancamento"/>
             </column>
             <column name="idusuario" type="${integer}">
                 <constraints nullable="false"/>
@@ -32,7 +32,7 @@
 
         <addForeignKeyConstraint baseTableName="lancamento"
                                  baseColumnNames="idusuario"
-                                 constraintName="fk_lancamento_usuario"
+                                 constraintName="fklancamentousuario"
                                  referencedTableName="usuario"
                                  referencedColumnNames="id"/>
     </changeSet>

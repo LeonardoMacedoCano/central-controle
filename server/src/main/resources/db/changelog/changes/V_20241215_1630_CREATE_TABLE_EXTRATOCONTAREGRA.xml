@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-    <changeSet id="create-extratocontaregra" author="lcano">
+    <changeSet id="create-tbale-extratocontaregra" author="lcano">
         <preConditions onFail="MARK_RAN" onFailMessage="A tabela extratocontaregra já existe">
             <not>
                 <tableExists tableName="extratocontaregra"/>
@@ -14,7 +14,7 @@
 
         <createTable tableName="extratocontaregra">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_extratocontaregra"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkextratocontaregra"/>
             </column>
             <column name="idusuario" type="${integer}">
                 <constraints nullable="false"/>
@@ -37,11 +37,11 @@
 
         <addUniqueConstraint tableName="extratocontaregra"
                              columnNames="idusuario, prioridade"
-                             constraintName="uq_extratocontaregra_usupr"/>
+                             constraintName="ukextratocontaregrausupr"/>
 
         <addForeignKeyConstraint baseTableName="extratocontaregra"
                                  baseColumnNames="idusuario"
-                                 constraintName="fk_extratocontaregra_usuario"
+                                 constraintName="fkextratocontaregrausuario"
                                  referencedTableName="usuario"
                                  referencedColumnNames="id"/>
     </changeSet>

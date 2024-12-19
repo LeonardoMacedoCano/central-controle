@@ -14,7 +14,7 @@
 
         <createTable tableName="arquivo">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_arquivo"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkarquivo"/>
             </column>
             <column name="nome" type="${varchar_255}">
                 <constraints nullable="false"/>

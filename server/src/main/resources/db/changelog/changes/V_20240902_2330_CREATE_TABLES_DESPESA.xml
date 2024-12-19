@@ -5,6 +5,23 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
+    <changeSet id="create-table-despesacategoria" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela despesacategoria já existe">
+            <not>
+                <tableExists tableName="despesacategoria"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="despesacategoria">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkdespesacategoria"/>
+            </column>
+            <column name="descricao" type="${varchar_255}">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
     <changeSet id="create-table-despesa" author="lcano">
         <preConditions onFail="MARK_RAN" onFailMessage="A tabela despesa já existe">
             <not>
@@ -14,7 +31,7 @@
 
         <createTable tableName="despesa">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_despesa"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkdespesa"/>
             </column>
             <column name="idlancamento" type="${integer}">
                 <constraints nullable="false" unique="true"/>
@@ -35,12 +52,13 @@
 
         <addForeignKeyConstraint baseTableName="despesa"
                                  baseColumnNames="idlancamento"
-                                 constraintName="fk_despesa_lancamento"
+                                 constraintName="fkdespesalancamento"
                                  referencedTableName="lancamento"
                                  referencedColumnNames="id"/>
+
         <addForeignKeyConstraint baseTableName="despesa"
                                  baseColumnNames="idcategoria"
-                                 constraintName="fk_despesa_categoria"
+                                 constraintName="fkdespesacategoria"
                                  referencedTableName="despesacategoria"
                                  referencedColumnNames="id"/>
     </changeSet>

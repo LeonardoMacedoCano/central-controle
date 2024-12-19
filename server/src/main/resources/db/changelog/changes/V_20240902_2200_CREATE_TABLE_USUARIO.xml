@@ -14,7 +14,7 @@
 
         <createTable tableName="usuario">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_usuario"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkusuario"/>
             </column>
             <column name="username" type="${varchar_255}">
                 <constraints nullable="false" unique="true"/>

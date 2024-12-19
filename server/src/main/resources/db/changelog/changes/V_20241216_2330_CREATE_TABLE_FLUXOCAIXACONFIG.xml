@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="create-table-fluxocaixaconfig" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela fluxocaixaconfig já existe">
+            <not>
+                <tableExists tableName="fluxocaixaconfig"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="fluxocaixaconfig">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkfluxocaixaconfig"/>
+            </column>
+            <column name="idusuario" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valormetasaldomensal" type="${number_10_2}"/>
+            <column name="idcategoriadespesapadrao" type="${integer}"/>
+            <column name="idcategoriareceitapadrao" type="${integer}"/>
+            <column name="diapadraovencimentofatura" type="${integer}" defaultValue="10">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint
+                tableName="fluxocaixaconfig"
+                columnNames="idusuario"
+                constraintName="ukfluxocaixaconfigusuario"/>
+
+        <addForeignKeyConstraint baseTableName="fluxocaixaconfig"
+                                 baseColumnNames="idcategoriadespesapadrao"
+                                 constraintName="fkfluxocaixacategdesp"
+                                 referencedTableName="despesacategoria"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="fluxocaixaconfig"
+                                 baseColumnNames="idcategoriareceitapadrao"
+                                 constraintName="fkfluxocaixacategrec"
+                                 referencedTableName="receitacategoria"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

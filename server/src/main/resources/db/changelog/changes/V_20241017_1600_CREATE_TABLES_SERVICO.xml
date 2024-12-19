@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="create-table-servico" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela servico já existe">
+            <not>
+                <tableExists tableName="servico"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="servico">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkservico"/>
+            </column>
+            <column name="nome" type="${varchar_20}">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="descricao" type="${varchar_100}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="porta" type="${integer}">
+                <constraints nullable="true"/>
+            </column>
+            <column name="idarquivo" type="${integer}">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="servico"
+                                 baseColumnNames="idarquivo"
+                                 constraintName="fkservicoarquivo"
+                                 referencedTableName="arquivo"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create-table-servidorconfig" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela servidorconfig já existe">
+            <not>
+                <tableExists tableName="servidorconfig"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="servidorconfig">
+            <column name="id" type="${integer}">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkservidorconfig"/>
+            </column>
+            <column name="ipexterno" type="${varchar_20}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <insert tableName="servidorconfig">
+            <column name="id" value="1"/>
+            <column name="ipexterno" value="0.0.0.0"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="create-table-servicocategoria" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela servicocategoria já existe">
+            <not>
+                <tableExists tableName="servicocategoria"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="servicocategoria">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkservicocategoria"/>
+            </column>
+            <column name="descricao" type="${varchar_20}">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="icone" type="${varchar_50}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-table-servicocategoriarel" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela servicocategoriarel já existe">
+            <not>
+                <tableExists tableName="servicocategoriarel"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="servicocategoriarel">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkservicocategoriarel"/>
+            </column>
+            <column name="idservico" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idservicocategoria" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="servicocategoriarel"
+                baseColumnNames="idservico"
+                constraintName="fkservicocategoriarelservico"
+                referencedTableName="servico"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="servicocategoriarel"
+                baseColumnNames="idservicocategoria"
+                constraintName="fkservicocategoriarelcategoria"
+                referencedTableName="servicocategoria"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="create-table-usuarioservico" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela usuarioservico já existe">
+            <not>
+                <tableExists tableName="usuarioservico"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="usuarioservico">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="p_usuarioservico"/>
+            </column>
+            <column name="idusuario" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idservico" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="permissao" type="${char_1}" defaultValue="N">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="usuarioservico"
+                                 baseColumnNames="idusuario"
+                                 constraintName="fkusuarioservicousuario"
+                                 referencedTableName="usuario"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="usuarioservico"
+                                 baseColumnNames="idservico"
+                                 constraintName="fkusuarioservicoservico"
+                                 referencedTableName="servico"
+                                 referencedColumnNames="id"/>
+
+        <addUniqueConstraint tableName="usuarioservico"
+                             columnNames="idusuario, idservico"
+                             constraintName="ukusuarioservico"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -14,7 +14,7 @@
 
         <createTable tableName="ativocategoria">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ativocategoria"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkativocategoria"/>
             </column>
             <column name="descricao" type="${varchar_255}">
                 <constraints nullable="false" unique="true"/>
@@ -31,7 +31,7 @@
 
         <createTable tableName="ativo">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_ativo"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkativo"/>
             </column>
             <column name="idlancamento" type="${integer}">
                 <constraints nullable="false" unique="true"/>
@@ -58,12 +58,12 @@
 
         <addForeignKeyConstraint baseTableName="ativo"
                                  baseColumnNames="idlancamento"
-                                 constraintName="fk_ativo_lancamento"
+                                 constraintName="fkativolancamento"
                                  referencedTableName="lancamento"
                                  referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="ativo"
                                  baseColumnNames="idcategoria"
-                                 constraintName="fk_ativo_categoria"
+                                 constraintName="fkativocategoria"
                                  referencedTableName="ativocategoria"
                                  referencedColumnNames="id"/>
     </changeSet>
