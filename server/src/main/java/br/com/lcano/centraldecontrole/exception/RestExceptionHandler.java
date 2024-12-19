@@ -2,6 +2,7 @@ package br.com.lcano.centraldecontrole.exception;
 
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.AtivoException;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
+import br.com.lcano.centraldecontrole.exception.fluxocaixa.ExtratoException;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.ReceitaException;
 import br.com.lcano.centraldecontrole.exception.servicos.DockerException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -118,6 +119,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({DockerException.DockerErroAlterarStatus.class})
     protected ResponseEntity<Object> handleDockerErroAlterarStatus(DockerException.DockerErroAlterarStatus ex) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler({ExtratoException.ExtratoContaRegraUniquePrioridadeViolada.class})
+    protected ResponseEntity<Object> handleExtratoContaRegraUniquePrioridadeViolada(ExtratoException.ExtratoContaRegraUniquePrioridadeViolada ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 }

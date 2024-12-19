@@ -6,7 +6,13 @@ import br.com.lcano.centraldecontrole.util.BooleanToCharConverter;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Table(name = "extratocontaregra")
+@Table(
+        name = "extratocontaregra",
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_extratocontaregra_usuario_prioridade",
+                columnNames = {"idusuario", "prioridade"}
+        )
+)
 @Entity
 @Data
 public class ExtratoContaRegra {
