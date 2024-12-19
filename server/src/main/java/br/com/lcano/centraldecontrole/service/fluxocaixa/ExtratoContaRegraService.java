@@ -2,7 +2,9 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoContaRegra;
+import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaRegraDTO;
+import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoConta;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.ExtratoException;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.ExtratoContaRegraRepository;
@@ -20,6 +22,8 @@ public class ExtratoContaRegraService {
     private final ExtratoContaRegraRepository extratoContaRegraRepository;
     @Autowired
     private final UsuarioUtil usuarioUtil;
+    @Autowired
+    private final FluxoCaixaConfigService fluxoCaixaConfigService;
 
     public List<ExtratoContaRegra> findByUsuarioAndAtivoOrderByPrioridadeAsc(Usuario usuario) {
         return extratoContaRegraRepository.findByUsuarioAndAtivoOrderByPrioridadeAsc(usuario, true);
@@ -60,5 +64,19 @@ public class ExtratoContaRegraService {
         extratoContaRegra.setAtivo(dto.isAtivo());
 
         return extratoContaRegra;
+    }
+
+    public CategoriaDTO getCategoriaPadrao(TipoLancamentoEnum tipoLancamentoEnum) {
+        CategoriaDTO categoriaDTO;
+
+        if (TipoLancamentoEnum.RECEITA.equals(tipoLancamentoEnum)) {
+            categoriaDTO = fluxoCaixaConfigService.getReceitaCategoriaPadrao();
+        } else {
+            categoriaDTO = fluxoCaixaConfigService.getDespesaCategoriaPadrao();
+        }
+
+        if (categoriaDTO == null) throw new ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada(tipoLancamentoEnum.getDescricao());
+
+        return categoriaDTO;
     }
 }

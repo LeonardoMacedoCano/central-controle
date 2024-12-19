@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.FluxoCaixaConfig;
+import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.FluxoCaixaConfigDTO;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.FluxoCaixaConfigRepository;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
@@ -58,5 +59,13 @@ public class FluxoCaixaConfigService {
         }
 
         return fluxoCaixaConfig;
+    }
+
+    public CategoriaDTO getDespesaCategoriaPadrao() {
+        return getConfig().getDespesaCategoriaPadrao();
+    }
+
+    public CategoriaDTO getReceitaCategoriaPadrao() {
+        return getConfig().getReceitaCategoriaPadrao();
     }
 }

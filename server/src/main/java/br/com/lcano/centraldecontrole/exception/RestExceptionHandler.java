@@ -126,4 +126,9 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExtratoContaRegraUniquePrioridadeViolada(ExtratoException.ExtratoContaRegraUniquePrioridadeViolada ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
+
+    @ExceptionHandler({ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada.class})
+    protected ResponseEntity<Object> handleExtratoContaRegraCategoriaPadraoNaoEncontrada(ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
 }

@@ -46,10 +46,6 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
     private Usuario usuario;
     private List<ExtratoContaRegra> regras;
 
-    // TO DO - Alterar para buscar a categoria padrao corretamente
-    private static final Long CATEGORIA_PADRAO_RECEITA = 1L;
-    private static final Long CATEGORIA_PADRAO_DESPESA = 1L;
-
     @Autowired
     public ImportacaoExtratoContaProcessor(@Value("#{jobParameters['usuarioId']}") Long usuarioId) {
         this.usuarioId = usuarioId;
@@ -161,12 +157,8 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
             } else {
                 return CategoriaDTO.converterParaDTO(despesaCategoriaService.getCategoriaById(regraCorrespondente.getIdCategoria()));
             }
-        }
-
-        if (tipoLancamentoEnum == TipoLancamentoEnum.RECEITA) {
-            return CategoriaDTO.converterParaDTO(receitaCategoriaService.getCategoriaById(CATEGORIA_PADRAO_RECEITA));
         } else {
-            return CategoriaDTO.converterParaDTO(despesaCategoriaService.getCategoriaById(CATEGORIA_PADRAO_DESPESA));
+            return extratoContaRegraService.getCategoriaPadrao(tipoLancamentoEnum);
         }
     }
 
