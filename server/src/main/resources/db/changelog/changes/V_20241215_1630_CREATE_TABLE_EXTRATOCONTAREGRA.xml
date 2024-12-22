@@ -27,17 +27,13 @@
             </column>
             <column name="descricaodestino" type="${varchar_255}"/>
             <column name="idcategoriadestino" type="${integer}"/>
-            <column name="prioridade" type="${integer}">
+            <column name="prioridade" type="${integer}" defaultValue="0">
                 <constraints nullable="false"/>
             </column>
             <column name="ativo" type="${char_1}" defaultValue="S">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-
-        <addUniqueConstraint tableName="extratocontaregra"
-                             columnNames="idusuario, prioridade"
-                             constraintName="ukextratocontaregrausupr"/>
 
         <addForeignKeyConstraint baseTableName="extratocontaregra"
                                  baseColumnNames="idusuario"
