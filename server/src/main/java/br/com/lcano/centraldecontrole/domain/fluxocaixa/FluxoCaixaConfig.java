@@ -20,16 +20,26 @@ public class FluxoCaixaConfig {
     @JoinColumn(name = "idusuario", nullable = false)
     private Usuario usuario;
 
-    @Column(name = "valormetasaldomensal")
-    private BigDecimal valorMetaSaldoMensal;
-
     @ManyToOne
     @JoinColumn(name = "idcategoriadespesapadrao")
     private DespesaCategoria despesaCategoriaPadrao;
 
+    @Column(name = "metalimitedespesamensal")
+    private BigDecimal metaLimiteDespesaMensal;
+
     @ManyToOne
     @JoinColumn(name = "idcategoriareceitapadrao")
     private ReceitaCategoria receitaCategoriaPadrao;
+
+    @ManyToOne
+    @JoinColumn(name = "idcategoriareceitaganhoativo")
+    private ReceitaCategoria receitaCategoriaParaGanhoAtivo;
+
+    @Column(name = "metaaportemensal")
+    private BigDecimal metaAporteMensal;
+    
+    @Column(name = "metaaportetotal", precision = 15, scale = 2)
+    private BigDecimal metaAporteTotal;
 
     @Column(name = "diapadraovencimentofatura", nullable = false)
     private Long diaPadraoVencimentoFatura;

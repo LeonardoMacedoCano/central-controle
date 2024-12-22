@@ -33,8 +33,11 @@ public class FluxoCaixaConfigService {
         FluxoCaixaConfig fluxoCaixaConfig = new FluxoCaixaConfig();
         fluxoCaixaConfig.setId(fluxoCaixaConfigDTO.getId());
         fluxoCaixaConfig.setUsuario(usuarioUtil.getUsuarioAutenticado());
-        fluxoCaixaConfig.setValorMetaSaldoMensal(fluxoCaixaConfigDTO.getValorMetaSaldoMensal());
+        fluxoCaixaConfig.setMetaLimiteDespesaMensal(fluxoCaixaConfigDTO.getMetaLimiteDespesaMensal());
+        fluxoCaixaConfig.setMetaAporteMensal(fluxoCaixaConfigDTO.getMetaAporteMensal());
+        fluxoCaixaConfig.setMetaAporteTotal(fluxoCaixaConfigDTO.getMetaAporteTotal());
         fluxoCaixaConfig.setDiaPadraoVencimentoFatura(fluxoCaixaConfigDTO.getDiaPadraoVencimentoFatura());
+
 
         if (fluxoCaixaConfigDTO.getDespesaCategoriaPadrao() != null
                 && fluxoCaixaConfigDTO.getDespesaCategoriaPadrao().getId() != null) {
@@ -52,6 +55,17 @@ public class FluxoCaixaConfigService {
             fluxoCaixaConfig.setReceitaCategoriaPadrao(
                     receitaCategoriaService.getCategoriaById(
                             fluxoCaixaConfigDTO.getReceitaCategoriaPadrao().getId()
+                    )
+            );
+        } else {
+            fluxoCaixaConfig.setReceitaCategoriaPadrao(null);
+        }
+
+        if (fluxoCaixaConfigDTO.getReceitaCategoriaParaGanhoAtivo() != null
+                && fluxoCaixaConfigDTO.getReceitaCategoriaParaGanhoAtivo().getId() != null) {
+            fluxoCaixaConfig.setReceitaCategoriaParaGanhoAtivo(
+                    receitaCategoriaService.getCategoriaById(
+                            fluxoCaixaConfigDTO.getReceitaCategoriaParaGanhoAtivo().getId()
                     )
             );
         } else {
