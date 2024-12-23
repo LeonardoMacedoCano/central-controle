@@ -5,6 +5,7 @@ import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.FluxoCaixaConfigDTO;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.FluxoCaixaConfigRepository;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,9 @@ public class FluxoCaixaConfigService {
         return FluxoCaixaConfigDTO.converterParaDTO(fluxoCaixaConfigRepository.findByUsuario(usuarioUtil.getUsuarioAutenticado()));
     }
 
-    public void saveConfig(FluxoCaixaConfigDTO fluxoCaixaConfigDTO) {
-        fluxoCaixaConfigRepository.save(this.buildFluxoCaixaConfig(fluxoCaixaConfigDTO));
+    @Transactional
+    public Long saveConfig(FluxoCaixaConfigDTO fluxoCaixaConfigDTO) {
+        return fluxoCaixaConfigRepository.save(this.buildFluxoCaixaConfig(fluxoCaixaConfigDTO)).getId();
     }
 
     private FluxoCaixaConfig buildFluxoCaixaConfig(FluxoCaixaConfigDTO fluxoCaixaConfigDTO) {

@@ -62,7 +62,6 @@ const FieldValue: React.FC<FieldValueProps> = ({
 
     switch (type) {
       case 'number':
-      case 'string':
         formattedValue = validateNumericInput(formattedValue);
         formattedValue = validateMinValue(formattedValue);
         formattedValue = validateMaxValue(formattedValue);

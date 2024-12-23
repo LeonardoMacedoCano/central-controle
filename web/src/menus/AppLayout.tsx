@@ -109,10 +109,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubme
     {
       Icon: FaDollarSign,
       Text: "Fluxo Caixa",
-      submenu: [{
-        to: "/lancamentos",
-        Text: "Lançamento"
-      }],
+      submenu: [
+        {
+          to: "/lancamentos",
+          Text: "Lançamento"
+        },
+        {
+          to: "/config-fluxo-caixa",
+          Text: "Configuração"
+        },
+      ],
     },
     {
       to: "/servicos",

@@ -56,6 +56,10 @@ import {
   Ativo,
   initialAtivoState
 } from "./fluxocaixa/Ativo";
+import { 
+  FluxoCaixaConfig,
+  initialFluxoCaixaConfigState
+} from "./fluxocaixa/FluxoCaixaConfig";
 
 export type {
   Categoria,
@@ -79,6 +83,7 @@ export type {
   Receita,
   AtivoOperacaoEnum,
   Ativo,
+  FluxoCaixaConfig,
 };
 
 export {
@@ -103,4 +108,5 @@ export {
   getAtivoOperacaoByCodigo,
   ativoOperacaoOptions,
   initialAtivoState,
+  initialFluxoCaixaConfigState,
 };

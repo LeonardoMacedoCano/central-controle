@@ -23,7 +23,7 @@ public class FluxoCaixaConfigResource {
 
     @PostMapping
     public ResponseEntity<Object> saveConfig(@RequestBody FluxoCaixaConfigDTO fluxoCaixaConfigDTO) {
-        this.fluxoCaixaConfigService.saveConfig(fluxoCaixaConfigDTO);
-        return CustomSuccess.buildResponseEntity("Configuração salva com sucesso.");
+        Long id = this.fluxoCaixaConfigService.saveConfig(fluxoCaixaConfigDTO);
+        return CustomSuccess.buildResponseEntity("Configuração salva com sucesso.", "id", id);
     }
 }
