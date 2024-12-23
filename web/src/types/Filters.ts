@@ -100,4 +100,5 @@ export const OPERATORS: Record<Field['type'], Operator[]> = {
   BOOLEAN: BOOLEAN_OPERATORS
 };
 
-export const PAGE_SIZE = 10;
+export const PAGE_SIZE_DEFAULT = 10;
+export const PAGE_SIZE_COMPACT = 5;

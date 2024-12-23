@@ -10,7 +10,7 @@ import {
   FlexBox,
   Container
 } from '../../components';
-import { PAGE_SIZE, PagedResponse } from '../../types';
+import { PagedResponse } from '../../types';
 
 interface SearchPaginationProps {
   page: PagedResponse<any>;
@@ -22,7 +22,7 @@ interface SearchPaginationProps {
 const SearchPagination: React.FC<SearchPaginationProps> = ({ page, height, width, loadPage }) => {
   const [currentPageIndex, setCurrentPageIndex] = useState(page.number);
   
-  const pageSize = PAGE_SIZE;
+  const pageSize = page.size;
   const lastPageNumber = page.totalPages;
   const isLastPage = currentPageIndex === lastPageNumber - 1;
   const isFirstPage = currentPageIndex === 0;

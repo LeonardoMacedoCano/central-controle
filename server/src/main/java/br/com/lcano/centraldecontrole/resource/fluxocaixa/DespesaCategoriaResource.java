@@ -10,6 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/despesa-categoria")
@@ -18,8 +20,13 @@ public class DespesaCategoriaResource {
     private final DespesaCategoriaService despesaCategoriaService;
 
     @GetMapping
-    public ResponseEntity<Page<CategoriaDTO>> getTodasCategorias(Pageable pageable) {
-        return ResponseEntity.ok(despesaCategoriaService.getTodasCategorias(pageable));
+    public ResponseEntity<List<CategoriaDTO>> getTodasCategorias() {
+        return ResponseEntity.ok(despesaCategoriaService.getTodasCategorias());
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<CategoriaDTO>> getTodasCategoriasPaged(Pageable pageable) {
+        return ResponseEntity.ok(despesaCategoriaService.getTodasCategoriasPaged(pageable));
     }
 
     @PostMapping

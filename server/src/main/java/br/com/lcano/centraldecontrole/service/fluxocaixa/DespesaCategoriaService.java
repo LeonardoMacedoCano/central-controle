@@ -12,13 +12,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class DespesaCategoriaService {
     @Autowired
     private final DespesaCategoriaRepository despesaCategoriaRepository;
 
-    public Page<CategoriaDTO> getTodasCategorias(Pageable pageable) {
+    public List<CategoriaDTO> getTodasCategorias() {
+        return this.despesaCategoriaRepository.findAllByOrderByIdAsc()
+                .stream()
+                .map(CategoriaDTO::converterParaDTO)
+                .toList();
+    }
+
+    public Page<CategoriaDTO> getTodasCategoriasPaged(Pageable pageable) {
         Pageable pageableComOrdenacao = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by(Sort.Order.asc("id")));
 

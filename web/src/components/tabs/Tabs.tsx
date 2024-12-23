@@ -50,7 +50,7 @@ const TabList = styled.div`
 
 const TabButton = styled.button<{ active: boolean }>`
   flex: 1;
-  padding: 10px 20px;
+  padding: 10px 0px;
   border: none;
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.secondary};

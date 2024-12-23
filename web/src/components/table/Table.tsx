@@ -1,17 +1,8 @@
 import React, { ReactNode, useState, FC } from 'react';
 import styled from 'styled-components';
-import { 
-  FaEdit, 
-  FaEye, 
-  FaTrash 
-} from 'react-icons/fa';
-import { 
-  Container,
-  Button,
-  SearchPagination
-} from '../';
+import { FaEdit, FaEye, FaTrash } from 'react-icons/fa';
+import { Container, Button, SearchPagination } from '../';
 import { PagedResponse } from '../../types';
-
 
 type ColumnProps<T> = {
   header: ReactNode;
@@ -29,10 +20,11 @@ interface TableActionsProps {
   onView?: () => void;
   onEdit?: () => void;
   onDelete?: () => void;
+  customActions?: () => ReactNode;
   visible: boolean;
 }
 
-const TableActions: FC<TableActionsProps> = ({ onView, onEdit, onDelete, visible }) => {
+const TableActions: FC<TableActionsProps> = ({ onView, onEdit, onDelete, visible, customActions }) => {
   const commonButtonStyles = {
     borderRadius: '50%',
     justifyContent: 'center',
@@ -45,6 +37,8 @@ const TableActions: FC<TableActionsProps> = ({ onView, onEdit, onDelete, visible
   return (
     <ActionsContainer>
       <ActionsWrapper visible={visible}>
+        {customActions && <CustomActionWrapper>{customActions()}</CustomActionWrapper>}
+        
         {onView && (
           <Button 
             onClick={onView}
@@ -75,6 +69,7 @@ const TableActions: FC<TableActionsProps> = ({ onView, onEdit, onDelete, visible
   );
 };
 
+
 interface TableProps<T> {
   values: T[] | PagedResponse<T>;
   columns: ReactNode[];
@@ -86,10 +81,7 @@ interface TableProps<T> {
   onView?: (item: T) => void;
   onEdit?: (item: T) => void;
   onDelete?: (item: T) => void;
-}
-
-interface Indexable {
-  [key: string]: any;
+  customActions?: (item: T) => ReactNode;
 }
 
 const getValues = (values: any[] | PagedResponse<any>): any[] => {
@@ -99,7 +91,7 @@ const getValues = (values: any[] | PagedResponse<any>): any[] => {
   return values as any[];
 };
 
-export const Table = <T extends Indexable>({
+export const Table = <T extends any>({
   values,
   columns,
   messageEmpty,
@@ -110,6 +102,7 @@ export const Table = <T extends Indexable>({
   onView,
   onEdit,
   onDelete,
+  customActions,
 }: TableProps<T>) => {
   const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);
 
@@ -173,6 +166,7 @@ export const Table = <T extends Indexable>({
                   onEdit={onEdit ? () => onEdit(item) : undefined}
                   onDelete={onDelete ? () => onDelete(item) : undefined}
                   visible={hoveredRowIndex === index}
+                  customActions={customActions && (() => customActions(item))}
                 />
               </ActionColumn>
             </TableRow>
@@ -210,7 +204,48 @@ export const Table = <T extends Indexable>({
   );
 };
 
-export default Table;
+const EmptyMessage = styled.div`
+  padding: 10px;
+`;
+
+const ActionColumn = styled.td<{ visible: boolean }>`
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 0;
+  border-left: none;
+  z-index: 1;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  display: ${props => (props.visible ? 'flex' : 'none')};
+  align-items: center;
+  justify-content: center;
+`;
+
+const ActionsContainer = styled.div`
+  position: relative;
+  height: 100%;
+`;
+
+const ActionsWrapper = styled.div<{ visible: boolean }>`
+  position: absolute;
+  top: 0;
+  right: 5px;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  opacity: ${props => (props.visible ? 1 : 0)};
+  pointer-events: ${props => (props.visible ? 'auto' : 'none')};
+  transition: opacity 0.2s ease-in-out;
+`;
+
+const TruncatedContent = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const StyledTable = styled.table`
   width: 100%;
@@ -283,46 +318,12 @@ const TableColumn = styled.td<{ isSelected?: boolean; width?: string; align?: st
   }
 `;
 
-
-const TruncatedContent = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const ActionColumn = styled.td<{ visible: boolean }>`
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  padding: 0;
-  border-left: none;
-  z-index: 1;
-  background-color: ${({ theme }) => theme.colors.secondary};
-  display: ${props => (props.visible ? 'flex' : 'none')};
-  align-items: center;
-  justify-content: center;
-`;
-
-const EmptyMessage = styled.div`
-  padding: 10px;
-`;
-
-const ActionsContainer = styled.div`
-  position: relative;
-  height: 100%;
-`;
-
-const ActionsWrapper = styled.div<{ visible: boolean }>`
-  position: absolute;
-  top: 0;
-  right: 5px;
-  bottom: 0;
+const CustomActionWrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  justify-content: flex-start;
   gap: 8px;
-  opacity: ${props => (props.visible ? 1 : 0)};
-  pointer-events: ${props => (props.visible ? 'auto' : 'none')};
-  transition: opacity 0.2s ease-in-out;
+  align-items: center;
 `;
+
+
+export default Table;

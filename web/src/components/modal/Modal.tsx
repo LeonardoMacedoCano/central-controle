@@ -9,7 +9,6 @@ import {
 import { getVariantColor } from '../../utils';
 import { Button } from '../';
 
-
 interface ModalProps {
   isOpen: boolean;
   title: string;
@@ -20,6 +19,7 @@ interface ModalProps {
   showCloseButton?: boolean;
   closeButtonSize?: string;
   modalWidth?: string;
+  maxWidth?: string;
   modalHeight?: string;
 }
 
@@ -51,6 +51,7 @@ const Modal: React.FC<ModalProps> = ({
   showCloseButton = true,
   closeButtonSize = '20px',
   modalWidth = '500px',
+  maxWidth,
   modalHeight = 'auto'
 }) => {
   const { icon: computedIcon} = getIcon(variant);
@@ -64,6 +65,7 @@ const Modal: React.FC<ModalProps> = ({
       <ModalContainer 
         onClick={(e) => e.stopPropagation()}
         width={modalWidth}
+        maxWidth={maxWidth}
         height={modalHeight}
       >
         <ModalHeader variant={variant}>
@@ -99,6 +101,7 @@ export default Modal;
 
 interface ModalContainerProps {
   width: string;
+  maxWidth?: string;
   height: string;
 }
 
@@ -117,6 +120,7 @@ export const ModalOverlay = styled.div`
 
 export const ModalContainer = styled.div<ModalContainerProps>`
   width: ${({ width }) => width};
+  max-width:  ${({ maxWidth }) => maxWidth};
   height: ${({ height }) => height};
   background-color: ${({ theme }) => theme.colors.primary};
   border-radius: 8px;

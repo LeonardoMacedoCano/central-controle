@@ -50,6 +50,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, title, content, onC
       title={title}
       content={content}
       modalWidth='400px'
+      maxWidth='85%'
       onClose={onClose}
       showCloseButton={false}
       actions={

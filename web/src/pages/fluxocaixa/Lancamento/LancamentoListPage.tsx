@@ -6,7 +6,7 @@ import {
 } from '../../../components';
 import { 
   PagedResponse, Lancamento, getDescricaoTipoLancamento, tipoLancamentoFilters, 
-  PAGE_SIZE,
+  PAGE_SIZE_DEFAULT,
   FilterDTO,
   TipoLancamentoEnum
 } from '../../../types';
@@ -19,7 +19,7 @@ import Card from '../../../components/card/Card';
 const LancamentoListPage: React.FC = () => {
   const [lancamentos, setLancamentos] = useState<PagedResponse<Lancamento>>();
   const [pageIndex, setPageIndex] = useState<number>(0);
-  const [pageSize, setPageSize] = useState<number>(PAGE_SIZE);
+  const [pageSize, setPageSize] = useState<number>(PAGE_SIZE_DEFAULT);
   const [filters, setFilters] = useState<FilterDTO[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
