@@ -11,11 +11,13 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class LancamentoDTO {
+public class LancamentoDTO extends BaseDTO<Lancamento> {
     private Long id;
 
     @JsonDeserialize(using = CustomDateDeserializer.class)
@@ -35,32 +37,28 @@ public class LancamentoDTO {
     })
     private LancamentoItemDTO itemDTO;
 
-    public static LancamentoDTO converterParaDTO(Lancamento lancamento, LancamentoItemDTO itemDTO) {
-        LancamentoDTO dto = new LancamentoDTO();
-        dto.setId(lancamento.getId());
-        dto.setDataLancamento(lancamento.getDataLancamento());
-        dto.setDescricao(lancamento.getDescricao());
-        dto.setTipo(lancamento.getTipo());
-        dto.setItemDTO(itemDTO);
-        return dto;
+    public LancamentoDTO fromEntityWithItem(Lancamento entity, LancamentoItemDTO itemDTO) {
+        this.fromEntity(entity);
+        this.itemDTO = itemDTO;
+        return this;
     }
 
-    public static LancamentoDTO converterParaDTO(Lancamento lancamento) {
-        LancamentoDTO dto = new LancamentoDTO();
-        dto.setId(lancamento.getId());
-        dto.setDataLancamento(lancamento.getDataLancamento());
-        dto.setDescricao(lancamento.getDescricao());
-        dto.setTipo(lancamento.getTipo());
-        return dto;
+    @Override
+    public LancamentoDTO fromEntity(Lancamento entity) {
+        this.id = entity.getId();
+        this.dataLancamento = entity.getDataLancamento();
+        this.descricao = entity.getDescricao();
+        this.tipo = entity.getTipo();
+        return this;
     }
 
     public Lancamento toEntity() {
-        Lancamento lancamento = new Lancamento();
-        lancamento.setId(this.id);
-        lancamento.setDataLancamento(this.dataLancamento);
-        lancamento.setDescricao(this.descricao);
-        lancamento.setTipo(this.tipo);
-        lancamento.setUsuario(this.usuario);
-        return lancamento;
+        Lancamento entity = new Lancamento();
+        entity.setId(this.id);
+        entity.setDataLancamento(this.dataLancamento);
+        entity.setDescricao(this.descricao);
+        entity.setTipo(this.tipo);
+        entity.setUsuario(this.usuario);
+        return entity;
     }
 }

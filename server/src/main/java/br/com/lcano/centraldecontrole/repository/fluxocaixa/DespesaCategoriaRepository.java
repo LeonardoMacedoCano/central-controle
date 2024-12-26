@@ -4,11 +4,9 @@ import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DespesaCategoriaRepository extends JpaRepository<DespesaCategoria, Long> {
-    DespesaCategoria findByDescricao(String descricao);
-
-    List<DespesaCategoria> findAllByOrderByIdAsc();
+    Optional<DespesaCategoria> findByDescricao(String descricaoCategoria);
 }

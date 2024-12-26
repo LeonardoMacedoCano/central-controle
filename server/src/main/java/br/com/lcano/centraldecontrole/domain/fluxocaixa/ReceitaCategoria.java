@@ -1,17 +1,20 @@
 package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.Categoria;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+@ToString(of = "id")
 @Table(name = "receitacategoria")
 @Entity
-public class ReceitaCategoria extends Categoria {
-    public ReceitaCategoria() {
-        super();
-    }
+public class ReceitaCategoria{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    public ReceitaCategoria(String descricao) {
-        super(descricao);
-    }
+    @Column(nullable = false, unique = true)
+    private String descricao;
 }

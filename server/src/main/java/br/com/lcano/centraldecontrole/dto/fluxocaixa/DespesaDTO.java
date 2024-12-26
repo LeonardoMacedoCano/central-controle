@@ -1,51 +1,51 @@
 package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
-import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
+import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class DespesaDTO implements LancamentoItemDTO {
+public class DespesaDTO extends BaseDTO<Despesa> implements LancamentoItemDTO {
     private Long id;
-    private CategoriaDTO categoria;
+    private DespesaCategoriaDTO categoria;
     private Date dataVencimento;
     private BigDecimal valor;
     private DespesaFormaPagamentoEnum formaPagamento;
 
-    public static DespesaDTO converterParaDTO(Despesa despesa) {
-        DespesaDTO dto = new DespesaDTO();
+    @Override
+    public DespesaDTO fromEntity(Despesa entity) {
+        this.id = entity.getId();
+        this.dataVencimento = entity.getDataVencimento();
+        this.valor = entity.getValor();
+        this.formaPagamento = entity.getFormaPagamento();
 
-        dto.setId(despesa.getId());
-        dto.setCategoria(CategoriaDTO.converterParaDTO(despesa.getCategoria()));
-        dto.setDataVencimento(despesa.getDataVencimento());
-        dto.setValor(despesa.getValor());
-        if (despesa.getFormaPagamento() != null) dto.setFormaPagamento(despesa.getFormaPagamento());
+        if (entity.getCategoria() != null) {
+            this.categoria = new DespesaCategoriaDTO().fromEntity(entity.getCategoria());
+        }
 
-        return dto;
+        return this;
     }
 
-    public Despesa toEntity(Long id,
-                            Lancamento lancamento,
-                            DespesaCategoria despesaCategoria,
-                            Date dataVencimento,
-                            BigDecimal valor,
-                            DespesaFormaPagamentoEnum formaPagamento) {
-        Despesa despesa = new Despesa();
+    @Override
+    public Despesa toEntity() {
+        Despesa entity = new Despesa();
 
-        despesa.setId(id);
-        despesa.setLancamento(lancamento);
-        despesa.setCategoria(despesaCategoria);
-        despesa.setDataVencimento(dataVencimento);
-        despesa.setValor(valor);
-        despesa.setFormaPagamento(formaPagamento);
+        entity.setId(this.id);
+        entity.setDataVencimento(this.dataVencimento);
+        entity.setValor(this.valor);
+        entity.setFormaPagamento(this.formaPagamento);
 
-        return despesa;
+        if (this.categoria != null) {
+            entity.setCategoria(this.categoria.toEntity());
+        }
+
+        return entity;
     }
 }

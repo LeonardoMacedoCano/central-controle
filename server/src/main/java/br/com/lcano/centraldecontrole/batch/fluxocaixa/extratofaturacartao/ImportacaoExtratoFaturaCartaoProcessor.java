@@ -1,8 +1,8 @@
 package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
 
 import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoFaturaCartaoDTO;
-import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
@@ -89,8 +89,8 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
         return despesaDTO;
     }
 
-    private CategoriaDTO getDespesaCategoriaDTO(String descricaoCategoria) {
-        return this.despesaCategoriaService.findOrCreateCategoria(descricaoCategoria);
+    private DespesaCategoriaDTO getDespesaCategoriaDTO(String descricaoCategoria) {
+        return this.despesaCategoriaService.findOrCreate(descricaoCategoria);
     }
 
     @Override

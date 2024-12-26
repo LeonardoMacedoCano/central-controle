@@ -2,11 +2,8 @@ package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratoconta;
 
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoContaRegra;
-import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaDTO;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.*;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoConta;
@@ -129,7 +126,7 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
         despesaDTO.setValor(extratoContaDTO.getValor().abs());
         despesaDTO.setDataVencimento(extratoContaDTO.getDataLancamento());
         despesaDTO.setFormaPagamento(DespesaFormaPagamentoEnum.PIX);
-        despesaDTO.setCategoria(obterCategoria(regraCorrespondente, TipoLancamentoEnum.DESPESA));
+        despesaDTO.setCategoria(obterCategoriaDespesa(regraCorrespondente));
 
         lancamentoDTO.setItemDTO(despesaDTO);
         return lancamentoDTO;
@@ -141,24 +138,31 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
         ReceitaDTO receitaDTO = new ReceitaDTO();
         receitaDTO.setValor(extratoContaDTO.getValor().abs());
         receitaDTO.setDataRecebimento(extratoContaDTO.getDataLancamento());
-        receitaDTO.setCategoria(obterCategoria(regraCorrespondente, TipoLancamentoEnum.RECEITA));
+        receitaDTO.setCategoria(obterCategoriaReceita(regraCorrespondente));
 
         lancamentoDTO.setItemDTO(receitaDTO);
         return lancamentoDTO;
     }
 
-    private CategoriaDTO obterCategoria(ExtratoContaRegra regraCorrespondente, TipoLancamentoEnum tipoLancamentoEnum) {
+    private DespesaCategoriaDTO obterCategoriaDespesa(ExtratoContaRegra regraCorrespondente) {
         if (regraCorrespondente != null &&
                 regraCorrespondente.getTipoRegra() == TipoRegraExtratoConta.CLASSIFICAR &&
                 regraCorrespondente.getIdCategoria() != null) {
 
-            if (tipoLancamentoEnum == TipoLancamentoEnum.RECEITA) {
-                return CategoriaDTO.converterParaDTO(receitaCategoriaService.getCategoriaById(regraCorrespondente.getIdCategoria()));
-            } else {
-                return CategoriaDTO.converterParaDTO(despesaCategoriaService.getCategoriaById(regraCorrespondente.getIdCategoria()));
-            }
+            return (DespesaCategoriaDTO) new DespesaCategoriaDTO().fromEntity(despesaCategoriaService.findById(regraCorrespondente.getIdCategoria()));
         } else {
-            return extratoContaRegraService.getCategoriaPadrao(tipoLancamentoEnum);
+            return extratoContaRegraService.getDespesaCategoriaPadrao();
+        }
+    }
+
+    private ReceitaCategoriaDTO obterCategoriaReceita(ExtratoContaRegra regraCorrespondente) {
+        if (regraCorrespondente != null &&
+                regraCorrespondente.getTipoRegra() == TipoRegraExtratoConta.CLASSIFICAR &&
+                regraCorrespondente.getIdCategoria() != null) {
+
+            return (ReceitaCategoriaDTO) new ReceitaCategoriaDTO().fromEntity(receitaCategoriaService.findById(regraCorrespondente.getIdCategoria()));
+        } else {
+            return extratoContaRegraService.getReceitaCategoriaPadrao();
         }
     }
 

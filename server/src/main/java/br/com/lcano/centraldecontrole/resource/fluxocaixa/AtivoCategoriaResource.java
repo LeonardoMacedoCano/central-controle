@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.resource.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.AtivoCategoriaDTO;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.AtivoCategoriaService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +19,7 @@ public class AtivoCategoriaResource {
     private final AtivoCategoriaService ativoCategoriaService;
 
     @GetMapping
-    public ResponseEntity<List<CategoriaDTO>> getTodasCategoriasAtivo() {
-        List<CategoriaDTO> categorias = ativoCategoriaService.getTodasCategorias();
-        return ResponseEntity.ok(categorias);
+    public ResponseEntity<List<AtivoCategoriaDTO>> findAllAsDto() {
+        return ResponseEntity.ok(ativoCategoriaService.findAllAsDto());
     }
 }

@@ -30,14 +30,9 @@ public class ImportacaoExtratoFaturaCartaoWriter implements ItemWriter<Lancament
             Lancamento lancamento = lancamentoDTO.toEntity();
 
             DespesaDTO despesaDTO = (DespesaDTO) lancamentoDTO.getItemDTO();
-            Despesa despesa = despesaDTO.toEntity(
-                    despesaDTO.getId(),
-                    lancamento,
-                    despesaCategoriaService.getCategoriaById(despesaDTO.getCategoria().getId()),
-                    despesaDTO.getDataVencimento(),
-                    despesaDTO.getValor(),
-                    despesaDTO.getFormaPagamento()
-            );
+
+            Despesa despesa = despesaDTO.toEntity();
+            despesa.setLancamento(lancamento);
 
             lancamento.setDespesa(despesa);
             lancamentosParaSalvar.add(lancamento);

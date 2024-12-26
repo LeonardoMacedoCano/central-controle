@@ -1,8 +1,9 @@
 package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.FluxoCaixaConfig;
-import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.FluxoCaixaConfigDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaCategoriaDTO;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.FluxoCaixaConfigRepository;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import jakarta.transaction.Transactional;
@@ -23,7 +24,11 @@ public class FluxoCaixaConfigService {
     private final ReceitaCategoriaService receitaCategoriaService;
 
     public FluxoCaixaConfigDTO getConfig() {
-        return FluxoCaixaConfigDTO.converterParaDTO(fluxoCaixaConfigRepository.findByUsuario(usuarioUtil.getUsuarioAutenticado()));
+        return new FluxoCaixaConfigDTO().fromEntity(
+                fluxoCaixaConfigRepository.findByUsuario(
+                        usuarioUtil.getUsuarioAutenticado()
+                )
+        );
     }
 
     @Transactional
@@ -44,7 +49,7 @@ public class FluxoCaixaConfigService {
         if (fluxoCaixaConfigDTO.getDespesaCategoriaPadrao() != null
                 && fluxoCaixaConfigDTO.getDespesaCategoriaPadrao().getId() != null) {
             fluxoCaixaConfig.setDespesaCategoriaPadrao(
-                    despesaCategoriaService.getCategoriaById(
+                    despesaCategoriaService.findById(
                             fluxoCaixaConfigDTO.getDespesaCategoriaPadrao().getId()
                     )
             );
@@ -55,7 +60,7 @@ public class FluxoCaixaConfigService {
         if (fluxoCaixaConfigDTO.getReceitaCategoriaPadrao() != null
                 && fluxoCaixaConfigDTO.getReceitaCategoriaPadrao().getId() != null) {
             fluxoCaixaConfig.setReceitaCategoriaPadrao(
-                    receitaCategoriaService.getCategoriaById(
+                    receitaCategoriaService.findById(
                             fluxoCaixaConfigDTO.getReceitaCategoriaPadrao().getId()
                     )
             );
@@ -66,7 +71,7 @@ public class FluxoCaixaConfigService {
         if (fluxoCaixaConfigDTO.getReceitaCategoriaParaGanhoAtivo() != null
                 && fluxoCaixaConfigDTO.getReceitaCategoriaParaGanhoAtivo().getId() != null) {
             fluxoCaixaConfig.setReceitaCategoriaParaGanhoAtivo(
-                    receitaCategoriaService.getCategoriaById(
+                    receitaCategoriaService.findById(
                             fluxoCaixaConfigDTO.getReceitaCategoriaParaGanhoAtivo().getId()
                     )
             );
@@ -77,11 +82,11 @@ public class FluxoCaixaConfigService {
         return fluxoCaixaConfig;
     }
 
-    public CategoriaDTO getDespesaCategoriaPadrao() {
+    public DespesaCategoriaDTO getDespesaCategoriaPadrao() {
         return getConfig().getDespesaCategoriaPadrao();
     }
 
-    public CategoriaDTO getReceitaCategoriaPadrao() {
+    public ReceitaCategoriaDTO getReceitaCategoriaPadrao() {
         return getConfig().getReceitaCategoriaPadrao();
     }
 }

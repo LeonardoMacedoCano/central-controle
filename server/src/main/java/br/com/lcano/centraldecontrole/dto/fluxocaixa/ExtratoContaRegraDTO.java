@@ -1,10 +1,14 @@
 package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoContaRegra;
+import br.com.lcano.centraldecontrole.dto.BaseDTO;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoConta;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class ExtratoContaRegraDTO {
+public class ExtratoContaRegraDTO extends BaseDTO<ExtratoContaRegra> {
     private Long id;
     private String tipoRegra;
     private String descricaoMatch;
@@ -13,15 +17,30 @@ public class ExtratoContaRegraDTO {
     private Long prioridade;
     private boolean ativo;
 
-    public static ExtratoContaRegraDTO converterParaDTO(ExtratoContaRegra extratoContaRegra) {
-        ExtratoContaRegraDTO dto = new ExtratoContaRegraDTO();
-        dto.setId(extratoContaRegra.getId());
-        dto.setTipoRegra(extratoContaRegra.getTipoRegra().getDescricao());
-        dto.setDescricaoMatch(extratoContaRegra.getDescricaoMatch());
-        dto.setDescricaoDestino(extratoContaRegra.getDescricaoDestino());
-        dto.setIdCategoria(extratoContaRegra.getIdCategoria());
-        dto.setPrioridade(extratoContaRegra.getPrioridade());
-        dto.setAtivo(extratoContaRegra.isAtivo());
-        return dto;
+    @Override
+    public ExtratoContaRegraDTO fromEntity(ExtratoContaRegra entity) {
+        this.id = entity.getId();
+        this.tipoRegra = entity.getTipoRegra().getDescricao();
+        this.descricaoMatch = entity.getDescricaoMatch();
+        this.descricaoDestino = entity.getDescricaoDestino();
+        this.idCategoria = entity.getIdCategoria();
+        this.prioridade = entity.getPrioridade();
+        this.ativo = entity.isAtivo();
+        return this;
+    }
+
+    @Override
+    public ExtratoContaRegra toEntity() {
+        ExtratoContaRegra entity = new ExtratoContaRegra();
+
+        entity.setId(this.id);
+        entity.setTipoRegra(TipoRegraExtratoConta.valueOf(this.tipoRegra));
+        entity.setDescricaoMatch(this.descricaoMatch);
+        entity.setDescricaoDestino(this.descricaoDestino);
+        entity.setIdCategoria(this.idCategoria);
+        entity.setPrioridade(this.prioridade);
+        entity.setAtivo(this.ativo);
+
+        return null;
     }
 }

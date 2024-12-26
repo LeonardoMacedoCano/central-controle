@@ -2,8 +2,9 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoContaRegra;
-import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaRegraDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaCategoriaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoConta;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.ExtratoException;
@@ -32,7 +33,7 @@ public class ExtratoContaRegraService {
     public List<ExtratoContaRegraDTO> getRegras() {
         return this.findByUsuarioAndAtivoOrderByPrioridadeAsc(usuarioUtil.getUsuarioAutenticado())
                 .stream()
-                .map(ExtratoContaRegraDTO::converterParaDTO)
+                .map(item -> new ExtratoContaRegraDTO().fromEntity(item))
                 .toList();
     }
 
@@ -66,17 +67,19 @@ public class ExtratoContaRegraService {
         return extratoContaRegra;
     }
 
-    public CategoriaDTO getCategoriaPadrao(TipoLancamentoEnum tipoLancamentoEnum) {
-        CategoriaDTO categoriaDTO;
+    public DespesaCategoriaDTO getDespesaCategoriaPadrao() {
+        DespesaCategoriaDTO despesaCategoriaPadrao = fluxoCaixaConfigService.getDespesaCategoriaPadrao();
 
-        if (TipoLancamentoEnum.RECEITA.equals(tipoLancamentoEnum)) {
-            categoriaDTO = fluxoCaixaConfigService.getReceitaCategoriaPadrao();
-        } else {
-            categoriaDTO = fluxoCaixaConfigService.getDespesaCategoriaPadrao();
-        }
+        if (despesaCategoriaPadrao == null) throw new ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada(TipoLancamentoEnum.DESPESA.getDescricao());
 
-        if (categoriaDTO == null) throw new ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada(tipoLancamentoEnum.getDescricao());
+        return despesaCategoriaPadrao;
+    }
 
-        return categoriaDTO;
+    public ReceitaCategoriaDTO getReceitaCategoriaPadrao() {
+        ReceitaCategoriaDTO receitaCategoriaPadrao = fluxoCaixaConfigService.getReceitaCategoriaPadrao();
+
+        if (receitaCategoriaPadrao == null) throw new ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada(TipoLancamentoEnum.RECEITA.getDescricao());
+
+        return receitaCategoriaPadrao;
     }
 }

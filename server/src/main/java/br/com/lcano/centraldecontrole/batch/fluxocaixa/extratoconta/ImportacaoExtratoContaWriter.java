@@ -54,23 +54,14 @@ public class ImportacaoExtratoContaWriter implements ItemWriter<LancamentoDTO> {
     }
 
     private Despesa mapearDespesa(DespesaDTO despesaDTO, Lancamento lancamento) {
-        return despesaDTO.toEntity(
-                despesaDTO.getId(),
-                lancamento,
-                despesaCategoriaService.getCategoriaById(despesaDTO.getCategoria().getId()),
-                despesaDTO.getDataVencimento(),
-                despesaDTO.getValor(),
-                despesaDTO.getFormaPagamento()
-        );
+        Despesa despesa = despesaDTO.toEntity();
+        despesa.setLancamento(lancamento);
+        return despesa;
     }
 
     private Receita mapearReceita(ReceitaDTO receitaDTO, Lancamento lancamento) {
-        return receitaDTO.toEntity(
-                receitaDTO.getId(),
-                lancamento,
-                receitaCategoriaService.getCategoriaById(receitaDTO.getCategoria().getId()),
-                receitaDTO.getDataRecebimento(),
-                receitaDTO.getValor()
-        );
+        Receita receita = receitaDTO.toEntity();
+        receita.setLancamento(lancamento);
+        return receita;
     }
 }

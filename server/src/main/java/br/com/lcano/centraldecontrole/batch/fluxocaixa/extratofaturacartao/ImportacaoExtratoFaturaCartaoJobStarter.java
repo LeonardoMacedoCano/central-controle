@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.service.fluxocaixa;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
 
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.springframework.batch.core.Job;

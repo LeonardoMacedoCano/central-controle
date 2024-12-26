@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.resource.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaCategoriaDTO;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.ReceitaCategoriaService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +16,10 @@ import java.util.List;
 @RequestMapping("/api/receita-categoria")
 public class ReceitaCategoriaResource {
     @Autowired
-    private final ReceitaCategoriaService receitaCategoriaService;
+    private final ReceitaCategoriaService service;
 
     @GetMapping
-    public ResponseEntity<List<CategoriaDTO>> getTodasCategoriasReceita() {
-        List<CategoriaDTO> categoriasDespesa = receitaCategoriaService.getTodasCategorias();
-        return ResponseEntity.ok(categoriasDespesa);
+    public ResponseEntity<List<ReceitaCategoriaDTO>> findAllAsDto() {
+        return ResponseEntity.ok(service.findAllAsDto());
     }
 }

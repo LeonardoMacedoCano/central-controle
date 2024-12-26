@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.resource.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import lombok.AllArgsConstructor;
@@ -17,27 +17,31 @@ import java.util.List;
 @RequestMapping("/api/despesa-categoria")
 public class DespesaCategoriaResource {
     @Autowired
-    private final DespesaCategoriaService despesaCategoriaService;
+    private final DespesaCategoriaService service;
 
     @GetMapping
-    public ResponseEntity<List<CategoriaDTO>> getTodasCategorias() {
-        return ResponseEntity.ok(despesaCategoriaService.getTodasCategorias());
+    public ResponseEntity<List<DespesaCategoriaDTO>> findAllAsDto() {
+        return ResponseEntity.ok(service.findAllAsDto());
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<CategoriaDTO>> getTodasCategoriasPaged(Pageable pageable) {
-        return ResponseEntity.ok(despesaCategoriaService.getTodasCategoriasPaged(pageable));
+    public ResponseEntity<Page<DespesaCategoriaDTO>> findAllPagedAsDto(Pageable pageable) {
+        return ResponseEntity.ok(service.findAllPagedAsDto(pageable));
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveCategoria(@RequestBody CategoriaDTO categoriaDTO) {
-        Long id = this.despesaCategoriaService.saveCategoria(categoriaDTO);
-        return CustomSuccess.buildResponseEntity("Categoria salva com sucesso.", "id", id);
+    public ResponseEntity<Object> saveAsDto(@RequestBody DespesaCategoriaDTO dto) {
+        DespesaCategoriaDTO despesaCategoriaBaseDTO = (DespesaCategoriaDTO) service.saveAsDto(dto);
+        return CustomSuccess.buildResponseEntity(
+                "Categoria salva com sucesso.",
+                "id",
+                despesaCategoriaBaseDTO.getId()
+        );
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteCategoria(@PathVariable Long id) {
-        this.despesaCategoriaService.deleteCategoria(id);
+    public ResponseEntity<Object> deleteById(@PathVariable Long id) {
+        service.deleteById(id);
         return CustomSuccess.buildResponseEntity("Categoria deletada com sucesso.");
     }
 }

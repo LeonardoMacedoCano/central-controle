@@ -1,31 +1,24 @@
 package br.com.lcano.centraldecontrole.domain.servicos;
 
-import br.com.lcano.centraldecontrole.domain.Categoria;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(of = "id")
+@ToString(of = "id")
 @Entity
 @Table(name = "servicocategoria")
-public class ServicoCategoria extends Categoria {
+public class ServicoCategoria {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String descricao;
 
     @Column(nullable = false)
     private String icone;
-
-    public ServicoCategoria() {
-        super();
-    }
-
-    public ServicoCategoria(String descricao, String icone) {
-        super(descricao);
-        this.icone = icone;
-    }
-
-    public String getIcone() {
-        return icone;
-    }
-
-    public void setIcone(String icone) {
-        this.icone = icone;
-    }
 }

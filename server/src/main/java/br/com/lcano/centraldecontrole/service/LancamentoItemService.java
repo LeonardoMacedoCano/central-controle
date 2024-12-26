@@ -6,8 +6,8 @@ import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 
 public interface LancamentoItemService<T extends LancamentoItemDTO> {
     void create(T itemDTO, Lancamento lancamento);
-    void update(Long id, T itemDTO);
+    void update(T itemDTO, Lancamento lancamento);
     void delete(Long id);
-    T get(Long id);
+    T getByLancamentoId(Long lancamentoId);
     TipoLancamentoEnum getTipoLancamento();
 }

@@ -1,34 +1,75 @@
 package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.FluxoCaixaConfig;
-import br.com.lcano.centraldecontrole.dto.CategoriaDTO;
+import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class FluxoCaixaConfigDTO {
+public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
     private Long id;
-    private CategoriaDTO despesaCategoriaPadrao;
+    private DespesaCategoriaDTO despesaCategoriaPadrao;
     private BigDecimal metaLimiteDespesaMensal;
-    private CategoriaDTO receitaCategoriaPadrao;
-    private CategoriaDTO receitaCategoriaParaGanhoAtivo;
+    private ReceitaCategoriaDTO receitaCategoriaPadrao;
+    private ReceitaCategoriaDTO receitaCategoriaParaGanhoAtivo;
     private BigDecimal metaAporteMensal;
     private BigDecimal metaAporteTotal;
     private Long diaPadraoVencimentoFatura;
 
-    public static FluxoCaixaConfigDTO converterParaDTO(FluxoCaixaConfig fluxoCaixaConfig) {
-        FluxoCaixaConfigDTO dto = new FluxoCaixaConfigDTO();
-        dto.setId(fluxoCaixaConfig.getId());
-        dto.setMetaLimiteDespesaMensal(fluxoCaixaConfig.getMetaLimiteDespesaMensal());
-        dto.setMetaAporteMensal(fluxoCaixaConfig.getMetaAporteMensal());
-        dto.setMetaAporteTotal(fluxoCaixaConfig.getMetaAporteTotal());
-        dto.setDiaPadraoVencimentoFatura(fluxoCaixaConfig.getDiaPadraoVencimentoFatura());
+    @Override
+    public FluxoCaixaConfigDTO fromEntity(FluxoCaixaConfig entity) {
+        this.id = entity.getId();
+        this.metaLimiteDespesaMensal = entity.getMetaLimiteDespesaMensal();
+        this.metaAporteMensal = entity.getMetaAporteMensal();
+        this.metaAporteTotal = entity.getMetaAporteTotal();
+        this.diaPadraoVencimentoFatura = entity.getDiaPadraoVencimentoFatura();
 
-        if (fluxoCaixaConfig.getDespesaCategoriaPadrao() != null) dto.setDespesaCategoriaPadrao(CategoriaDTO.converterParaDTO(fluxoCaixaConfig.getDespesaCategoriaPadrao()));
-        if (fluxoCaixaConfig.getReceitaCategoriaPadrao() != null) dto.setReceitaCategoriaPadrao(CategoriaDTO.converterParaDTO(fluxoCaixaConfig.getReceitaCategoriaPadrao()));
-        if (fluxoCaixaConfig.getReceitaCategoriaParaGanhoAtivo() != null) dto.setReceitaCategoriaParaGanhoAtivo(CategoriaDTO.converterParaDTO(fluxoCaixaConfig.getReceitaCategoriaParaGanhoAtivo()));
+        if (entity.getDespesaCategoriaPadrao() != null) {
+            this.despesaCategoriaPadrao = (DespesaCategoriaDTO) new DespesaCategoriaDTO().fromEntity(
+                    entity.getDespesaCategoriaPadrao()
+            );
+        }
 
-        return dto;
+        if (entity.getReceitaCategoriaPadrao() != null) {
+            this.receitaCategoriaPadrao = (ReceitaCategoriaDTO) new ReceitaCategoriaDTO().fromEntity(
+                    entity.getReceitaCategoriaPadrao()
+            );
+        }
+
+        if (entity.getReceitaCategoriaParaGanhoAtivo() != null) {
+            this.receitaCategoriaPadrao = (ReceitaCategoriaDTO) new ReceitaCategoriaDTO().fromEntity(
+                    entity.getReceitaCategoriaParaGanhoAtivo()
+            );
+        }
+
+        return this;
+    }
+
+    @Override
+    public FluxoCaixaConfig toEntity() {
+        FluxoCaixaConfig entity = new FluxoCaixaConfig();
+
+        entity.setId(this.id);
+        entity.setMetaLimiteDespesaMensal(this.metaLimiteDespesaMensal);
+        entity.setMetaAporteMensal(this.metaAporteMensal);
+        entity.setMetaAporteTotal(this.metaAporteTotal);
+        entity.setDiaPadraoVencimentoFatura(this.diaPadraoVencimentoFatura);
+
+        if (this.despesaCategoriaPadrao != null) {
+            entity.setDespesaCategoriaPadrao(this.despesaCategoriaPadrao.toEntity());
+        }
+
+        if (this.receitaCategoriaPadrao != null) {
+            entity.setReceitaCategoriaPadrao(this.receitaCategoriaPadrao.toEntity());
+        }
+
+        if (this.receitaCategoriaParaGanhoAtivo != null) {
+            entity.setReceitaCategoriaParaGanhoAtivo(this.receitaCategoriaParaGanhoAtivo.toEntity());
+        }
+
+        return entity;
     }
 }
