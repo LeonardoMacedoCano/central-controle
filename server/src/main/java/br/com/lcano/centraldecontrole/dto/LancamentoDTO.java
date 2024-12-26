@@ -6,10 +6,8 @@ import br.com.lcano.centraldecontrole.dto.fluxocaixa.AtivoDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
-import br.com.lcano.centraldecontrole.util.CustomDateDeserializer;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,14 +17,9 @@ import java.util.Date;
 @Data
 public class LancamentoDTO extends BaseDTO<Lancamento> {
     private Long id;
-
-    @JsonDeserialize(using = CustomDateDeserializer.class)
     private Date dataLancamento;
-
     private String descricao;
-
     private TipoLancamentoEnum tipo;
-
     private Usuario usuario;
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "tipo")
@@ -52,6 +45,7 @@ public class LancamentoDTO extends BaseDTO<Lancamento> {
         return this;
     }
 
+    @Override
     public Lancamento toEntity() {
         Lancamento entity = new Lancamento();
         entity.setId(this.id);

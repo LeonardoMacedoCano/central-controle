@@ -9,8 +9,7 @@ import { formatDateToYMDString } from "../utils";
 import { FilterDTO } from "../types/Filters";
 
 interface LancamentoApi {
-  createLancamento: (token: string, data: Lancamento) => Promise<{ id: number } | undefined>;
-  updateLancamento: (token: string, id: string | number, data: Lancamento) => Promise<void | undefined>;
+  saveLancamento: (token: string, data: Lancamento) => Promise<{ id: number } | undefined>;
   deleteLancamento: (token: string, id: string | number) => Promise<void | undefined>;
   getLancamentos: (token: string, page: number, size: number, filters?: FilterDTO[]) => Promise<PagedResponse<Lancamento> | undefined>;
   getLancamento: (token: string, id: string | number) => Promise<Lancamento | undefined>;
@@ -21,23 +20,9 @@ const LancamentoService = (): LancamentoApi => {
   const { request } = DefaultService();
   const message = useMessage();
 
-  const lancamentoPayload = (data: Lancamento) => ({
-    descricao: data.descricao,
-    tipo: data.tipo,
-    itemDTO: data.itemDTO
-  });
-
-  const createLancamento = async (token: string, data: Lancamento): Promise<{ id: number } | undefined> => {
+  const saveLancamento = async (token: string, data: Lancamento): Promise<{ id: number } | undefined> => {
     try {
-      return await request<{ id: number }>('post', 'lancamento', token, message, lancamentoPayload(data));
-    } catch (error) {
-      return undefined;
-    }
-  };
-
-  const updateLancamento = async (token: string, id: string | number, data: Lancamento): Promise<void | undefined> => {
-    try {
-      await request<undefined>('put', `lancamento/${id}`, token, message, lancamentoPayload(data));
+      return await request<{ id: number }>('post', 'lancamento', token, message, data);
     } catch (error) {
       return undefined;
     }
@@ -80,8 +65,7 @@ const LancamentoService = (): LancamentoApi => {
   };
 
   return {
-    createLancamento,
-    updateLancamento,
+    saveLancamento,
     deleteLancamento,
     getLancamentos,
     getLancamento,

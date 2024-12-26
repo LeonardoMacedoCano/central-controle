@@ -24,32 +24,26 @@ public class LancamentoResource {
     private final LancamentoService lancamentoService;
 
     @PostMapping
-    public ResponseEntity<Object> createLancamento(@RequestBody LancamentoDTO lancamentoDTO) {
-        Long id = this.lancamentoService.createLancamento(lancamentoDTO);
-        return CustomSuccess.buildResponseEntity("Lançamento efetuado com sucesso.", "id", id);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> updateLancamento(@PathVariable Long id, @RequestBody LancamentoDTO lancamentoDTO) {
-        this.lancamentoService.updateLancamento(id, lancamentoDTO);
-        return CustomSuccess.buildResponseEntity("Lançamento editado com sucesso.");
+    public ResponseEntity<Object> saveAsDto(@RequestBody LancamentoDTO lancamentoDTO) {
+        Long id = this.lancamentoService.saveAsDto(lancamentoDTO).getId();
+        return CustomSuccess.buildResponseEntity("Lançamento salvo com sucesso.", "id", id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteLancamento(@PathVariable Long id) {
-        this.lancamentoService.deleteLancamento(id);
+    public ResponseEntity<Object> deleteById(@PathVariable Long id) {
+        this.lancamentoService.deleteById(id);
         return CustomSuccess.buildResponseEntity("Lançamento deletado com sucesso.");
     }
 
     @PostMapping("/search")
-    public ResponseEntity<Page<LancamentoDTO>> getLancamentos(Pageable pageable,
+    public ResponseEntity<Page<LancamentoDTO>> search(Pageable pageable,
                                                               @RequestBody(required = false) List<FilterDTO> filterDTOs) {
-        return ResponseEntity.ok(lancamentoService.getLancamentos(pageable, filterDTOs));
+        return ResponseEntity.ok(lancamentoService.search(pageable, filterDTOs));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<LancamentoDTO> getLancamento(@PathVariable Long id) {
-        return ResponseEntity.ok(this.lancamentoService.getLancamentoDTO(id));
+    public ResponseEntity<LancamentoDTO> findByIdAsDto(@PathVariable Long id) {
+        return ResponseEntity.ok(this.lancamentoService.findByIdAsDto(id));
     }
 
     @PostMapping("/import-extrato-fatura-cartao")

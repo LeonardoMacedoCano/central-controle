@@ -71,7 +71,6 @@ public abstract class AbstractGenericService<T, ID> {
         return getRepository().save(entity);
     }
 
-    @Transactional
     public <D extends BaseDTO<T>> D saveAsDto(D dto) {
         T entity = dto.toEntity();
         T savedEntity = save(entity);

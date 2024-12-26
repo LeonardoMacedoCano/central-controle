@@ -106,15 +106,8 @@ const LancamentoFormPage: React.FC = () => {
     if (!auth.usuario?.token) return;
 
     try {
-      let responseId;
-      if (id) {
-        await lancamentoService.updateLancamento(auth.usuario?.token, id, lancamento);
-        responseId = id;
-      } else {
-        const response = await lancamentoService.createLancamento(auth.usuario?.token, lancamento);
-        if (response?.id) responseId = response.id;
-      }
-      if (responseId) navigate(`/lancamento/${responseId}`);
+      const response = await lancamentoService.saveLancamento(auth.usuario?.token, lancamento);
+      if (response?.id) navigate(`/lancamento/${response.id}`);
     } catch (error) {
       message.showErrorWithLog('Erro ao salvar o lançamento.', error);
     }

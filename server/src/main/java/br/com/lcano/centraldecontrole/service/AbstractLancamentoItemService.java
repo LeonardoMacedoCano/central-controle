@@ -13,22 +13,10 @@ public abstract class AbstractLancamentoItemService<T, D extends BaseDTO<T> & La
     protected abstract LancamentoItemRepository<T> getRepository();
 
     @Override
-    public void create(D itemDTO, Lancamento lancamento) {
+    public void save(D itemDTO, Lancamento lancamento) {
         T entity = itemDTO.toEntity();
         setLancamento(entity, lancamento);
         getRepository().save(entity);
-    }
-
-    @Override
-    public void update(D itemDTO, Lancamento lancamento) {
-        T entity = itemDTO.toEntity();
-        setLancamento(entity, lancamento);
-        getRepository().save(entity);
-    }
-
-    @Override
-    public void delete(Long id) {
-        this.deleteById(id);
     }
 
     @Override

@@ -2,6 +2,7 @@ package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.domain.Arquivo;
 import br.com.lcano.centraldecontrole.domain.Lancamento;
+import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.repository.LancamentoSpecifications;
 import br.com.lcano.centraldecontrole.dto.FilterDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
@@ -31,7 +32,6 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
     private final LancamentoRepository lancamentoRepository;
     private final Map<TipoLancamentoEnum, LancamentoItemService<? extends LancamentoItemDTO>> lancamentoItemServices;
     private final UsuarioUtil usuarioUtil;
-    private final DateUtil dateUtil;
     private final ArquivoService arquivoService;
     private final ImportacaoExtratoFaturaCartaoJobStarter importacaoExtratoFaturaCartaoJobStarter;
     private final ImportacaoExtratoContaJobStarter importacaoExtratoContaJobStarter;
@@ -46,45 +46,27 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
         return new LancamentoDTO();
     }
 
-    @Transactional
-    public Long createLancamento(LancamentoDTO lancamentoDTO) {
-        var lancamento = new Lancamento();
-        lancamento.setDataLancamento(dateUtil.getDataAtual());
-        lancamento.setDescricao(lancamentoDTO.getDescricao());
-        lancamento.setTipo(lancamentoDTO.getTipo());
-        lancamento.setUsuario(usuarioUtil.getUsuarioAutenticado());
-        lancamento = save(lancamento);
-
-        getLancamentoItemService(lancamento.getTipo())
-                .create(lancamentoDTO.getItemDTO(), lancamento);
-
-        return lancamento.getId();
-    }
-
-    @Transactional
-    public void updateLancamento(Long id, LancamentoDTO lancamentoDTO) {
-        var lancamento = findById(id);
-        lancamento.setDescricao(lancamentoDTO.getDescricao());
-        save(lancamento);
-
-        getLancamentoItemService(lancamento.getTipo())
-                .update(lancamentoDTO.getItemDTO(), lancamento);
-    }
-
-    @Transactional
-    public void deleteLancamento(Long id) {
-        var lancamento = findById(id);
-        getLancamentoItemService(lancamento.getTipo()).delete(id);
-        deleteById(id);
-    }
-
-    public LancamentoDTO getLancamentoDTO(Long id) {
-        var lancamento = findById(id);
-        var itemDTO = getLancamentoItemService(lancamento.getTipo()).getByLancamentoId(id);
+    @Override
+    public LancamentoDTO findByIdAsDto(Long id) {
+        Lancamento lancamento = this.findById(id);
+        LancamentoItemDTO itemDTO = getLancamentoItemService(lancamento.getTipo()).getByLancamentoId(id);
         return new LancamentoDTO().fromEntityWithItem(lancamento, itemDTO);
     }
 
-    public Page<LancamentoDTO> getLancamentos(Pageable pageable, List<FilterDTO> filterDTOs) {
+    @Override
+    @Transactional
+    public <D extends BaseDTO<Lancamento>> D saveAsDto(D dto) {
+        Lancamento lancamento = dto.toEntity();
+        lancamento.setUsuario(usuarioUtil.getUsuarioAutenticado());
+        lancamento = this.save(lancamento);
+
+        getLancamentoItemService(lancamento.getTipo())
+                .save(((LancamentoDTO) dto).getItemDTO(), lancamento);
+
+        return (D) new LancamentoDTO().fromEntity(lancamento);
+    }
+
+    public Page<LancamentoDTO> search(Pageable pageable, List<FilterDTO> filterDTOs) {
         Specification<Lancamento> combinedSpecification = FilterUtil.buildSpecificationsFromDTO(filterDTOs, this::applyFieldSpecification);
         return lancamentoRepository.findAll(combinedSpecification, pageable)
                 .map(lancamento -> {
