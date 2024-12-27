@@ -12,9 +12,9 @@ import java.util.List;
 @Service
 public class ServicoCategoriaRelService {
     @Autowired
-    private final ServicoCategoriaRelRepository servicoCategoriaRelRepository;
+    private final ServicoCategoriaRelRepository repository;
 
     public List<ServicoCategoriaRel> findByServicoId(Long servicoId) {
-        return servicoCategoriaRelRepository.findByServicoId(servicoId);
+        return repository.findByServicoId(servicoId);
     }
 }

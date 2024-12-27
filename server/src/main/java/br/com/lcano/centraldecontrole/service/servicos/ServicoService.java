@@ -23,7 +23,7 @@ import java.util.List;
 @Service
 public class ServicoService {
     @Autowired
-    private final ServicoRepository servicoRepository;
+    private final ServicoRepository repository;
     @Autowired
     private final DockerService dockerService;
     @Autowired
@@ -33,12 +33,12 @@ public class ServicoService {
 
     public Page<ServicoDTO> getServicos(Pageable pageable, List<FilterDTO> filterDTOs) {
         Specification<Servico> combinedSpecification = FilterUtil.buildSpecificationsFromDTO(filterDTOs, this::applyFieldSpecification);
-        return servicoRepository.findAll(combinedSpecification, pageable)
+        return repository.findAll(combinedSpecification, pageable)
                 .map(servico -> {
                     DockerStatusEnum status = dockerService.getContainerStatusByName(servico.getNome());
                     Boolean hasPermission = usuarioServicoService.hasPermissionForService(servico.getId());
                     List<ServicoCategoriaDTO> categorias = servicoCategoriaService.findByServicoId(servico.getId());
-                    return ServicoDTO.converterParaDTO(servico, status, hasPermission, categorias);
+                    return new ServicoDTO().fromEntity(servico, status, hasPermission, categorias);
                 });
     }
 
@@ -47,7 +47,7 @@ public class ServicoService {
     }
 
     public List<ServicoCategoriaDTO> getAllServicoCategoria() {
-        return servicoCategoriaService.getAll();
+        return servicoCategoriaService.findAllAsDto();
     }
 
     private Specification<Servico> applyFieldSpecification(FilterDTO filterDTO) {

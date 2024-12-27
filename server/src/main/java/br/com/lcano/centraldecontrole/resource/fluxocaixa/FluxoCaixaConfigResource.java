@@ -18,7 +18,11 @@ public class FluxoCaixaConfigResource {
 
     @GetMapping
     public ResponseEntity<FluxoCaixaConfigDTO> findByUsuarioAsDto() {
-        return ResponseEntity.ok(this.service.findByUsuarioAsDto());
+        return ResponseEntity.ok(
+                new FluxoCaixaConfigDTO().fromEntity(
+                        this.service.findByUsuario()
+                )
+        );
     }
 
     @PostMapping

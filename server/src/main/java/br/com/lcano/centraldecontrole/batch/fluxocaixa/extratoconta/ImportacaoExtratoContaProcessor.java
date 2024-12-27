@@ -153,7 +153,7 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
 
             return despesaCategoriaService.findById(regraCorrespondente.getIdCategoria());
         } else {
-            return extratoContaRegraService.getDespesaCategoriaPadrao().toEntity();
+            return extratoContaRegraService.getDespesaCategoriaPadrao();
         }
     }
 
@@ -164,7 +164,7 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
 
             return receitaCategoriaService.findById(regraCorrespondente.getIdCategoria());
         } else {
-            return extratoContaRegraService.getReceitaCategoriaPadrao().toEntity();
+            return extratoContaRegraService.getReceitaCategoriaPadrao();
         }
     }
 

@@ -12,9 +12,9 @@ import java.util.Optional;
 @Service
 public class ServidorConfigService {
     @Autowired
-    private final ServidorConfigRepository servidorConfigRepository;
+    private final ServidorConfigRepository repository;
 
     public Optional<ServidorConfig> find() {
-        return servidorConfigRepository.findById(1L);
+        return repository.findById(1L);
     }
 }

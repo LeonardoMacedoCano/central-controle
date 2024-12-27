@@ -1,30 +1,31 @@
 package br.com.lcano.centraldecontrole.dto.servicos;
 
 import br.com.lcano.centraldecontrole.domain.servicos.ServicoCategoria;
-import br.com.lcano.centraldecontrole.domain.servicos.ServicoCategoriaRel;
+import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class ServicoCategoriaDTO {
+public class ServicoCategoriaDTO extends BaseDTO<ServicoCategoria> {
     private Long id;
     private String descricao;
     private String icone;
 
-    public static ServicoCategoriaDTO converterParaDTO(ServicoCategoriaRel servicoCategoriaRel) {
-        ServicoCategoria servicoCategoria = servicoCategoriaRel.getServicoCategoria();
-
-        ServicoCategoriaDTO dto = new ServicoCategoriaDTO();
-        dto.setId(servicoCategoria.getId());
-        dto.setDescricao(servicoCategoria.getDescricao());
-        dto.setIcone(servicoCategoria.getIcone());
-        return dto;
+    @Override
+    public ServicoCategoriaDTO fromEntity(ServicoCategoria entity) {
+        this.id = entity.getId();
+        this.descricao = entity.getDescricao();
+        this.icone = entity.getIcone();
+        return this;
     }
 
-    public static ServicoCategoriaDTO converterParaDTO(ServicoCategoria servicoCategoria) {
-        ServicoCategoriaDTO dto = new ServicoCategoriaDTO();
-        dto.setId(servicoCategoria.getId());
-        dto.setDescricao(servicoCategoria.getDescricao());
-        dto.setIcone(servicoCategoria.getIcone());
-        return dto;
+    @Override
+    public ServicoCategoria toEntity() {
+        ServicoCategoria entity = new ServicoCategoria();
+        entity.setId(this.id);
+        entity.setDescricao(this.descricao);
+        entity.setIcone(this.icone);
+        return entity;
     }
 }

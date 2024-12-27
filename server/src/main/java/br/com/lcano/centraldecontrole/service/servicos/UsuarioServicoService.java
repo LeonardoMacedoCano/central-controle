@@ -12,13 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class UsuarioServicoService {
     @Autowired
-    private final UsuarioServicoRepository usuarioServicoRepository;
+    private final UsuarioServicoRepository repository;
     @Autowired
     UsuarioUtil usuarioUtil;
 
     public boolean hasPermissionForService(Long idServico) {
         Usuario usuarioAutenticado = usuarioUtil.getUsuarioAutenticado();
-        UsuarioServico usuarioServico = usuarioServicoRepository.findByUsuarioIdAndServicoId(usuarioAutenticado.getId(), idServico);
+        UsuarioServico usuarioServico = repository.findByUsuarioIdAndServicoId(usuarioAutenticado.getId(), idServico);
         return usuarioServico != null && usuarioServico.isPermissao();
     }
 }

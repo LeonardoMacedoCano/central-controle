@@ -18,28 +18,28 @@ import java.util.List;
 @RequestMapping("/api/lancamento")
 public class LancamentoResource {
     @Autowired
-    private final LancamentoService lancamentoService;
+    private final LancamentoService service;
 
     @PostMapping
     public ResponseEntity<Object> saveAsDto(@RequestBody LancamentoDTO lancamentoDTO) {
-        Long id = this.lancamentoService.saveAsDto(lancamentoDTO).getId();
+        Long id = this.service.saveAsDto(lancamentoDTO).getId();
         return CustomSuccess.buildResponseEntity("Lançamento salvo com sucesso.", "id", id);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteById(@PathVariable Long id) {
-        this.lancamentoService.deleteById(id);
+        this.service.deleteById(id);
         return CustomSuccess.buildResponseEntity("Lançamento deletado com sucesso.");
     }
 
     @PostMapping("/search")
     public ResponseEntity<Page<LancamentoDTO>> search(Pageable pageable,
                                                               @RequestBody(required = false) List<FilterDTO> filterDTOs) {
-        return ResponseEntity.ok(lancamentoService.search(pageable, filterDTOs));
+        return ResponseEntity.ok(service.search(pageable, filterDTOs));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<LancamentoDTO> findByIdAsDto(@PathVariable Long id) {
-        return ResponseEntity.ok(this.lancamentoService.findByIdAsDto(id));
+        return ResponseEntity.ok(this.service.findByIdAsDto(id));
     }
 }

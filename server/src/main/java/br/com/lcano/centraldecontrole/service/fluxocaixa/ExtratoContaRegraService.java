@@ -1,10 +1,10 @@
 package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoContaRegra;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.ReceitaCategoria;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaRegraDTO;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaCategoriaDTO;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.FluxoCaixaConfigException;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.ExtratoContaRegraRepository;
 import br.com.lcano.centraldecontrole.service.AbstractGenericService;
@@ -68,11 +68,11 @@ public class ExtratoContaRegraService extends AbstractGenericService<ExtratoCont
         return extratoContaRegra;
     }
 
-    public DespesaCategoriaDTO getDespesaCategoriaPadrao() {
+    public DespesaCategoria getDespesaCategoriaPadrao() {
         return fluxoCaixaConfigService.getDespesaCategoriaPadrao();
     }
 
-    public ReceitaCategoriaDTO getReceitaCategoriaPadrao() {
+    public ReceitaCategoria getReceitaCategoriaPadrao() {
         return fluxoCaixaConfigService.getReceitaCategoriaPadrao();
     }
 }

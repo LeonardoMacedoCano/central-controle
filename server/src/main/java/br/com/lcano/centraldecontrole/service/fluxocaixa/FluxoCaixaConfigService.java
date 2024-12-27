@@ -1,10 +1,10 @@
 package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.FluxoCaixaConfig;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.ReceitaCategoria;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.FluxoCaixaConfigDTO;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaCategoriaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.FluxoCaixaConfigException;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.FluxoCaixaConfigRepository;
@@ -34,11 +34,9 @@ public class FluxoCaixaConfigService extends AbstractGenericService<FluxoCaixaCo
         return new FluxoCaixaConfigDTO();
     }
 
-    public FluxoCaixaConfigDTO findByUsuarioAsDto() {
-        return new FluxoCaixaConfigDTO().fromEntity(
-                repository.findByUsuario(
-                        usuarioUtil.getUsuarioAutenticado()
-                )
+    public FluxoCaixaConfig findByUsuario() {
+        return repository.findByUsuario(
+                usuarioUtil.getUsuarioAutenticado()
         );
     }
 
@@ -53,20 +51,20 @@ public class FluxoCaixaConfigService extends AbstractGenericService<FluxoCaixaCo
         return (D) new FluxoCaixaConfigDTO().fromEntity(fluxoCaixaConfig);
     }
 
-    public DespesaCategoriaDTO getDespesaCategoriaPadrao() {
-        return findByUsuarioAsDto().getDespesaCategoriaPadrao();
+    public DespesaCategoria getDespesaCategoriaPadrao() {
+        return findByUsuario().getDespesaCategoriaPadrao();
     }
 
-    public ReceitaCategoriaDTO getReceitaCategoriaPadrao() {
-        return findByUsuarioAsDto().getReceitaCategoriaPadrao();
+    public ReceitaCategoria getReceitaCategoriaPadrao() {
+        return findByUsuario().getReceitaCategoriaPadrao();
     }
 
     public void validateConfig() {
-        FluxoCaixaConfigDTO fluxoCaixaConfigDTO = findByUsuarioAsDto();
+        FluxoCaixaConfig fluxoCaixaConfig = findByUsuario();
 
-        if (fluxoCaixaConfigDTO == null) throw new FluxoCaixaConfigException.ConfigNaoEncontrada();
-        if (fluxoCaixaConfigDTO.getDespesaCategoriaPadrao() == null) throw new FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada(TipoLancamentoEnum.DESPESA.getDescricao());
-        if (fluxoCaixaConfigDTO.getReceitaCategoriaPadrao() == null) throw new FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada(TipoLancamentoEnum.RECEITA.getDescricao());
+        if (fluxoCaixaConfig == null) throw new FluxoCaixaConfigException.ConfigNaoEncontrada();
+        if (fluxoCaixaConfig.getDespesaCategoriaPadrao() == null) throw new FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada(TipoLancamentoEnum.DESPESA.getDescricao());
+        if (fluxoCaixaConfig.getReceitaCategoriaPadrao() == null) throw new FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada(TipoLancamentoEnum.RECEITA.getDescricao());
     }
 
 }

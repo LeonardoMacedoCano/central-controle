@@ -21,6 +21,8 @@ public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
 
     @Override
     public FluxoCaixaConfigDTO fromEntity(FluxoCaixaConfig entity) {
+        if (null == entity) return null;
+
         this.id = entity.getId();
         this.metaLimiteDespesaMensal = entity.getMetaLimiteDespesaMensal();
         this.metaAporteMensal = entity.getMetaAporteMensal();
