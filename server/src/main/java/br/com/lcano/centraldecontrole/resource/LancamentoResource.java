@@ -8,12 +8,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -44,18 +41,5 @@ public class LancamentoResource {
     @GetMapping("/{id}")
     public ResponseEntity<LancamentoDTO> findByIdAsDto(@PathVariable Long id) {
         return ResponseEntity.ok(this.lancamentoService.findByIdAsDto(id));
-    }
-
-    @PostMapping("/import-extrato-fatura-cartao")
-    public ResponseEntity<Object> importExtratoFaturaCartao(@RequestParam MultipartFile file,
-                                                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataVencimento) throws Exception {
-        this.lancamentoService.importExtratoFaturaCartao(file, dataVencimento);
-        return CustomSuccess.buildResponseEntity("Importação iniciada.");
-    }
-
-    @PostMapping("/import-extrato-conta")
-    public ResponseEntity<Object> importExtratoConta(@RequestParam MultipartFile file) throws Exception {
-        this.lancamentoService.importExtratoConta(file);
-        return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
 }

@@ -31,7 +31,7 @@ public class DespesaCategoriaResource {
 
     @PostMapping
     public ResponseEntity<Object> saveAsDto(@RequestBody DespesaCategoriaDTO dto) {
-        DespesaCategoriaDTO despesaCategoriaBaseDTO = (DespesaCategoriaDTO) service.saveAsDto(dto);
+        DespesaCategoriaDTO despesaCategoriaBaseDTO = service.saveAsDto(dto);
         return CustomSuccess.buildResponseEntity(
                 "Categoria salva com sucesso.",
                 "id",

@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratoconta;
 
-import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
+import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaDTO;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -32,7 +32,7 @@ public class ImportacaoExtratoContaConfig {
                                            ImportacaoExtratoContaProcessor processor,
                                            ImportacaoExtratoContaWriter writer) {
         return new StepBuilder("importacaoExtratoContaStep", jobRepository)
-                .<ExtratoContaDTO, LancamentoDTO>chunk(10, transactionManager)
+                .<ExtratoContaDTO, Lancamento>chunk(10, transactionManager)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)

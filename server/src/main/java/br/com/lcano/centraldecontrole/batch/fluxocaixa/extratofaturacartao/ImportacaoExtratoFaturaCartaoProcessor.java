@@ -1,10 +1,10 @@
 package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
 
+import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoFaturaCartaoDTO;
-import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
@@ -24,7 +24,7 @@ import java.util.Date;
 
 @Component
 @StepScope
-public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<ExtratoFaturaCartaoDTO, LancamentoDTO>, StepExecutionListener {
+public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<ExtratoFaturaCartaoDTO, Lancamento>, StepExecutionListener {
 
     @Autowired
     UsuarioService usuarioService;
@@ -50,13 +50,12 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
     }
 
     @Override
-    public LancamentoDTO process(ExtratoFaturaCartaoDTO extratoFaturaCartao) {
+    public Lancamento process(ExtratoFaturaCartaoDTO extratoFaturaCartao) {
         if (this.isDespesa(extratoFaturaCartao)) {
-            LancamentoDTO lancamentoDTO = this.buildLancamentoDTO(extratoFaturaCartao);
-            DespesaDTO despesaDTO = this.buildDespesaDTO(extratoFaturaCartao);
-            lancamentoDTO.setItemDTO(despesaDTO);
-
-            return lancamentoDTO;
+            Lancamento lancamento = this.buildLancamento(extratoFaturaCartao);
+            Despesa despesa = this.buildDespesa(extratoFaturaCartao, lancamento);
+            lancamento.setDespesa(despesa);
+            return lancamento;
         }
 
         return null;
@@ -66,31 +65,28 @@ public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<Ext
         return extratoFaturaCartao.getValor().compareTo(BigDecimal.valueOf(0.00)) > 0;
     }
 
-    private LancamentoDTO buildLancamentoDTO(ExtratoFaturaCartaoDTO extratoFaturaCartao) {
-        LancamentoDTO lancamentoDTO = new LancamentoDTO();
-
-        lancamentoDTO.setDataLancamento(extratoFaturaCartao.getDataLancamento());
-        lancamentoDTO.setDescricao(extratoFaturaCartao.getDescricao());
-        lancamentoDTO.setTipo(TipoLancamentoEnum.DESPESA);
-        lancamentoDTO.setUsuario(usuario);
-
-        return lancamentoDTO;
+    private Lancamento buildLancamento(ExtratoFaturaCartaoDTO extratoFaturaCartao) {
+        Lancamento lancamento = new Lancamento();
+        lancamento.setDataLancamento(extratoFaturaCartao.getDataLancamento());
+        lancamento.setDescricao(extratoFaturaCartao.getDescricao());
+        lancamento.setTipo(TipoLancamentoEnum.DESPESA);
+        lancamento.setUsuario(usuario);
+        return lancamento;
     }
 
-    private DespesaDTO buildDespesaDTO(ExtratoFaturaCartaoDTO extratoFaturaCartao) {
-        DespesaDTO despesaDTO = new DespesaDTO();
-
+    private Despesa buildDespesa(ExtratoFaturaCartaoDTO extratoFaturaCartao, Lancamento lancamento) {
+        Despesa despesa = new Despesa();
         String descricaoCategoriaFormatada = StringUtil.capitalizeFirstLetter(extratoFaturaCartao.getCategoria());
-        despesaDTO.setCategoria(this.getDespesaCategoriaDTO(descricaoCategoriaFormatada));
-        despesaDTO.setDataVencimento(dataVencimento);
-        despesaDTO.setValor(extratoFaturaCartao.getValor());
-        despesaDTO.setFormaPagamento(DespesaFormaPagamentoEnum.CARTAO_CREDITO);
-
-        return despesaDTO;
+        despesa.setCategoria(this.getDespesaCategoriaDTO(descricaoCategoriaFormatada));
+        despesa.setDataVencimento(dataVencimento);
+        despesa.setValor(extratoFaturaCartao.getValor());
+        despesa.setFormaPagamento(DespesaFormaPagamentoEnum.CARTAO_CREDITO);
+        despesa.setLancamento(lancamento);
+        return despesa;
     }
 
-    private DespesaCategoriaDTO getDespesaCategoriaDTO(String descricaoCategoria) {
-        return this.despesaCategoriaService.findOrCreate(descricaoCategoria);
+    private DespesaCategoria getDespesaCategoriaDTO(String descricaoCategoria) {
+        return this.despesaCategoriaService.findOrCreate(descricaoCategoria).toEntity();
     }
 
     @Override

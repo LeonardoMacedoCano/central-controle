@@ -32,7 +32,6 @@ public class ExtratoContaRegraDTO extends BaseDTO<ExtratoContaRegra> {
     @Override
     public ExtratoContaRegra toEntity() {
         ExtratoContaRegra entity = new ExtratoContaRegra();
-
         entity.setId(this.id);
         entity.setTipoRegra(TipoRegraExtratoConta.valueOf(this.tipoRegra));
         entity.setDescricaoMatch(this.descricaoMatch);
@@ -40,7 +39,6 @@ public class ExtratoContaRegraDTO extends BaseDTO<ExtratoContaRegra> {
         entity.setIdCategoria(this.idCategoria);
         entity.setPrioridade(this.prioridade);
         entity.setAtivo(this.ativo);
-
         return null;
     }
 }

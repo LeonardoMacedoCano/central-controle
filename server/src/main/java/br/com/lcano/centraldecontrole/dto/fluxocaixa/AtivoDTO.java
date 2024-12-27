@@ -29,29 +29,20 @@ public class AtivoDTO extends BaseDTO<Ativo> implements LancamentoItemDTO {
         this.quantidade = entity.getQuantidade();
         this.precoUnitario = entity.getPrecoUnitario();
         this.dataMovimento = entity.getDataMovimento();
-
-        if (entity.getCategoria() != null) {
-            this.categoria = new AtivoCategoriaDTO().fromEntity(entity.getCategoria());
-        }
-
+        if (entity.getCategoria() != null) this.categoria = new AtivoCategoriaDTO().fromEntity(entity.getCategoria());
         return this;
     }
 
     @Override
     public Ativo toEntity() {
         Ativo entity = new Ativo();
-
         entity.setId(this.id);
         entity.setTicker(this.ticker);
         entity.setOperacao(this.operacao);
         entity.setQuantidade(this.quantidade);
         entity.setPrecoUnitario(this.precoUnitario);
         entity.setDataMovimento(this.dataMovimento);
-
-        if (this.categoria != null) {
-            entity.setCategoria(this.categoria.toEntity());
-        }
-
+        if (this.categoria != null) entity.setCategoria(this.categoria.toEntity());
         return entity;
     }
 }

@@ -25,27 +25,18 @@ public class DespesaDTO extends BaseDTO<Despesa> implements LancamentoItemDTO {
         this.dataVencimento = entity.getDataVencimento();
         this.valor = entity.getValor();
         this.formaPagamento = entity.getFormaPagamento();
-
-        if (entity.getCategoria() != null) {
-            this.categoria = new DespesaCategoriaDTO().fromEntity(entity.getCategoria());
-        }
-
+        if (entity.getCategoria() != null) this.categoria = new DespesaCategoriaDTO().fromEntity(entity.getCategoria());
         return this;
     }
 
     @Override
     public Despesa toEntity() {
         Despesa entity = new Despesa();
-
         entity.setId(this.id);
         entity.setDataVencimento(this.dataVencimento);
         entity.setValor(this.valor);
         entity.setFormaPagamento(this.formaPagamento);
-
-        if (this.categoria != null) {
-            entity.setCategoria(this.categoria.toEntity());
-        }
-
+        if (this.categoria != null) entity.setCategoria(this.categoria.toEntity());
         return entity;
     }
 }

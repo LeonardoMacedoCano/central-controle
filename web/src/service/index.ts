@@ -7,7 +7,7 @@ import ArquivoService from "./ArquivoService";
 import ReceitaCategoriaService from "./fluxocaixa/ReceitaCategoriaService";
 import AtivoCategoriaService from "./fluxocaixa/AtivoCategoriaService";
 import FluxoCaixaConfigService from "./fluxocaixa/FluxoCaixaConfigService";
-import DespesaConfigSectionForm from "../pages/fluxocaixa/Configuracao/DespesaConfigSectionForm";
+import ExtratoFluxoCaixaService from "./fluxocaixa/ExtratoFluxoCaixaService";
 
 export {
   AuthService,
@@ -19,5 +19,5 @@ export {
   ReceitaCategoriaService,
   AtivoCategoriaService,
   FluxoCaixaConfigService,
-  DespesaConfigSectionForm
+  ExtratoFluxoCaixaService
 }

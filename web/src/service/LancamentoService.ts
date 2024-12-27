@@ -4,8 +4,6 @@ import {
   Lancamento,
   PagedResponse,
 } from "../types";
-import { ExtratoFaturaCartaoDTO } from "../types/fluxocaixa/ExtratoFaturaCartao";
-import { formatDateToYMDString } from "../utils";
 import { FilterDTO } from "../types/Filters";
 
 interface LancamentoApi {
@@ -13,7 +11,6 @@ interface LancamentoApi {
   deleteLancamento: (token: string, id: string | number) => Promise<void | undefined>;
   getLancamentos: (token: string, page: number, size: number, filters?: FilterDTO[]) => Promise<PagedResponse<Lancamento> | undefined>;
   getLancamento: (token: string, id: string | number) => Promise<Lancamento | undefined>;
-  importExtratoFaturaCartao: (token: string, extratoFaturaCartaoDTO: ExtratoFaturaCartaoDTO) => Promise<void | undefined>;
 }
 
 const LancamentoService = (): LancamentoApi => {
@@ -52,24 +49,11 @@ const LancamentoService = (): LancamentoApi => {
     }
   };
 
-  const importExtratoFaturaCartao = async (token: string, extratoFaturaCartaoDTO: ExtratoFaturaCartaoDTO): Promise<void | undefined> => {
-    try {
-      const formData = new FormData();
-      formData.append("file", extratoFaturaCartaoDTO.file!);
-      formData.append("dataVencimento", formatDateToYMDString(extratoFaturaCartaoDTO.dataVencimento));
-
-      await request<undefined>('post', 'lancamento/import-extrato-fatura-cartao', token, message, formData);
-    } catch (error) {
-      return undefined;
-    }
-  };
-
   return {
     saveLancamento,
     deleteLancamento,
     getLancamentos,
-    getLancamento,
-    importExtratoFaturaCartao
+    getLancamento
   };
 };
 

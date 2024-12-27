@@ -16,10 +16,10 @@ import java.util.List;
 @RequestMapping("/api/ativo-categoria")
 public class AtivoCategoriaResource {
     @Autowired
-    private final AtivoCategoriaService ativoCategoriaService;
+    private final AtivoCategoriaService service;
 
     @GetMapping
     public ResponseEntity<List<AtivoCategoriaDTO>> findAllAsDto() {
-        return ResponseEntity.ok(ativoCategoriaService.findAllAsDto());
+        return ResponseEntity.ok(service.findAllAsDto());
     }
 }

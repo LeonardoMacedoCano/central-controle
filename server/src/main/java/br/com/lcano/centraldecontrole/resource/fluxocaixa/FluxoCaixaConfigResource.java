@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.*;
 public class FluxoCaixaConfigResource {
 
     @Autowired
-    private final FluxoCaixaConfigService fluxoCaixaConfigService;
+    private final FluxoCaixaConfigService service;
 
     @GetMapping
-    public ResponseEntity<FluxoCaixaConfigDTO> getConfig() {
-        return ResponseEntity.ok(this.fluxoCaixaConfigService.getConfig());
+    public ResponseEntity<FluxoCaixaConfigDTO> findByUsuarioAsDto() {
+        return ResponseEntity.ok(this.service.findByUsuarioAsDto());
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveConfig(@RequestBody FluxoCaixaConfigDTO fluxoCaixaConfigDTO) {
-        Long id = this.fluxoCaixaConfigService.saveConfig(fluxoCaixaConfigDTO);
+    public ResponseEntity<Object> saveAsDto(@RequestBody FluxoCaixaConfigDTO fluxoCaixaConfigDTO) {
+        Long id = this.service.saveAsDto(fluxoCaixaConfigDTO).getId();
         return CustomSuccess.buildResponseEntity("Configuração salva com sucesso.", "id", id);
     }
 }

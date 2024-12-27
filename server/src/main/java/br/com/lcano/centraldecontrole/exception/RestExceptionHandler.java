@@ -1,9 +1,6 @@
 package br.com.lcano.centraldecontrole.exception;
 
-import br.com.lcano.centraldecontrole.exception.fluxocaixa.AtivoException;
-import br.com.lcano.centraldecontrole.exception.fluxocaixa.DespesaException;
-import br.com.lcano.centraldecontrole.exception.fluxocaixa.ExtratoException;
-import br.com.lcano.centraldecontrole.exception.fluxocaixa.ReceitaException;
+import br.com.lcano.centraldecontrole.exception.fluxocaixa.FluxoCaixaConfigException;
 import br.com.lcano.centraldecontrole.exception.servicos.DockerException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.http.HttpStatus;
@@ -57,36 +54,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
-    @ExceptionHandler({DespesaException.CategoriaNaoEncontradaById.class})
-    protected ResponseEntity<Object> handleDespesaCategoriaNaoEncontradaById(DespesaException.CategoriaNaoEncontradaById ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler({DespesaException.DespesaNaoEncontradaByLancamentoId.class})
-    protected ResponseEntity<Object> handleDespesaNaoEncontradaByLancamentoId(DespesaException.DespesaNaoEncontradaByLancamentoId ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler({ReceitaException.CategoriaNaoEncontradaById.class})
-    protected ResponseEntity<Object> handleReceitaCategoriaNaoEncontradaById(ReceitaException.CategoriaNaoEncontradaById ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler({ReceitaException.ReceitaNaoEncontradaByLancamentoId.class})
-    protected ResponseEntity<Object> handleReceitaNaoEncontradaByLancamentoId(ReceitaException.ReceitaNaoEncontradaByLancamentoId ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler({AtivoException.CategoriaNaoEncontradaById.class})
-    protected ResponseEntity<Object> handleAtivoCategoriaNaoEncontradaById(AtivoException.CategoriaNaoEncontradaById ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
-    @ExceptionHandler({AtivoException.AtivoNaoEncontradaByLancamentoId.class})
-    protected ResponseEntity<Object> handleAtivoNaoEncontradaByLancamentoId(AtivoException.AtivoNaoEncontradaByLancamentoId ex) {
-        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
     @ExceptionHandler({LancamentoException.LancamentoNaoEncontradoById.class})
     protected ResponseEntity<Object> handleLancamentoNaoEncontradaById(LancamentoException.LancamentoNaoEncontradoById ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -122,13 +89,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler({ExtratoException.ExtratoContaRegraUniquePrioridadeViolada.class})
-    protected ResponseEntity<Object> handleExtratoContaRegraUniquePrioridadeViolada(ExtratoException.ExtratoContaRegraUniquePrioridadeViolada ex) {
+    @ExceptionHandler({FluxoCaixaConfigException.UniquePrioridadeViolada.class})
+    protected ResponseEntity<Object> handleUniquePrioridadeViolada(FluxoCaixaConfigException.UniquePrioridadeViolada ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler({ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada.class})
-    protected ResponseEntity<Object> handleExtratoContaRegraCategoriaPadraoNaoEncontrada(ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada ex) {
+    @ExceptionHandler({FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada.class})
+    protected ResponseEntity<Object> handleCategoriaPadraoNaoEncontrada(FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada ex) {
+        return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({FluxoCaixaConfigException.ConfigNaoEncontrada.class})
+    protected ResponseEntity<Object> handleConfigNaoEncontrada(FluxoCaixaConfigException.ConfigNaoEncontrada ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 }

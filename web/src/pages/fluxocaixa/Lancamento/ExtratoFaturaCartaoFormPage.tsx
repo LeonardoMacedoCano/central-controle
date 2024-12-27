@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Container, DragDropFile, FieldValue, FlexBox, FloatingButton, Loading, Panel } from '../../../components';
 import { formatDateToYMDString, getCurrentDate, isDateValid } from '../../../utils';
 import { ExtratoFaturaCartaoDTO } from '../../../types/fluxocaixa/ExtratoFaturaCartao';
-import { LancamentoService } from '../../../service';
+import { ExtratoFluxoCaixaService } from '../../../service';
 import { AuthContext, useMessage } from '../../../contexts';
 import { FaCheck } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,7 @@ const ExtratoFaturaCartaoFormPage: React.FC = () => {
 
   const auth = useContext(AuthContext);
   const message = useMessage();
-  const lancamentoService = LancamentoService();
+  const extratoFluxoCaixaService = ExtratoFluxoCaixaService();
   const navigate = useNavigate();
 
   const importarExtratoFaturaCartao = async () => {
@@ -26,7 +26,7 @@ const ExtratoFaturaCartaoFormPage: React.FC = () => {
 
     setIsLoading(true);
     try {
-      await lancamentoService.importExtratoFaturaCartao(auth.usuario?.token, extratoDTO);
+      await extratoFluxoCaixaService.importExtratoFaturaCartao(auth.usuario?.token, extratoDTO);
     } catch (error) {
       message.showErrorWithLog('Erro ao importar o extrato da fatura de cartão.', error);
     } finally {

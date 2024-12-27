@@ -1,6 +1,5 @@
 package br.com.lcano.centraldecontrole.service;
 
-import br.com.lcano.centraldecontrole.domain.Arquivo;
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.repository.LancamentoSpecifications;
@@ -11,8 +10,6 @@ import br.com.lcano.centraldecontrole.enums.OperatorFilterEnum;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.exception.LancamentoException;
 import br.com.lcano.centraldecontrole.repository.LancamentoRepository;
-import br.com.lcano.centraldecontrole.batch.fluxocaixa.extratoconta.ImportacaoExtratoContaJobStarter;
-import br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao.ImportacaoExtratoFaturaCartaoJobStarter;
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import br.com.lcano.centraldecontrole.util.FilterUtil;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
@@ -22,23 +19,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class LancamentoService extends AbstractGenericService<Lancamento, Long> {
-    private final LancamentoRepository lancamentoRepository;
+    private final LancamentoRepository repository;
     private final Map<TipoLancamentoEnum, LancamentoItemService<? extends LancamentoItemDTO>> lancamentoItemServices;
     private final UsuarioUtil usuarioUtil;
-    private final ArquivoService arquivoService;
-    private final ImportacaoExtratoFaturaCartaoJobStarter importacaoExtratoFaturaCartaoJobStarter;
-    private final ImportacaoExtratoContaJobStarter importacaoExtratoContaJobStarter;
 
     @Override
     protected LancamentoRepository getRepository() {
-        return lancamentoRepository;
+        return repository;
     }
 
     @Override
@@ -68,7 +61,7 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
 
     public Page<LancamentoDTO> search(Pageable pageable, List<FilterDTO> filterDTOs) {
         Specification<Lancamento> combinedSpecification = FilterUtil.buildSpecificationsFromDTO(filterDTOs, this::applyFieldSpecification);
-        return lancamentoRepository.findAll(combinedSpecification, pageable)
+        return repository.findAll(combinedSpecification, pageable)
                 .map(lancamento -> {
                     var itemDTO = getLancamentoItemService(lancamento.getTipo()).getByLancamentoId(lancamento.getId());
                     return new LancamentoDTO().fromEntityWithItem(lancamento, itemDTO);
@@ -129,27 +122,5 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
             case MENOR_OU_IGUAL -> LancamentoSpecifications.hasDataLancamentoLessOrEqual(date);
             default -> null;
         };
-    }
-
-    public void importExtratoFaturaCartao(MultipartFile file, Date dataVencimento) throws Exception {
-        Arquivo arquivo = arquivoService.uploadArquivo(file);
-
-        try {
-            importacaoExtratoFaturaCartaoJobStarter.startJob(arquivo.getId(), usuarioUtil.getUsuarioAutenticado().getId(), dataVencimento);
-        } catch (Exception e) {
-            arquivoService.deleteArquivoIfExists(arquivo.getId());
-            throw new LancamentoException.ErroIniciarImportacaoExtrato(e);
-        }
-    }
-
-    public void importExtratoConta(MultipartFile file) throws Exception {
-        Arquivo arquivo = arquivoService.uploadArquivo(file);
-
-        try {
-            importacaoExtratoContaJobStarter.startJob(arquivo.getId(), usuarioUtil.getUsuarioAutenticado().getId());
-        } catch (Exception e) {
-            arquivoService.deleteArquivoIfExists(arquivo.getId());
-            throw new LancamentoException.ErroIniciarImportacaoExtrato(e);
-        }
     }
 }

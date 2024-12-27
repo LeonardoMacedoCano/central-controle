@@ -1,7 +1,6 @@
 package br.com.lcano.centraldecontrole.dto;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
-import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.AtivoDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaDTO;
@@ -20,7 +19,6 @@ public class LancamentoDTO extends BaseDTO<Lancamento> {
     private Date dataLancamento;
     private String descricao;
     private TipoLancamentoEnum tipo;
-    private Usuario usuario;
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "tipo")
     @JsonSubTypes({
@@ -52,7 +50,6 @@ public class LancamentoDTO extends BaseDTO<Lancamento> {
         entity.setDataLancamento(this.dataLancamento);
         entity.setDescricao(this.descricao);
         entity.setTipo(this.tipo);
-        entity.setUsuario(this.usuario);
         return entity;
     }
 }

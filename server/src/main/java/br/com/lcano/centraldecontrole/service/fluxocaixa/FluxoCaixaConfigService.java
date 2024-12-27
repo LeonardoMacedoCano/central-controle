@@ -1,92 +1,72 @@
 package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.FluxoCaixaConfig;
+import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.FluxoCaixaConfigDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaCategoriaDTO;
+import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.exception.fluxocaixa.FluxoCaixaConfigException;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.FluxoCaixaConfigRepository;
+import br.com.lcano.centraldecontrole.service.AbstractGenericService;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
-public class FluxoCaixaConfigService {
+public class FluxoCaixaConfigService extends AbstractGenericService<FluxoCaixaConfig, Long> {
     @Autowired
-    private final FluxoCaixaConfigRepository fluxoCaixaConfigRepository;
+    private final FluxoCaixaConfigRepository repository;
     @Autowired
     private final UsuarioUtil usuarioUtil;
-    @Autowired
-    private final DespesaCategoriaService despesaCategoriaService;
-    @Autowired
-    private final ReceitaCategoriaService receitaCategoriaService;
 
-    public FluxoCaixaConfigDTO getConfig() {
+    @Override
+    protected JpaRepository<FluxoCaixaConfig, Long> getRepository() {
+        return repository;
+    }
+
+    @Override
+    protected FluxoCaixaConfigDTO getDtoInstance() {
+        return new FluxoCaixaConfigDTO();
+    }
+
+    public FluxoCaixaConfigDTO findByUsuarioAsDto() {
         return new FluxoCaixaConfigDTO().fromEntity(
-                fluxoCaixaConfigRepository.findByUsuario(
+                repository.findByUsuario(
                         usuarioUtil.getUsuarioAutenticado()
                 )
         );
     }
 
+    @Override
     @Transactional
-    public Long saveConfig(FluxoCaixaConfigDTO fluxoCaixaConfigDTO) {
-        return fluxoCaixaConfigRepository.save(this.buildFluxoCaixaConfig(fluxoCaixaConfigDTO)).getId();
-    }
-
-    private FluxoCaixaConfig buildFluxoCaixaConfig(FluxoCaixaConfigDTO fluxoCaixaConfigDTO) {
-        FluxoCaixaConfig fluxoCaixaConfig = new FluxoCaixaConfig();
-        fluxoCaixaConfig.setId(fluxoCaixaConfigDTO.getId());
+    public <D extends BaseDTO<FluxoCaixaConfig>> D saveAsDto(D dto) {
+        FluxoCaixaConfig fluxoCaixaConfig = dto.toEntity();
         fluxoCaixaConfig.setUsuario(usuarioUtil.getUsuarioAutenticado());
-        fluxoCaixaConfig.setMetaLimiteDespesaMensal(fluxoCaixaConfigDTO.getMetaLimiteDespesaMensal());
-        fluxoCaixaConfig.setMetaAporteMensal(fluxoCaixaConfigDTO.getMetaAporteMensal());
-        fluxoCaixaConfig.setMetaAporteTotal(fluxoCaixaConfigDTO.getMetaAporteTotal());
-        fluxoCaixaConfig.setDiaPadraoVencimentoFatura(fluxoCaixaConfigDTO.getDiaPadraoVencimentoFatura());
 
+        fluxoCaixaConfig = repository.save(fluxoCaixaConfig);
 
-        if (fluxoCaixaConfigDTO.getDespesaCategoriaPadrao() != null
-                && fluxoCaixaConfigDTO.getDespesaCategoriaPadrao().getId() != null) {
-            fluxoCaixaConfig.setDespesaCategoriaPadrao(
-                    despesaCategoriaService.findById(
-                            fluxoCaixaConfigDTO.getDespesaCategoriaPadrao().getId()
-                    )
-            );
-        } else {
-            fluxoCaixaConfig.setDespesaCategoriaPadrao(null);
-        }
-
-        if (fluxoCaixaConfigDTO.getReceitaCategoriaPadrao() != null
-                && fluxoCaixaConfigDTO.getReceitaCategoriaPadrao().getId() != null) {
-            fluxoCaixaConfig.setReceitaCategoriaPadrao(
-                    receitaCategoriaService.findById(
-                            fluxoCaixaConfigDTO.getReceitaCategoriaPadrao().getId()
-                    )
-            );
-        } else {
-            fluxoCaixaConfig.setReceitaCategoriaPadrao(null);
-        }
-
-        if (fluxoCaixaConfigDTO.getReceitaCategoriaParaGanhoAtivo() != null
-                && fluxoCaixaConfigDTO.getReceitaCategoriaParaGanhoAtivo().getId() != null) {
-            fluxoCaixaConfig.setReceitaCategoriaParaGanhoAtivo(
-                    receitaCategoriaService.findById(
-                            fluxoCaixaConfigDTO.getReceitaCategoriaParaGanhoAtivo().getId()
-                    )
-            );
-        } else {
-            fluxoCaixaConfig.setReceitaCategoriaPadrao(null);
-        }
-
-        return fluxoCaixaConfig;
+        return (D) new FluxoCaixaConfigDTO().fromEntity(fluxoCaixaConfig);
     }
 
     public DespesaCategoriaDTO getDespesaCategoriaPadrao() {
-        return getConfig().getDespesaCategoriaPadrao();
+        return findByUsuarioAsDto().getDespesaCategoriaPadrao();
     }
 
     public ReceitaCategoriaDTO getReceitaCategoriaPadrao() {
-        return getConfig().getReceitaCategoriaPadrao();
+        return findByUsuarioAsDto().getReceitaCategoriaPadrao();
     }
+
+    public void validateConfig() {
+        FluxoCaixaConfigDTO fluxoCaixaConfigDTO = findByUsuarioAsDto();
+
+        if (fluxoCaixaConfigDTO == null) throw new FluxoCaixaConfigException.ConfigNaoEncontrada();
+        if (fluxoCaixaConfigDTO.getDespesaCategoriaPadrao() == null) throw new FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada(TipoLancamentoEnum.DESPESA.getDescricao());
+        if (fluxoCaixaConfigDTO.getReceitaCategoriaPadrao() == null) throw new FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada(TipoLancamentoEnum.RECEITA.getDescricao());
+    }
+
 }

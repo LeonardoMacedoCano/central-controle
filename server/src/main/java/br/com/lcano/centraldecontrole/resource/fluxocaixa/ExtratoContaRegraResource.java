@@ -15,16 +15,16 @@ import java.util.List;
 @RequestMapping("/api/extrato-conta-regra")
 public class ExtratoContaRegraResource {
     @Autowired
-    private final ExtratoContaRegraService extratoContaRegraService;
+    private final ExtratoContaRegraService service;
 
     @GetMapping
-    public ResponseEntity<List<ExtratoContaRegraDTO>> getRegras() {
-        return ResponseEntity.ok(this.extratoContaRegraService.getRegras());
+    public ResponseEntity<List<ExtratoContaRegraDTO>> findAllAsDto() {
+        return ResponseEntity.ok(this.service.findAllAsDto());
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveRegra(@RequestBody ExtratoContaRegraDTO extratoContaRegraDTO) {
-        this.extratoContaRegraService.saveRegra(extratoContaRegraDTO);
+    public ResponseEntity<Object> validateAndSave(@RequestBody ExtratoContaRegraDTO extratoContaRegraDTO) {
+        this.service.validateAndSave(extratoContaRegraDTO);
         return CustomSuccess.buildResponseEntity("Regra salva com sucesso.");
     }
 }

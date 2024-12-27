@@ -28,19 +28,19 @@ public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
         this.diaPadraoVencimentoFatura = entity.getDiaPadraoVencimentoFatura();
 
         if (entity.getDespesaCategoriaPadrao() != null) {
-            this.despesaCategoriaPadrao = (DespesaCategoriaDTO) new DespesaCategoriaDTO().fromEntity(
+            this.despesaCategoriaPadrao = new DespesaCategoriaDTO().fromEntity(
                     entity.getDespesaCategoriaPadrao()
             );
         }
 
         if (entity.getReceitaCategoriaPadrao() != null) {
-            this.receitaCategoriaPadrao = (ReceitaCategoriaDTO) new ReceitaCategoriaDTO().fromEntity(
+            this.receitaCategoriaPadrao = new ReceitaCategoriaDTO().fromEntity(
                     entity.getReceitaCategoriaPadrao()
             );
         }
 
         if (entity.getReceitaCategoriaParaGanhoAtivo() != null) {
-            this.receitaCategoriaPadrao = (ReceitaCategoriaDTO) new ReceitaCategoriaDTO().fromEntity(
+            this.receitaCategoriaPadrao = new ReceitaCategoriaDTO().fromEntity(
                     entity.getReceitaCategoriaParaGanhoAtivo()
             );
         }

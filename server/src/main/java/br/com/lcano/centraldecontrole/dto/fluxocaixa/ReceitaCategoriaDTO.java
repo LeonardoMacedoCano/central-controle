@@ -13,7 +13,7 @@ public class ReceitaCategoriaDTO extends BaseDTO<ReceitaCategoria> {
     private String descricao;
 
     @Override
-    public BaseDTO<ReceitaCategoria> fromEntity(ReceitaCategoria entity) {
+    public ReceitaCategoriaDTO fromEntity(ReceitaCategoria entity) {
         this.id = entity.getId();
         this.descricao = entity.getDescricao();
         return this;

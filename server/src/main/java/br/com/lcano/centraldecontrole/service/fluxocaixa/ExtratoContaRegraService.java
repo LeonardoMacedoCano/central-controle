@@ -5,81 +5,74 @@ import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoContaRegra;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaRegraDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaCategoriaDTO;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoConta;
-import br.com.lcano.centraldecontrole.exception.fluxocaixa.ExtratoException;
+import br.com.lcano.centraldecontrole.exception.fluxocaixa.FluxoCaixaConfigException;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.ExtratoContaRegraRepository;
+import br.com.lcano.centraldecontrole.service.AbstractGenericService;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @AllArgsConstructor
 @Service
-public class ExtratoContaRegraService {
+public class ExtratoContaRegraService extends AbstractGenericService<ExtratoContaRegra, Long> {
     @Autowired
-    private final ExtratoContaRegraRepository extratoContaRegraRepository;
+    private final ExtratoContaRegraRepository repository;
     @Autowired
     private final UsuarioUtil usuarioUtil;
     @Autowired
     private final FluxoCaixaConfigService fluxoCaixaConfigService;
 
-    public List<ExtratoContaRegra> findByUsuarioAndAtivoOrderByPrioridadeAsc(Usuario usuario) {
-        return extratoContaRegraRepository.findByUsuarioAndAtivoOrderByPrioridadeAsc(usuario, true);
+    @Override
+    protected JpaRepository<ExtratoContaRegra, Long> getRepository() {
+        return repository;
     }
 
-    public List<ExtratoContaRegraDTO> getRegras() {
+    @Override
+    protected ExtratoContaRegraDTO getDtoInstance() {
+        return new ExtratoContaRegraDTO();
+    }
+
+    @Override
+    public List<ExtratoContaRegraDTO> findAllAsDto() {
         return this.findByUsuarioAndAtivoOrderByPrioridadeAsc(usuarioUtil.getUsuarioAutenticado())
                 .stream()
                 .map(item -> new ExtratoContaRegraDTO().fromEntity(item))
                 .toList();
     }
 
-
-    public void saveRegra(ExtratoContaRegraDTO extratoContaRegraDTO) {
-        validarPrioridadeUnica(extratoContaRegraDTO);
-        extratoContaRegraRepository.save(this.buildExtratoContaRegra(extratoContaRegraDTO));
+    public List<ExtratoContaRegra> findByUsuarioAndAtivoOrderByPrioridadeAsc(Usuario usuario) {
+        return repository.findByUsuarioAndAtivoOrderByPrioridadeAsc(usuario, true);
     }
 
-    private void validarPrioridadeUnica(ExtratoContaRegraDTO dto) {
-        boolean prioridadeExistente = extratoContaRegraRepository.existsByUsuarioAndPrioridadeAndIdNot(
+    public void validateAndSave(ExtratoContaRegraDTO extratoContaRegraDTO) {
+        validatePrioridadeUnica(extratoContaRegraDTO);
+        this.save(this.buildExtratoContaRegra(extratoContaRegraDTO));
+    }
+
+    private void validatePrioridadeUnica(ExtratoContaRegraDTO dto) {
+        boolean prioridadeExistente = repository.existsByUsuarioAndPrioridadeAndIdNot(
                 usuarioUtil.getUsuarioAutenticado(),
                 dto.getPrioridade(),
                 dto.getId());
 
-        if (prioridadeExistente) throw new ExtratoException.ExtratoContaRegraUniquePrioridadeViolada(dto.getPrioridade());
+        if (prioridadeExistente) throw new FluxoCaixaConfigException.UniquePrioridadeViolada(dto.getPrioridade());
     }
 
     private ExtratoContaRegra buildExtratoContaRegra(ExtratoContaRegraDTO dto) {
-        ExtratoContaRegra extratoContaRegra = new ExtratoContaRegra();
-
-        extratoContaRegra.setId(dto.getId());
+        ExtratoContaRegra extratoContaRegra = dto.toEntity();
         extratoContaRegra.setUsuario(usuarioUtil.getUsuarioAutenticado());
-        extratoContaRegra.setTipoRegra(TipoRegraExtratoConta.valueOf(dto.getTipoRegra()));
-        extratoContaRegra.setDescricaoMatch(dto.getDescricaoMatch());
-        extratoContaRegra.setDescricaoDestino(dto.getDescricaoDestino());
-        extratoContaRegra.setIdCategoria(dto.getIdCategoria());
-        extratoContaRegra.setPrioridade(dto.getPrioridade());
-        extratoContaRegra.setAtivo(dto.isAtivo());
-
         return extratoContaRegra;
     }
 
     public DespesaCategoriaDTO getDespesaCategoriaPadrao() {
-        DespesaCategoriaDTO despesaCategoriaPadrao = fluxoCaixaConfigService.getDespesaCategoriaPadrao();
-
-        if (despesaCategoriaPadrao == null) throw new ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada(TipoLancamentoEnum.DESPESA.getDescricao());
-
-        return despesaCategoriaPadrao;
+        return fluxoCaixaConfigService.getDespesaCategoriaPadrao();
     }
 
     public ReceitaCategoriaDTO getReceitaCategoriaPadrao() {
-        ReceitaCategoriaDTO receitaCategoriaPadrao = fluxoCaixaConfigService.getReceitaCategoriaPadrao();
-
-        if (receitaCategoriaPadrao == null) throw new ExtratoException.ExtratoContaRegraCategoriaPadraoNaoEncontrada(TipoLancamentoEnum.RECEITA.getDescricao());
-
-        return receitaCategoriaPadrao;
+        return fluxoCaixaConfigService.getReceitaCategoriaPadrao();
     }
 }
