@@ -1,7 +1,7 @@
 package br.com.lcano.centraldecontrole.resource.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaRegraDTO;
-import br.com.lcano.centraldecontrole.service.fluxocaixa.ExtratoContaRegraService;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.RegraExtratoContaCorrenteDTO;
+import br.com.lcano.centraldecontrole.service.fluxocaixa.RegraExtratoContaCorrenteService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +12,18 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/extrato-conta-regra")
-public class ExtratoContaRegraResource {
+@RequestMapping("/api/regra-extrato-conta-corrente")
+public class RegraExtratoContaCorrenteResource {
     @Autowired
-    private final ExtratoContaRegraService service;
+    private final RegraExtratoContaCorrenteService service;
 
     @GetMapping
-    public ResponseEntity<List<ExtratoContaRegraDTO>> findAllAsDto() {
+    public ResponseEntity<List<RegraExtratoContaCorrenteDTO>> findAllAsDto() {
         return ResponseEntity.ok(this.service.findAllAsDto());
     }
 
     @PostMapping
-    public ResponseEntity<Object> validateAndSave(@RequestBody ExtratoContaRegraDTO extratoContaRegraDTO) {
+    public ResponseEntity<Object> validateAndSave(@RequestBody RegraExtratoContaCorrenteDTO extratoContaRegraDTO) {
         this.service.validateAndSave(extratoContaRegraDTO);
         return CustomSuccess.buildResponseEntity("Regra salva com sucesso.");
     }

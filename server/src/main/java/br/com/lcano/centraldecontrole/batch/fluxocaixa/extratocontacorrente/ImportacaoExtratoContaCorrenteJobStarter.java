@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratoconta;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratocontacorrente;
 
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.springframework.batch.core.Job;
@@ -9,13 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ImportacaoExtratoContaJobStarter {
+public class ImportacaoExtratoContaCorrenteJobStarter {
 
     @Autowired
     JobLauncher jobLauncher;
 
     @Autowired
-    Job importacaoExtratoContaJob;
+    Job importacaoExtratoContaCorrenteJob;
 
     @Autowired
     DateUtil dateUtil;
@@ -26,6 +26,6 @@ public class ImportacaoExtratoContaJobStarter {
                 .addLong("usuarioId", usuarioId)
                 .addDate("startDate", dateUtil.getDataAtual())
                 .toJobParameters();
-        jobLauncher.run(importacaoExtratoContaJob, jobParameters);
+        jobLauncher.run(importacaoExtratoContaCorrenteJob, jobParameters);
     }
 }

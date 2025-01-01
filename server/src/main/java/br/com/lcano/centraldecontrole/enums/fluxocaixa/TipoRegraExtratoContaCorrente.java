@@ -3,13 +3,13 @@ package br.com.lcano.centraldecontrole.enums.fluxocaixa;
 import lombok.Getter;
 
 @Getter
-public enum TipoRegraExtratoConta {
+public enum TipoRegraExtratoContaCorrente {
     IGNORAR("IGNORAR"),
     CLASSIFICAR("CLASSIFICAR");
 
     private final String descricao;
 
-    TipoRegraExtratoConta(String descricao) {
+    TipoRegraExtratoContaCorrente(String descricao) {
         this.descricao = descricao;
     }
 }

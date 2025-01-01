@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratoconta;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratocontacorrente;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
@@ -6,10 +6,10 @@ import br.com.lcano.centraldecontrole.domain.fluxocaixa.*;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.*;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoConta;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoContaCorrente;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
-import br.com.lcano.centraldecontrole.service.fluxocaixa.ExtratoContaRegraService;
+import br.com.lcano.centraldecontrole.service.fluxocaixa.RegraExtratoContaCorrenteService;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.ReceitaCategoriaService;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -25,7 +25,7 @@ import java.util.List;
 
 @Component
 @StepScope
-public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoContaDTO, Lancamento>, StepExecutionListener {
+public class ImportacaoExtratoContaCorrenteProcessor implements ItemProcessor<ExtratoContaCorrenteDTO, Lancamento>, StepExecutionListener {
 
     @Autowired
     UsuarioService usuarioService;
@@ -37,14 +37,14 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
     ReceitaCategoriaService receitaCategoriaService;
 
     @Autowired
-    ExtratoContaRegraService extratoContaRegraService;
+    RegraExtratoContaCorrenteService extratoContaRegraService;
 
     private final Long usuarioId;
     private Usuario usuario;
-    private List<ExtratoContaRegra> regras;
+    private List<RegraExtratoContaCorrente> regras;
 
     @Autowired
-    public ImportacaoExtratoContaProcessor(@Value("#{jobParameters['usuarioId']}") Long usuarioId) {
+    public ImportacaoExtratoContaCorrenteProcessor(@Value("#{jobParameters['usuarioId']}") Long usuarioId) {
         this.usuarioId = usuarioId;
     }
 
@@ -55,8 +55,8 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
     }
 
     @Override
-    public Lancamento process(ExtratoContaDTO extratoContaDTO) {
-        ExtratoContaRegra regraCorrespondente = findRegraCorrespondente(extratoContaDTO);
+    public Lancamento process(ExtratoContaCorrenteDTO extratoContaDTO) {
+        RegraExtratoContaCorrente regraCorrespondente = findRegraCorrespondente(extratoContaDTO);
 
         if (isRegraCorrespondenteTipoIgnorar(regraCorrespondente)) return null;
 
@@ -65,31 +65,31 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
                 : processarReceita(extratoContaDTO, regraCorrespondente);
     }
 
-    private ExtratoContaRegra findRegraCorrespondente(ExtratoContaDTO extratoContaDTO) {
+    private RegraExtratoContaCorrente findRegraCorrespondente(ExtratoContaCorrenteDTO extratoContaDTO) {
         return regras.stream()
                 .filter(regra -> descricaoCorresponde(extratoContaDTO.getDescricao(), regra.getDescricaoMatch()))
                 .findFirst()
                 .orElse(null);
     }
 
-    private boolean isRegraCorrespondenteTipoIgnorar(ExtratoContaRegra regraCorrespondente) {
-        return regraCorrespondente != null && regraCorrespondente.getTipoRegra() == TipoRegraExtratoConta.IGNORAR;
+    private boolean isRegraCorrespondenteTipoIgnorar(RegraExtratoContaCorrente regraCorrespondente) {
+        return regraCorrespondente != null && regraCorrespondente.getTipoRegra() == TipoRegraExtratoContaCorrente.IGNORAR;
     }
 
     private boolean descricaoCorresponde(String descricao, String regraMatch) {
         return descricao.toUpperCase().contains(regraMatch.toUpperCase());
     }
 
-    private boolean isDespesa(ExtratoContaDTO extratoContaDTO) {
+    private boolean isDespesa(ExtratoContaCorrenteDTO extratoContaDTO) {
         return extratoContaDTO.getValor().compareTo(BigDecimal.ZERO) < 0;
     }
 
-    private boolean isTransferencia(ExtratoContaDTO extratoContaDTO) {
+    private boolean isTransferencia(ExtratoContaCorrenteDTO extratoContaDTO) {
         String descricao = extratoContaDTO.getDescricao();
         return descricao.contains("Transferência enviada pelo Pix") || descricao.contains("Transferência Recebida");
     }
 
-    private String formatarDescricaoTransferencia(ExtratoContaDTO extratoContaDTO) {
+    private String formatarDescricaoTransferencia(ExtratoContaCorrenteDTO extratoContaDTO) {
         String descricao = extratoContaDTO.getDescricao();
         String parteFixa = descricao.startsWith("Transferência enviada pelo Pix")
                 ? "Transferência enviada pelo Pix - "
@@ -103,7 +103,7 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
         return descricao.substring(inicioNome, fimNome == -1 ? descricao.length() : fimNome).trim();
     }
 
-    private Lancamento buildLancamento(ExtratoContaDTO extratoContaDTO, TipoLancamentoEnum tipo, ExtratoContaRegra regraCorrespondente) {
+    private Lancamento buildLancamento(ExtratoContaCorrenteDTO extratoContaDTO, TipoLancamentoEnum tipo, RegraExtratoContaCorrente regraCorrespondente) {
         Lancamento lancamento = new Lancamento();
         lancamento.setDataLancamento(extratoContaDTO.getDataLancamento());
         lancamento.setDescricao(obterDescricaoLancamento(extratoContaDTO, regraCorrespondente));
@@ -112,14 +112,14 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
         return lancamento;
     }
 
-    private String obterDescricaoLancamento(ExtratoContaDTO extratoContaDTO, ExtratoContaRegra regraCorrespondente) {
-        if (regraCorrespondente != null && regraCorrespondente.getTipoRegra() == TipoRegraExtratoConta.CLASSIFICAR && regraCorrespondente.getDescricaoDestino() != null) {
+    private String obterDescricaoLancamento(ExtratoContaCorrenteDTO extratoContaDTO, RegraExtratoContaCorrente regraCorrespondente) {
+        if (regraCorrespondente != null && regraCorrespondente.getTipoRegra() == TipoRegraExtratoContaCorrente.CLASSIFICAR && regraCorrespondente.getDescricaoDestino() != null) {
             return regraCorrespondente.getDescricaoDestino();
         }
         return isTransferencia(extratoContaDTO) ? formatarDescricaoTransferencia(extratoContaDTO) : extratoContaDTO.getDescricao();
     }
 
-    private Lancamento processarDespesa(ExtratoContaDTO extratoContaDTO, ExtratoContaRegra regraCorrespondente) {
+    private Lancamento processarDespesa(ExtratoContaCorrenteDTO extratoContaDTO, RegraExtratoContaCorrente regraCorrespondente) {
         Lancamento lancamento = buildLancamento(extratoContaDTO, TipoLancamentoEnum.DESPESA, regraCorrespondente);
 
         Despesa despesa = new Despesa();
@@ -133,7 +133,7 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
         return lancamento;
     }
 
-    private Lancamento processarReceita(ExtratoContaDTO extratoContaDTO, ExtratoContaRegra regraCorrespondente) {
+    private Lancamento processarReceita(ExtratoContaCorrenteDTO extratoContaDTO, RegraExtratoContaCorrente regraCorrespondente) {
         Lancamento lancamento = buildLancamento(extratoContaDTO, TipoLancamentoEnum.RECEITA, regraCorrespondente);
 
         Receita receita = new Receita();
@@ -146,9 +146,9 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
         return lancamento;
     }
 
-    private DespesaCategoria obterCategoriaDespesa(ExtratoContaRegra regraCorrespondente) {
+    private DespesaCategoria obterCategoriaDespesa(RegraExtratoContaCorrente regraCorrespondente) {
         if (regraCorrespondente != null &&
-                regraCorrespondente.getTipoRegra() == TipoRegraExtratoConta.CLASSIFICAR &&
+                regraCorrespondente.getTipoRegra() == TipoRegraExtratoContaCorrente.CLASSIFICAR &&
                 regraCorrespondente.getIdCategoria() != null) {
 
             return despesaCategoriaService.findById(regraCorrespondente.getIdCategoria());
@@ -157,9 +157,9 @@ public class ImportacaoExtratoContaProcessor implements ItemProcessor<ExtratoCon
         }
     }
 
-    private ReceitaCategoria obterCategoriaReceita(ExtratoContaRegra regraCorrespondente) {
+    private ReceitaCategoria obterCategoriaReceita(RegraExtratoContaCorrente regraCorrespondente) {
         if (regraCorrespondente != null &&
-                regraCorrespondente.getTipoRegra() == TipoRegraExtratoConta.CLASSIFICAR &&
+                regraCorrespondente.getTipoRegra() == TipoRegraExtratoContaCorrente.CLASSIFICAR &&
                 regraCorrespondente.getIdCategoria() != null) {
 
             return receitaCategoriaService.findById(regraCorrespondente.getIdCategoria());

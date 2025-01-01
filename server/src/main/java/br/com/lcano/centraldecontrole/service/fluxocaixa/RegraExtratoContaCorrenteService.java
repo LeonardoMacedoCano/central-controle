@@ -2,11 +2,11 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.ExtratoContaRegra;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.RegraExtratoContaCorrente;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.ReceitaCategoria;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaRegraDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.RegraExtratoContaCorrenteDTO;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.FluxoCaixaConfigException;
-import br.com.lcano.centraldecontrole.repository.fluxocaixa.ExtratoContaRegraRepository;
+import br.com.lcano.centraldecontrole.repository.fluxocaixa.RegraExtratoContaCorrenteRepository;
 import br.com.lcano.centraldecontrole.service.AbstractGenericService;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import lombok.AllArgsConstructor;
@@ -18,42 +18,42 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
-public class ExtratoContaRegraService extends AbstractGenericService<ExtratoContaRegra, Long> {
+public class RegraExtratoContaCorrenteService extends AbstractGenericService<RegraExtratoContaCorrente, Long> {
     @Autowired
-    private final ExtratoContaRegraRepository repository;
+    private final RegraExtratoContaCorrenteRepository repository;
     @Autowired
     private final UsuarioUtil usuarioUtil;
     @Autowired
     private final FluxoCaixaConfigService fluxoCaixaConfigService;
 
     @Override
-    protected JpaRepository<ExtratoContaRegra, Long> getRepository() {
+    protected JpaRepository<RegraExtratoContaCorrente, Long> getRepository() {
         return repository;
     }
 
     @Override
-    protected ExtratoContaRegraDTO getDtoInstance() {
-        return new ExtratoContaRegraDTO();
+    protected RegraExtratoContaCorrenteDTO getDtoInstance() {
+        return new RegraExtratoContaCorrenteDTO();
     }
 
     @Override
-    public List<ExtratoContaRegraDTO> findAllAsDto() {
+    public List<RegraExtratoContaCorrenteDTO> findAllAsDto() {
         return this.findByUsuarioAndAtivoOrderByPrioridadeAsc(usuarioUtil.getUsuarioAutenticado())
                 .stream()
-                .map(item -> new ExtratoContaRegraDTO().fromEntity(item))
+                .map(item -> new RegraExtratoContaCorrenteDTO().fromEntity(item))
                 .toList();
     }
 
-    public List<ExtratoContaRegra> findByUsuarioAndAtivoOrderByPrioridadeAsc(Usuario usuario) {
+    public List<RegraExtratoContaCorrente> findByUsuarioAndAtivoOrderByPrioridadeAsc(Usuario usuario) {
         return repository.findByUsuarioAndAtivoOrderByPrioridadeAsc(usuario, true);
     }
 
-    public void validateAndSave(ExtratoContaRegraDTO extratoContaRegraDTO) {
+    public void validateAndSave(RegraExtratoContaCorrenteDTO extratoContaRegraDTO) {
         validatePrioridadeUnica(extratoContaRegraDTO);
         this.save(this.buildExtratoContaRegra(extratoContaRegraDTO));
     }
 
-    private void validatePrioridadeUnica(ExtratoContaRegraDTO dto) {
+    private void validatePrioridadeUnica(RegraExtratoContaCorrenteDTO dto) {
         boolean prioridadeExistente = repository.existsByUsuarioAndPrioridadeAndIdNot(
                 usuarioUtil.getUsuarioAutenticado(),
                 dto.getPrioridade(),
@@ -62,8 +62,8 @@ public class ExtratoContaRegraService extends AbstractGenericService<ExtratoCont
         if (prioridadeExistente) throw new FluxoCaixaConfigException.UniquePrioridadeViolada(dto.getPrioridade());
     }
 
-    private ExtratoContaRegra buildExtratoContaRegra(ExtratoContaRegraDTO dto) {
-        ExtratoContaRegra extratoContaRegra = dto.toEntity();
+    private RegraExtratoContaCorrente buildExtratoContaRegra(RegraExtratoContaCorrenteDTO dto) {
+        RegraExtratoContaCorrente extratoContaRegra = dto.toEntity();
         extratoContaRegra.setUsuario(usuarioUtil.getUsuarioAutenticado());
         return extratoContaRegra;
     }

@@ -29,9 +29,9 @@ public class ExtratoFluxoCaixaResource {
         return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
 
-    @PostMapping("/import-extrato-conta")
-    public ResponseEntity<Object> importExtratoConta(@RequestParam MultipartFile file) throws Exception {
-        this.service.importExtratoConta(file);
+    @PostMapping("/import-extrato-conta-corrente")
+    public ResponseEntity<Object> importExtratoContaCorrente(@RequestParam MultipartFile file) throws Exception {
+        this.service.importExtratoContaCorrente(file);
         return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
 }

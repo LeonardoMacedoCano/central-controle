@@ -26,7 +26,7 @@ const ExtratoFluxoCaixaService = (): ExtratoFluxoCaixaApi => {
 
   const importExtratoConta = async (token: string): Promise<void | undefined> => {
     try {
-      await request<undefined>('post', 'extrato-fluxo-caixa/import-extrato-conta', token, message);
+      await request<undefined>('post', 'extrato-fluxo-caixa/import-extrato-conta-corrente', token, message);
     } catch (error) {
       return undefined;
     }

@@ -5,16 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-    <changeSet id="create-tbale-extratocontaregra" author="lcano">
-        <preConditions onFail="MARK_RAN" onFailMessage="A tabela extratocontaregra já existe">
+    <changeSet id="create-table-regraextratocontacorrente" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela regraextratocontacorrente já existe">
             <not>
-                <tableExists tableName="extratocontaregra"/>
+                <tableExists tableName="regraextratocontacorrente"/>
             </not>
         </preConditions>
 
-        <createTable tableName="extratocontaregra">
+        <createTable tableName="regraextratocontacorrente">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pkextratocontaregra"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkregraextratocontacorrente"/>
             </column>
             <column name="idusuario" type="${integer}">
                 <constraints nullable="false"/>
@@ -35,9 +35,9 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="extratocontaregra"
+        <addForeignKeyConstraint baseTableName="regraextratocontacorrente"
                                  baseColumnNames="idusuario"
-                                 constraintName="fkextratocontaregrausuario"
+                                 constraintName="fkregraextratocontacorusuario"
                                  referencedTableName="usuario"
                                  referencedColumnNames="id"/>
     </changeSet>

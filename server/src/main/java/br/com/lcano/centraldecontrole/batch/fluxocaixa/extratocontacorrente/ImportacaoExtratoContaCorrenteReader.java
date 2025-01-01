@@ -1,7 +1,7 @@
-package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratoconta;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratocontacorrente;
 
 import br.com.lcano.centraldecontrole.domain.Arquivo;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaCorrenteDTO;
 import br.com.lcano.centraldecontrole.service.ArquivoService;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemReader;
@@ -15,21 +15,21 @@ import java.util.List;
 
 @Component
 @StepScope
-public class ImportacaoExtratoContaReader implements ItemReader<ExtratoContaDTO> {
+public class ImportacaoExtratoContaCorrenteReader implements ItemReader<ExtratoContaCorrenteDTO> {
 
     private final ArquivoService arquivoService;
     private final Long arquivoId;
-    private Iterator<ExtratoContaDTO> extratoIterator;
+    private Iterator<ExtratoContaCorrenteDTO> extratoIterator;
 
     @Autowired
-    public ImportacaoExtratoContaReader(ArquivoService arquivoService,
-                                        @Value("#{jobParameters['arquivoId']}") Long arquivoId) {
+    public ImportacaoExtratoContaCorrenteReader(ArquivoService arquivoService,
+                                                @Value("#{jobParameters['arquivoId']}") Long arquivoId) {
         this.arquivoService = arquivoService;
         this.arquivoId = arquivoId;
     }
 
     @Override
-    public ExtratoContaDTO read() throws Exception {
+    public ExtratoContaCorrenteDTO read() throws Exception {
         if (extratoIterator == null) {
             this.initializeExtratoIterator();
         }
@@ -38,16 +38,16 @@ public class ImportacaoExtratoContaReader implements ItemReader<ExtratoContaDTO>
 
     private void initializeExtratoIterator() throws Exception {
         Arquivo arquivo = this.arquivoService.findByIdwithValidation(arquivoId);
-        List<ExtratoContaDTO> extratos = this.parseExtratos(arquivo.getConteudo());
+        List<ExtratoContaCorrenteDTO> extratos = this.parseExtratos(arquivo.getConteudo());
         extratoIterator = extratos.iterator();
     }
 
-    private List<ExtratoContaDTO> parseExtratos(byte[] arquivoConteudo) throws Exception {
-        ExtratoContaCSVParser extratoContaCSVParser = new ExtratoContaCSVParser();
-        return extratoContaCSVParser.parse(new ByteArrayInputStream(arquivoConteudo));
+    private List<ExtratoContaCorrenteDTO> parseExtratos(byte[] arquivoConteudo) throws Exception {
+        ExtratoContaCorrenteCSVParser extratoContaCorrenteCSVParser = new ExtratoContaCorrenteCSVParser();
+        return extratoContaCorrenteCSVParser.parse(new ByteArrayInputStream(arquivoConteudo));
     }
 
-    private ExtratoContaDTO getNextExtrato() {
+    private ExtratoContaCorrenteDTO getNextExtrato() {
         if (extratoIterator != null && extratoIterator.hasNext()) {
             return extratoIterator.next();
         } else {

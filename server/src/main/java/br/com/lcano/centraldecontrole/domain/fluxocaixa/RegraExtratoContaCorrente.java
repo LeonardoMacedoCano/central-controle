@@ -1,15 +1,15 @@
 package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Usuario;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoConta;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoContaCorrente;
 import br.com.lcano.centraldecontrole.util.BooleanToCharConverter;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Table(name = "extratocontaregra")
+@Table(name = "regraextratocontacorrente")
 @Entity
 @Data
-public class ExtratoContaRegra {
+public class RegraExtratoContaCorrente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,7 +20,7 @@ public class ExtratoContaRegra {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tiporegra", nullable = false)
-    private TipoRegraExtratoConta tipoRegra;
+    private TipoRegraExtratoContaCorrente tipoRegra;
 
     @Column(name = "descricaomatch", nullable = false)
     private String descricaoMatch;
