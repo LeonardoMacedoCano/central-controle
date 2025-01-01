@@ -3,6 +3,7 @@ package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Ativo;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoriaEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoOperacaoEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Data
 public class AtivoDTO extends BaseDTO<Ativo> implements LancamentoItemDTO {
     private Long id;
-    private AtivoCategoriaDTO categoria;
+    private AtivoCategoriaEnum categoria;
     private String ticker;
     private AtivoOperacaoEnum operacao;
     private BigDecimal quantidade;
@@ -29,7 +30,7 @@ public class AtivoDTO extends BaseDTO<Ativo> implements LancamentoItemDTO {
         this.quantidade = entity.getQuantidade();
         this.precoUnitario = entity.getPrecoUnitario();
         this.dataMovimento = entity.getDataMovimento();
-        if (entity.getCategoria() != null) this.categoria = new AtivoCategoriaDTO().fromEntity(entity.getCategoria());
+        this.categoria = entity.getCategoria();
         return this;
     }
 
@@ -42,7 +43,7 @@ public class AtivoDTO extends BaseDTO<Ativo> implements LancamentoItemDTO {
         entity.setQuantidade(this.quantidade);
         entity.setPrecoUnitario(this.precoUnitario);
         entity.setDataMovimento(this.dataMovimento);
-        if (this.categoria != null) entity.setCategoria(this.categoria.toEntity());
+        entity.setCategoria(this.categoria);
         return entity;
     }
 }

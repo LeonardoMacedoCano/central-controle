@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { FieldValue, FlexBox, Panel } from '../../../components';
-import { Ativo, ativoOperacaoOptions, Categoria, getAtivoOperacaoByCodigo, getCodigoAtivoOperacao, getDescricaoAtivoOperacao } from '../../../types';
+import { Ativo, ativoCategoriaOptions, ativoOperacaoOptions, getAtivoCategoriaByCodigo, getAtivoOperacaoByCodigo, getCodigoAtivoCategoria, getCodigoAtivoOperacao, getDescricaoAtivoCategoria, getDescricaoAtivoOperacao } from '../../../types';
 import { formatDateToYMDString } from '../../../utils';
-import { AuthContext, useMessage } from '../../../contexts';
-import { AtivoCategoriaService } from '../../../service';
 
 interface AtivoSectionFormProps {
   ativo: Ativo;
@@ -11,27 +9,6 @@ interface AtivoSectionFormProps {
 }
 
 const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) => {
-  const [categorias, setCategorias] = useState<Categoria[]>([]);
-
-  const auth = useContext(AuthContext);
-  const message = useMessage();
-  const ativoCategoriaService = AtivoCategoriaService();
-
-  useEffect(() => {
-    const carregarCategoriasDespesa = async () => {
-      if (!auth.usuario?.token) return;
-  
-      try {
-        const result = await ativoCategoriaService.getTodasCategoriasAtivo(auth.usuario?.token);
-        setCategorias(result || []);
-      } catch (error) {
-        message.showErrorWithLog('Erro ao carregar as categorias de ativo.', error);
-      }
-    };
-
-    carregarCategoriasDespesa();
-  }, []);
-
   const updateAtivo = (updatedFields: Partial<Ativo>) => {
     const updatedAtivo: Ativo = {
       ...ativo!,
@@ -47,7 +24,7 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
   };
 
   const handleUpdateCategoria = (value: any) => {
-    const selectedCategoria = categorias.find(c => String(c.id) === String(value)); 
+    const selectedCategoria = getAtivoCategoriaByCodigo(value); 
     updateAtivo({ categoria: selectedCategoria });
   };
 
@@ -59,7 +36,6 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
     updateAtivo({ quantidade: value });
   };
   
-
   const handleUpdateOperacao = (value: any) => {
     const selectedOperacao = getAtivoOperacaoByCodigo(value); 
     updateAtivo({ operacao: selectedOperacao });
@@ -88,9 +64,9 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
             <FieldValue 
               description='Categoria'
               type='select'
-              value={{ key: String(ativo?.categoria?.id), value: ativo?.categoria?.descricao }}
+              value={{ key: getCodigoAtivoCategoria(ativo?.categoria), value: getDescricaoAtivoCategoria(ativo?.categoria) }}
               editable={true}
-              options={categorias.map(categoria => ({ key: String(categoria.id), value: categoria.descricao }))}
+              options={ativoCategoriaOptions}
               onUpdate={handleUpdateCategoria}
             />
           </FlexBox.Item>
@@ -107,13 +83,13 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
           </FlexBox.Item>
           <FlexBox.Item >
             <FieldValue 
-                description='Operação'
-                type='select'
-                value={{ key: getCodigoAtivoOperacao(ativo?.operacao), value: getDescricaoAtivoOperacao(ativo?.operacao) }}
-                editable={true}
-                options={ativoOperacaoOptions}
-                onUpdate={handleUpdateOperacao}
-              />
+              description='Operação'
+              type='select'
+              value={{ key: getCodigoAtivoOperacao(ativo?.operacao), value: getDescricaoAtivoOperacao(ativo?.operacao) }}
+              editable={true}
+              options={ativoOperacaoOptions}
+              onUpdate={handleUpdateOperacao}
+            />
           </FlexBox.Item>
         </FlexBox>
         <FlexBox flexDirection="row">

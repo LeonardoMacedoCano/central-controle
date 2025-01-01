@@ -12,19 +12,11 @@ const AtivoOperacoes: Record<AtivoOperacaoEnum, AtivoOperacaoInfo> = {
 };
 
 export const getDescricaoAtivoOperacao = (tipo?: AtivoOperacaoEnum): string => {
-  if (tipo) {
-    return AtivoOperacoes[tipo].descricao;
-  } else {
-    return '';
-  };
+  return tipo ? AtivoOperacoes[tipo].descricao : '';
 };
 
 export const getCodigoAtivoOperacao = (tipo?: AtivoOperacaoEnum): string | undefined => {
-  if (tipo) {
-    return AtivoOperacoes[tipo].codigo;
-  } else {
-    return undefined
-  };
+  return tipo ? AtivoOperacoes[tipo].codigo : undefined;
 };
 
 export const getAtivoOperacaoByCodigo = (codigo: string): AtivoOperacaoEnum | undefined => {
@@ -32,8 +24,7 @@ export const getAtivoOperacaoByCodigo = (codigo: string): AtivoOperacaoEnum | un
   return foundTipo ? foundTipo.tipo : undefined;
 };
 
-export const ativoOperacaoOptions = [
-  { key: getCodigoAtivoOperacao('COMPRA'), value: getDescricaoAtivoOperacao('COMPRA') },
-  { key: getCodigoAtivoOperacao('VENDA'), value: getDescricaoAtivoOperacao('VENDA') },
-];
-
+export const ativoOperacaoOptions = Object.values(AtivoOperacoes).map(info => ({
+  key: info.codigo,
+  value: info.descricao,
+}));

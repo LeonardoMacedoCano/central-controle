@@ -12,4 +12,13 @@ public enum AtivoOperacaoEnum {
     AtivoOperacaoEnum(String descricao) {
         this.descricao = descricao;
     }
+
+    public static AtivoOperacaoEnum fromDescricao(String descricao) {
+        for (AtivoOperacaoEnum operacao : values()) {
+            if (operacao.getDescricao().equalsIgnoreCase(descricao)) {
+                return operacao;
+            }
+        }
+        throw new IllegalArgumentException("Tipo de movimentação inválido: " + descricao);
+    }
 }

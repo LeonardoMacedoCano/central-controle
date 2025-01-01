@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoriaEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoOperacaoEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,9 +30,9 @@ public class Ativo implements Serializable {
     @JoinColumn(name = "idlancamento", nullable = false)
     private Lancamento lancamento;
 
-    @ManyToOne
-    @JoinColumn(name = "idcategoria", nullable = false)
-    private AtivoCategoria categoria;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "categoria", nullable = false)
+    private AtivoCategoriaEnum categoria;
 
     @Column(nullable = false)
     private String ticker;

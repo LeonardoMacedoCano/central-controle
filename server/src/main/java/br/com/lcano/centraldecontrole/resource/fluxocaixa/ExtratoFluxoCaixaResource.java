@@ -34,4 +34,10 @@ public class ExtratoFluxoCaixaResource {
         this.service.importExtratoContaCorrente(file);
         return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
+
+    @PostMapping("/import-extrato-ativos-b3")
+    public ResponseEntity<Object> importExtratoAtivosB3(@RequestParam MultipartFile file) throws Exception {
+        this.service.importExtratoAtivosB3(file);
+        return CustomSuccess.buildResponseEntity("Importação iniciada.");
+    }
 }

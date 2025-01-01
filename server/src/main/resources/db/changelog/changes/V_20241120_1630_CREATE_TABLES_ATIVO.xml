@@ -5,23 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-    <changeSet id="create-table-ativocategoria" author="lcano">
-        <preConditions onFail="MARK_RAN" onFailMessage="A tabela ativocategoria já existe">
-            <not>
-                <tableExists tableName="ativocategoria"/>
-            </not>
-        </preConditions>
-
-        <createTable tableName="ativocategoria">
-            <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pkativocategoria"/>
-            </column>
-            <column name="descricao" type="${varchar_255}">
-                <constraints nullable="false" unique="true"/>
-            </column>
-        </createTable>
-    </changeSet>
-
     <changeSet id="create-table-ativo" author="lcano">
         <preConditions onFail="MARK_RAN" onFailMessage="A tabela ativo já existe">
             <not>
@@ -36,14 +19,14 @@
             <column name="idlancamento" type="${integer}">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="idcategoria" type="${integer}">
+            <column name="categoria" type="${varchar_20}">
                 <constraints nullable="false"/>
             </column>
             <column name="ticker" type="${varchar_255}">
                 <constraints nullable="false"/>
             </column>
             <column name="operacao" type="${varchar_6}">
-                <constraints nullable="false" checkConstraint="operacao IN ('COMPRA', 'VENDA')"/>
+                <constraints nullable="false"/>
             </column>
             <column name="quantidade" type="${number_18_6}">
                 <constraints nullable="false"/>
@@ -60,11 +43,6 @@
                                  baseColumnNames="idlancamento"
                                  constraintName="fkativolancamento"
                                  referencedTableName="lancamento"
-                                 referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="ativo"
-                                 baseColumnNames="idcategoria"
-                                 constraintName="fkativocategoria"
-                                 referencedTableName="ativocategoria"
                                  referencedColumnNames="id"/>
     </changeSet>
 

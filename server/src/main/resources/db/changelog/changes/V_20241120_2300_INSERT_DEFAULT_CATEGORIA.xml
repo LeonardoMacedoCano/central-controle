@@ -52,26 +52,4 @@
         </insert>
     </changeSet>
 
-    <changeSet id="insert-default-ativocategoria" author="lcano">
-        <preConditions onFail="MARK_RAN">
-            <tableExists tableName="ativocategoria"/>
-        </preConditions>
-
-        <insert tableName="ativocategoria">
-            <column name="descricao" value="Ação Nacional"/>
-        </insert>
-        <insert tableName="ativocategoria">
-            <column name="descricao" value="Ação Internacional"/>
-        </insert>
-        <insert tableName="ativocategoria">
-            <column name="descricao" value="Fundo Imobiliário"/>
-        </insert>
-        <insert tableName="ativocategoria">
-            <column name="descricao" value="ETF"/>
-        </insert>
-        <insert tableName="ativocategoria">
-            <column name="descricao" value="Criptomoeda"/>
-        </insert>
-    </changeSet>
-
 </databaseChangeLog>

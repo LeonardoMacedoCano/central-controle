@@ -1,9 +1,9 @@
-import { AtivoOperacaoEnum, Categoria } from "..";
+import { AtivoCategoriaEnum, AtivoOperacaoEnum } from "..";
 import { getCurrentDate } from "../../utils";
 
 export type Ativo = {
   id?: number;
-  categoria?: Categoria;
+  categoria?: AtivoCategoriaEnum;
   ticker: string;
   operacao?: AtivoOperacaoEnum;
   quantidade: number;

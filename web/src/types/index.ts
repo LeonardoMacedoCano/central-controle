@@ -61,6 +61,13 @@ import {
   FluxoCaixaConfig,
   initialFluxoCaixaConfigState
 } from "./fluxocaixa/FluxoCaixaConfig";
+import { 
+  AtivoCategoriaEnum,
+  getDescricaoAtivoCategoria,
+  getCodigoAtivoCategoria,
+  getAtivoCategoriaByCodigo,
+  ativoCategoriaOptions
+} from "./fluxocaixa/AtivoCategoriaEnum";
 
 export type {
   Categoria,
@@ -85,6 +92,7 @@ export type {
   AtivoOperacaoEnum,
   Ativo,
   FluxoCaixaConfig,
+  AtivoCategoriaEnum,
 };
 
 export {
@@ -111,4 +119,8 @@ export {
   ativoOperacaoOptions,
   initialAtivoState,
   initialFluxoCaixaConfigState,
+  getDescricaoAtivoCategoria,
+  getCodigoAtivoCategoria,
+  getAtivoCategoriaByCodigo,
+  ativoCategoriaOptions,
 };

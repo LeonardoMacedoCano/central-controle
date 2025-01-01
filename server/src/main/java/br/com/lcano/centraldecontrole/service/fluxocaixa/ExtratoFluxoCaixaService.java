@@ -1,5 +1,6 @@
 package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
+import br.com.lcano.centraldecontrole.batch.fluxocaixa.extratoativosb3.ImportacaoExtratoAtivosB3JobStarter;
 import br.com.lcano.centraldecontrole.batch.fluxocaixa.extratocontacorrente.ImportacaoExtratoContaCorrenteJobStarter;
 import br.com.lcano.centraldecontrole.batch.fluxocaixa.extratomensalcartao.ImportacaoExtratoMensalCartaoJobStarter;
 import br.com.lcano.centraldecontrole.domain.Arquivo;
@@ -20,7 +21,7 @@ public class ExtratoFluxoCaixaService {
     private final FluxoCaixaConfigService fluxoCaixaConfigService;
     private final ImportacaoExtratoMensalCartaoJobStarter importacaoExtratoMensalCartaoJobStarter;
     private final ImportacaoExtratoContaCorrenteJobStarter importacaoExtratoContaCorrenteJobStarter;
-
+    private final ImportacaoExtratoAtivosB3JobStarter importacaoExtratoAtivosB3JobStarter;
 
     public void importExtratoCartaoCartao(MultipartFile file, Date dataVencimento) throws Exception {
         fluxoCaixaConfigService.validateConfig();
@@ -40,6 +41,17 @@ public class ExtratoFluxoCaixaService {
 
         try {
             importacaoExtratoContaCorrenteJobStarter.startJob(arquivo.getId(), usuarioUtil.getUsuarioAutenticado().getId());
+        } catch (Exception e) {
+            arquivoService.deleteArquivoIfExists(arquivo.getId());
+            throw new LancamentoException.ErroIniciarImportacaoExtrato(e);
+        }
+    }
+
+    public void importExtratoAtivosB3(MultipartFile file) throws Exception {
+        Arquivo arquivo = arquivoService.uploadArquivo(file);
+
+        try {
+            importacaoExtratoAtivosB3JobStarter.startJob(arquivo.getId(), usuarioUtil.getUsuarioAutenticado().getId());
         } catch (Exception e) {
             arquivoService.deleteArquivoIfExists(arquivo.getId());
             throw new LancamentoException.ErroIniciarImportacaoExtrato(e);
