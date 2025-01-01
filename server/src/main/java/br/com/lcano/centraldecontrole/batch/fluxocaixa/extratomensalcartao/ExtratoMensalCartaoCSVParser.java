@@ -36,9 +36,9 @@ public class ExtratoMensalCartaoCSVParser {
         ExtratoMensalCartaoDTO extrato = new ExtratoMensalCartaoDTO();
 
         extrato.setDataLancamento(DateUtil.parseDate(line[0]));
-        extrato.setCategoria(line[1]);
-        extrato.setDescricao(line[2]);
-        extrato.setValor(new BigDecimal(line[3]));
+        extrato.setDescricao(line[1]);
+        extrato.setValor(new BigDecimal(line[2]));
+        extrato.setCategoria(line.length > 3 ? line[3] : "");
 
         return extrato;
     }

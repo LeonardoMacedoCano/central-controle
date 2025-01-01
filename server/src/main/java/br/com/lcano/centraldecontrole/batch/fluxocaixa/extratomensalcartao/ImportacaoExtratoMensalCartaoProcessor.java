@@ -9,6 +9,7 @@ import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
+import br.com.lcano.centraldecontrole.service.fluxocaixa.FluxoCaixaConfigService;
 import br.com.lcano.centraldecontrole.util.StringUtil;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -31,6 +32,9 @@ public class ImportacaoExtratoMensalCartaoProcessor implements ItemProcessor<Ext
 
     @Autowired
     DespesaCategoriaService despesaCategoriaService;
+
+    @Autowired
+    FluxoCaixaConfigService fluxoCaixaConfigService;
 
     private final Long usuarioId;
     private final Date dataVencimento;
@@ -86,7 +90,9 @@ public class ImportacaoExtratoMensalCartaoProcessor implements ItemProcessor<Ext
     }
 
     private DespesaCategoria getDespesaCategoriaDTO(String descricaoCategoria) {
-        return this.despesaCategoriaService.findOrCreate(descricaoCategoria).toEntity();
+        return (descricaoCategoria.isEmpty()) ?
+                this.fluxoCaixaConfigService.getDespesaCategoriaPadrao() :
+                this.despesaCategoriaService.findOrCreate(descricaoCategoria).toEntity();
     }
 
     @Override

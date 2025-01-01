@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Comparator;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,6 +21,13 @@ public class ReceitaCategoriaResource {
 
     @GetMapping
     public ResponseEntity<List<ReceitaCategoriaDTO>> findAllAsDto() {
-        return ResponseEntity.ok(service.findAllAsDto());
+        List<ReceitaCategoriaDTO> categorias = service.findAllAsDto();
+
+        List<ReceitaCategoriaDTO> categoriasOrdenadas = categorias
+                .stream()
+                .sorted(Comparator.comparing(ReceitaCategoriaDTO::getDescricao))
+                .toList();
+
+        return ResponseEntity.ok(categoriasOrdenadas);
     }
 }

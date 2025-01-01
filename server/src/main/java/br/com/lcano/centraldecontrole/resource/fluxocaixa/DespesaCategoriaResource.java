@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
 
 @AllArgsConstructor
@@ -21,8 +22,16 @@ public class DespesaCategoriaResource {
 
     @GetMapping
     public ResponseEntity<List<DespesaCategoriaDTO>> findAllAsDto() {
-        return ResponseEntity.ok(service.findAllAsDto());
+        List<DespesaCategoriaDTO> categorias = service.findAllAsDto();
+
+        List<DespesaCategoriaDTO> categoriasOrdenadas = categorias
+                .stream()
+                .sorted(Comparator.comparing(DespesaCategoriaDTO::getDescricao))
+                .toList();
+
+        return ResponseEntity.ok(categoriasOrdenadas);
     }
+
 
     @GetMapping("/search")
     public ResponseEntity<Page<DespesaCategoriaDTO>> findAllPagedAsDto(Pageable pageable) {
