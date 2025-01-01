@@ -18,7 +18,7 @@ const ExtratoFluxoCaixaService = (): ExtratoFluxoCaixaApi => {
       formData.append("file", extratoFaturaCartaoDTO.file!);
       formData.append("dataVencimento", formatDateToYMDString(extratoFaturaCartaoDTO.dataVencimento));
 
-      await request<undefined>('post', 'extrato-fluxo-caixa/import-extrato-fatura-cartao', token, message, formData);
+      await request<undefined>('post', 'extrato-fluxo-caixa/import-extrato-mensal-cartao', token, message, formData);
     } catch (error) {
       return undefined;
     }

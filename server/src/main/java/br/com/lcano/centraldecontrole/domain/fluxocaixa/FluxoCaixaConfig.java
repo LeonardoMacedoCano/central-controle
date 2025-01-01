@@ -41,6 +41,6 @@ public class FluxoCaixaConfig {
     @Column(name = "metaaportetotal", precision = 15, scale = 2)
     private BigDecimal metaAporteTotal;
 
-    @Column(name = "diapadraovencimentofatura", nullable = false)
-    private Long diaPadraoVencimentoFatura;
+    @Column(name = "diapadraovencimentocartao", nullable = false)
+    private Long diaPadraoVencimentoCartao;
 }

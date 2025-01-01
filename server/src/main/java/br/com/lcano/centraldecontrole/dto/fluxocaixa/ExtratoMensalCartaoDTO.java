@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-public class ExtratoFaturaCartaoDTO {
+public class ExtratoMensalCartaoDTO {
     private Date dataLancamento;
     private BigDecimal valor;
     private String descricao;

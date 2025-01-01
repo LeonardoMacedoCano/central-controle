@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratomensalcartao;
 
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.springframework.batch.core.Job;
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class ImportacaoExtratoFaturaCartaoJobStarter {
+public class ImportacaoExtratoMensalCartaoJobStarter {
 
     @Autowired
     JobLauncher jobLauncher;
 
     @Autowired
-    Job importacaoExtratoFaturaCartaoJob;
+    Job importacaoExtratoMensalCartaoJob;
 
     @Autowired
     DateUtil dateUtil;
@@ -29,6 +29,6 @@ public class ImportacaoExtratoFaturaCartaoJobStarter {
                 .addDate("startDate", dateUtil.getDataAtual())
                 .addDate("dataVencimento", dataVencimento)
                 .toJobParameters();
-        jobLauncher.run(importacaoExtratoFaturaCartaoJob, jobParameters);
+        jobLauncher.run(importacaoExtratoMensalCartaoJob, jobParameters);
     }
 }

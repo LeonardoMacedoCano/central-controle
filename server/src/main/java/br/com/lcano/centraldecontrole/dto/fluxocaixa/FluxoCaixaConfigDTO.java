@@ -17,7 +17,7 @@ public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
     private ReceitaCategoriaDTO receitaCategoriaParaGanhoAtivo;
     private BigDecimal metaAporteMensal;
     private BigDecimal metaAporteTotal;
-    private Long diaPadraoVencimentoFatura;
+    private Long diaPadraoVencimentoCartao;
 
     @Override
     public FluxoCaixaConfigDTO fromEntity(FluxoCaixaConfig entity) {
@@ -27,7 +27,7 @@ public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
         this.metaLimiteDespesaMensal = entity.getMetaLimiteDespesaMensal();
         this.metaAporteMensal = entity.getMetaAporteMensal();
         this.metaAporteTotal = entity.getMetaAporteTotal();
-        this.diaPadraoVencimentoFatura = entity.getDiaPadraoVencimentoFatura();
+        this.diaPadraoVencimentoCartao = entity.getDiaPadraoVencimentoCartao();
 
         if (entity.getDespesaCategoriaPadrao() != null) {
             this.despesaCategoriaPadrao = new DespesaCategoriaDTO().fromEntity(
@@ -58,7 +58,7 @@ public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
         entity.setMetaLimiteDespesaMensal(this.metaLimiteDespesaMensal);
         entity.setMetaAporteMensal(this.metaAporteMensal);
         entity.setMetaAporteTotal(this.metaAporteTotal);
-        entity.setDiaPadraoVencimentoFatura(this.diaPadraoVencimentoFatura);
+        entity.setDiaPadraoVencimentoCartao(this.diaPadraoVencimentoCartao);
 
         if (this.despesaCategoriaPadrao != null) {
             entity.setDespesaCategoriaPadrao(this.despesaCategoriaPadrao.toEntity());
