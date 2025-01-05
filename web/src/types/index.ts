@@ -68,6 +68,18 @@ import {
   getAtivoCategoriaByCodigo,
   ativoCategoriaOptions
 } from "./fluxocaixa/AtivoCategoriaEnum";
+import { 
+  TipoExtratoFluxoCaixaEnum,
+  getDescricaoTipoExtratoFluxoCaixa,
+  getCodigoTipoExtratoFluxoCaixa,
+  getTipoExtratoFluxoCaixaByCodigo,
+  tipoExtratoFluxoCaixaOptions
+} from "./fluxocaixa/TipoExtratoFluxoCaixaEnum";
+import { 
+  ExtratoFluxoCaixa,
+  ExtratoMensalCartaoDTO,
+  ExtratoPadraoDTO
+ } from "./fluxocaixa/ExtratoFluxoCaixa";
 
 export type {
   Categoria,
@@ -93,6 +105,10 @@ export type {
   Ativo,
   FluxoCaixaConfig,
   AtivoCategoriaEnum,
+  TipoExtratoFluxoCaixaEnum,
+  ExtratoFluxoCaixa,
+  ExtratoMensalCartaoDTO,
+  ExtratoPadraoDTO,
 };
 
 export {
@@ -123,4 +139,8 @@ export {
   getCodigoAtivoCategoria,
   getAtivoCategoriaByCodigo,
   ativoCategoriaOptions,
+  getDescricaoTipoExtratoFluxoCaixa,
+  getCodigoTipoExtratoFluxoCaixa,
+  getTipoExtratoFluxoCaixaByCodigo,
+  tipoExtratoFluxoCaixaOptions,
 };

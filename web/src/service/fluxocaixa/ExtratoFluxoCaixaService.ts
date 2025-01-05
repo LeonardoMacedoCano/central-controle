@@ -1,22 +1,22 @@
 import { useMessage } from "../../contexts";
-import { ExtratoFaturaCartaoDTO } from "../../types/fluxocaixa/ExtratoFaturaCartao";
 import { formatDateToYMDString } from "../../utils";
 import DefaultService from "../DefaultService";
 
 interface ExtratoFluxoCaixaApi {
-  importExtratoFaturaCartao: (token: string, extratoFaturaCartaoDTO: ExtratoFaturaCartaoDTO) => Promise<void | undefined>;
-  importExtratoConta: (token: string) => Promise<void | undefined>;
+  importExtratoMensalCartao: (token: string, file: File, dataVencimento: Date) => Promise<void | undefined>;
+  importExtratoContaCorrente: (token: string, file: File) => Promise<void | undefined>;
+  importExtratoAtivosB3: (token: string, file: File) => Promise<void | undefined>;
 }
 
 const ExtratoFluxoCaixaService = (): ExtratoFluxoCaixaApi => {
   const { request } = DefaultService();
   const message = useMessage();
 
-  const importExtratoFaturaCartao = async (token: string, extratoFaturaCartaoDTO: ExtratoFaturaCartaoDTO): Promise<void | undefined> => {
+  const importExtratoMensalCartao = async (token: string, file: File, dataVencimento: Date): Promise<void | undefined> => {
     try {
       const formData = new FormData();
-      formData.append("file", extratoFaturaCartaoDTO.file!);
-      formData.append("dataVencimento", formatDateToYMDString(extratoFaturaCartaoDTO.dataVencimento));
+      formData.append("file", file);
+      formData.append("dataVencimento", formatDateToYMDString(dataVencimento));
 
       await request<undefined>('post', 'extrato-fluxo-caixa/import-extrato-mensal-cartao', token, message, formData);
     } catch (error) {
@@ -24,17 +24,32 @@ const ExtratoFluxoCaixaService = (): ExtratoFluxoCaixaApi => {
     }
   };
 
-  const importExtratoConta = async (token: string): Promise<void | undefined> => {
+  const importExtratoContaCorrente = async (token: string, file: File): Promise<void | undefined> => {
     try {
-      await request<undefined>('post', 'extrato-fluxo-caixa/import-extrato-conta-corrente', token, message);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      await request<undefined>('post', 'extrato-fluxo-caixa/import-extrato-conta-corrente', token, message, formData);
+    } catch (error) {
+      return undefined;
+    }
+  };
+
+  const importExtratoAtivosB3 = async (token: string, file: File): Promise<void | undefined> => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      await request<undefined>('post', 'extrato-fluxo-caixa/import-extrato-ativos-b3', token, message, formData);
     } catch (error) {
       return undefined;
     }
   };
 
   return {
-    importExtratoFaturaCartao,
-    importExtratoConta
+    importExtratoMensalCartao,
+    importExtratoContaCorrente,
+    importExtratoAtivosB3
   };
 };
 

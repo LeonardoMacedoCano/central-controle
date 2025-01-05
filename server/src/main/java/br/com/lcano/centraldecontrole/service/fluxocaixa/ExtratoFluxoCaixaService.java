@@ -23,7 +23,7 @@ public class ExtratoFluxoCaixaService {
     private final ImportacaoExtratoContaCorrenteJobStarter importacaoExtratoContaCorrenteJobStarter;
     private final ImportacaoExtratoAtivosB3JobStarter importacaoExtratoAtivosB3JobStarter;
 
-    public void importExtratoCartaoCartao(MultipartFile file, Date dataVencimento) throws Exception {
+    public void importExtratoMensalCartao(MultipartFile file, Date dataVencimento) throws Exception {
         fluxoCaixaConfigService.validateConfig();
         Arquivo arquivo = arquivoService.uploadArquivo(file);
 
