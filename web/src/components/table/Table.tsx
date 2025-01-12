@@ -12,9 +12,7 @@ type ColumnProps<T> = {
   titleAlign?: 'left' | 'center' | 'right';
 };
 
-export const Column = <T extends any>({}: ColumnProps<T>) => {
-  return null;
-};
+export const Column = <T extends any>({}: ColumnProps<T>) => null;
 
 interface TableActionsProps {
   onView?: () => void;
@@ -38,29 +36,29 @@ const TableActions: FC<TableActionsProps> = ({ onView, onEdit, onDelete, visible
     <ActionsContainer>
       <ActionsWrapper visible={visible}>
         {customActions && <CustomActionWrapper>{customActions()}</CustomActionWrapper>}
-        
+
         {onView && (
-          <Button 
+          <Button
             onClick={onView}
-            variant='success'
+            variant="success"
             icon={<FaEye />}
-            hint='Visualizar'
+            hint="Visualizar"
             style={commonButtonStyles}
           />
         )}
         {onEdit && (
-          <Button 
-            variant='info'
+          <Button
+            variant="info"
             icon={<FaEdit />}
-            onClick={onEdit} 
+            onClick={onEdit}
             style={commonButtonStyles}
           />
         )}
         {onDelete && (
-          <Button 
-            variant='warning'
-            icon={<FaTrash />} 
-            onClick={onDelete} 
+          <Button
+            variant="warning"
+            icon={<FaTrash />}
+            onClick={onDelete}
             style={commonButtonStyles}
           />
         )}
@@ -68,7 +66,6 @@ const TableActions: FC<TableActionsProps> = ({ onView, onEdit, onDelete, visible
     </ActionsContainer>
   );
 };
-
 
 interface TableProps<T> {
   values: T[] | PagedResponse<T>;
@@ -179,11 +176,7 @@ export const Table = <T extends any>({
   const renderPagination = () => {
     if (loadPage && 'content' in values && values.totalElements > 0) {
       return (
-        <SearchPagination
-          height='35px'
-          page={values}
-          loadPage={loadPage}
-        />
+        <SearchPagination height="35px" page={values} loadPage={loadPage} />
       );
     }
     return null;
@@ -194,57 +187,25 @@ export const Table = <T extends any>({
       {getValues(values).length === 0 ? (
         <EmptyMessage>{messageEmpty}</EmptyMessage>
       ) : (
-        <StyledTable>
-          {renderTableHead()}
-          {renderTableBody()}
-        </StyledTable>
+        <TableContainer>
+          <StyledTable>
+            {renderTableHead()}
+            {renderTableBody()}
+          </StyledTable>
+        </TableContainer>
       )}
       {renderPagination()}
     </Container>
   );
 };
 
+const TableContainer = styled.div`
+  width: 100%;
+  overflow: hidden;
+`;
+
 const EmptyMessage = styled.div`
   padding: 10px;
-`;
-
-const ActionColumn = styled.td<{ visible: boolean }>`
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  padding: 0;
-  border-left: none;
-  z-index: 1;
-  background-color: ${({ theme }) => theme.colors.secondary};
-  display: ${props => (props.visible ? 'flex' : 'none')};
-  align-items: center;
-  justify-content: center;
-`;
-
-const ActionsContainer = styled.div`
-  position: relative;
-  height: 100%;
-`;
-
-const ActionsWrapper = styled.div<{ visible: boolean }>`
-  position: absolute;
-  top: 0;
-  right: 5px;
-  bottom: 0;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-  opacity: ${props => (props.visible ? 1 : 0)};
-  pointer-events: ${props => (props.visible ? 'auto' : 'none')};
-  transition: opacity 0.2s ease-in-out;
-`;
-
-const TruncatedContent = styled.div`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
 const StyledTable = styled.table`
@@ -268,29 +229,6 @@ const TableHeadColumn = styled.th`
   }
 `;
 
-const TableColumnTitle = styled.div<{ align?: string }>`
-  font-size: 14px;
-  height: 40px;
-  text-align: ${({ align }) => align};
-  display: flex;
-  align-items: center;
-  justify-content: ${({ align }) => align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center'};
-  box-sizing: border-box;
-  color: ${({ theme }) => theme.colors.quaternary};
-`;
-
-const TableRow = styled.tr<{ isSelected?: boolean }>`
-  background-color: ${({ theme }) => theme.colors.secondary};
-  position: relative;
-  
-  &:nth-child(odd) {
-    background-color: ${({ theme }) => theme.colors.tertiary};
-  }
-  &:last-child {
-    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
-  }
-`;
-
 const TableColumn = styled.td<{ isSelected?: boolean; width?: string; align?: string }>`
   font-size: 13px;
   height: 35px;
@@ -301,6 +239,7 @@ const TableColumn = styled.td<{ isSelected?: boolean; width?: string; align?: st
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: ${({ width }) => width || '200px'};
   width: ${({ width }) => width || 'auto'};
 
   &:first-child::before {
@@ -318,12 +257,76 @@ const TableColumn = styled.td<{ isSelected?: boolean; width?: string; align?: st
   }
 `;
 
+const TruncatedContent = styled.div`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+`;
+
+const TableColumnTitle = styled.div<{ align?: string }>`
+  font-size: 14px;
+  height: 40px;
+  text-align: ${({ align }) => align};
+  display: flex;
+  align-items: center;
+  justify-content: ${({ align }) =>
+    align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center'};
+  box-sizing: border-box;
+  color: ${({ theme }) => theme.colors.quaternary};
+`;
+
+const TableRow = styled.tr<{ isSelected?: boolean }>`
+  background-color: ${({ theme }) => theme.colors.secondary};
+  position: relative;
+
+  &:nth-child(odd) {
+    background-color: ${({ theme }) => theme.colors.tertiary};
+  }
+
+  &:last-child {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
+  }
+`;
+
+const ActionColumn = styled.td<{ visible: boolean }>`
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  padding: 0;
+  border-left: none;
+  z-index: 1;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  display: ${({ visible }) => (visible ? 'flex' : 'none')};
+  align-items: center;
+  justify-content: center;
+`;
+
+const ActionsContainer = styled.div`
+  position: relative;
+  height: 100%;
+`;
+
+const ActionsWrapper = styled.div<{ visible: boolean }>`
+  position: absolute;
+  top: 0;
+  right: 5px;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  opacity: ${({ visible }) => (visible ? 1 : 0)};
+  pointer-events: ${({ visible }) => (visible ? 'auto' : 'none')};
+  transition: opacity 0.2s ease-in-out;
+`;
+
 const CustomActionWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
   gap: 8px;
   align-items: center;
 `;
-
 
 export default Table;
