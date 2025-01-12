@@ -6,6 +6,7 @@ import { FluxoCaixaConfig, initialFluxoCaixaConfigState } from "../../../types";
 import { AuthContext, useMessage } from "../../../contexts";
 import { FluxoCaixaConfigService } from "../../../service";
 import ReceitaConfigSectionForm from "./ReceitaConfigSectionForm";
+import AtivoConfigSectionForm from "./AtivoConfigSectionForm";
 
 const ConfiguracaoFluxoCaixaPage: React.FC = () => {
   const [config, setConfig] = useState<FluxoCaixaConfig>(initialFluxoCaixaConfigState);
@@ -54,7 +55,7 @@ const ConfiguracaoFluxoCaixaPage: React.FC = () => {
     },
     {
       label: 'Ativo',
-      content: <div>Conteúdo da aba 3</div>,
+      content: <AtivoConfigSectionForm config={config} onUpdate={atualizarConfig} />,
     },
     {
       label: 'Extrato',

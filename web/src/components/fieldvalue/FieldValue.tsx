@@ -10,7 +10,7 @@ import {
 
 type FieldValueProps = {
   type: 'string' | 'number' | 'boolean' | 'date' | 'month' | 'select';
-  value: string | number | boolean | SelectValue;
+  value?: string | number | boolean | SelectValue;
   variant?: 'success' | 'info' | 'warning';
   description?: string;
   hint?: string;
@@ -34,7 +34,7 @@ type FieldValueProps = {
 
 const FieldValue: React.FC<FieldValueProps> = ({
   type,
-  value,
+  value = "",
   variant,
   description,
   hint,
