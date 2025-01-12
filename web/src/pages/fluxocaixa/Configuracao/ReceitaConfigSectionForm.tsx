@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Categoria, FluxoCaixaConfig, initialCategoriaState, PAGE_SIZE_COMPACT, PagedResponse } from '../../../types';
 import { Button, Column, ConfirmModal, FieldValue, FlexBox, Panel, Table } from '../../../components';
-import { DespesaCategoriaService } from '../../../service';
+import { ReceitaCategoriaService } from '../../../service';
 import { AuthContext, useMessage } from '../../../contexts';
 import { useConfirmModal } from '../../../hooks';
 import CategoriaSectionForm from './CategoriaSectionForm';
-import { FaPlus, FaStar } from 'react-icons/fa';
+import { FaMoneyBill, FaPlus, FaStar } from 'react-icons/fa';
 
-interface DespesaConfigSectionFormProps {
+interface ReceitaConfigSectionFormProps {
   config: FluxoCaixaConfig;
   onUpdate: (configAtualizado: FluxoCaixaConfig) => void;
 }
 
-const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ config, onUpdate }) => {
+const ReceitaConfigSectionForm: React.FC<ReceitaConfigSectionFormProps> = ({ config, onUpdate }) => {
   const [categorias, setCategorias] = useState<PagedResponse<Categoria>>();
   const [modalOpen, setModalOpen] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState<Categoria | undefined>();
@@ -21,7 +21,7 @@ const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ con
 
   const auth = useContext(AuthContext);
   const message = useMessage();
-  const categoriaService = DespesaCategoriaService();
+  const categoriaService = ReceitaCategoriaService();
   const { confirm, ConfirmModalComponent } = useConfirmModal();
 
   const loadCategorias = async () => {
@@ -31,7 +31,7 @@ const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ con
       const result = await categoriaService.getAllCategoriasPaged(auth.usuario?.token, pageIndex, pageSize);
       setCategorias(result);
     } catch (error) {
-      message.showErrorWithLog('Erro ao carregar as categorias de despesa.', error);
+      message.showErrorWithLog('Erro ao carregar as categorias de receita.', error);
     }
   };
 
@@ -51,13 +51,14 @@ const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ con
     }
   };
 
-  const handleMetaLimiteDespesaMensal = (value: any) => {
-    onUpdate({ ...config, metaLimiteDespesaMensal: value });
-  };
-
   const handleUpdateCategoriaPadrao = (value: any) => {
     const selectedCategoria = categorias?.content.find(c => String(c.id) === String(value));
-    onUpdate({ ...config, despesaCategoriaPadrao: selectedCategoria });
+    onUpdate({ ...config, receitaCategoriaPadrao: selectedCategoria });
+  };
+
+  const handleUpdateCategoriaGanhoAtivo = (value: any) => {
+    const selectedCategoria = categorias?.content.find(c => String(c.id) === String(value));
+    onUpdate({ ...config, receitaCategoriaParaGanhoAtivo: selectedCategoria });
   };
 
   const handleEditCategoria = (categoria: Categoria) => {
@@ -120,13 +121,10 @@ const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ con
         <FlexBox flexDirection="row">
           <FlexBox.Item borderBottom>
             <FieldValue 
-              description="Valor Teto Meta Mensal"
-              hint="Meta máxima para o total de despesas em um mês."
-              type="number"
-              value={config.metaLimiteDespesaMensal || 0}
-              editable={true}
-              minValue={0}
-              onUpdate={handleMetaLimiteDespesaMensal}
+              description='Categoria Ganhos Ativo'
+              hint="Categoria de receita para ganhos dos ativos."
+              type='string'
+              value={config?.receitaCategoriaParaGanhoAtivo?.descricao || ''}
             />
           </FlexBox.Item>
         </FlexBox>
@@ -134,9 +132,9 @@ const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ con
           <FlexBox.Item>
             <FieldValue 
               description='Categoria Padrão'
-              hint="Categoria de despesa padrão."
+              hint="Categoria de receita padrão."
               type='string'
-              value={config?.despesaCategoriaPadrao?.descricao || ''}
+              value={config?.receitaCategoriaPadrao?.descricao || ''}
             />
           </FlexBox.Item>
         </FlexBox>
@@ -171,20 +169,36 @@ const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ con
           onEdit={handleEditCategoria}
           onDelete={(item) => handleDelete(item.id)}
           customActions={(item) => (
-            <Button
-              variant="success"
-              onClick={() => (handleUpdateCategoriaPadrao(item.id))}
-              icon={<FaStar />}
-              hint="Definir Principal"
-              style={{
-                borderRadius: '50%',
-                justifyContent: 'center',
-                alignItems: 'center',
-                display: 'flex',
-                height: '25px',
-                width: '25px',
-              }}
-            />
+            <>
+              <Button
+                variant="success"
+                onClick={() => (handleUpdateCategoriaPadrao(item.id))}
+                icon={<FaStar />}
+                hint="Definir Principal"
+                style={{
+                  borderRadius: '50%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                  height: '25px',
+                  width: '25px',
+                }}
+              />
+              <Button
+                variant="success"
+                onClick={() => (handleUpdateCategoriaGanhoAtivo(item.id))}
+                icon={<FaMoneyBill />}
+                hint="Definir Ganho Ativo"
+                style={{
+                  borderRadius: '50%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  display: 'flex',
+                  height: '25px',
+                  width: '25px',
+                }}
+              />
+            </>
           )}
           loadPage={loadPage}
           columns={[
@@ -199,4 +213,4 @@ const DespesaConfigSectionForm: React.FC<DespesaConfigSectionFormProps> = ({ con
   );
 };
 
-export default DespesaConfigSectionForm;
+export default ReceitaConfigSectionForm;

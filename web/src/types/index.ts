@@ -1,4 +1,7 @@
-import { Categoria } from "./Categoria";
+import { 
+  Categoria,
+  initialCategoriaState
+ } from "./Categoria";
 import { Lancamento } from "./Lancamento";
 import { PagedResponse } from "./PagedResponse";
 import { SelectValue } from "./SelectValue";
@@ -143,4 +146,5 @@ export {
   getCodigoTipoExtratoFluxoCaixa,
   getTipoExtratoFluxoCaixaByCodigo,
   tipoExtratoFluxoCaixaOptions,
+  initialCategoriaState,
 };

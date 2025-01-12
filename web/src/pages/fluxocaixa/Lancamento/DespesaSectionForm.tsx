@@ -21,7 +21,7 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
       if (!auth.usuario?.token) return;
   
       try {
-        const result = await despesaCategoriaService.getTodasCategoriasDespesa(auth.usuario?.token);
+        const result = await despesaCategoriaService.getAllCategorias(auth.usuario?.token);
         setCategorias(result || []);
       } catch (error) {
         message.showErrorWithLog('Erro ao carregar as categorias de despesa.', error);

@@ -42,7 +42,7 @@ public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
         }
 
         if (entity.getReceitaCategoriaParaGanhoAtivo() != null) {
-            this.receitaCategoriaPadrao = new ReceitaCategoriaDTO().fromEntity(
+            this.receitaCategoriaParaGanhoAtivo = new ReceitaCategoriaDTO().fromEntity(
                     entity.getReceitaCategoriaParaGanhoAtivo()
             );
         }
