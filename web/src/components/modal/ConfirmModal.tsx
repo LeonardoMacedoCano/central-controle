@@ -10,12 +10,20 @@ interface ConfirmModalProps {
   content: React.ReactNode;
   onClose: () => void;
   onConfirm: () => void;
+  variant?: 'success' | 'info' | 'warning';
 }
 
-const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, title, content, onClose, onConfirm }) => {
+const ConfirmModal: React.FC<ConfirmModalProps> = ({ 
+  isOpen, 
+  title, 
+  content, 
+  onClose, 
+  onConfirm, 
+  variant = `warning` 
+}) => {
   const confirmButton = (
     <Button 
-      variant="warning"
+      variant={variant}
       width="100px"
       height="30px"
       style={{
@@ -47,6 +55,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, title, content, onC
   return (
     <Modal
       isOpen={isOpen}
+      variant={variant}
       title={title}
       content={content}
       modalWidth='400px'
