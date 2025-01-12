@@ -9,39 +9,35 @@ interface PanelProps {
   width?: string;
   maxWidth?: string;
   padding?: string;
+  actionButton?: ReactNode;
 }
 
-const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth, padding }) => {
+const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth, padding, actionButton }) => {
   return (
     <Container
-      width={width || '100%'} 
+      width={width || '100%'}
       padding={padding}
-      margin='auto'
-      backgroundColor='transparent'
-      style={{maxWidth: maxWidth || 'none'}}
+      margin="auto"
+      backgroundColor="transparent"
+      style={{ maxWidth: maxWidth || 'none' }}
     >
-      {title && (
+      {(title || actionButton) && (
         <Title>
           <h3>{title}</h3>
+          {actionButton && <ActionContainer>{actionButton}</ActionContainer>}
         </Title>
       )}
       <Container
-        width={'100%'} 
-        variantColor='secondary'
-        margin='20px 0 0 0'
+        width="100%"
+        variantColor="secondary"
+        margin="20px 0 0 0"
         style={{
           boxShadow: '0 0 2px',
-          borderRadius: '5px'
+          borderRadius: '5px',
         }}
       >
-        <Body>
-          {children}
-        </Body>
-        {footer && (
-          <Footer>
-            {footer}
-          </Footer>
-        )}
+        <Body>{children}</Body>
+        {footer && <Footer>{footer}</Footer>}
       </Container>
     </Container>
   );
@@ -50,10 +46,19 @@ const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth,
 export default Panel;
 
 const Title = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.gray};
   h3 {
     color: ${({ theme }) => theme.colors.white};
-    border-bottom: 2px solid ${({ theme }) => theme.colors.gray};
   }
+`;
+
+const ActionContainer = styled.div`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 `;
 
 const BaseBox = styled.div`
