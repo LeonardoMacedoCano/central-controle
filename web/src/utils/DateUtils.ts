@@ -44,5 +44,10 @@ export const parseDateStringToDate = (dateStr: string): Date => {
 };
   
 export const isDateValid = (date: any): boolean => {
+  if (typeof date === 'number' || typeof date === 'string') {
+    date = new Date(date);
+  }
+
   return date instanceof Date && !isNaN(date.getTime());
 };
+

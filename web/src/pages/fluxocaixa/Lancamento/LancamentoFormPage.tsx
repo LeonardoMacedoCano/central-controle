@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Ativo, getCodigoTipoLancamento, getDescricaoTipoLancamento, getTipoLancamentoByCodigo, initialAtivoState, initialReceitaState, Lancamento, Receita, tipoLancamentoOptions } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
-import { formatDateToShortString, getCurrentDate } from '../../../utils';
+import { formatDateToShortString, getCurrentDate, isDateValid } from '../../../utils';
 import { FaCheck } from 'react-icons/fa';
 import DespesaSectionForm from './DespesaSectionForm';
 import { Despesa, initialDespesaState } from '../../../types/fluxocaixa/Despesa';
@@ -75,7 +75,7 @@ const LancamentoFormPage: React.FC = () => {
         !!despesa.categoria && 
         !!despesa.formaPagamento && 
         despesa.valor > 0 &&
-        despesa.dataVencimento instanceof Date && !isNaN(despesa.dataVencimento.getTime())
+        isDateValid(despesa.dataVencimento)
       );
     }
   
@@ -95,7 +95,7 @@ const LancamentoFormPage: React.FC = () => {
         ativo.quantidade > 0 &&
         ativo.precoUnitario > 0 &&
         !!ativo.operacao &&
-        ativo.dataMovimento instanceof Date && !isNaN(ativo.dataMovimento.getTime())
+        isDateValid(ativo.dataMovimento)
       );      
     }
   
