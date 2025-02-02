@@ -8,7 +8,7 @@ const FluxoCaixaConfigPage: React.FC = () => {
   const buttons = [
     { label: "Parâmetros", hint: "Parâmetros", path: "/parametros-fluxo-caixa" },
     { label: "Categorias", hint: "Categorias", path: "/categorias-fluxo-caixa" },
-    { label: "Regras Extrato Conta Corrente", hint: "Regras Extrato Conta Corrente", path: "/Regras-extrato" },
+    { label: "Regras Extrato Conta Corrente", hint: "Regras Extrato Conta Corrente", path: "/regras-extrato-conta-corrente" },
   ];
 
   const buttonStyle: React.CSSProperties = {

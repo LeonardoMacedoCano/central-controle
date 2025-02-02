@@ -19,6 +19,11 @@ public class RegraExtratoContaCorrenteResource {
     @Autowired
     private final RegraExtratoContaCorrenteService service;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<RegraExtratoContaCorrenteDTO> findByIdAsDto(@PathVariable Long id) {
+        return ResponseEntity.ok(this.service.findByIdAsDto(id));
+    }
+
     @GetMapping
     public ResponseEntity<List<RegraExtratoContaCorrenteDTO>> findAllAsDto() {
         return ResponseEntity.ok(this.service.findAllAsDto());

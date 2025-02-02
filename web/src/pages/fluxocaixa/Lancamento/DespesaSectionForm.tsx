@@ -97,12 +97,12 @@ const DespesaSectionForm: React.FC<DespesaSectionFormProps> = ({ despesa, onUpda
           </FlexBox.Item>
           <FlexBox.Item >
             <FieldValue 
-                description='Valor'
-                type='number'
-                value={despesa.valor}
-                editable={true}
-                onUpdate={handleUpdateValor}
-              />
+              description='Valor'
+              type='number'
+              value={despesa.valor}
+              editable={true}
+              onUpdate={handleUpdateValor}
+            />
           </FlexBox.Item>
         </FlexBox>
 

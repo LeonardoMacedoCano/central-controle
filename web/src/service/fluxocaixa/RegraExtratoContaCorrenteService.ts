@@ -3,6 +3,7 @@ import { PagedResponse, RegraExtratoContaCorrente } from '../../types';
 import { useMessage } from '../../contexts';
 
 interface RegraExtratoContaCorrenteServiceApi {
+  getRegra: (token: string, id: string | number) => Promise<RegraExtratoContaCorrente | undefined>;
   getAllRegras: (token: string) => Promise<RegraExtratoContaCorrente[] | undefined>;
   getAllRegrasPaged: (token: string, page: number, size: number) => Promise<PagedResponse<RegraExtratoContaCorrente> | undefined>;
   saveRegra: (token: string, data: RegraExtratoContaCorrente) => Promise<{ id: number } | undefined>;
@@ -12,6 +13,14 @@ interface RegraExtratoContaCorrenteServiceApi {
 const RegraExtratoContaCorrenteService = (): RegraExtratoContaCorrenteServiceApi => {
   const { request } = DefaultService();
   const message = useMessage();
+
+  const getRegra = async (token: string, id: string | number): Promise<RegraExtratoContaCorrente | undefined> => {
+      try {
+        return await request<RegraExtratoContaCorrente>('get', `regra-extrato-conta-corrente/${id}`, token);
+      } catch (error) {
+        return undefined;
+      }
+    };
 
   const getAllRegras = async (token: string): Promise<RegraExtratoContaCorrente[] | undefined> => {
     try {
@@ -39,13 +48,14 @@ const RegraExtratoContaCorrenteService = (): RegraExtratoContaCorrenteServiceApi
 
   const deleteRegra = async (token: string, id: string | number): Promise<void | undefined> => {
     try {
-      await request<undefined>('delete', `regra-extrato-conta-correntea/${id}`, token, message);
+      await request<undefined>('delete', `regra-extrato-conta-corrente/${id}`, token, message);
     } catch (error) {
       return undefined;
     }
   };
 
   return {
+    getRegra,
     getAllRegras,
     getAllRegrasPaged,
     saveRegra,

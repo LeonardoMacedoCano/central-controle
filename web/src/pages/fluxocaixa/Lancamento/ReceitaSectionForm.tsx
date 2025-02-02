@@ -21,7 +21,7 @@ const ReceitaSectionForm: React.FC<ReceitaSectionFormProps> = ({ receita, onUpda
       if (!auth.usuario?.token) return;
   
       try {
-        const result = await receitaCategoriaService.getTodasCategoriasReceita(auth.usuario?.token);
+        const result = await receitaCategoriaService.getAllCategorias(auth.usuario?.token);
         setCategorias(result || []);
       } catch (error) {
         message.showErrorWithLog('Erro ao carregar as categorias de receita.', error);

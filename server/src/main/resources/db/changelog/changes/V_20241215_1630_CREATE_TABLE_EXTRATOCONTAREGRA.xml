@@ -19,7 +19,7 @@
             <column name="idusuario" type="${integer}">
                 <constraints nullable="false"/>
             </column>
-            <column name="tiporegra" type="${varchar_15}">
+            <column name="tiporegra" type="${varchar_20}">
                 <constraints nullable="false"/>
             </column>
             <column name="descricao" type="${varchar_255}">

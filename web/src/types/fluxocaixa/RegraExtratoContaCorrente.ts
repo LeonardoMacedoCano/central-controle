@@ -15,9 +15,9 @@ export type RegraExtratoContaCorrente = {
 
 export const initialRegraExtratoContaCorrenteState: RegraExtratoContaCorrente = {
   id: 0,
-  tipoRegra: "CLASSIFICAR",
+  tipoRegra: "CLASSIFICAR_DESPESA",
   descricao: "",
   descricaoMatch: "",
   prioridade: 0,
-  ativo: false,
+  ativo: true,
 };

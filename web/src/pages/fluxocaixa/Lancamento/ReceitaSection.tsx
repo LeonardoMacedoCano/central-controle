@@ -29,10 +29,10 @@ const ReceitaSection: React.FC<ReceitaSectionProps> = ({ receita }) => {
         <FlexBox flexDirection="row">
           <FlexBox.Item >
             <FieldValue 
-                description='Valor'
-                type='string'
-                value={formatValueToBRL(receita.valor)}
-              />
+              description='Valor'
+              type='string'
+              value={formatValueToBRL(receita.valor)}
+            />
           </FlexBox.Item>
         </FlexBox>
       </FlexBox>
