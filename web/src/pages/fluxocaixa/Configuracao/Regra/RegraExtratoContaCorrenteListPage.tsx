@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Column, Container, FloatingButton, Loading, Panel, Table } from '../../../../components';
-import { PAGE_SIZE_DEFAULT, PagedResponse, RegraExtratoContaCorrente } from '../../../../types';
+import { getDescricaoTipoRegraExtratoContaCorrente, PAGE_SIZE_DEFAULT, PagedResponse, RegraExtratoContaCorrente } from '../../../../types';
 import { useConfirmModal } from '../../../../hooks';
 import { AuthContext, useMessage } from '../../../../contexts';
 import { useNavigate } from 'react-router-dom';
 import { RegraExtratoContaCorrenteService } from '../../../../service';
 import { FaPlus } from 'react-icons/fa';
+import Card from '../../../../components/card/Card';
 
 const RegraExtratoContaCorrenteListPage: React.FC = () => {
   const [regras, setRegras] = useState<PagedResponse<RegraExtratoContaCorrente>>();
@@ -76,6 +77,26 @@ const RegraExtratoContaCorrenteListPage: React.FC = () => {
           onDelete={(item) => handleDelete(item.id)}
           loadPage={loadPage}
           columns={[
+            <Column<RegraExtratoContaCorrente> 
+              header="Ativo" 
+              width="60px"
+              align="center"
+              value={(item) => (
+                <Card
+                  variant={item.ativo ? 'success' : 'warning'}
+                  width='75px'
+                  height='25px'
+                  style={{textAlign: 'center'}}
+                >
+                  {item.ativo ? 'Sim' : 'Não'}
+                </Card>
+              )}
+            />,
+            <Column<RegraExtratoContaCorrente> 
+              header="Tipo" 
+              width="150px"
+              value={(item) => getDescricaoTipoRegraExtratoContaCorrente(item.tipoRegra)} 
+            />,
             <Column<RegraExtratoContaCorrente> 
               header="Descrição" 
               value={(item) => item.descricao} 

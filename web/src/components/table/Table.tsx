@@ -157,7 +157,7 @@ export const Table = <T extends any>({
                 }
                 return null;
               })}
-              <ActionColumn visible={hoveredRowIndex === index}>
+              <ActionColumn>
                 <TableActions
                   onView={onView ? () => onView(item) : undefined}
                   onEdit={onEdit ? () => onEdit(item) : undefined}
@@ -202,6 +202,7 @@ export const Table = <T extends any>({
 const TableContainer = styled.div`
   width: 100%;
   overflow: hidden;
+  table-layout: fixed;
 `;
 
 const EmptyMessage = styled.div`
@@ -214,7 +215,6 @@ const StyledTable = styled.table`
 `;
 
 const TableHeadRow = styled.tr`
-  width: 100%;
   border-bottom: 2px solid ${({ theme }) => theme.colors.quaternary};
 `;
 
@@ -232,15 +232,16 @@ const TableHeadColumn = styled.th`
 const TableColumn = styled.td<{ isSelected?: boolean; width?: string; align?: string }>`
   font-size: 13px;
   height: 35px;
-  padding: 0 5px;
   text-align: ${({ align }) => align || 'left'};
   border-left: 1px solid ${({ theme }) => theme.colors.gray};
   position: relative;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: ${({ width }) => width || '200px'};
+  max-width: ${({ width }) => width || 'auto'};
   width: ${({ width }) => width || 'auto'};
+  padding: 0 5px;
+  display: table-cell;
 
   &:first-child::before {
     content: '';
@@ -262,6 +263,7 @@ const TruncatedContent = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
+  width: 100%;
 `;
 
 const TableColumnTitle = styled.div<{ align?: string }>`
@@ -289,18 +291,11 @@ const TableRow = styled.tr<{ isSelected?: boolean }>`
   }
 `;
 
-const ActionColumn = styled.td<{ visible: boolean }>`
-  position: absolute;
+const ActionColumn = styled.td`
+  position: sticky;
   right: 0;
-  top: 0;
-  bottom: 0;
-  padding: 0;
-  border-left: none;
-  z-index: 1;
-  background-color: ${({ theme }) => theme.colors.secondary};
-  display: ${({ visible }) => (visible ? 'flex' : 'none')};
-  align-items: center;
-  justify-content: center;
+  padding: 2px;
+  z-index: 2;
 `;
 
 const ActionsContainer = styled.div`
@@ -309,7 +304,7 @@ const ActionsContainer = styled.div`
 `;
 
 const ActionsWrapper = styled.div<{ visible: boolean }>`
-  position: absolute;
+  position: sticky;
   top: 0;
   right: 5px;
   bottom: 0;

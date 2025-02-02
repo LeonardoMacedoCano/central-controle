@@ -22,7 +22,7 @@ const FluxoCaixaConfigPage: React.FC = () => {
 
   return (
     <Container>
-      <Panel maxWidth="1000px" title="Parâmetros Fluxo Caixa">
+      <Panel maxWidth="1000px" title="Configuração Fluxo Caixa">
         <FlexBox flexDirection="column">
           <FlexBox flexDirection="row">
             {buttons.map(({ label, hint, path }, index) => (
