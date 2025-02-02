@@ -76,11 +76,20 @@ public class ImportacaoExtratoContaCorrenteProcessor
     private boolean correspondeARegra(RegraExtratoContaCorrente regra, String descricao, boolean isDespesa) {
         boolean contemDescricao = descricao.toUpperCase().contains(regra.getDescricaoMatch().toUpperCase());
 
-        return contemDescricao && (
-                (isDespesa && regra.getTipoRegra().equals(TipoRegraExtratoContaCorrente.CLASSIFICAR_DESPESA)) ||
-                        (!isDespesa && regra.getTipoRegra().equals(TipoRegraExtratoContaCorrente.CLASSIFICAR_RECEITA))
-        );
+        if (!contemDescricao) {
+            return false;
+        }
+
+        TipoRegraExtratoContaCorrente tipoRegra = regra.getTipoRegra();
+        if (isDespesa) {
+            return tipoRegra.equals(TipoRegraExtratoContaCorrente.CLASSIFICAR_DESPESA) ||
+                    tipoRegra.equals(TipoRegraExtratoContaCorrente.IGNORAR_DESPESA);
+        } else {
+            return tipoRegra.equals(TipoRegraExtratoContaCorrente.CLASSIFICAR_RECEITA) ||
+                    tipoRegra.equals(TipoRegraExtratoContaCorrente.IGNORAR_RECEITA);
+        }
     }
+
 
     private Lancamento criarLancamentoDespesa(ExtratoContaCorrenteDTO dto, RegraExtratoContaCorrente regra) {
         Lancamento lancamento = criarLancamentoBase(dto, TipoLancamentoEnum.DESPESA, regra);
@@ -127,23 +136,29 @@ public class ImportacaoExtratoContaCorrenteProcessor
 
     private boolean ehTransferencia(ExtratoContaCorrenteDTO dto) {
         String descricao = dto.getDescricao();
-        return descricao.contains("Transferência enviada pelo Pix") || descricao.contains("Transferência Recebida");
+        return descricao.toUpperCase().contains("TRANSFERÊNCIA ENVIADA") || descricao.toUpperCase().contains("TRANSFERÊNCIA RECEBIDA");
     }
 
     private String formatarDescricaoTransferencia(ExtratoContaCorrenteDTO dto) {
         String descricao = dto.getDescricao();
-        String parteFixa = descricao.startsWith("Transferência enviada pelo Pix") ?
-                "Transferência enviada pelo Pix - " :
-                "Transferência Recebida - ";
+        String parteFixa = descricao.toUpperCase().startsWith("TRANSFERÊNCIA ENVIADA") ?
+                "Transferência enviada - " :
+                "Transferência recebida - ";
 
-        return parteFixa + extrairNomePessoa(descricao, parteFixa);
+        return parteFixa + extrairNomePessoa(descricao);
     }
 
-    private String extrairNomePessoa(String descricao, String parteFixa) {
-        int inicioNome = descricao.indexOf(parteFixa) + parteFixa.length();
-        int fimNome = descricao.indexOf(" - ", inicioNome);
-        return descricao.substring(inicioNome, fimNome == -1 ? descricao.length() : fimNome).trim();
+    private String extrairNomePessoa(String descricao) {
+        int primeiroHifen = descricao.indexOf(" - ");
+        int segundoHifen = descricao.indexOf(" - ", primeiroHifen + 1);
+
+        if (primeiroHifen != -1 && segundoHifen != -1) {
+            return descricao.substring(primeiroHifen + 3, segundoHifen).trim();
+        }
+
+        return "";
     }
+
 
     private DespesaCategoria obterCategoriaDespesa(RegraExtratoContaCorrente regra) {
         return (regra != null && regra.getTipoRegra() == TipoRegraExtratoContaCorrente.CLASSIFICAR_DESPESA &&

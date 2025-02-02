@@ -58,11 +58,11 @@ const ExtratoFluxoCaixaFormPage: React.FC = () => {
         default:
           throw new Error('Tipo de extrato não suportado.');
       }
+      navigate('/lancamentos');
     } catch (error) {
       message.showErrorWithLog('Erro ao importar o extrato da fatura de cartão.', error);
     } finally {
       setIsLoading(false);
-      navigate('/lancamentos');
     }
   };
 
