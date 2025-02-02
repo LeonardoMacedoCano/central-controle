@@ -8,9 +8,7 @@ import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoContaCorrente;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
-import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.RegraExtratoContaCorrenteService;
-import br.com.lcano.centraldecontrole.service.fluxocaixa.ReceitaCategoriaService;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.StepExecutionListener;
@@ -29,12 +27,6 @@ public class ImportacaoExtratoContaCorrenteProcessor implements ItemProcessor<Ex
 
     @Autowired
     UsuarioService usuarioService;
-
-    @Autowired
-    DespesaCategoriaService despesaCategoriaService;
-
-    @Autowired
-    ReceitaCategoriaService receitaCategoriaService;
 
     @Autowired
     RegraExtratoContaCorrenteService extratoContaRegraService;
@@ -149,9 +141,9 @@ public class ImportacaoExtratoContaCorrenteProcessor implements ItemProcessor<Ex
     private DespesaCategoria obterCategoriaDespesa(RegraExtratoContaCorrente regraCorrespondente) {
         if (regraCorrespondente != null &&
                 regraCorrespondente.getTipoRegra() == TipoRegraExtratoContaCorrente.CLASSIFICAR &&
-                regraCorrespondente.getIdCategoria() != null) {
+                regraCorrespondente.getDespesaCategoriaDestino() != null) {
 
-            return despesaCategoriaService.findById(regraCorrespondente.getIdCategoria());
+            return regraCorrespondente.getDespesaCategoriaDestino();
         } else {
             return extratoContaRegraService.getDespesaCategoriaPadrao();
         }
@@ -160,9 +152,9 @@ public class ImportacaoExtratoContaCorrenteProcessor implements ItemProcessor<Ex
     private ReceitaCategoria obterCategoriaReceita(RegraExtratoContaCorrente regraCorrespondente) {
         if (regraCorrespondente != null &&
                 regraCorrespondente.getTipoRegra() == TipoRegraExtratoContaCorrente.CLASSIFICAR &&
-                regraCorrespondente.getIdCategoria() != null) {
+                regraCorrespondente.getReceitaCategoriaDestino() != null) {
 
-            return receitaCategoriaService.findById(regraCorrespondente.getIdCategoria());
+            return regraCorrespondente.getReceitaCategoriaDestino();
         } else {
             return extratoContaRegraService.getReceitaCategoriaPadrao();
         }

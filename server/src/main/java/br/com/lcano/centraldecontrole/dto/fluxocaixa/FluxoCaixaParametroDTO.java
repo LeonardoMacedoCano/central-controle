@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.FluxoCaixaConfig;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.FluxoCaixaParametro;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
+public class FluxoCaixaParametroDTO extends BaseDTO<FluxoCaixaParametro> {
     private Long id;
     private DespesaCategoriaDTO despesaCategoriaPadrao;
     private BigDecimal metaLimiteDespesaMensal;
@@ -20,7 +20,7 @@ public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
     private Long diaPadraoVencimentoCartao;
 
     @Override
-    public FluxoCaixaConfigDTO fromEntity(FluxoCaixaConfig entity) {
+    public FluxoCaixaParametroDTO fromEntity(FluxoCaixaParametro entity) {
         if (null == entity) return null;
 
         this.id = entity.getId();
@@ -51,8 +51,8 @@ public class FluxoCaixaConfigDTO extends BaseDTO<FluxoCaixaConfig> {
     }
 
     @Override
-    public FluxoCaixaConfig toEntity() {
-        FluxoCaixaConfig entity = new FluxoCaixaConfig();
+    public FluxoCaixaParametro toEntity() {
+        FluxoCaixaParametro entity = new FluxoCaixaParametro();
 
         entity.setId(this.id);
         entity.setMetaLimiteDespesaMensal(this.metaLimiteDespesaMensal);

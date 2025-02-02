@@ -89,18 +89,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler({FluxoCaixaConfigException.UniquePrioridadeViolada.class})
-    protected ResponseEntity<Object> handleUniquePrioridadeViolada(FluxoCaixaConfigException.UniquePrioridadeViolada ex) {
-        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
     @ExceptionHandler({FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada.class})
     protected ResponseEntity<Object> handleCategoriaPadraoNaoEncontrada(FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    @ExceptionHandler({FluxoCaixaConfigException.ConfigNaoEncontrada.class})
-    protected ResponseEntity<Object> handleConfigNaoEncontrada(FluxoCaixaConfigException.ConfigNaoEncontrada ex) {
+    @ExceptionHandler({FluxoCaixaConfigException.ParametroNaoEncontrado.class})
+    protected ResponseEntity<Object> handleParametroNaoEncontrado(FluxoCaixaConfigException.ParametroNaoEncontrado ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 }

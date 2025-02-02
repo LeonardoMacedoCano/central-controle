@@ -5,16 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-    <changeSet id="create-table-fluxocaixaconfig" author="lcano">
-        <preConditions onFail="MARK_RAN" onFailMessage="A tabela fluxocaixaconfig já existe">
+    <changeSet id="create-table-fluxocaixaparametro" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela fluxocaixaparametro já existe">
             <not>
-                <tableExists tableName="fluxocaixaconfig"/>
+                <tableExists tableName="fluxocaixaparametro"/>
             </not>
         </preConditions>
 
-        <createTable tableName="fluxocaixaconfig">
+        <createTable tableName="fluxocaixaparametro">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pkfluxocaixaconfig"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkfluxocaixaparametro"/>
             </column>
             <column name="idusuario" type="${integer}">
                 <constraints nullable="false"/>
@@ -31,23 +31,23 @@
         </createTable>
 
         <addUniqueConstraint
-                tableName="fluxocaixaconfig"
+                tableName="fluxocaixaparametro"
                 columnNames="idusuario"
-                constraintName="ukfluxocaixaconfigusuario"/>
+                constraintName="ukfluxocaixaparametrousuario"/>
 
-        <addForeignKeyConstraint baseTableName="fluxocaixaconfig"
+        <addForeignKeyConstraint baseTableName="fluxocaixaparametro"
                                  baseColumnNames="idcategoriadespesapadrao"
                                  constraintName="fkfluxocaixacategdesp"
                                  referencedTableName="despesacategoria"
                                  referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableName="fluxocaixaconfig"
+        <addForeignKeyConstraint baseTableName="fluxocaixaparametro"
                                  baseColumnNames="idcategoriareceitapadrao"
                                  constraintName="fkfluxocaixacategrec"
                                  referencedTableName="receitacategoria"
                                  referencedColumnNames="id"/>
 
-        <addForeignKeyConstraint baseTableName="fluxocaixaconfig"
+        <addForeignKeyConstraint baseTableName="fluxocaixaparametro"
                                  baseColumnNames="idcategoriareceitaganhoativo"
                                  constraintName="fkfluxocaixacategrecativo"
                                  referencedTableName="receitacategoria"

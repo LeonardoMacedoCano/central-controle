@@ -22,14 +22,22 @@ public class RegraExtratoContaCorrente {
     @Column(name = "tiporegra", nullable = false)
     private TipoRegraExtratoContaCorrente tipoRegra;
 
+    @Column(nullable = false)
+    private String descricao;
+
     @Column(name = "descricaomatch", nullable = false)
     private String descricaoMatch;
 
     @Column(name = "descricaodestino")
     private String descricaoDestino;
 
-    @Column(name = "idcategoriadestino")
-    private Long idCategoria;
+    @ManyToOne
+    @JoinColumn(name = "idcategoriadespesadestino")
+    private DespesaCategoria despesaCategoriaDestino;
+
+    @ManyToOne
+    @JoinColumn(name = "idcategoriareceitadestino")
+    private ReceitaCategoria receitaCategoriaDestino;
 
     @Column(nullable = false)
     private Long prioridade;

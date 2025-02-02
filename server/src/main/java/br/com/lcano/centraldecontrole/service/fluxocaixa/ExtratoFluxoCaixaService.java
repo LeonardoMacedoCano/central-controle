@@ -18,13 +18,13 @@ import java.util.Date;
 public class ExtratoFluxoCaixaService {
     private final UsuarioUtil usuarioUtil;
     private final ArquivoService arquivoService;
-    private final FluxoCaixaConfigService fluxoCaixaConfigService;
+    private final FluxoCaixaParametroService fluxoCaixaParametroService;
     private final ImportacaoExtratoMensalCartaoJobStarter importacaoExtratoMensalCartaoJobStarter;
     private final ImportacaoExtratoContaCorrenteJobStarter importacaoExtratoContaCorrenteJobStarter;
     private final ImportacaoExtratoAtivosB3JobStarter importacaoExtratoAtivosB3JobStarter;
 
     public void importExtratoMensalCartao(MultipartFile file, Date dataVencimento) throws Exception {
-        fluxoCaixaConfigService.validateConfig();
+        fluxoCaixaParametroService.validateParametro();
         Arquivo arquivo = arquivoService.uploadArquivo(file);
 
         try {
@@ -36,7 +36,7 @@ public class ExtratoFluxoCaixaService {
     }
 
     public void importExtratoContaCorrente(MultipartFile file) throws Exception {
-        fluxoCaixaConfigService.validateConfig();
+        fluxoCaixaParametroService.validateParametro();
         Arquivo arquivo = arquivoService.uploadArquivo(file);
 
         try {

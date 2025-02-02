@@ -8,10 +8,10 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
-@Table(name = "fluxocaixaconfig", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "idusuario", name = "ukfluxocaixaconfigusuario")
+@Table(name = "fluxocaixaparametro", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "idusuario", name = "ukfluxocaixaparametrousuario")
 })
-public class FluxoCaixaConfig {
+public class FluxoCaixaParametro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

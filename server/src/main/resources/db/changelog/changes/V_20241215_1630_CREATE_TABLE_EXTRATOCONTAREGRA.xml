@@ -22,11 +22,15 @@
             <column name="tiporegra" type="${varchar_15}">
                 <constraints nullable="false"/>
             </column>
+            <column name="descricao" type="${varchar_255}">
+                <constraints nullable="false"/>
+            </column>
             <column name="descricaomatch" type="${varchar_255}">
                 <constraints nullable="false"/>
             </column>
             <column name="descricaodestino" type="${varchar_255}"/>
-            <column name="idcategoriadestino" type="${integer}"/>
+            <column name="idcategoriadespesadestino" type="${integer}"/>
+            <column name="idcategoriareceitadestino" type="${integer}"/>
             <column name="prioridade" type="${integer}" defaultValue="0">
                 <constraints nullable="false"/>
             </column>
@@ -39,6 +43,18 @@
                                  baseColumnNames="idusuario"
                                  constraintName="fkregraextratocontacorusuario"
                                  referencedTableName="usuario"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="regraextratocontacorrente"
+                                 baseColumnNames="idcategoriadespesadestino"
+                                 constraintName="fkregraextratocontacorcatdesp"
+                                 referencedTableName="despesacategoria"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="regraextratocontacorrente"
+                                 baseColumnNames="idcategoriareceitadestino"
+                                 constraintName="fkregraextratocontacorcatrec"
+                                 referencedTableName="receitacategoria"
                                  referencedColumnNames="id"/>
     </changeSet>
 

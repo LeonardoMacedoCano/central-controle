@@ -1,6 +1,6 @@
 import { Categoria } from "../Categoria";
 
-export type FluxoCaixaConfig = {
+export type FluxoCaixaParametro = {
   id?: number;
   despesaCategoriaPadrao?: Categoria;
   metaLimiteDespesaMensal?: number;
@@ -8,9 +8,9 @@ export type FluxoCaixaConfig = {
   receitaCategoriaParaGanhoAtivo?: Categoria;
   metaAporteMensal?: number;
   metaAporteTotal?: number;
-  diaPadraoVencimentoFatura?: number;
+  diaPadraoVencimentoCartao: number;
 }
 
-export const initialFluxoCaixaConfigState: FluxoCaixaConfig = {
-  diaPadraoVencimentoFatura: 10
+export const initialFluxoCaixaParametroState: FluxoCaixaParametro = {
+  diaPadraoVencimentoCartao: 10,
 };

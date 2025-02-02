@@ -5,6 +5,8 @@ import br.com.lcano.centraldecontrole.service.fluxocaixa.RegraExtratoContaCorren
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +24,24 @@ public class RegraExtratoContaCorrenteResource {
         return ResponseEntity.ok(this.service.findAllAsDto());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<Page<RegraExtratoContaCorrenteDTO>> findAllPagedAsDto(Pageable pageable) {
+        return ResponseEntity.ok(service.findAllPagedAsDto(pageable));
+    }
+
     @PostMapping
-    public ResponseEntity<Object> validateAndSave(@RequestBody RegraExtratoContaCorrenteDTO extratoContaRegraDTO) {
-        this.service.validateAndSave(extratoContaRegraDTO);
-        return CustomSuccess.buildResponseEntity("Regra salva com sucesso.");
+    public ResponseEntity<Object> saveAsDto(@RequestBody RegraExtratoContaCorrenteDTO extratoContaRegraDTO) {
+        RegraExtratoContaCorrenteDTO regraExtratoContaCorrenteDTO = service.saveAsDto(extratoContaRegraDTO);
+        return CustomSuccess.buildResponseEntity(
+                "Regra salva com sucesso.",
+                "id",
+                regraExtratoContaCorrenteDTO.getId()
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteById(@PathVariable Long id) {
+        service.deleteById(id);
+        return CustomSuccess.buildResponseEntity("Regra deletada com sucesso.");
     }
 }

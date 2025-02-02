@@ -1,8 +1,10 @@
 package br.com.lcano.centraldecontrole.service;
 
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
+import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import jakarta.persistence.Id;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AbstractGenericService<T, ID> {
+
+    @Autowired
+    private UsuarioUtil usuarioUtil;
 
     protected abstract JpaRepository<T, ID> getRepository();
 
@@ -73,8 +78,22 @@ public abstract class AbstractGenericService<T, ID> {
 
     public <D extends BaseDTO<T>> D saveAsDto(D dto) {
         T entity = dto.toEntity();
+        setUsuarioIfExists(entity);
         T savedEntity = save(entity);
         return (D) getDtoInstance().fromEntity(savedEntity);
+    }
+
+    private void setUsuarioIfExists(T entity) {
+        try {
+            Field usuarioField = entity.getClass().getDeclaredField("usuario");
+            if (usuarioField != null && usuarioField.getType().getSimpleName().equals("Usuario")) {
+                usuarioField.setAccessible(true);
+                usuarioField.set(entity, usuarioUtil.getUsuarioAutenticado());
+            }
+        } catch (NoSuchFieldException ignored) {
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Erro ao definir o usuário autenticado no campo 'usuario'", e);
+        }
     }
 
     @Transactional

@@ -1,5 +1,5 @@
-import { FieldValue, FlexBox } from "../../../components";
-import { Categoria } from "../../../types";
+import { FieldValue, FlexBox } from "../../../../components";
+import { Categoria } from "../../../../types";
 
 interface CategoriaSectionSectionFormProps {
   categoria: Categoria;

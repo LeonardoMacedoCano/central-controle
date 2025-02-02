@@ -10,6 +10,7 @@ interface ConfirmModalProps {
   content: React.ReactNode;
   onClose: () => void;
   onConfirm: () => void;
+  modalWidth?: string;
   variant?: 'success' | 'info' | 'warning';
 }
 
@@ -18,8 +19,9 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
   title, 
   content, 
   onClose, 
-  onConfirm, 
-  variant = `warning` 
+  onConfirm,
+  modalWidth = '400px',
+  variant = 'warning'
 }) => {
   const confirmButton = (
     <Button 
@@ -58,7 +60,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
       variant={variant}
       title={title}
       content={content}
-      modalWidth='400px'
+      modalWidth={modalWidth}
       maxWidth='85%'
       onClose={onClose}
       showCloseButton={false}

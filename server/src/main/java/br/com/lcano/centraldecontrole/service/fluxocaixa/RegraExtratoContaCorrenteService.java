@@ -5,7 +5,6 @@ import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.RegraExtratoContaCorrente;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.ReceitaCategoria;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.RegraExtratoContaCorrenteDTO;
-import br.com.lcano.centraldecontrole.exception.fluxocaixa.FluxoCaixaConfigException;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.RegraExtratoContaCorrenteRepository;
 import br.com.lcano.centraldecontrole.service.AbstractGenericService;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
@@ -24,7 +23,7 @@ public class RegraExtratoContaCorrenteService extends AbstractGenericService<Reg
     @Autowired
     private final UsuarioUtil usuarioUtil;
     @Autowired
-    private final FluxoCaixaConfigService fluxoCaixaConfigService;
+    private final FluxoCaixaParametroService fluxoCaixaParametroService;
 
     @Override
     protected JpaRepository<RegraExtratoContaCorrente, Long> getRepository() {
@@ -48,31 +47,11 @@ public class RegraExtratoContaCorrenteService extends AbstractGenericService<Reg
         return repository.findByUsuarioAndAtivoOrderByPrioridadeAsc(usuario, true);
     }
 
-    public void validateAndSave(RegraExtratoContaCorrenteDTO extratoContaRegraDTO) {
-        validatePrioridadeUnica(extratoContaRegraDTO);
-        this.save(this.buildExtratoContaRegra(extratoContaRegraDTO));
-    }
-
-    private void validatePrioridadeUnica(RegraExtratoContaCorrenteDTO dto) {
-        boolean prioridadeExistente = repository.existsByUsuarioAndPrioridadeAndIdNot(
-                usuarioUtil.getUsuarioAutenticado(),
-                dto.getPrioridade(),
-                dto.getId());
-
-        if (prioridadeExistente) throw new FluxoCaixaConfigException.UniquePrioridadeViolada(dto.getPrioridade());
-    }
-
-    private RegraExtratoContaCorrente buildExtratoContaRegra(RegraExtratoContaCorrenteDTO dto) {
-        RegraExtratoContaCorrente extratoContaRegra = dto.toEntity();
-        extratoContaRegra.setUsuario(usuarioUtil.getUsuarioAutenticado());
-        return extratoContaRegra;
-    }
-
     public DespesaCategoria getDespesaCategoriaPadrao() {
-        return fluxoCaixaConfigService.getDespesaCategoriaPadrao();
+        return fluxoCaixaParametroService.getDespesaCategoriaPadrao();
     }
 
     public ReceitaCategoria getReceitaCategoriaPadrao() {
-        return fluxoCaixaConfigService.getReceitaCategoriaPadrao();
+        return fluxoCaixaParametroService.getReceitaCategoriaPadrao();
     }
 }

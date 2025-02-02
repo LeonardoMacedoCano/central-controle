@@ -10,20 +10,28 @@ import lombok.EqualsAndHashCode;
 @Data
 public class RegraExtratoContaCorrenteDTO extends BaseDTO<RegraExtratoContaCorrente> {
     private Long id;
-    private String tipoRegra;
+    private TipoRegraExtratoContaCorrente tipoRegra;
+    private String descricao;
     private String descricaoMatch;
     private String descricaoDestino;
-    private Long idCategoria;
+    private DespesaCategoriaDTO despesaCategoriaDestino;
+    private ReceitaCategoriaDTO receitaCategoriaDestino;
     private Long prioridade;
     private boolean ativo;
 
     @Override
     public RegraExtratoContaCorrenteDTO fromEntity(RegraExtratoContaCorrente entity) {
         this.id = entity.getId();
-        this.tipoRegra = entity.getTipoRegra().getDescricao();
+        this.tipoRegra = entity.getTipoRegra();
+        this.descricao = entity.getDescricao();
         this.descricaoMatch = entity.getDescricaoMatch();
         this.descricaoDestino = entity.getDescricaoDestino();
-        this.idCategoria = entity.getIdCategoria();
+        this.despesaCategoriaDestino = entity.getDespesaCategoriaDestino() != null
+                ? new DespesaCategoriaDTO().fromEntity(entity.getDespesaCategoriaDestino())
+                : null;
+        this.receitaCategoriaDestino = entity.getReceitaCategoriaDestino() != null
+                ? new ReceitaCategoriaDTO().fromEntity(entity.getReceitaCategoriaDestino())
+                : null;
         this.prioridade = entity.getPrioridade();
         this.ativo = entity.isAtivo();
         return this;
@@ -33,12 +41,14 @@ public class RegraExtratoContaCorrenteDTO extends BaseDTO<RegraExtratoContaCorre
     public RegraExtratoContaCorrente toEntity() {
         RegraExtratoContaCorrente entity = new RegraExtratoContaCorrente();
         entity.setId(this.id);
-        entity.setTipoRegra(TipoRegraExtratoContaCorrente.valueOf(this.tipoRegra));
+        entity.setTipoRegra(this.tipoRegra);
+        entity.setDescricao(this.descricao);
         entity.setDescricaoMatch(this.descricaoMatch);
         entity.setDescricaoDestino(this.descricaoDestino);
-        entity.setIdCategoria(this.idCategoria);
+        if (this.despesaCategoriaDestino != null) entity.setDespesaCategoriaDestino(this.despesaCategoriaDestino.toEntity());
+        if (this.receitaCategoriaDestino != null) entity.setReceitaCategoriaDestino(this.receitaCategoriaDestino.toEntity());
         entity.setPrioridade(this.prioridade);
         entity.setAtivo(this.ativo);
-        return null;
+        return entity;
     }
 }

@@ -10,12 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UsuarioUtil {
 
-    private final UsuarioService usuarioService;
-
     @Autowired
-    public UsuarioUtil(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
-    }
+    private UsuarioService usuarioService;
 
     public Usuario getUsuarioAutenticado() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -30,4 +26,3 @@ public class UsuarioUtil {
         }
     }
 }
-

@@ -1,5 +1,6 @@
 package br.com.lcano.centraldecontrole.resource.fluxocaixa;
 
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaCategoriaDTO;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.ReceitaCategoriaService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
@@ -24,12 +25,12 @@ public class ReceitaCategoriaResource {
     public ResponseEntity<List<ReceitaCategoriaDTO>> findAllAsDto() {
         List<ReceitaCategoriaDTO> categorias = service.findAllAsDto();
 
-        List<ReceitaCategoriaDTO> categoriasOrdenadas = categorias
-                .stream()
-                .sorted(Comparator.comparing(ReceitaCategoriaDTO::getDescricao))
-                .toList();
+        categorias.sort(Comparator.comparing(
+                ReceitaCategoriaDTO::getDescricao,
+                Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER)
+        ));
 
-        return ResponseEntity.ok(categoriasOrdenadas);
+        return ResponseEntity.ok(categorias);
     }
 
     @GetMapping("/search")

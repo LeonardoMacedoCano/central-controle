@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 @AllArgsConstructor
 @RestController
@@ -24,12 +25,12 @@ public class DespesaCategoriaResource {
     public ResponseEntity<List<DespesaCategoriaDTO>> findAllAsDto() {
         List<DespesaCategoriaDTO> categorias = service.findAllAsDto();
 
-        List<DespesaCategoriaDTO> categoriasOrdenadas = categorias
-                .stream()
-                .sorted(Comparator.comparing(DespesaCategoriaDTO::getDescricao))
-                .toList();
+        categorias.sort(Comparator.comparing(
+                DespesaCategoriaDTO::getDescricao,
+                Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER)
+        ));
 
-        return ResponseEntity.ok(categoriasOrdenadas);
+        return ResponseEntity.ok(categorias);
     }
 
 

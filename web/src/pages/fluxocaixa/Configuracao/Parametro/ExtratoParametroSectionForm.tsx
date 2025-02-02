@@ -1,19 +1,19 @@
-import React from 'react';
-import { FluxoCaixaConfig} from '../../../types';
-import { FieldValue, FlexBox} from '../../../components';
+import React, {  } from 'react';
+import { FluxoCaixaParametro} from '../../../../types';
+import { FieldValue, FlexBox} from '../../../../components';
 
-interface AtivoConfigSectionFormProps {
-  config: FluxoCaixaConfig;
-  onUpdate: (configAtualizado: FluxoCaixaConfig) => void;
+interface props {
+  parametros: FluxoCaixaParametro;
+  onUpdate: (parametrosAtualizado: FluxoCaixaParametro) => void;
 }
 
-const AtivoConfigSectionForm: React.FC<AtivoConfigSectionFormProps> = ({ config, onUpdate }) => {
+const ExtratoParametroSectionForm: React.FC<props> = ({ parametros, onUpdate }) => {
   const handleMetaAporteMensal = (value: any) => {
-    onUpdate({ ...config, metaAporteMensal: value });
+    onUpdate({ ...parametros, metaAporteMensal: value });
   };
 
   const handleMetaAporteTotal = (value: any) => {
-    onUpdate({ ...config, metaAporteTotal: value });
+    onUpdate({ ...parametros, metaAporteTotal: value });
   };
 
   return (
@@ -21,12 +21,13 @@ const AtivoConfigSectionForm: React.FC<AtivoConfigSectionFormProps> = ({ config,
       <FlexBox flexDirection="row">
         <FlexBox.Item borderBottom>
           <FieldValue 
-            description="Meta aporte mensal"
-            hint="Meta valor de aporte mensal."
+            description="Dia Vencimento Fatura"
+            hint="Dia padrão do vencimento da fatura do cartão."
             type="number"
-            value={config.metaAporteMensal}
+            value={parametros.diaPadraoVencimentoCartao}
             editable={true}
-            minValue={0}
+            minValue={1}
+            maxValue={28}
             onUpdate={handleMetaAporteMensal}
           />
         </FlexBox.Item>
@@ -37,7 +38,7 @@ const AtivoConfigSectionForm: React.FC<AtivoConfigSectionFormProps> = ({ config,
             description="Meta aporte total"
             hint="Meta valor de aporte total."
             type="number"
-            value={config.metaAporteTotal}
+            value={parametros.metaAporteTotal}
             editable={true}
             minValue={0}
             onUpdate={handleMetaAporteTotal}
@@ -48,4 +49,4 @@ const AtivoConfigSectionForm: React.FC<AtivoConfigSectionFormProps> = ({ config,
   );
 };
 
-export default AtivoConfigSectionForm;
+export default ExtratoParametroSectionForm;

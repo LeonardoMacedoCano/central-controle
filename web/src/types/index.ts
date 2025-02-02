@@ -61,9 +61,9 @@ import {
   initialAtivoState
 } from "./fluxocaixa/Ativo";
 import { 
-  FluxoCaixaConfig,
-  initialFluxoCaixaConfigState
-} from "./fluxocaixa/FluxoCaixaConfig";
+  FluxoCaixaParametro,
+  initialFluxoCaixaParametroState
+} from "./fluxocaixa/FluxoCaixaParametro";
 import { 
   AtivoCategoriaEnum,
   getDescricaoAtivoCategoria,
@@ -83,6 +83,17 @@ import {
   ExtratoMensalCartaoDTO,
   ExtratoPadraoDTO
  } from "./fluxocaixa/ExtratoFluxoCaixa";
+import { 
+  TipoRegraExtratoContaCorrenteEnum,
+  getDescricaoTipoRegraExtratoContaCorrente,
+  getCodigoTipoRegraExtratoContaCorrente,
+  getTipoRegraExtratoContaCorrenteByCodigo,
+  tipoRegraExtratoContaCorrenteOptions
+}  from "./fluxocaixa/TipoRegraExtratoContaCorrenteEnum";
+import { 
+  RegraExtratoContaCorrente ,
+  initialRegraExtratoContaCorrenteState
+} from "./fluxocaixa/RegraExtratoContaCorrente";
 
 export type {
   Categoria,
@@ -106,12 +117,14 @@ export type {
   Receita,
   AtivoOperacaoEnum,
   Ativo,
-  FluxoCaixaConfig,
+  FluxoCaixaParametro,
   AtivoCategoriaEnum,
   TipoExtratoFluxoCaixaEnum,
   ExtratoFluxoCaixa,
   ExtratoMensalCartaoDTO,
   ExtratoPadraoDTO,
+  TipoRegraExtratoContaCorrenteEnum,
+  RegraExtratoContaCorrente,
 };
 
 export {
@@ -137,7 +150,7 @@ export {
   getAtivoOperacaoByCodigo,
   ativoOperacaoOptions,
   initialAtivoState,
-  initialFluxoCaixaConfigState,
+  initialFluxoCaixaParametroState,
   getDescricaoAtivoCategoria,
   getCodigoAtivoCategoria,
   getAtivoCategoriaByCodigo,
@@ -147,4 +160,9 @@ export {
   getTipoExtratoFluxoCaixaByCodigo,
   tipoExtratoFluxoCaixaOptions,
   initialCategoriaState,
+  getDescricaoTipoRegraExtratoContaCorrente,
+  getCodigoTipoRegraExtratoContaCorrente,
+  getTipoRegraExtratoContaCorrenteByCodigo,
+  tipoRegraExtratoContaCorrenteOptions,
+  initialRegraExtratoContaCorrenteState,
 };

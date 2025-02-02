@@ -6,8 +6,9 @@ import ServidorConfigService from "./servicos/ServidorConfigService";
 import ArquivoService from "./ArquivoService";
 import ReceitaCategoriaService from "./fluxocaixa/ReceitaCategoriaService";
 import AtivoCategoriaService from "./fluxocaixa/AtivoCategoriaService";
-import FluxoCaixaConfigService from "./fluxocaixa/FluxoCaixaConfigService";
+import FluxoCaixaParametroService from "./fluxocaixa/FluxoCaixaParametroService";
 import ExtratoFluxoCaixaService from "./fluxocaixa/ExtratoFluxoCaixaService";
+import RegraExtratoContaCorrenteService from "./fluxocaixa/RegraExtratoContaCorrenteService";
 
 export {
   AuthService,
@@ -18,6 +19,7 @@ export {
   ArquivoService,
   ReceitaCategoriaService,
   AtivoCategoriaService,
-  FluxoCaixaConfigService,
-  ExtratoFluxoCaixaService
+  FluxoCaixaParametroService,
+  ExtratoFluxoCaixaService,
+  RegraExtratoContaCorrenteService,
 }
