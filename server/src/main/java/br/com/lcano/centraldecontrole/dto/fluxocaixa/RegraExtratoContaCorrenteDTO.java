@@ -15,7 +15,7 @@ public class RegraExtratoContaCorrenteDTO extends BaseDTO<RegraExtratoContaCorre
     private String descricaoMatch;
     private String descricaoDestino;
     private DespesaCategoriaDTO despesaCategoriaDestino;
-    private ReceitaCategoriaDTO receitaCategoriaDestino;
+    private RendaCategoriaDTO rendaCategoriaDestino;
     private Long prioridade;
     private boolean ativo;
 
@@ -29,8 +29,8 @@ public class RegraExtratoContaCorrenteDTO extends BaseDTO<RegraExtratoContaCorre
         this.despesaCategoriaDestino = entity.getDespesaCategoriaDestino() != null
                 ? new DespesaCategoriaDTO().fromEntity(entity.getDespesaCategoriaDestino())
                 : null;
-        this.receitaCategoriaDestino = entity.getReceitaCategoriaDestino() != null
-                ? new ReceitaCategoriaDTO().fromEntity(entity.getReceitaCategoriaDestino())
+        this.rendaCategoriaDestino = entity.getRendaCategoriaDestino() != null
+                ? new RendaCategoriaDTO().fromEntity(entity.getRendaCategoriaDestino())
                 : null;
         this.prioridade = entity.getPrioridade();
         this.ativo = entity.isAtivo();
@@ -46,7 +46,7 @@ public class RegraExtratoContaCorrenteDTO extends BaseDTO<RegraExtratoContaCorre
         entity.setDescricaoMatch(this.descricaoMatch);
         entity.setDescricaoDestino(this.descricaoDestino);
         if (this.despesaCategoriaDestino != null) entity.setDespesaCategoriaDestino(this.despesaCategoriaDestino.toEntity());
-        if (this.receitaCategoriaDestino != null) entity.setReceitaCategoriaDestino(this.receitaCategoriaDestino.toEntity());
+        if (this.rendaCategoriaDestino != null) entity.setRendaCategoriaDestino(this.rendaCategoriaDestino.toEntity());
         entity.setPrioridade(this.prioridade);
         entity.setAtivo(this.ativo);
         return entity;

@@ -4,8 +4,8 @@ export type FluxoCaixaParametro = {
   id?: number;
   despesaCategoriaPadrao?: Categoria;
   metaLimiteDespesaMensal?: number;
-  receitaCategoriaPadrao?: Categoria;
-  receitaCategoriaParaGanhoAtivo?: Categoria;
+  rendaCategoriaPadrao?: Categoria;
+  rendaPassivaCategoria?: Categoria;
   metaAporteMensal?: number;
   metaAporteTotal?: number;
   diaPadraoVencimentoCartao: number;

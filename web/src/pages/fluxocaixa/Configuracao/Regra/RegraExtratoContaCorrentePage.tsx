@@ -37,8 +37,8 @@ const RegraExtratoContaCorrentePage: React.FC = () => {
       case 'CLASSIFICAR_DESPESA':
         return regra?.despesaCategoriaDestino ? regra?.despesaCategoriaDestino.descricao : "";
   
-      case 'CLASSIFICAR_RECEITA':
-        return regra?.receitaCategoriaDestino ? regra?.receitaCategoriaDestino.descricao : "";
+      case 'CLASSIFICAR_RENDA':
+        return regra?.rendaCategoriaDestino ? regra?.rendaCategoriaDestino.descricao : "";
   
       default:
         return "";

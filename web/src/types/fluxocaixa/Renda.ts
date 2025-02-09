@@ -1,14 +1,14 @@
 import { Categoria } from "..";
 import { getCurrentDate } from "../../utils";
 
-export type Receita = {
+export type Renda = {
   id?: number;
   categoria?: Categoria;
   valor: number;
   dataRecebimento: Date;
 }
 
-export const initialReceitaState: Receita = {
+export const initialRendaState: Renda = {
   valor: 0,
   dataRecebimento: getCurrentDate(),
 };

@@ -36,19 +36,19 @@
         </insert>
     </changeSet>
 
-    <changeSet id="insert-default-receitacategoria" author="lcano">
+    <changeSet id="insert-default-rendacategoria" author="lcano">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="receitacategoria"/>
+            <tableExists tableName="rendacategoria"/>
         </preConditions>
 
-        <insert tableName="receitacategoria">
+        <insert tableName="rendacategoria">
             <column name="descricao" value="Salário"/>
         </insert>
-        <insert tableName="receitacategoria">
-            <column name="descricao" value="Investimentos"/>
-        </insert>
-        <insert tableName="receitacategoria">
+        <insert tableName="rendacategoria">
             <column name="descricao" value="Renda Extra"/>
+        </insert>
+        <insert tableName="rendacategoria">
+            <column name="descricao" value="Renda Passiva"/>
         </insert>
     </changeSet>
 

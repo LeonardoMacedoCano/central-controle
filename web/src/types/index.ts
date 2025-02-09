@@ -46,9 +46,9 @@ import {
 } from "./servicos/DockerStatusEnum";
 import { ContainerActionEnum } from "./servicos/ContainerActionEnum";
 import { 
-  Receita,
-  initialReceitaState
-} from "./fluxocaixa/Receita";
+  Renda,
+  initialRendaState
+} from "./fluxocaixa/Renda";
 import { 
   AtivoOperacaoEnum,
   getDescricaoAtivoOperacao,
@@ -114,7 +114,7 @@ export type {
   Arquivo,
   ServidorConfig,
   ServicoCategoria,
-  Receita,
+  Renda,
   AtivoOperacaoEnum,
   Ativo,
   FluxoCaixaParametro,
@@ -144,7 +144,7 @@ export {
   ContainerActionEnum,
   getDescricaoDockerStatus,
   convertToOptions,
-  initialReceitaState,
+  initialRendaState,
   getDescricaoAtivoOperacao,
   getCodigoAtivoOperacao,
   getAtivoOperacaoByCodigo,

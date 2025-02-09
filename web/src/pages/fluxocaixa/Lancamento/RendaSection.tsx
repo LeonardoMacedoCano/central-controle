@@ -1,28 +1,28 @@
 import React from 'react';
 import { FieldValue, FlexBox, Panel } from '../../../components';
-import { Receita } from '../../../types';
+import { Renda } from '../../../types';
 import { formatDateToShortString, formatValueToBRL } from '../../../utils';
 
-interface ReceitaSectionProps {
-  receita: Receita;
+interface RendaSectionProps {
+  renda: Renda;
 }
-const ReceitaSection: React.FC<ReceitaSectionProps> = ({ receita }) => {
+const RendaSection: React.FC<RendaSectionProps> = ({ renda }) => {
   return (
-    <Panel maxWidth='1000px' title='Receita' padding='15px 0 0 0'>
+    <Panel maxWidth='1000px' title='Renda' padding='15px 0 0 0'>
       <FlexBox flexDirection="column">
         <FlexBox flexDirection="row" borderBottom>
           <FlexBox.Item borderRight>
             <FieldValue 
               description='Data Recebimento'
               type='string'
-                value={formatDateToShortString(receita.dataRecebimento)}
+                value={formatDateToShortString(renda.dataRecebimento)}
             />
           </FlexBox.Item>
           <FlexBox.Item >
             <FieldValue 
               description='Categoria'
               type='string'
-              value={receita?.categoria?.descricao || ''}
+              value={renda?.categoria?.descricao || ''}
             />
           </FlexBox.Item>
         </FlexBox>
@@ -31,7 +31,7 @@ const ReceitaSection: React.FC<ReceitaSectionProps> = ({ receita }) => {
             <FieldValue 
               description='Valor'
               type='string'
-              value={formatValueToBRL(receita.valor)}
+              value={formatValueToBRL(renda.valor)}
             />
           </FlexBox.Item>
         </FlexBox>
@@ -40,4 +40,4 @@ const ReceitaSection: React.FC<ReceitaSectionProps> = ({ receita }) => {
   );
 };
 
-export default ReceitaSection;
+export default RendaSection;

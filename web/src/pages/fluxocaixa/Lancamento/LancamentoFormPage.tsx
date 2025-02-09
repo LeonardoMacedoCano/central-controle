@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, FieldValue, FlexBox, FloatingButton, Panel } from '../../../components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Ativo, getCodigoTipoLancamento, getDescricaoTipoLancamento, getTipoLancamentoByCodigo, initialAtivoState, initialReceitaState, Lancamento, Receita, tipoLancamentoOptions } from '../../../types';
+import { Ativo, getCodigoTipoLancamento, getDescricaoTipoLancamento, getTipoLancamentoByCodigo, initialAtivoState, initialRendaState, Lancamento, Renda, tipoLancamentoOptions } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
 import { formatDateToShortString, getCurrentDate, isDateValid } from '../../../utils';
 import { FaCheck } from 'react-icons/fa';
 import DespesaSectionForm from './DespesaSectionForm';
 import { Despesa, initialDespesaState } from '../../../types/fluxocaixa/Despesa';
-import ReceitaSectionForm from './ReceitaSectionForm';
+import RendaSectionForm from './RendaSectionForm';
 import AtivoSectionForm from './AtivoSectionForm';
 
 const LancamentoFormPage: React.FC = () => {
@@ -79,11 +79,11 @@ const LancamentoFormPage: React.FC = () => {
       );
     }
   
-    if (tipo === 'RECEITA') {
-      const receita = itemDTO as Receita;
+    if (tipo === 'RENDA') {
+      const renda = itemDTO as Renda;
       return (
-        !!receita.categoria && 
-        receita.valor > 0
+        !!renda.categoria && 
+        renda.valor > 0
       );
     }
   
@@ -119,8 +119,8 @@ const LancamentoFormPage: React.FC = () => {
     switch (lancamento.tipo) {
       case 'DESPESA':
         return <DespesaSectionForm despesa={lancamento.itemDTO as Despesa || initialDespesaState} onUpdate={handleUpdateItem} />;
-      case 'RECEITA':
-        return <ReceitaSectionForm receita={lancamento.itemDTO as Receita || initialReceitaState} onUpdate={handleUpdateItem} />;
+      case 'RENDA':
+        return <RendaSectionForm renda={lancamento.itemDTO as Renda || initialRendaState} onUpdate={handleUpdateItem} />;
       case 'ATIVO':
         return <AtivoSectionForm ativo={lancamento.itemDTO as Ativo || initialAtivoState} onUpdate={handleUpdateItem} />;
       default:

@@ -56,7 +56,7 @@ public class ImportacaoExtratoContaCorrenteProcessor
 
         return isDespesa
                 ? criarLancamentoDespesa(extratoContaDTO, regra)
-                : criarLancamentoReceita(extratoContaDTO, regra);
+                : criarLancamentoRenda(extratoContaDTO, regra);
     }
 
     private RegraExtratoContaCorrente encontrarRegra(ExtratoContaCorrenteDTO dto, boolean isDespesa) {
@@ -69,7 +69,7 @@ public class ImportacaoExtratoContaCorrenteProcessor
     private boolean deveIgnorarRegra(RegraExtratoContaCorrente regra) {
         return regra != null && (
                 regra.getTipoRegra() == TipoRegraExtratoContaCorrente.IGNORAR_DESPESA ||
-                        regra.getTipoRegra() == TipoRegraExtratoContaCorrente.IGNORAR_RECEITA
+                        regra.getTipoRegra() == TipoRegraExtratoContaCorrente.IGNORAR_RENDA
         );
     }
 
@@ -85,8 +85,8 @@ public class ImportacaoExtratoContaCorrenteProcessor
             return tipoRegra.equals(TipoRegraExtratoContaCorrente.CLASSIFICAR_DESPESA) ||
                     tipoRegra.equals(TipoRegraExtratoContaCorrente.IGNORAR_DESPESA);
         } else {
-            return tipoRegra.equals(TipoRegraExtratoContaCorrente.CLASSIFICAR_RECEITA) ||
-                    tipoRegra.equals(TipoRegraExtratoContaCorrente.IGNORAR_RECEITA);
+            return tipoRegra.equals(TipoRegraExtratoContaCorrente.CLASSIFICAR_RENDA) ||
+                    tipoRegra.equals(TipoRegraExtratoContaCorrente.IGNORAR_RENDA);
         }
     }
 
@@ -105,16 +105,16 @@ public class ImportacaoExtratoContaCorrenteProcessor
         return lancamento;
     }
 
-    private Lancamento criarLancamentoReceita(ExtratoContaCorrenteDTO dto, RegraExtratoContaCorrente regra) {
-        Lancamento lancamento = criarLancamentoBase(dto, TipoLancamentoEnum.RECEITA, regra);
+    private Lancamento criarLancamentoRenda(ExtratoContaCorrenteDTO dto, RegraExtratoContaCorrente regra) {
+        Lancamento lancamento = criarLancamentoBase(dto, TipoLancamentoEnum.RENDA, regra);
 
-        Receita receita = new Receita();
-        receita.setValor(dto.getValor().abs());
-        receita.setDataRecebimento(dto.getDataLancamento());
-        receita.setCategoria(obterCategoriaReceita(regra));
-        receita.setLancamento(lancamento);
+        Renda renda = new Renda();
+        renda.setValor(dto.getValor().abs());
+        renda.setDataRecebimento(dto.getDataLancamento());
+        renda.setCategoria(obterCategoriaRenda(regra));
+        renda.setLancamento(lancamento);
 
-        lancamento.setReceita(receita);
+        lancamento.setRenda(renda);
         return lancamento;
     }
 
@@ -167,11 +167,11 @@ public class ImportacaoExtratoContaCorrenteProcessor
                 : extratoContaRegraService.getDespesaCategoriaPadrao();
     }
 
-    private ReceitaCategoria obterCategoriaReceita(RegraExtratoContaCorrente regra) {
-        return (regra != null && regra.getTipoRegra() == TipoRegraExtratoContaCorrente.CLASSIFICAR_RECEITA &&
-                regra.getReceitaCategoriaDestino() != null)
-                ? regra.getReceitaCategoriaDestino()
-                : extratoContaRegraService.getReceitaCategoriaPadrao();
+    private RendaCategoria obterCategoriaRenda(RegraExtratoContaCorrente regra) {
+        return (regra != null && regra.getTipoRegra() == TipoRegraExtratoContaCorrente.CLASSIFICAR_RENDA &&
+                regra.getRendaCategoriaDestino() != null)
+                ? regra.getRendaCategoriaDestino()
+                : extratoContaRegraService.getRendaCategoriaPadrao();
     }
 
     @Override

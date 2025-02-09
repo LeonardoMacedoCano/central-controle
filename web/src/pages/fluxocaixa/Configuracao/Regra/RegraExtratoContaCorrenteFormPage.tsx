@@ -3,14 +3,14 @@ import { Container, FieldValue, FlexBox, FloatingButton, Loading, Panel } from "
 import { Categoria, getCodigoTipoRegraExtratoContaCorrente, getDescricaoTipoRegraExtratoContaCorrente, getTipoRegraExtratoContaCorrenteByCodigo, initialRegraExtratoContaCorrenteState, RegraExtratoContaCorrente, tipoRegraExtratoContaCorrenteOptions } from "../../../../types";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext, useMessage } from "../../../../contexts";
-import { DespesaCategoriaService, ReceitaCategoriaService, RegraExtratoContaCorrenteService } from "../../../../service";
+import { DespesaCategoriaService, RendaCategoriaService, RegraExtratoContaCorrenteService } from "../../../../service";
 import { FaCheck } from "react-icons/fa";
 
 const RegraExtratoContaCorrenteFormPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const [regra, setRegra] = useState<RegraExtratoContaCorrente>(initialRegraExtratoContaCorrenteState);
   const [categoriasDespesa, setCategoriasDespesa] = useState<Categoria[]>([]);
-  const [categoriasReceita, setCategoriasReceita] = useState<Categoria[]>([]);
+  const [categoriasRenda, setCategoriasRenda] = useState<Categoria[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const auth = useContext(AuthContext);
@@ -18,15 +18,15 @@ const RegraExtratoContaCorrenteFormPage: React.FC = () => {
   const regraService = RegraExtratoContaCorrenteService();
   const navigate = useNavigate();
   const categoriaDespesaService = DespesaCategoriaService();
-  const categoriaReceitaService = ReceitaCategoriaService();
+  const categoriaRendaService = RendaCategoriaService();
 
   useEffect(() => {
     if (!auth.usuario?.token) return;
   
     setIsLoading(true);
   
-    const requests = id ? [loadRegra(id), loadCategoriasDespesa(), loadCategoriasReceita()] 
-      : [loadCategoriasDespesa(), loadCategoriasReceita()];
+    const requests = id ? [loadRegra(id), loadCategoriasDespesa(), loadCategoriasRenda()] 
+      : [loadCategoriasDespesa(), loadCategoriasRenda()];
   
     Promise.all(requests).finally(() => setIsLoading(false));
   }, [auth.usuario?.token, id]);
@@ -49,12 +49,12 @@ const RegraExtratoContaCorrenteFormPage: React.FC = () => {
     }
   };
   
-  const loadCategoriasReceita = async () => {
+  const loadCategoriasRenda = async () => {
     try {
-      const result = await categoriaReceitaService.getAllCategorias(auth.usuario!.token);
-      setCategoriasReceita(result || []);
+      const result = await categoriaRendaService.getAllCategorias(auth.usuario!.token);
+      setCategoriasRenda(result || []);
     } catch (error) {
-      message.showErrorWithLog("Erro ao carregar as categorias de Receita.", error);
+      message.showErrorWithLog("Erro ao carregar as categorias de Renda.", error);
     }
   };
 
@@ -105,7 +105,7 @@ const RegraExtratoContaCorrenteFormPage: React.FC = () => {
     updateRegra({
       tipoRegra: selectedTipo,
       despesaCategoriaDestino: undefined,
-      receitaCategoriaDestino: undefined,
+      rendaCategoriaDestino: undefined,
     });
   };
 
@@ -114,9 +114,9 @@ const RegraExtratoContaCorrenteFormPage: React.FC = () => {
     updateRegra({ despesaCategoriaDestino: selectedCategoria });
   };
 
-  const handleUpdateCategoriaReceita = (value: any) => {
-    const selectedCategoria = categoriasReceita.find(c => String(c.id) === String(value)); 
-    updateRegra({ receitaCategoriaDestino: selectedCategoria });
+  const handleUpdateCategoriaRenda = (value: any) => {
+    const selectedCategoria = categoriasRenda.find(c => String(c.id) === String(value)); 
+    updateRegra({ rendaCategoriaDestino: selectedCategoria });
   };
 
   const handleUpdatePrioridade = (value: any) => {
@@ -140,15 +140,15 @@ const RegraExtratoContaCorrenteFormPage: React.FC = () => {
           onUpdate: handleUpdateCategoriaDespesa,
         };
   
-      case 'CLASSIFICAR_RECEITA':
+      case 'CLASSIFICAR_RENDA':
         return {
           value: {
-            key: String(regra.receitaCategoriaDestino?.id || ''),
-            value: regra.receitaCategoriaDestino?.descricao || '',
+            key: String(regra.rendaCategoriaDestino?.id || ''),
+            value: regra.rendaCategoriaDestino?.descricao || '',
           },
           editable: true,
-          options: categoriasReceita.map(c => ({ key: String(c.id), value: c.descricao })),
-          onUpdate: handleUpdateCategoriaReceita,
+          options: categoriasRenda.map(c => ({ key: String(c.id), value: c.descricao })),
+          onUpdate: handleUpdateCategoriaRenda,
         };
   
       default:

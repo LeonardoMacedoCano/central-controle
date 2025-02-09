@@ -1,4 +1,4 @@
-export type TipoRegraExtratoContaCorrenteEnum = | 'IGNORAR_DESPESA' | 'CLASSIFICAR_DESPESA' | 'IGNORAR_RECEITA' | 'CLASSIFICAR_RECEITA';
+export type TipoRegraExtratoContaCorrenteEnum = | 'IGNORAR_DESPESA' | 'CLASSIFICAR_DESPESA' | 'IGNORAR_RENDA' | 'CLASSIFICAR_RENDA';
 
 interface TipoRegraExtratoContaCorrenteInfo {
   tipo: TipoRegraExtratoContaCorrenteEnum;
@@ -9,8 +9,8 @@ interface TipoRegraExtratoContaCorrenteInfo {
 const TipoRegraExtratoContaCorrente: Record<TipoRegraExtratoContaCorrenteEnum, TipoRegraExtratoContaCorrenteInfo> = {
   IGNORAR_DESPESA: { tipo: 'IGNORAR_DESPESA', descricao: 'Ignorar Despesa', codigo: '1' },
   CLASSIFICAR_DESPESA: { tipo: 'CLASSIFICAR_DESPESA', descricao: 'Classificar Despesa', codigo: '2' },
-  IGNORAR_RECEITA: { tipo: 'IGNORAR_RECEITA', descricao: 'Ignorar Receita', codigo: '3' },
-  CLASSIFICAR_RECEITA: { tipo: 'CLASSIFICAR_RECEITA', descricao: 'Classificar Receita', codigo: '4' },
+  IGNORAR_RENDA: { tipo: 'IGNORAR_RENDA', descricao: 'Ignorar Renda', codigo: '3' },
+  CLASSIFICAR_RENDA: { tipo: 'CLASSIFICAR_RENDA', descricao: 'Classificar Renda', codigo: '4' },
 };
 
 export const getDescricaoTipoRegraExtratoContaCorrente = (tipo?: TipoRegraExtratoContaCorrenteEnum): string => {

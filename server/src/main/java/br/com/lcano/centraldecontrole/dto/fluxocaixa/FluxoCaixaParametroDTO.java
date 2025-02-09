@@ -13,8 +13,8 @@ public class FluxoCaixaParametroDTO extends BaseDTO<FluxoCaixaParametro> {
     private Long id;
     private DespesaCategoriaDTO despesaCategoriaPadrao;
     private BigDecimal metaLimiteDespesaMensal;
-    private ReceitaCategoriaDTO receitaCategoriaPadrao;
-    private ReceitaCategoriaDTO receitaCategoriaParaGanhoAtivo;
+    private RendaCategoriaDTO rendaCategoriaPadrao;
+    private RendaCategoriaDTO rendaPassivaCategoria;
     private BigDecimal metaAporteMensal;
     private BigDecimal metaAporteTotal;
     private Long diaPadraoVencimentoCartao;
@@ -35,15 +35,15 @@ public class FluxoCaixaParametroDTO extends BaseDTO<FluxoCaixaParametro> {
             );
         }
 
-        if (entity.getReceitaCategoriaPadrao() != null) {
-            this.receitaCategoriaPadrao = new ReceitaCategoriaDTO().fromEntity(
-                    entity.getReceitaCategoriaPadrao()
+        if (entity.getRendaCategoriaPadrao() != null) {
+            this.rendaCategoriaPadrao = new RendaCategoriaDTO().fromEntity(
+                    entity.getRendaCategoriaPadrao()
             );
         }
 
-        if (entity.getReceitaCategoriaParaGanhoAtivo() != null) {
-            this.receitaCategoriaParaGanhoAtivo = new ReceitaCategoriaDTO().fromEntity(
-                    entity.getReceitaCategoriaParaGanhoAtivo()
+        if (entity.getRendaPassivaCategoria() != null) {
+            this.rendaPassivaCategoria = new RendaCategoriaDTO().fromEntity(
+                    entity.getRendaPassivaCategoria()
             );
         }
 
@@ -64,12 +64,12 @@ public class FluxoCaixaParametroDTO extends BaseDTO<FluxoCaixaParametro> {
             entity.setDespesaCategoriaPadrao(this.despesaCategoriaPadrao.toEntity());
         }
 
-        if (this.receitaCategoriaPadrao != null) {
-            entity.setReceitaCategoriaPadrao(this.receitaCategoriaPadrao.toEntity());
+        if (this.rendaCategoriaPadrao != null) {
+            entity.setRendaCategoriaPadrao(this.rendaCategoriaPadrao.toEntity());
         }
 
-        if (this.receitaCategoriaParaGanhoAtivo != null) {
-            entity.setReceitaCategoriaParaGanhoAtivo(this.receitaCategoriaParaGanhoAtivo.toEntity());
+        if (this.rendaPassivaCategoria != null) {
+            entity.setRendaPassivaCategoria(this.rendaPassivaCategoria.toEntity());
         }
 
         return entity;

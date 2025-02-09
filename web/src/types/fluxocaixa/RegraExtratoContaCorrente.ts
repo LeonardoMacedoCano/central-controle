@@ -8,7 +8,7 @@ export type RegraExtratoContaCorrente = {
   descricaoMatch: string;
   descricaoDestino?: string;
   despesaCategoriaDestino?: Categoria;
-  receitaCategoriaDestino?: Categoria;
+  rendaCategoriaDestino?: Categoria;
   prioridade: number;
   ativo: boolean;
 }

@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, FieldValue, FlexBox, Loading, Panel } from '../../../components';
 import { useParams } from 'react-router-dom';
-import { Ativo, Despesa, getDescricaoTipoLancamento, Lancamento, Receita } from '../../../types';
+import { Ativo, Despesa, getDescricaoTipoLancamento, Lancamento, Renda } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
 import { formatDateToShortString } from '../../../utils';
 import DespesaSection from './DespesaSection';
-import ReceitaSection from './ReceitaSection';
+import RendaSection from './RendaSection';
 import AtivoSection from './AtivoSection';
 
 const LancamentoPage: React.FC = () => {
@@ -43,8 +43,8 @@ const LancamentoPage: React.FC = () => {
     switch (lancamento.tipo) {
       case 'DESPESA':
         return <DespesaSection despesa={lancamento.itemDTO as Despesa} />;
-      case 'RECEITA':
-        return <ReceitaSection receita={lancamento.itemDTO as Receita} />;
+      case 'RENDA':
+        return <RendaSection renda={lancamento.itemDTO as Renda} />;
       case 'ATIVO':
         return <AtivoSection ativo={lancamento.itemDTO as Ativo} />;
       default:

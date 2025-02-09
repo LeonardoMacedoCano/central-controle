@@ -2,7 +2,7 @@ package br.com.lcano.centraldecontrole.domain;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Ativo;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.Receita;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.Renda;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,7 +44,7 @@ public class Lancamento implements Serializable {
     private Despesa despesa;
 
     @OneToOne(mappedBy = "lancamento", cascade = CascadeType.ALL)
-    private Receita receita;
+    private Renda renda;
 
     @OneToOne(mappedBy = "lancamento", cascade = CascadeType.ALL)
     private Ativo ativo;

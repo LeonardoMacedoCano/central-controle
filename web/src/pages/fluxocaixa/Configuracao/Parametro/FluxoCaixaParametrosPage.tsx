@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext, useMessage } from "../../../../contexts";
-import { DespesaCategoriaService, FluxoCaixaParametroService, ReceitaCategoriaService } from "../../../../service";
+import { DespesaCategoriaService, FluxoCaixaParametroService, RendaCategoriaService } from "../../../../service";
 import { Container, FloatingButton, Loading, Panel, Tabs } from "../../../../components";
 import { FaCheck } from "react-icons/fa";
-import ReceitaParametroSectionForm from "./ReceitaParametroSectionForm";
+import RendaParametroSectionForm from "./RendaParametroSectionForm";
 import AtivoParametroSectionForm from "./AtivoParametroSectionForm";
 import ExtratoParametroSectionForm from "./ExtratoParametroSectionForm";
 import DespesaParametroSectionForm from "./DespesaParametroSectionForm";
@@ -12,20 +12,20 @@ import { Categoria, FluxoCaixaParametro, initialFluxoCaixaParametroState } from 
 const FluxoCaixaParametrosPage: React.FC = () => {
   const [parametros, setParametros] = useState<FluxoCaixaParametro>(initialFluxoCaixaParametroState);
   const [categoriasDespesa, setCategoriasDespesa] = useState<Categoria[]>([]);
-  const [categoriasReceita, setCategoriasReceita] = useState<Categoria[]>([]);
+  const [categoriasRenda, setCategoriasRenda] = useState<Categoria[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const auth = useContext(AuthContext);
   const message = useMessage();
   const parametroService = FluxoCaixaParametroService();
   const categoriaDespesaService = DespesaCategoriaService();
-  const categoriaReceitaService = ReceitaCategoriaService();
+  const categoriaRendaService = RendaCategoriaService();
 
   useEffect(() => {
     if (!auth.usuario?.token) return;
   
     setIsLoading(true);
-    Promise.all([loadParametros(), loadCategoriasDespesa(), loadCategoriasReceita()])
+    Promise.all([loadParametros(), loadCategoriasDespesa(), loadCategoriasRenda()])
       .finally(() => setIsLoading(false));
   }, [auth.usuario?.token]);
   
@@ -47,12 +47,12 @@ const FluxoCaixaParametrosPage: React.FC = () => {
     }
   };
   
-  const loadCategoriasReceita = async () => {
+  const loadCategoriasRenda = async () => {
     try {
-      const result = await categoriaReceitaService.getAllCategorias(auth.usuario!.token);
-      setCategoriasReceita(result || []);
+      const result = await categoriaRendaService.getAllCategorias(auth.usuario!.token);
+      setCategoriasRenda(result || []);
     } catch (error) {
-      message.showErrorWithLog("Erro ao carregar as categorias de Receita.", error);
+      message.showErrorWithLog("Erro ao carregar as categorias de Renda.", error);
     }
   };
   
@@ -73,8 +73,8 @@ const FluxoCaixaParametrosPage: React.FC = () => {
       content: <DespesaParametroSectionForm parametros={parametros} categorias={categoriasDespesa} onUpdate={updateParametros} />,
     },
     {
-      label: "Receita",
-      content: <ReceitaParametroSectionForm parametros={parametros} categorias={categoriasReceita} onUpdate={updateParametros} />,
+      label: "Renda",
+      content: <RendaParametroSectionForm parametros={parametros} categorias={categoriasRenda} onUpdate={updateParametros} />,
     },
     {
       label: "Ativo",

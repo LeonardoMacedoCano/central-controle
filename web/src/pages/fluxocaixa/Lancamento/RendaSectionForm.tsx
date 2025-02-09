@@ -1,68 +1,68 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { FieldValue, FlexBox, Panel } from '../../../components';
-import { Categoria, Receita } from '../../../types';
+import { Categoria, Renda } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
-import { ReceitaCategoriaService } from '../../../service';
+import { RendaCategoriaService } from '../../../service';
 import { formatDateToYMDString } from '../../../utils';
 
-interface ReceitaSectionFormProps {
-  receita: Receita;
-  onUpdate: (updatedReceita: Receita) => void;
+interface RendaSectionFormProps {
+  renda: Renda;
+  onUpdate: (updatedRenda: Renda) => void;
 }
-const ReceitaSectionForm: React.FC<ReceitaSectionFormProps> = ({ receita, onUpdate }) => {
+const RendaSectionForm: React.FC<RendaSectionFormProps> = ({ renda, onUpdate }) => {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
 
   const auth = useContext(AuthContext);
   const message = useMessage();
-  const receitaCategoriaService = ReceitaCategoriaService();
+  const rendaCategoriaService = RendaCategoriaService();
 
   useEffect(() => {
-    const carregarCategoriasReceita = async () => {
+    const carregarCategoriasRenda = async () => {
       if (!auth.usuario?.token) return;
   
       try {
-        const result = await receitaCategoriaService.getAllCategorias(auth.usuario?.token);
+        const result = await rendaCategoriaService.getAllCategorias(auth.usuario?.token);
         setCategorias(result || []);
       } catch (error) {
-        message.showErrorWithLog('Erro ao carregar as categorias de receita.', error);
+        message.showErrorWithLog('Erro ao carregar as categorias de renda.', error);
       }
     };
 
-    carregarCategoriasReceita();
+    carregarCategoriasRenda();
   }, []);
 
-  const updateReceita = (updatedFields: Partial<Receita>) => {
-    const updatedReceita: Receita = {
-      ...receita!,
+  const updateRenda = (updatedFields: Partial<Renda>) => {
+    const updatedRenda: Renda = {
+      ...renda!,
       ...updatedFields
     };
-    onUpdate(updatedReceita);
+    onUpdate(updatedRenda);
   };
   
   const handleUpdateCategoria = (value: any) => {
     const selectedCategoria = categorias.find(c => String(c.id) === String(value)); 
-    updateReceita({ categoria: selectedCategoria });
+    updateRenda({ categoria: selectedCategoria });
   };
 
   const handleUpdateValor = (value: any) => {
-    updateReceita({ valor: value });
+    updateRenda({ valor: value });
   };
 
   const handleUpdateDataRecebimento = (value: any) => {
     if (value instanceof Date) {
-      updateReceita({ dataRecebimento: value });
+      updateRenda({ dataRecebimento: value });
     }
   };
 
   return (
-    <Panel maxWidth='1000px' title='Receita' padding='15px 0 0 0'>
+    <Panel maxWidth='1000px' title='Renda' padding='15px 0 0 0'>
       <FlexBox flexDirection="column">
         <FlexBox flexDirection="row" borderBottom>
           <FlexBox.Item borderRight>
             <FieldValue 
               description='Data Recebimento'
               type='date'
-              value={formatDateToYMDString(receita?.dataRecebimento)}
+              value={formatDateToYMDString(renda?.dataRecebimento)}
               editable={true}
               onUpdate={handleUpdateDataRecebimento}
             />
@@ -71,7 +71,7 @@ const ReceitaSectionForm: React.FC<ReceitaSectionFormProps> = ({ receita, onUpda
             <FieldValue 
               description='Categoria'
               type='select'
-              value={{ key: String(receita?.categoria?.id), value: receita?.categoria?.descricao }}
+              value={{ key: String(renda?.categoria?.id), value: renda?.categoria?.descricao }}
               editable={true}
               options={categorias.map(categoria => ({ key: String(categoria.id), value: categoria.descricao }))}
               onUpdate={handleUpdateCategoria}
@@ -84,7 +84,7 @@ const ReceitaSectionForm: React.FC<ReceitaSectionFormProps> = ({ receita, onUpda
             <FieldValue 
                 description='Valor'
                 type='number'
-                value={receita.valor}
+                value={renda.valor}
                 editable={true}
                 onUpdate={handleUpdateValor}
               />
@@ -96,4 +96,4 @@ const ReceitaSectionForm: React.FC<ReceitaSectionFormProps> = ({ receita, onUpda
   );
 };
 
-export default ReceitaSectionForm;
+export default RendaSectionForm;

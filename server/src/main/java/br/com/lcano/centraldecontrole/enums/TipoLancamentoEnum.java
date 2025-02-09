@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum TipoLancamentoEnum {
     DESPESA("DESPESA"),
-    RECEITA("RECEITA"),
+    RENDA("RENDA"),
     ATIVO("ATIVO");
 
     private final String descricao;

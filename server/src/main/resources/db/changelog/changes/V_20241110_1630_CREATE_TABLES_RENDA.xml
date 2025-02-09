@@ -5,16 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
-    <changeSet id="create-table-receitacategoria" author="lcano">
-        <preConditions onFail="MARK_RAN" onFailMessage="A tabela receitacategoria já existe">
+    <changeSet id="create-table-rendacategoria" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela rendacategoria já existe">
             <not>
-                <tableExists tableName="receitacategoria"/>
+                <tableExists tableName="rendacategoria"/>
             </not>
         </preConditions>
 
-        <createTable tableName="receitacategoria">
+        <createTable tableName="rendacategoria">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pkreceitacategoria"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkrendacategoria"/>
             </column>
             <column name="descricao" type="${varchar_255}">
                 <constraints nullable="false" unique="true"/>
@@ -22,16 +22,16 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="create-table-receita" author="lcano">
-        <preConditions onFail="MARK_RAN" onFailMessage="A tabela receita já existe">
+    <changeSet id="create-table-renda" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela renda já existe">
             <not>
-                <tableExists tableName="receita"/>
+                <tableExists tableName="renda"/>
             </not>
         </preConditions>
 
-        <createTable tableName="receita">
+        <createTable tableName="renda">
             <column name="id" type="${integer}" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="pkreceita"/>
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkrenda"/>
             </column>
             <column name="idlancamento" type="${integer}">
                 <constraints nullable="false" unique="true"/>
@@ -47,15 +47,15 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint baseTableName="receita"
+        <addForeignKeyConstraint baseTableName="renda"
                                  baseColumnNames="idlancamento"
-                                 constraintName="fkreceitalancamento"
+                                 constraintName="fkrendalancamento"
                                  referencedTableName="lancamento"
                                  referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="receita"
+        <addForeignKeyConstraint baseTableName="renda"
                                  baseColumnNames="idcategoria"
-                                 constraintName="fkreceitacategoria"
-                                 referencedTableName="receitacategoria"
+                                 constraintName="fkrendacategoria"
+                                 referencedTableName="rendacategoria"
                                  referencedColumnNames="id"/>
     </changeSet>
 

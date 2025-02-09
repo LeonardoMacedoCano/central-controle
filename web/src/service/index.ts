@@ -4,7 +4,7 @@ import DespesaCategoriaService from "./fluxocaixa/DespesaCategoriaService";
 import ServicoService from "./servicos/ServicoService";
 import ServidorConfigService from "./servicos/ServidorConfigService";
 import ArquivoService from "./ArquivoService";
-import ReceitaCategoriaService from "./fluxocaixa/ReceitaCategoriaService";
+import RendaCategoriaService from "./fluxocaixa/RendaCategoriaService";
 import AtivoCategoriaService from "./fluxocaixa/AtivoCategoriaService";
 import FluxoCaixaParametroService from "./fluxocaixa/FluxoCaixaParametroService";
 import ExtratoFluxoCaixaService from "./fluxocaixa/ExtratoFluxoCaixaService";
@@ -17,7 +17,7 @@ export {
   ServicoService,
   ServidorConfigService,
   ArquivoService,
-  ReceitaCategoriaService,
+  RendaCategoriaService,
   AtivoCategoriaService,
   FluxoCaixaParametroService,
   ExtratoFluxoCaixaService,

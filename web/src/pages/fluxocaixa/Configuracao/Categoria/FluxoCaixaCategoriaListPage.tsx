@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Panel, Tabs } from '../../../../components';
 import DespesaCategoriaSection from './DespesaCategoriaSection';
-import ReceitaCategoriaSection from './ReceitaCategoriaSection';
+import RendaCategoriaSection from './RendaCategoriaSection';
 
 const FluxoCaixaCategoriaListPage: React.FC = () => {
   const tabs = [
@@ -10,8 +10,8 @@ const FluxoCaixaCategoriaListPage: React.FC = () => {
       content: <DespesaCategoriaSection />,
     },
     {
-      label: "Receita",
-      content: <ReceitaCategoriaSection />,
+      label: "Renda",
+      content: <RendaCategoriaSection />,
     },
   ];
 

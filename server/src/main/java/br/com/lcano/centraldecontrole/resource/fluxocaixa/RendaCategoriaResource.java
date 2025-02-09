@@ -1,8 +1,7 @@
 package br.com.lcano.centraldecontrole.resource.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaCategoriaDTO;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaCategoriaDTO;
-import br.com.lcano.centraldecontrole.service.fluxocaixa.ReceitaCategoriaService;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.RendaCategoriaDTO;
+import br.com.lcano.centraldecontrole.service.fluxocaixa.RendaCategoriaService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +15,17 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/receita-categoria")
-public class ReceitaCategoriaResource {
+@RequestMapping("/api/renda-categoria")
+public class RendaCategoriaResource {
     @Autowired
-    private final ReceitaCategoriaService service;
+    private final RendaCategoriaService service;
 
     @GetMapping
-    public ResponseEntity<List<ReceitaCategoriaDTO>> findAllAsDto() {
-        List<ReceitaCategoriaDTO> categorias = service.findAllAsDto();
+    public ResponseEntity<List<RendaCategoriaDTO>> findAllAsDto() {
+        List<RendaCategoriaDTO> categorias = service.findAllAsDto();
 
         categorias.sort(Comparator.comparing(
-                ReceitaCategoriaDTO::getDescricao,
+                RendaCategoriaDTO::getDescricao,
                 Comparator.nullsFirst(String.CASE_INSENSITIVE_ORDER)
         ));
 
@@ -34,17 +33,17 @@ public class ReceitaCategoriaResource {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<ReceitaCategoriaDTO>> findAllPagedAsDto(Pageable pageable) {
+    public ResponseEntity<Page<RendaCategoriaDTO>> findAllPagedAsDto(Pageable pageable) {
         return ResponseEntity.ok(service.findAllPagedAsDto(pageable));
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveAsDto(@RequestBody ReceitaCategoriaDTO dto) {
-        ReceitaCategoriaDTO receitaCategoriaDTO = service.saveAsDto(dto);
+    public ResponseEntity<Object> saveAsDto(@RequestBody RendaCategoriaDTO dto) {
+        RendaCategoriaDTO rendaCategoriaDTO = service.saveAsDto(dto);
         return CustomSuccess.buildResponseEntity(
                 "Categoria salva com sucesso.",
                 "id",
-                receitaCategoriaDTO.getId()
+                rendaCategoriaDTO.getId()
         );
     }
 

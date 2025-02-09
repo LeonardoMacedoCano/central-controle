@@ -36,8 +36,8 @@ public class RegraExtratoContaCorrente {
     private DespesaCategoria despesaCategoriaDestino;
 
     @ManyToOne
-    @JoinColumn(name = "idcategoriareceitadestino")
-    private ReceitaCategoria receitaCategoriaDestino;
+    @JoinColumn(name = "idcategoriarendadestino")
+    private RendaCategoria rendaCategoriaDestino;
 
     @Column(nullable = false)
     private Long prioridade;

@@ -1,4 +1,4 @@
-export type TipoLancamentoEnum = 'DESPESA' | 'RECEITA' | 'ATIVO';
+export type TipoLancamentoEnum = 'DESPESA' | 'RENDA' | 'ATIVO';
 
 export interface TipoLancamentoInfo {
   tipo: TipoLancamentoEnum;
@@ -8,7 +8,7 @@ export interface TipoLancamentoInfo {
 
 export const TiposLancamentos: Record<TipoLancamentoEnum, TipoLancamentoInfo> = {
   DESPESA: { tipo: 'DESPESA', descricao: 'Despesa', codigo: '1' },
-  RECEITA: { tipo: 'RECEITA', descricao: 'Receita', codigo: '2' },
+  RENDA: { tipo: 'RENDA', descricao: 'Renda', codigo: '2' },
   ATIVO: { tipo: 'ATIVO', descricao: 'Ativo', codigo: '3' },
 };
 
@@ -31,9 +31,9 @@ const createTipoLancamentoOptions = (keys: TipoLancamentoEnum[]): { key: string;
   }));
 };
 
-export const tipoLancamentoOptions = createTipoLancamentoOptions(['DESPESA', 'RECEITA', 'ATIVO']);
+export const tipoLancamentoOptions = createTipoLancamentoOptions(['DESPESA', 'RENDA', 'ATIVO']);
 
-export const tipoLancamentoFilters = (['DESPESA', 'RECEITA', 'ATIVO'] as TipoLancamentoEnum[]).map(tipo => ({
+export const tipoLancamentoFilters = (['DESPESA', 'RENDA', 'ATIVO'] as TipoLancamentoEnum[]).map(tipo => ({
   key: tipo,
   value: getDescricaoTipoLancamento(tipo),
 }));

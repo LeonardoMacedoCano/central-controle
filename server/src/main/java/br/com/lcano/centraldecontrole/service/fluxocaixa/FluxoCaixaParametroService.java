@@ -2,7 +2,7 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.FluxoCaixaParametro;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.ReceitaCategoria;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.RendaCategoria;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.FluxoCaixaParametroDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
@@ -55,8 +55,8 @@ public class FluxoCaixaParametroService extends AbstractGenericService<FluxoCaix
         return findByUsuario().getDespesaCategoriaPadrao();
     }
 
-    public ReceitaCategoria getReceitaCategoriaPadrao() {
-        return findByUsuario().getReceitaCategoriaPadrao();
+    public RendaCategoria getRendaCategoriaPadrao() {
+        return findByUsuario().getRendaCategoriaPadrao();
     }
 
     public void validateParametro() {
@@ -64,7 +64,7 @@ public class FluxoCaixaParametroService extends AbstractGenericService<FluxoCaix
 
         if (fluxoCaixaParametro == null) throw new FluxoCaixaConfigException.ParametroNaoEncontrado();
         if (fluxoCaixaParametro.getDespesaCategoriaPadrao() == null) throw new FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada(TipoLancamentoEnum.DESPESA.getDescricao());
-        if (fluxoCaixaParametro.getReceitaCategoriaPadrao() == null) throw new FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada(TipoLancamentoEnum.RECEITA.getDescricao());
+        if (fluxoCaixaParametro.getRendaCategoriaPadrao() == null) throw new FluxoCaixaConfigException.CategoriaPadraoNaoEncontrada(TipoLancamentoEnum.RENDA.getDescricao());
     }
 
 }

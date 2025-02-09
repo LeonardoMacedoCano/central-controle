@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.RegraExtratoContaCorrente;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.ReceitaCategoria;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.RendaCategoria;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.RegraExtratoContaCorrenteDTO;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.RegraExtratoContaCorrenteRepository;
 import br.com.lcano.centraldecontrole.service.AbstractGenericService;
@@ -51,7 +51,7 @@ public class RegraExtratoContaCorrenteService extends AbstractGenericService<Reg
         return fluxoCaixaParametroService.getDespesaCategoriaPadrao();
     }
 
-    public ReceitaCategoria getReceitaCategoriaPadrao() {
-        return fluxoCaixaParametroService.getReceitaCategoriaPadrao();
+    public RendaCategoria getRendaCategoriaPadrao() {
+        return fluxoCaixaParametroService.getRendaCategoriaPadrao();
     }
 }

@@ -28,12 +28,12 @@ public class FluxoCaixaParametro {
     private BigDecimal metaLimiteDespesaMensal;
 
     @ManyToOne
-    @JoinColumn(name = "idcategoriareceitapadrao")
-    private ReceitaCategoria receitaCategoriaPadrao;
+    @JoinColumn(name = "idcategoriarendapadrao")
+    private RendaCategoria rendaCategoriaPadrao;
 
     @ManyToOne
-    @JoinColumn(name = "idcategoriareceitaganhoativo")
-    private ReceitaCategoria receitaCategoriaParaGanhoAtivo;
+    @JoinColumn(name = "idcategoriarendapassiva")
+    private RendaCategoria rendaPassivaCategoria;
 
     @Column(name = "metaaportemensal")
     private BigDecimal metaAporteMensal;

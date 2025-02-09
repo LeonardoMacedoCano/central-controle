@@ -1,6 +1,6 @@
 package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.Receita;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.Renda;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import lombok.Data;
@@ -11,24 +11,24 @@ import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ReceitaDTO extends BaseDTO<Receita> implements LancamentoItemDTO {
+public class RendaDTO extends BaseDTO<Renda> implements LancamentoItemDTO {
     private Long id;
-    private ReceitaCategoriaDTO categoria;
+    private RendaCategoriaDTO categoria;
     private BigDecimal valor;
     private Date dataRecebimento;
 
     @Override
-    public ReceitaDTO fromEntity(Receita entity) {
+    public RendaDTO fromEntity(Renda entity) {
         this.id = entity.getId();
         this.dataRecebimento = entity.getDataRecebimento();
         this.valor = entity.getValor();
-        if (entity.getCategoria() != null) this.categoria = new ReceitaCategoriaDTO().fromEntity(entity.getCategoria());
+        if (entity.getCategoria() != null) this.categoria = new RendaCategoriaDTO().fromEntity(entity.getCategoria());
         return this;
     }
 
     @Override
-    public Receita toEntity() {
-        Receita entity = new Receita();
+    public Renda toEntity() {
+        Renda entity = new Renda();
         entity.setId(this.id);
         entity.setDataRecebimento(this.dataRecebimento);
         entity.setValor(this.valor);

@@ -9,14 +9,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Table(name = "receita")
+@Table(name = "renda")
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(of = "id")
-public class Receita implements Serializable {
+public class Renda implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -30,7 +30,7 @@ public class Receita implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idcategoria", nullable = false)
-    private ReceitaCategoria categoria;
+    private RendaCategoria categoria;
 
     @Column(nullable = false)
     private BigDecimal valor;

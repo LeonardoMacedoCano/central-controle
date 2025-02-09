@@ -144,7 +144,7 @@ const getTipoVariant = (tipo: TipoLancamentoEnum): VariantColor => {
   switch (tipo) {
     case 'DESPESA':
       return 'warning';
-    case 'RECEITA':
+    case 'RENDA':
       return 'success';
     case 'ATIVO':
       return 'info';

@@ -1,11 +1,11 @@
 package br.com.lcano.centraldecontrole.service.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
-import br.com.lcano.centraldecontrole.domain.fluxocaixa.Receita;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ReceitaDTO;
+import br.com.lcano.centraldecontrole.domain.fluxocaixa.Renda;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.RendaDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
 import br.com.lcano.centraldecontrole.repository.LancamentoItemRepository;
-import br.com.lcano.centraldecontrole.repository.fluxocaixa.ReceitaRepository;
+import br.com.lcano.centraldecontrole.repository.fluxocaixa.RendaRepository;
 import br.com.lcano.centraldecontrole.service.AbstractLancamentoItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,28 +13,28 @@ import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class ReceitaService extends AbstractLancamentoItemService<Receita, ReceitaDTO> {
+public class RendaService extends AbstractLancamentoItemService<Renda, RendaDTO> {
 
     @Autowired
-    private final ReceitaRepository repository;
+    private final RendaRepository repository;
 
     @Override
-    protected LancamentoItemRepository<Receita> getRepository() {
+    protected LancamentoItemRepository<Renda> getRepository() {
         return repository;
     }
 
     @Override
-    protected ReceitaDTO getDtoInstance() {
-        return new ReceitaDTO();
+    protected RendaDTO getDtoInstance() {
+        return new RendaDTO();
     }
 
     @Override
-    protected void setLancamento(Receita entity, Lancamento lancamento) {
+    protected void setLancamento(Renda entity, Lancamento lancamento) {
         entity.setLancamento(lancamento);
     }
 
     @Override
     public TipoLancamentoEnum getTipoLancamento() {
-        return TipoLancamentoEnum.RECEITA;
+        return TipoLancamentoEnum.RENDA;
     }
 }

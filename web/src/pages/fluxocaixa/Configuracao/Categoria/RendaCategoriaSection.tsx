@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { Categoria, initialCategoriaState, PAGE_SIZE_DEFAULT, PagedResponse } from '../../../../types';
 import { AuthContext, useMessage } from '../../../../contexts';
-import { DespesaCategoriaService, ReceitaCategoriaService } from '../../../../service';
+import { RendaCategoriaService } from '../../../../service';
 import { useConfirmModal } from '../../../../hooks';
 import { Column, ConfirmModal, FloatingButton, Panel, Table } from '../../../../components';
 import CategoriaSectionForm from './CategoriaSectionForm';
@@ -18,7 +18,7 @@ const INITIAL_PAGED_RESPONSE: PagedResponse<Categoria> = {
   numberOfElements: 0,
 };
 
-const ReceitaCategoriaSection: React.FC = () => {
+const RendaCategoriaSection: React.FC = () => {
   const [categorias, setCategorias] = useState(INITIAL_PAGED_RESPONSE);
   const [modalOpen, setModalOpen] = useState(false);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState<Categoria | undefined>();
@@ -27,7 +27,7 @@ const ReceitaCategoriaSection: React.FC = () => {
 
   const auth = useContext(AuthContext);
   const message = useMessage();
-  const categoriaService = ReceitaCategoriaService();
+  const categoriaService = RendaCategoriaService();
   const { confirm, ConfirmModalComponent } = useConfirmModal();
 
   const loadCategorias = useCallback(async () => {
@@ -37,7 +37,7 @@ const ReceitaCategoriaSection: React.FC = () => {
       const result = await categoriaService.getAllCategoriasPaged(auth.usuario.token, pageIndex, pageSize);
       setCategorias(result || INITIAL_PAGED_RESPONSE);
     } catch (error) {
-      message.showErrorWithLog('Erro ao carregar as categorias de receita.', error);
+      message.showErrorWithLog('Erro ao carregar as categorias de renda.', error);
     }
   }, [auth.usuario?.token, pageIndex, pageSize, categoriaService, message]);
 
@@ -82,7 +82,7 @@ const ReceitaCategoriaSection: React.FC = () => {
         <ConfirmModal
           variant="info"
           isOpen={modalOpen}
-          title={categoriaSelecionada.id ? 'Editar Categoria Receita' : 'Nova Categoria Receita'}
+          title={categoriaSelecionada.id ? 'Editar Categoria Renda' : 'Nova Categoria Renda'}
           content={
             <CategoriaSectionForm
               categoria={categoriaSelecionada}
@@ -114,4 +114,4 @@ const ReceitaCategoriaSection: React.FC = () => {
   );
 };
 
-export default ReceitaCategoriaSection;
+export default RendaCategoriaSection;

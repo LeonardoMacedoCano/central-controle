@@ -30,7 +30,7 @@
             </column>
             <column name="descricaodestino" type="${varchar_255}"/>
             <column name="idcategoriadespesadestino" type="${integer}"/>
-            <column name="idcategoriareceitadestino" type="${integer}"/>
+            <column name="idcategoriarendadestino" type="${integer}"/>
             <column name="prioridade" type="${integer}" defaultValue="0">
                 <constraints nullable="false"/>
             </column>
@@ -52,9 +52,9 @@
                                  referencedColumnNames="id"/>
 
         <addForeignKeyConstraint baseTableName="regraextratocontacorrente"
-                                 baseColumnNames="idcategoriareceitadestino"
-                                 constraintName="fkregraextratocontacorcatrec"
-                                 referencedTableName="receitacategoria"
+                                 baseColumnNames="idcategoriarendadestino"
+                                 constraintName="fkregraextratocontacorcatren"
+                                 referencedTableName="rendacategoria"
                                  referencedColumnNames="id"/>
     </changeSet>
 

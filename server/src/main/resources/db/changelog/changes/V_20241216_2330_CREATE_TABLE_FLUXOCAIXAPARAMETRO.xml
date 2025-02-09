@@ -21,8 +21,8 @@
             </column>
             <column name="idcategoriadespesapadrao" type="${integer}"/>
             <column name="metalimitedespesamensal" type="${number_10_2}"/>
-            <column name="idcategoriareceitapadrao" type="${integer}"/>
-            <column name="idcategoriareceitaganhoativo" type="${integer}"/>
+            <column name="idcategoriarendapadrao" type="${integer}"/>
+            <column name="idcategoriarendapassiva" type="${integer}"/>
             <column name="metaaportemensal" type="${number_10_2}"/>
             <column name="metaaportetotal" type="${number_15_2}"/>
             <column name="diapadraovencimentocartao" type="${integer}" defaultValue="10">
@@ -42,15 +42,15 @@
                                  referencedColumnNames="id"/>
 
         <addForeignKeyConstraint baseTableName="fluxocaixaparametro"
-                                 baseColumnNames="idcategoriareceitapadrao"
-                                 constraintName="fkfluxocaixacategrec"
-                                 referencedTableName="receitacategoria"
+                                 baseColumnNames="idcategoriarendapadrao"
+                                 constraintName="fkfluxocaixacategrenda"
+                                 referencedTableName="rendacategoria"
                                  referencedColumnNames="id"/>
 
         <addForeignKeyConstraint baseTableName="fluxocaixaparametro"
-                                 baseColumnNames="idcategoriareceitaganhoativo"
-                                 constraintName="fkfluxocaixacategrecativo"
-                                 referencedTableName="receitacategoria"
+                                 baseColumnNames="idcategoriarendapassiva"
+                                 constraintName="fkfluxocaixacategrendapas"
+                                 referencedTableName="rendacategoria"
                                  referencedColumnNames="id"/>
     </changeSet>
 

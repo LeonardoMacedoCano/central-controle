@@ -8,9 +8,9 @@ import lombok.*;
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(of = "id")
-@Table(name = "receitacategoria")
+@Table(name = "rendacategoria")
 @Entity
-public class ReceitaCategoria{
+public class RendaCategoria {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
