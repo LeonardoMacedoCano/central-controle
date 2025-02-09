@@ -1,9 +1,9 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { getVariantColor } from '../../utils';
+import { getVariantColor, VariantColor } from '../../utils';
 
 interface CardProps {
-  variant?: 'success' | 'info' | 'warning';
+  variant?: VariantColor;
   width?: string;
   height?: string;
   style?: React.CSSProperties;

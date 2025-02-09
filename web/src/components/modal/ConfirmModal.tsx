@@ -3,6 +3,7 @@ import {
   Button,
   Modal
 } from '../';
+import { VariantColor } from '../../utils';
 
 interface ConfirmModalProps {
   isOpen: boolean;
@@ -11,7 +12,7 @@ interface ConfirmModalProps {
   onClose: () => void;
   onConfirm: () => void;
   modalWidth?: string;
-  variant?: 'success' | 'info' | 'warning';
+  variant?: VariantColor;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({ 

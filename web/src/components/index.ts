@@ -16,6 +16,7 @@ import DragDropFile from "./dragdropfile/DragDropFile";
 import SearchFilter from "./searchfilter/SearchFilter";
 import CardServico from "./card/CardServico";
 import ServicoCategoriaIcon from "./icon/ServicoCategoriaIcon";
+import InfoCard from "./card/InfoCard";
 
 export {
   Button, 
@@ -36,5 +37,6 @@ export {
   DragDropFile,
   SearchFilter,
   CardServico,
-  ServicoCategoriaIcon
+  ServicoCategoriaIcon,
+  InfoCard
 };

@@ -9,10 +9,20 @@ interface PanelProps {
   width?: string;
   maxWidth?: string;
   padding?: string;
+  transparent?: boolean;
   actionButton?: ReactNode;
 }
 
-const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth, padding, actionButton }) => {
+const Panel: React.FC<PanelProps> = ({ 
+  title,
+  children,
+  footer,
+  width,
+  maxWidth,
+  padding,
+  actionButton ,
+  transparent = false
+}) => {
   return (
     <Container
       width={width || '100%'}
@@ -29,12 +39,17 @@ const Panel: React.FC<PanelProps> = ({ title, children, footer, width, maxWidth,
       )}
       <Container
         width="100%"
-        variantColor="secondary"
+        variantColor={transparent ? undefined : "secondary"}
+        backgroundColor={transparent ? "transparent" : undefined}
         margin="20px 0 0 0"
-        style={{
-          boxShadow: '0 0 2px',
-          borderRadius: '5px',
-        }}
+        style={
+          transparent ?
+          {} :
+          {
+            boxShadow: '0 0 2px',
+            borderRadius: '5px',
+          }
+        }
       >
         <Body>{children}</Body>
         {footer && <Footer>{footer}</Footer>}

@@ -111,6 +111,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubme
       Text: "Fluxo Caixa",
       submenu: [
         {
+          to: "/resumo-fluxo-caixa",
+          Text: "Resumo"
+        },
+        {
           to: "/lancamentos",
           Text: "Lançamentos"
         },

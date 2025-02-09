@@ -5,13 +5,14 @@ import {
   formatDateToYMString,
   formatDateToYMDString,
   parseDateStringToDate,
-  getVariantColor
+  getVariantColor,
+  VariantColor
 } from '../../utils';
 
 type FieldValueProps = {
   type: 'string' | 'number' | 'boolean' | 'date' | 'month' | 'select';
   value?: string | number | boolean | SelectValue;
-  variant?: 'success' | 'info' | 'warning';
+  variant?: VariantColor;
   description?: string;
   hint?: string;
   editable?: boolean;
@@ -225,7 +226,7 @@ interface StyledInputProps {
   inputWidth?: string;
   inline?: boolean;
   readOnly?: boolean;
-  variant?: 'success' | 'info' | 'warning';
+  variant?: VariantColor;
 }
 
 export const StyledInput = styled.input<StyledInputProps>`

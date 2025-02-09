@@ -12,7 +12,7 @@ import {
 } from '../../../types';
 import { AuthContext, useMessage } from '../../../contexts';
 import { LancamentoService } from '../../../service';
-import { formatDateToShortString } from '../../../utils';
+import { formatDateToShortString, VariantColor } from '../../../utils';
 import { useConfirmModal } from '../../../hooks';
 import Card from '../../../components/card/Card';
 
@@ -140,7 +140,7 @@ const LancamentoListPage: React.FC = () => {
 
 export default LancamentoListPage;
 
-const getTipoVariant = (tipo: TipoLancamentoEnum): 'success' | 'info' | 'warning' => {
+const getTipoVariant = (tipo: TipoLancamentoEnum): VariantColor => {
   switch (tipo) {
     case 'DESPESA':
       return 'warning';

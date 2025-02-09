@@ -9,7 +9,8 @@ import {
 
 import { 
   convertReactStyleToCSSObject,
-  getVariantColor
+  getVariantColor,
+  VariantColor
 } from "./StyledUtils";
 
 import { 
@@ -44,5 +45,9 @@ export {
   getIconByName,
   formatNumberWithLeadingZeros,
   copyLinkToClipboard,
-  formatNumberWithTrailingZeros
+  formatNumberWithTrailingZeros,
 };
+
+export type {
+  VariantColor
+}

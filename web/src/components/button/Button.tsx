@@ -2,11 +2,12 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import { 
   convertReactStyleToCSSObject,
-  getVariantColor
+  getVariantColor,
+  VariantColor
 } from '../../utils';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'success' | 'info' | 'warning' | 'login';
+  variant?: VariantColor | 'login';
   width?: string;
   height?: string;
   icon?: React.ReactNode;
@@ -47,7 +48,7 @@ const Button: React.FC<ButtonProps> = ({
 export default Button;
 
 interface StyledButtonProps {
-  variant?: 'success' | 'info' | 'warning' | 'login';
+  variant?: VariantColor | 'login';
   width?: string;
   height?: string;
   disabled?: boolean;

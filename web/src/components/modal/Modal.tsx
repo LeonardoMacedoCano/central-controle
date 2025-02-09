@@ -6,7 +6,7 @@ import {
   FaExclamationTriangle,
   FaTimes
 } from 'react-icons/fa';
-import { getVariantColor } from '../../utils';
+import { getVariantColor, VariantColor } from '../../utils';
 import { Button } from '../';
 
 interface ModalProps {
@@ -14,7 +14,7 @@ interface ModalProps {
   title: string;
   content: React.ReactNode;
   onClose: () => void;
-  variant?: 'success' | 'info' | 'warning';
+  variant?: VariantColor;
   actions?: React.ReactNode;
   showCloseButton?: boolean;
   closeButtonSize?: string;
@@ -128,7 +128,7 @@ export const ModalContainer = styled.div<ModalContainerProps>`
 `;
 
 interface ModalHeaderProps {
-  variant: 'success' | 'info' | 'warning';
+  variant: VariantColor;
 }
 export const ModalHeader = styled.div<ModalHeaderProps>`
   color: ${({ theme }) => theme.colors.white};

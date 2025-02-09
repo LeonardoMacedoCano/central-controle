@@ -6,8 +6,10 @@ export const convertReactStyleToCSSObject = (style: React.CSSProperties): CSSObj
   );
 }
 
-interface VariantProps {
-  variant: 'success' | 'info' | 'warning';
+export type VariantColor = 'success' | 'info' | 'warning';
+
+export interface VariantProps {
+  variant: VariantColor;
 }
 
 export const getVariantColor = (theme: any, variant?: VariantProps['variant']) => {
