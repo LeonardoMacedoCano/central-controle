@@ -1,45 +1,11 @@
 import React from 'react';
-import { Container, CustomBarChart, InfoCard, Panel } from '../../../components';
+import { Container, CustomBarChart, CustomPieChart, InfoCard, Panel } from '../../../components';
 import styled from 'styled-components';
 import { VariantColor } from '../../../utils';
-import { BarChartData } from '../../../components/chart/CustomBarChart';
-
-type PieChartData = {
-  name: string;
-  value: number;
-};
-
-type CustomPieChartProps = {
-  data: PieChartData[];
-  colors: string[];
-};
 
 const handleClick = () => {
   console.log("Opa");
 }
-
-const CustomPieChart: React.FC<CustomPieChartProps> = ({ data, colors }) => {
-  const total = data.reduce((sum, entry) => sum + entry.value, 0);
-  let cumulative = 0;
-
-  return (
-    <svg width="200" height="200" viewBox="0 0 32 32">
-      {data.map((entry, index) => {
-        const [startX, startY] = [Math.cos(2 * Math.PI * cumulative / total) * 16, Math.sin(2 * Math.PI * cumulative / total) * 16];
-        cumulative += entry.value;
-        const [endX, endY] = [Math.cos(2 * Math.PI * cumulative / total) * 16, Math.sin(2 * Math.PI * cumulative / total) * 16];
-        const largeArc = entry.value / total > 0.5 ? 1 : 0;
-        return (
-          <path
-            key={index}
-            d={`M16,16 L${16 + startX},${16 + startY} A16,16 0 ${largeArc},1 ${16 + endX},${16 + endY} Z`}
-            fill={colors[index]}
-          />
-        );
-      })}
-    </svg>
-  );
-};
 
 type SummaryData = {
   title: string;
@@ -79,11 +45,6 @@ const ResumoFluxoCaixaPage: React.FC = () => {
       variant: 'info',
       onClick: handleClick
     },
-  ];
-
-  const pieData: PieChartData[] = [
-    { name: 'Renda Passiva', value: 30 },
-    { name: 'Outras Rendas', value: 70 },
   ];
 
   return (
@@ -130,9 +91,18 @@ const ResumoFluxoCaixaPage: React.FC = () => {
       />
       </Panel>
       <Panel maxWidth="1000px" title="Teste">
-        <div className="grid grid-cols-2 gap-4 mt-4">
-          <CustomPieChart data={pieData} colors={['#ef4444', '#84cc16']} />
-        </div>
+        <CustomPieChart title="Despesas Mensais" data={
+          [
+            { name: "Alimentação", value: 500},
+            { name: "Transporte", value: 300 },
+            { name: "Lazer", value: 200},
+            { name: "Saúde", value: 100},
+            { name: "a", value: 500},
+            { name: "b", value: 300 },
+            { name: "c", value: 200},
+            { name: "d", value: 100},
+          ]
+        } showLegend />
       </Panel>
     </Container>
   );

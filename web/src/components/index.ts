@@ -18,6 +18,7 @@ import CardServico from "./card/CardServico";
 import ServicoCategoriaIcon from "./icon/ServicoCategoriaIcon";
 import InfoCard from "./card/InfoCard";
 import CustomBarChart from "./chart/CustomBarChart";
+import CustomPieChart from "./chart/CustomPieChart";
 
 export {
   Button, 
@@ -40,5 +41,6 @@ export {
   CardServico,
   ServicoCategoriaIcon,
   InfoCard,
-  CustomBarChart
+  CustomBarChart,
+  CustomPieChart
 };

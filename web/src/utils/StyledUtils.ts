@@ -6,7 +6,7 @@ export const convertReactStyleToCSSObject = (style: React.CSSProperties): CSSObj
   );
 }
 
-export type VariantColor = 'success' | 'info' | 'warning';
+export type VariantColor = 'primary' | 'secondary' | 'tertiary' | 'quaternary' | 'success' | 'info' | 'warning';
 
 export interface VariantProps {
   variant: VariantColor;
@@ -18,6 +18,10 @@ export const getVariantColor = (theme: any, variant?: VariantProps['variant']) =
   const validVariant = variant || 'info';
 
   switch (validVariant) {
+    case 'primary':
+    case 'secondary':
+    case 'tertiary':
+    case 'quaternary':
     case 'success':
     case 'info':
     case 'warning':
