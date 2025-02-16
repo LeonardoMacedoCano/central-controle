@@ -166,6 +166,8 @@ const CustomBarChart: React.FC<CustomBarChartProps> = ({
                       key={groupIndex}
                       x={labelX}
                       y={0}
+                      transform={`rotate(-45, ${labelX}, 10)`}
+
                     >
                       {label}
                     </BarLabel>
@@ -328,6 +330,6 @@ const Bar = styled.rect<{ variant: VariantColor }>`
   z-index: 2;
 
   &:hover {
-    filter: brightness(1.2);
+    filter: brightness(1.75);
   }
 `;

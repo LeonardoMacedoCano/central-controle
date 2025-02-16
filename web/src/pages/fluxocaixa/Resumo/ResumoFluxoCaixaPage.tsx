@@ -113,7 +113,7 @@ const ResumoFluxoCaixaPage: React.FC = () => {
         title='Renda x Despesa'
         showGridLines={true}
         data={{
-          labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+          labels: ["Jan/25", "Fev/25", "Mar/25", "Abr/25", "Mai/25", "Jun/25", "Jul/25", "Ago/25", "Set/25", "Out/25", "Nov/25", "Dez/25"],
           series: [
             {
               name: "Renda",
