@@ -1,32 +1,8 @@
 import React from 'react';
-import { Container, InfoCard, Panel } from '../../../components';
+import { Container, CustomBarChart, InfoCard, Panel } from '../../../components';
 import styled from 'styled-components';
 import { VariantColor } from '../../../utils';
-
-type BarChartData = {
-  label: string;
-  value: number;
-};
-
-type CustomBarChartProps = {
-  data: BarChartData[];
-  colors: string[];
-};
-
-const CustomBarChart: React.FC<CustomBarChartProps> = ({ data, colors }) => (
-  <svg width="100%" height="200">
-    {data.map((item, index) => (
-      <rect
-        key={index}
-        x={index * 50 + 10}
-        y={200 - item.value}
-        width="40"
-        height={item.value}
-        fill={colors[index]}
-      />
-    ))}
-  </svg>
-);
+import { BarChartData } from '../../../components/chart/CustomBarChart';
 
 type PieChartData = {
   name: string;
@@ -105,11 +81,6 @@ const ResumoFluxoCaixaPage: React.FC = () => {
     },
   ];
 
-  const barData: BarChartData[] = [
-    { label: 'Jan', value: 40 },
-    { label: 'Fev', value: 30 },
-  ];
-
   const pieData: PieChartData[] = [
     { name: 'Renda Passiva', value: 30 },
     { name: 'Outras Rendas', value: 70 },
@@ -137,9 +108,29 @@ const ResumoFluxoCaixaPage: React.FC = () => {
           ))}
         </CardContainer>
       </Panel>
+      <Panel maxWidth="1000px">
+      <CustomBarChart 
+        title='Renda x Despesa'
+        showGridLines={true}
+        data={{
+          labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+          series: [
+            {
+              name: "Renda",
+              variant: "success",
+              data: [4000, 4200, 4000, 4000, 4200, 4000, 4000, 4200, 4000, 4000, 4200, 4000]
+            },
+            {
+              name: "Despesa",
+              variant: "warning",
+              data: [1800, 2000, 1900, 1800, 2000, 1900, 1800, 2000, 1900, 1800, 2000, 1900]
+            }
+          ]
+        }}
+      />
+      </Panel>
       <Panel maxWidth="1000px" title="Teste">
         <div className="grid grid-cols-2 gap-4 mt-4">
-          <CustomBarChart data={barData} colors={['#4f46e5', '#84cc16']} />
           <CustomPieChart data={pieData} colors={['#ef4444', '#84cc16']} />
         </div>
       </Panel>
