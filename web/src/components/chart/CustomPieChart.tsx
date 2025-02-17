@@ -21,16 +21,39 @@ const CustomPieChart: React.FC<CustomPieChartProps> = ({
   showLegend = true,
   size = 200,
 }) => {
-  const [hoveredItem, setHoveredItem] = useState<string | null>(null);  
+  const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const totalValue = data.reduce((sum, item) => sum + item.value, 0);
   let cumulativePercentage = 0;
   const coloredData = assignColors(data);
 
   return (
-    <ChartContainer>
+    <ChartWrapper>
       <ChartHeader>
         <ChartTitle>{title}</ChartTitle>
+      </ChartHeader>
+
+      <ChartContent>
+        <SvgContainer width={size} height={size} viewBox="0 0 32 32">
+          {coloredData.map((item) => {
+            const percentage = (item.value / totalValue) * 100;
+            const startAngle = (cumulativePercentage / 100) * 360;
+            cumulativePercentage += percentage;
+            const endAngle = (cumulativePercentage / 100) * 360;
+            const pathData = describeArc(16, 16, 15, startAngle, endAngle);
+
+            return (
+              <Slice
+                key={item.name}
+                variant={item.variant!}
+                d={pathData}
+                onMouseEnter={() => setHoveredItem(`${item.name}: ${item.value}`)}
+                onMouseLeave={() => setHoveredItem(null)}
+              />
+            );
+          })}
+        </SvgContainer>
+
         {showLegend && (
           <LegendContainer>
             {coloredData.map((item) => (
@@ -41,30 +64,10 @@ const CustomPieChart: React.FC<CustomPieChartProps> = ({
             ))}
           </LegendContainer>
         )}
-      </ChartHeader>
-
-      <SvgContainer width={size} height={size} viewBox="0 0 32 32">
-        {coloredData.map((item) => {
-          const percentage = (item.value / totalValue) * 100;
-          const startAngle = (cumulativePercentage / 100) * 360;
-          cumulativePercentage += percentage;
-          const endAngle = (cumulativePercentage / 100) * 360;
-          const pathData = describeArc(16, 16, 15, startAngle, endAngle);
-          
-          return (
-            <Slice
-              key={item.name}
-              variant={item.variant!}
-              d={pathData}
-              onMouseEnter={() => setHoveredItem(`${item.name}: ${item.value}`)}
-              onMouseLeave={() => setHoveredItem(null)}
-            />
-          );
-        })}
-      </SvgContainer>
+      </ChartContent>
 
       {hoveredItem && <Tooltip>{hoveredItem}</Tooltip>}
-    </ChartContainer>
+    </ChartWrapper>
   );
 };
 
@@ -117,29 +120,48 @@ function describeArc(x: number, y: number, radius: number, startAngle: number, e
   ].join(" ");
 }
 
-const ChartContainer = styled.div`
+const ChartWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  position: relative;
-  width: 100%;
   align-items: center;
+  width: 100%;
 `;
 
 const ChartHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  flex-wrap: wrap;
-  flex-direction: column;
   text-align: center;
+  width: 100%;
+  margin-bottom: 15px;
+`;
+
+const ChartTitle = styled.h2`
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.white};
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+`;
+
+const ChartContent = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+`;
+
+const SvgContainer = styled.svg`
+  display: block;
+  flex-shrink: 0;
 `;
 
 const LegendContainer = styled.div`
   display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
+  min-width: 50px;
 `;
 
 const LegendItem = styled.div`
@@ -147,24 +169,19 @@ const LegendItem = styled.div`
   align-items: center;
   gap: 8px;
   padding: 4px;
+  justify-content: flex-start;
 `;
 
 const LegendColor = styled.div<{ variant: VariantColor }>`
   width: 16px;
   height: 16px;
-  background-color: ${({ variant, theme }) =>  getVariantColor(theme, variant)};
+  background-color: ${({ variant, theme }) => getVariantColor(theme, variant)};
   border-radius: 4px;
 `;
 
 const LegendText = styled.span`
   color: ${({ theme }) => theme.colors.white};
   font-size: 14px;
-`;
-
-const SvgContainer = styled.svg`
-  display: block;
-  margin: 20px auto;
-  overflow: visible;
 `;
 
 const Slice = styled.path<{ variant: VariantColor }>`
@@ -176,16 +193,6 @@ const Slice = styled.path<{ variant: VariantColor }>`
 
   &:hover {
     filter: brightness(1.5);
-  }
-`;
-
-const ChartTitle = styled.h2`
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: ${({ theme }) => theme.colors.white};
-
-  @media (max-width: 768px) {
-    font-size: 1rem;
   }
 `;
 

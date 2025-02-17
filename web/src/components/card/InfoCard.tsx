@@ -5,7 +5,9 @@ import { getVariantColor, VariantColor } from '../../utils';
 interface InfoCardProps {
   variant?: VariantColor;
   title: string;
-  description: string;
+  description?: string;
+  height?: string;
+  width?: string;
   onClick: () => void;
   children?: React.ReactNode;
 }
@@ -14,10 +16,17 @@ const InfoCard: React.FC<InfoCardProps> = ({
   variant = 'info', 
   title, 
   description, 
+  height,
+  width,
   onClick, 
   children
 }) => (
-  <CardContainer variant={variant} onClick={onClick}>
+  <CardContainer
+    variant={variant} 
+    height={height} 
+    width={width} 
+    onClick={onClick}
+  >
     <CardTitle>{title}</CardTitle>
     <CardDescription>{description}</CardDescription>
     {children && <CardContent>{children}</CardContent>}
@@ -26,14 +35,18 @@ const InfoCard: React.FC<InfoCardProps> = ({
 
 export default InfoCard;
 
-const CardContainer = styled.div<{ variant: VariantColor }>`
+const CardContainer = styled.div<{ variant: VariantColor, height?: string, width?: string }>`
   background: ${({ theme }) => theme.colors.tertiary};
+  width: ${({ width }) => width || 'auto'};
+  height: ${({ height }) => height || 'auto'};
   padding: 15px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   border-top: 5px solid ${({ theme, variant }) => getVariantColor(theme, variant)};
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: scale(1.05);
@@ -51,8 +64,9 @@ const CardDescription = styled.p`
   font-size: 0.85rem;
   color: ${({ theme }) => theme.colors.gray};
   margin: 5px 0 10px;
+  text-align: justify;
 `;
 
 const CardContent = styled.div`
-  margin-top: 10px;
+  margin-top: auto;
 `;
