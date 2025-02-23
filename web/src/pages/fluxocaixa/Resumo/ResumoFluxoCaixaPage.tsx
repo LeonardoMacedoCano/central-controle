@@ -1,10 +1,25 @@
-import React from 'react';
-import { Container, CustomBarChart, CustomPieChart, InfoCard, Panel } from '../../../components';
+import React, { useContext, useEffect, useState } from 'react';
+import { Container, CustomBarChart, CustomPieChart, InfoCard, Loading, Panel } from '../../../components';
 import styled from 'styled-components';
 import { VariantColor } from '../../../utils';
+import { FluxoCaixaResumoService } from '../../../service';
+import { initialResumoFluxoCaixaState, ResumoFluxoCaixa } from '../../../types';
+import { AuthContext, useMessage } from '../../../contexts';
 
-const handleClick = () => {
-  console.log("Opa");
+const handleRendasClick = () => {
+  console.log("Rendas");
+}
+
+const handleDespesasClick = () => {
+  console.log("Despesas");
+}
+
+const handleAtivosClick = () => {
+  console.log("Ativos");
+}
+
+const handleMetasClick = () => {
+  console.log("Metas");
 }
 
 type SummaryData = {
@@ -17,43 +32,69 @@ type SummaryData = {
 };
 
 const ResumoFluxoCaixaPage: React.FC = () => {
+  const [resumo, setResumo] = useState<ResumoFluxoCaixa>(initialResumoFluxoCaixaState);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const auth = useContext(AuthContext);
+  const message = useMessage();
+  const service = FluxoCaixaResumoService();
+
+  useEffect(() => {
+    if (!auth.usuario?.token) return;
+  
+    loadResumo()
+  }, [auth.usuario?.token]);
+  
+  const loadResumo = async () => {
+    setIsLoading(true);
+    try {
+      const result = await service.getResumoFluxoCaixa(auth.usuario!.token);
+      if (result) setResumo(result);
+    } catch (error) {
+      message.showErrorWithLog("Erro ao carregar o resumo do fluxo de caixa.", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const summaryData: SummaryData[] = [
     {
       title: 'Rendas',
-      valueMensal: 'R$ 4.000',
-      valueAnual: 'R$ 50.000',
+      valueMensal: `R$ ${resumo.valorRendaMesAtual}`,
+      valueAnual: `R$ ${resumo.valorRendaAnoAtual}`,
       variant: 'success',
-      onClick: handleClick,
+      onClick: handleRendasClick,
       descricao: 'Total das rendas recebidas no mês e no ano até o momento.'
     },
     {
       title: 'Despesas',
-      valueMensal: 'R$ 2.000',
-      valueAnual: 'R$ 25.000',
+      valueMensal: `R$ ${resumo.valorDespesaMesAtual}`,
+      valueAnual: `R$ ${resumo.valorDespesaAnoAtual}`,
       variant: 'warning',
-      onClick: handleClick,
+      onClick: handleDespesasClick,
       descricao: 'Total das despesas realizadas no mês e acumuladas no ano.'
     },
     {
       title: 'Ativos',
-      valueMensal: 'R$ 1.800',
-      valueAnual: 'R$ 20.000',
+      valueMensal: `R$ ${resumo.valorAtivosMesAtual}`,
+      valueAnual: `R$ ${resumo.valorAtivosAnoAtual}`,
       variant: 'info',
-      onClick: handleClick,
+      onClick: handleAtivosClick,
       descricao: 'Valor total investido em ativos no mês e acumulado no ano.'
     },
     {
       title: 'Metas',
-      valueMensal: '100%',
-      valueAnual: '80%',
+      valueMensal: `${resumo.percentualMetasMesAtual}%`,
+      valueAnual: `${resumo.percentualMetasAnoAtual}%`,
       variant: 'quaternary',
-      onClick: handleClick,
+      onClick: handleMetasClick,
       descricao: 'Porcentagem de cumprimento das metas de rendimento para o mês e o ano.'
     },
   ];  
 
   return (
     <Container>
+      <Loading isLoading={isLoading}/>
       <Panel maxWidth="1000px" title="Resumo Fluxo Caixa" transparent>
         <CardContainer>
           {summaryData.map((item, index) => (
@@ -74,32 +115,32 @@ const ResumoFluxoCaixaPage: React.FC = () => {
           ))}
         </CardContainer>
       </Panel>
-      <Panel maxWidth="1000px">
+      <Panel maxWidth="1000px" >
         <CustomBarChart 
           title='Renda x Despesa'
           showGridLines={true}
           data={{
-            labels: ["Jan/25", "Fev/25", "Mar/25", "Abr/25", "Mai/25", "Jun/25", "Jul/25", "Ago/25", "Set/25", "Out/25", "Nov/25", "Dez/25"],
+            labels: resumo.labelsMensalAnoAtual,
             series: [
               {
                 name: "Renda",
                 variant: "success",
-                data: [4000, 4200, 4000, 4000, 4200, 4000, 4000, 4200, 4000, 4000, 4200, 4000]
+                data: resumo.valoresRendaAnoAtual
               },
               {
                 name: "Despesa",
                 variant: "warning",
-                data: [1800, 2000, 1900, 1800, 2000, 1900, 1800, 2000, 1900, 1800, 2000, 1900]
+                data: resumo.valoresDespesaAnoAtual
               }
             ]
           }}
         />
       </Panel>
-      <Panel maxWidth="1000px">
+      <Panel maxWidth="1000px" >
         <CustomPieChart title="Renda Passiva x Despesa (Mês atual)" data={
           [
-            { name: "Renda Passiva", value: 100, variant: 'success'},
-            { name: "Despesa", value: 4000, variant: 'warning' }
+            { name: "Renda Passiva", value: resumo.valorRendaPassivaMesAtual, variant: 'success'},
+            { name: "Despesa", value: resumo.valorDespesaMesAtual, variant: 'warning' },
           ]
         } showLegend />
       </Panel>

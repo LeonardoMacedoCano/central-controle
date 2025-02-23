@@ -99,6 +99,18 @@ const CustomBarChart: React.FC<CustomBarChartProps> = ({
   const { barWidth: responsiveBarWidth, groupGap: responsiveGroupGap } = calculateBarDimensions();
 
   const totalChartWidth = data.labels.length * (data.series.length * (responsiveBarWidth + barGap) + responsiveGroupGap) - responsiveGroupGap;
+  const hasData = data.labels.length > 0 && data.series.some(series => series.data.some(value => value > 0));
+
+  if (!hasData) {
+    return (
+      <ChartContainer ref={chartContainerRef}>
+        <ChartHeader>
+          <ChartTitle>{title}</ChartTitle>
+        </ChartHeader>
+        <NoDataMessage>Não há dados disponíveis para exibição</NoDataMessage>
+      </ChartContainer>
+    );
+  }
 
   return (
     <ChartContainer ref={chartContainerRef}>
@@ -191,7 +203,7 @@ const ChartContainer = styled.div`
   flex-direction: column;
   position: relative;
   width: 100%;
-  padding: 10px;
+  padding: 5px;
   align-items: center;
 `;
 
@@ -234,6 +246,7 @@ const SvgContainer = styled.svg.attrs<{ height: number, width: number }>(props =
 }))`
   display: block;
   margin: 0 auto;
+  width: 100%;
 `;
 
 const ChartHeader = styled.div`
@@ -290,6 +303,7 @@ const Tooltip = styled.div`
 const GridLine = styled.line`
   stroke: ${({ theme }) => theme.colors.gray};
   stroke-dasharray: 4;
+  width: 100%;
 `;
 
 const ChartTitle = styled.h2`
@@ -332,4 +346,11 @@ const Bar = styled.rect<{ variant: VariantColor }>`
   &:hover {
     filter: brightness(1.75);
   }
+`;
+
+const NoDataMessage = styled.div`
+  color: ${({ theme }) => theme.colors.white};
+  font-size: 1rem;
+  text-align: center;
+  padding: 20px;
 `;

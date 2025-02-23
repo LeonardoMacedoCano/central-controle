@@ -9,6 +9,7 @@ import AtivoCategoriaService from "./fluxocaixa/AtivoCategoriaService";
 import FluxoCaixaParametroService from "./fluxocaixa/FluxoCaixaParametroService";
 import ExtratoFluxoCaixaService from "./fluxocaixa/ExtratoFluxoCaixaService";
 import RegraExtratoContaCorrenteService from "./fluxocaixa/RegraExtratoContaCorrenteService";
+import FluxoCaixaResumoService from "./fluxocaixa/FluxoCaixaResumoService";
 
 export {
   AuthService,
@@ -22,4 +23,5 @@ export {
   FluxoCaixaParametroService,
   ExtratoFluxoCaixaService,
   RegraExtratoContaCorrenteService,
+  FluxoCaixaResumoService,
 }

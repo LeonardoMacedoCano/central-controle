@@ -94,6 +94,10 @@ import {
   RegraExtratoContaCorrente ,
   initialRegraExtratoContaCorrenteState
 } from "./fluxocaixa/RegraExtratoContaCorrente";
+import { 
+  ResumoFluxoCaixa,
+  initialResumoFluxoCaixaState
+} from "./fluxocaixa/ResumoFluxoCaixa";
 
 export type {
   Categoria,
@@ -125,6 +129,7 @@ export type {
   ExtratoPadraoDTO,
   TipoRegraExtratoContaCorrenteEnum,
   RegraExtratoContaCorrente,
+  ResumoFluxoCaixa,
 };
 
 export {
@@ -165,4 +170,5 @@ export {
   getTipoRegraExtratoContaCorrenteByCodigo,
   tipoRegraExtratoContaCorrenteOptions,
   initialRegraExtratoContaCorrenteState,
+  initialResumoFluxoCaixaState,
 };

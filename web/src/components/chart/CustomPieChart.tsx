@@ -23,9 +23,13 @@ const CustomPieChart: React.FC<CustomPieChartProps> = ({
 }) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
-  const totalValue = data.reduce((sum, item) => sum + item.value, 0);
+  const validData = data.filter(item => item.value > 0);
+  const hasValidData = validData.length > 0;
+  const totalValue = hasValidData ? validData.reduce((sum, item) => sum + item.value, 0) : 0;
   let cumulativePercentage = 0;
-  const coloredData = assignColors(data);
+  const coloredData = assignColors(validData);
+
+  const drawFullCircle = validData.length === 1;
 
   return (
     <ChartWrapper>
@@ -34,35 +38,55 @@ const CustomPieChart: React.FC<CustomPieChartProps> = ({
       </ChartHeader>
 
       <ChartContent>
-        <SvgContainer width={size} height={size} viewBox="0 0 32 32">
-          {coloredData.map((item) => {
-            const percentage = (item.value / totalValue) * 100;
-            const startAngle = (cumulativePercentage / 100) * 360;
-            cumulativePercentage += percentage;
-            const endAngle = (cumulativePercentage / 100) * 360;
-            const pathData = describeArc(16, 16, 15, startAngle, endAngle);
+        {!hasValidData ? (
+          <NoDataMessage>Não há dados disponíveis para exibição</NoDataMessage>
+        ) : (
+          <>
+            <SvgContainer width={size} height={size} viewBox="0 0 32 32">
+              {coloredData.map((item) => {
+                if (drawFullCircle) {
+                  return (
+                    <FullCircle
+                      key={item.name}
+                      cx="16"
+                      cy="16"
+                      r="15"
+                      variant={item.variant!}
+                      onMouseEnter={() => setHoveredItem(`${item.name}: ${item.value}`)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    />
+                  );
+                }
 
-            return (
-              <Slice
-                key={item.name}
-                variant={item.variant!}
-                d={pathData}
-                onMouseEnter={() => setHoveredItem(`${item.name}: ${item.value}`)}
-                onMouseLeave={() => setHoveredItem(null)}
-              />
-            );
-          })}
-        </SvgContainer>
+                const percentage = (item.value / totalValue) * 100;
+                const startAngle = (cumulativePercentage / 100) * 360;
+                cumulativePercentage += percentage;
+                const endAngle = (cumulativePercentage / 100) * 360;
+                const pathData = describeArc(16, 16, 15, startAngle, endAngle);
 
-        {showLegend && (
-          <LegendContainer>
-            {coloredData.map((item) => (
-              <LegendItem key={item.name}>
-                <LegendColor variant={item.variant!} />
-                <LegendText>{item.name}</LegendText>
-              </LegendItem>
-            ))}
-          </LegendContainer>
+                return (
+                  <Slice
+                    key={item.name}
+                    variant={item.variant!}
+                    d={pathData}
+                    onMouseEnter={() => setHoveredItem(`${item.name}: ${item.value}`)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                  />
+                );
+              })}
+            </SvgContainer>
+
+            {showLegend && (
+              <LegendContainer>
+                {coloredData.map((item) => (
+                  <LegendItem key={item.name}>
+                    <LegendColor variant={item.variant!} />
+                    <LegendText>{item.name}</LegendText>
+                  </LegendItem>
+                ))}
+              </LegendContainer>
+            )}
+          </>
         )}
       </ChartContent>
 
@@ -123,8 +147,10 @@ function describeArc(x: number, y: number, radius: number, startAngle: number, e
 const ChartWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  position: relative;
   width: 100%;
+  padding: 5px;
+  align-items: center;
 `;
 
 const ChartHeader = styled.div`
@@ -151,6 +177,13 @@ const ChartContent = styled.div`
   gap: 10px;
 `;
 
+const NoDataMessage = styled.div`
+  color: ${({ theme }) => theme.colors.white};
+  font-size: 1rem;
+  text-align: center;
+  padding: 20px;
+`;
+
 const SvgContainer = styled.svg`
   display: block;
   flex-shrink: 0;
@@ -158,10 +191,9 @@ const SvgContainer = styled.svg`
 
 const LegendContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
   justify-content: center;
-  min-width: 50px;
 `;
 
 const LegendItem = styled.div`
@@ -169,7 +201,6 @@ const LegendItem = styled.div`
   align-items: center;
   gap: 8px;
   padding: 4px;
-  justify-content: flex-start;
 `;
 
 const LegendColor = styled.div<{ variant: VariantColor }>`
@@ -185,6 +216,18 @@ const LegendText = styled.span`
 `;
 
 const Slice = styled.path<{ variant: VariantColor }>`
+  fill: ${({ theme, variant }) => getVariantColor(theme, variant)};
+  stroke: ${({ theme }) => theme.colors.gray};
+  stroke-width: 0.5;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    filter: brightness(1.5);
+  }
+`;
+
+const FullCircle = styled.circle<{ variant: VariantColor }>`
   fill: ${({ theme, variant }) => getVariantColor(theme, variant)};
   stroke: ${({ theme }) => theme.colors.gray};
   stroke-width: 0.5;
