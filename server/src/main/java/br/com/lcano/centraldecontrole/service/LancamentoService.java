@@ -123,4 +123,16 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
             default -> null;
         };
     }
+
+
+    public List<Lancamento> findByUsuarioAutenticadoAndTipoAndDateRange(TipoLancamentoEnum tipoLancamentoEnum, Date inicio, Date fim) {
+        return repository.findAll(
+                LancamentoRepository.withUsuarioAndTipoAndDateRange(
+                        usuarioUtil.getUsuarioAutenticado(),
+                        tipoLancamentoEnum,
+                        inicio,
+                        fim
+                )
+        );
+    }
 }
