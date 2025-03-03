@@ -21,10 +21,6 @@ public class DateUtil {
         return TimeZone.getTimeZone(PropertiesConfig.getTimeZone());
     }
 
-    public String getDateFormat() {
-        return PropertiesConfig.getDateFormat();
-    }
-
     public static Date parseDate(String dateStr) {
         return parseDate(dateStr, "yyyy-MM-dd");
     }

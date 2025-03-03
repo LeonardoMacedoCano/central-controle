@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { FaBars, FaFileImport, FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { 
   Container, Panel, Column, Table, FloatingButton, Loading, SearchFilter
@@ -130,9 +130,11 @@ const LancamentoListPage: React.FC = () => {
         />
       </Panel>
       <FloatingButton
-        mainButtonIcon={<FaPlus />}
-        mainAction={() => handleNavigation('/lancamento/novo')}
-        mainButtonHint='Lançamento Manual'
+        mainButtonIcon={<FaBars />}
+        options={[
+          { icon: <FaFileImport />, hint: 'Importar Extrato', action: () => handleNavigation('/extrato-fluxo-caixa') },
+          { icon: <FaPlus />, hint: 'Lançamento Manual', action: () => handleNavigation('/lancamento/novo') }
+        ]}
       />
     </Container>
   );

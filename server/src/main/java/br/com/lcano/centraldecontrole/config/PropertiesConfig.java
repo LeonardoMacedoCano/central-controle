@@ -13,20 +13,16 @@ public class PropertiesConfig {
     AuthorizationService authorizationService;
     @Value("${spring.jackson.time-zone}")
     String timeZone;
-    @Value("${spring.jackson.date-format}")
-    String dateFormat;
     @Value("${admin.username}")
     String adminUsername;
     @Value("${admin.password}")
     String adminPassword;
 
     private static String staticTimeZone;
-    private static String staticDateFormat;
 
     @PostConstruct
     public void init() {
         PropertiesConfig.staticTimeZone = this.timeZone;
-        PropertiesConfig.staticDateFormat = this.dateFormat;
 
         if (!adminUserJaCadastrado()) {
             try {
@@ -47,9 +43,5 @@ public class PropertiesConfig {
 
     public static String getTimeZone() {
         return staticTimeZone;
-    }
-
-    public static String getDateFormat() {
-        return staticDateFormat;
     }
 }

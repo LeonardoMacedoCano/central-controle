@@ -3,7 +3,7 @@ import { Categoria, initialCategoriaState, PAGE_SIZE_DEFAULT, PagedResponse } fr
 import { AuthContext, useMessage } from '../../../../contexts';
 import { RendaCategoriaService } from '../../../../service';
 import { useConfirmModal } from '../../../../hooks';
-import { Column, ConfirmModal, FloatingButton, Panel, Table } from '../../../../components';
+import { Column, ConfirmModal, FloatingButton, Table } from '../../../../components';
 import CategoriaSectionForm from './CategoriaSectionForm';
 import { FaPlus } from 'react-icons/fa';
 
@@ -96,20 +96,18 @@ const RendaCategoriaSection: React.FC = () => {
 
       <FloatingButton mainButtonIcon={<FaPlus />} mainButtonHint="Adicionar categoria" mainAction={handleAddCategoria} />
 
-      <Panel maxWidth="1000px" padding='0'>
-        <Table<Categoria>
-          values={categorias}
-          messageEmpty="Nenhuma categoria encontrada."
-          keyExtractor={(item) => item.id.toString()}
-          onEdit={handleEditCategoria}
-          onDelete={(item) => handleDelete(item.id)}
-          loadPage={loadPage}
-          columns={[
-            <Column<Categoria> header="Código" value={(item) => item.id} width='80px' />,
-            <Column<Categoria> header="Descrição" value={(item) => item.descricao} />,
-          ]}
-        />
-      </Panel>
+      <Table<Categoria>
+        values={categorias}
+        messageEmpty="Nenhuma categoria encontrada."
+        keyExtractor={(item) => item.id.toString()}
+        onEdit={handleEditCategoria}
+        onDelete={(item) => handleDelete(item.id)}
+        loadPage={loadPage}
+        columns={[
+          <Column<Categoria> header="Código" value={(item) => item.id} width='80px' />,
+          <Column<Categoria> header="Descrição" value={(item) => item.descricao} />,
+        ]}
+      />
     </>
   );
 };
