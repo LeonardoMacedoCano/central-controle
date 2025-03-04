@@ -12,14 +12,10 @@ const ExtratoParametroSectionForm: React.FC<props> = ({ parametros, onUpdate }) 
     onUpdate({ ...parametros, metaAporteMensal: value });
   };
 
-  const handleMetaAporteTotal = (value: any) => {
-    onUpdate({ ...parametros, metaAporteTotal: value });
-  };
-
   return (
-    <FlexBox flexDirection="column" borderTop borderBottom borderLeft borderRight>
+    <FlexBox flexDirection="column">
       <FlexBox flexDirection="row">
-        <FlexBox.Item borderBottom>
+        <FlexBox.Item>
           <FieldValue 
             description="Dia Vencimento Fatura"
             hint="Dia padrão do vencimento da fatura do cartão."
@@ -29,19 +25,6 @@ const ExtratoParametroSectionForm: React.FC<props> = ({ parametros, onUpdate }) 
             minValue={1}
             maxValue={28}
             onUpdate={handleMetaAporteMensal}
-          />
-        </FlexBox.Item>
-      </FlexBox>
-      <FlexBox flexDirection="row">
-        <FlexBox.Item>
-          <FieldValue 
-            description="Meta aporte total"
-            hint="Meta valor de aporte total."
-            type="number"
-            value={parametros.metaAporteTotal}
-            editable={true}
-            minValue={0}
-            onUpdate={handleMetaAporteTotal}
           />
         </FlexBox.Item>
       </FlexBox>

@@ -17,7 +17,7 @@ const AtivoParametroSectionForm: React.FC<props> = ({ parametros, onUpdate }) =>
   };
 
   return (
-    <FlexBox flexDirection="column" borderTop borderBottom borderLeft borderRight>
+    <FlexBox flexDirection="column">
       <FlexBox flexDirection="row">
         <FlexBox.Item borderBottom>
           <FieldValue 

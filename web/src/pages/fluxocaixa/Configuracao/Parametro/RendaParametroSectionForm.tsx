@@ -21,7 +21,7 @@ const RendaParametroSectionForm: React.FC<props> = ({ parametros, categorias, on
   };
 
   return (
-    <FlexBox flexDirection="column" borderTop borderBottom borderLeft borderRight>
+    <FlexBox flexDirection="column">
       <FlexBox flexDirection="row">
         <FlexBox.Item borderBottom>
           <FieldValue 
