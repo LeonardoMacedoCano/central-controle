@@ -1,5 +1,6 @@
 package br.com.lcano.centraldecontrole.exception;
 
+import br.com.lcano.centraldecontrole.exception.fluxocaixa.ExtratoException;
 import br.com.lcano.centraldecontrole.exception.fluxocaixa.FluxoCaixaConfigException;
 import br.com.lcano.centraldecontrole.exception.servicos.DockerException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -97,5 +98,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({FluxoCaixaConfigException.ParametroNaoEncontrado.class})
     protected ResponseEntity<Object> handleParametroNaoEncontrado(FluxoCaixaConfigException.ParametroNaoEncontrado ex) {
         return buildResponseEntity(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler({ExtratoException.ErroPreenchimentoCampo.class})
+    protected ResponseEntity<Object> handleErroPreenchimentoCampo(ExtratoException.ErroPreenchimentoCampo ex) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 }
