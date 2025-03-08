@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="create-table-joberrorlog" author="system">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela joberrorlog já existe">
+            <not>
+                <tableExists tableName="joberrorlog"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="joberrorlog">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkjoberrorlog"/>
+            </column>
+            <column name="jobname" type="${varchar_255}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="errortimestamp" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="errormessage" type="${varchar_500}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stacktrace" type="clob">
+                <constraints nullable="true"/>
+            </column>
+            <column name="idusuario" type="${integer}">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="joberrorlog"
+                                 baseColumnNames="idusuario"
+                                 constraintName="fkjoberrorlogusuario"
+                                 referencedTableName="usuario"
+                                 referencedColumnNames="id"/>
+
+        <createIndex indexName="idxjoberrorlogjobname" tableName="joberrorlog">
+            <column name="jobname"/>
+        </createIndex>
+
+        <createIndex indexName="idxjoberrorlogtimestamp" tableName="joberrorlog">
+            <column name="errortimestamp"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

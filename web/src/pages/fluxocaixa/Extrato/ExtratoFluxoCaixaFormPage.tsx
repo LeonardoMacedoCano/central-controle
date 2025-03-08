@@ -20,7 +20,7 @@ import {
 import { FaCheck } from 'react-icons/fa';
 import { formatDateToYMDString, getCurrentDate, isDateValid } from '../../../utils';
 import { ExtratoFluxoCaixaService } from '../../../service';
-import { AuthContext, useMessage } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 import { useNavigate } from 'react-router-dom';
 
 const ExtratoFluxoCaixaFormPage: React.FC = () => {
@@ -32,7 +32,6 @@ const ExtratoFluxoCaixaFormPage: React.FC = () => {
   const [tipo, setTipo] = useState<TipoExtratoFluxoCaixaEnum>('EXTRATO_MENSAL_CARTAO');
 
   const auth = useContext(AuthContext);
-  const message = useMessage();
   const extratoFluxoCaixaService = ExtratoFluxoCaixaService();
   const navigate = useNavigate();
 
@@ -59,8 +58,6 @@ const ExtratoFluxoCaixaFormPage: React.FC = () => {
           throw new Error('Tipo de extrato não suportado.');
       }
       navigate('/lancamentos');
-    } catch (error) {
-      message.showErrorWithLog('Erro ao importar o extrato da fatura de cartão.', error);
     } finally {
       setIsLoading(false);
     }
