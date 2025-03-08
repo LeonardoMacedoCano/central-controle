@@ -8,8 +8,8 @@ interface props {
 }
 
 const ExtratoParametroSectionForm: React.FC<props> = ({ parametros, onUpdate }) => {
-  const handleMetaAporteMensal = (value: any) => {
-    onUpdate({ ...parametros, metaAporteMensal: value });
+  const handleDiaPadraoVencimentoCartao = (value: any) => {
+    onUpdate({ ...parametros, diaPadraoVencimentoCartao: value });
   };
 
   return (
@@ -24,7 +24,7 @@ const ExtratoParametroSectionForm: React.FC<props> = ({ parametros, onUpdate }) 
             editable={true}
             minValue={1}
             maxValue={28}
-            onUpdate={handleMetaAporteMensal}
+            onUpdate={handleDiaPadraoVencimentoCartao}
           />
         </FlexBox.Item>
       </FlexBox>
