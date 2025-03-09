@@ -10,6 +10,4 @@ import java.util.List;
 @Repository
 public interface RegraExtratoContaCorrenteRepository extends JpaRepository<RegraExtratoContaCorrente, Long> {
     List<RegraExtratoContaCorrente> findByUsuarioAndAtivoOrderByPrioridadeAsc(Usuario usuario, Boolean ativo);
-
-    boolean existsByUsuarioAndPrioridadeAndIdNot(Usuario usuarioLogado, Long prioridade, Long idAtual);
 }
