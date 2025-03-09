@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="create-table-notificacao" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela notificacao já existe">
+            <not>
+                <tableExists tableName="notificacao"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="notificacao">
+            <column name="id" type="${integer}" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pknotificacao"/>
+            </column>
+            <column name="idusuario" type="${integer}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="datahora" type="${timestamp}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mensagem" type="${varchar_255}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="link" type="${varchar_100}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="visto" type="${char_1}" defaultValue="S">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="notificacao"
+                                 baseColumnNames="idusuario"
+                                 constraintName="fknotificacaousuario"
+                                 referencedTableName="usuario"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

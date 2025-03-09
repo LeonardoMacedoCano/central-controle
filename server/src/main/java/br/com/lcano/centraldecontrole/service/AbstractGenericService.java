@@ -86,7 +86,7 @@ public abstract class AbstractGenericService<T, ID> {
     private void setUsuarioIfExists(T entity) {
         try {
             Field usuarioField = entity.getClass().getDeclaredField("usuario");
-            if (usuarioField != null && usuarioField.getType().getSimpleName().equals("Usuario")) {
+            if (usuarioField.getType().getSimpleName().equals("Usuario")) {
                 usuarioField.setAccessible(true);
                 usuarioField.set(entity, usuarioUtil.getUsuarioAutenticado());
             }
