@@ -47,6 +47,10 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
         save(notificacao);
     }
 
+    public Long getTotalNotificacoesNaoLidas() {
+        return repository.countByUsuarioIdAndVistoFalse(usuarioUtil.getUsuarioAutenticado().getId());
+    }
+
     public Page<NotificacaoDTO> search(Pageable pageable, List<FilterDTO> filterDTOs) {
         Specification<Notificacao> combinedSpecification = FilterUtil.buildSpecificationsFromDTO(filterDTOs, this::applyFieldSpecification);
         return repository.findAll(combinedSpecification, pageable)

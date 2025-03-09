@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import { FaBars, FaDollarSign, FaHome, FaServer, FaSignOutAlt } from 'react-icons/fa';
+import { FaBars, FaDollarSign, FaHome, FaServer, FaSignOutAlt, FaEnvelope } from 'react-icons/fa';
 import { Link as RouterLink } from 'react-router-dom';
-import { AuthContext } from '../contexts';
+import { AuthContext, NotificationContext } from '../contexts';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -12,6 +12,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSubmenu, setActiveSubmenu] = useState<string | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const { unreadCount } = useContext(NotificationContext);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -50,7 +52,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
         />
       </div>
       <MainContent isMenuOpen={isMenuOpen}>
-        <Header toggleMenu={toggleMenu} />
+        <Header 
+          toggleMenu={toggleMenu} 
+          unreadMessages={unreadCount}
+        />
         <PageContent>
           {children}
         </PageContent>
@@ -59,12 +64,32 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   );
 };
 
-const Header: React.FC<{ toggleMenu: () => void }> = ({ toggleMenu }) => (
+interface HeaderProps {
+  toggleMenu: () => void;
+  unreadMessages: number;
+}
+
+const Header: React.FC<HeaderProps> = ({ toggleMenu, unreadMessages }) => (
   <AppHeader>
-    <MenuIcon onClick={toggleMenu}>
-      <FaBars />
-    </MenuIcon>
-    <TitleHeader>Central de Controle</TitleHeader>
+    <MenuIconContainer>
+      <MenuIcon onClick={toggleMenu}>
+        <FaBars />
+      </MenuIcon>
+    </MenuIconContainer>
+    
+    <TitleHeaderContainer>
+      <TitleHeader>Central de Controle</TitleHeader>
+    </TitleHeaderContainer>
+    
+    <UserMenuContainer>
+      <MessageIconWrapper>
+        <FaEnvelope />
+        {unreadMessages > 0 && <UnreadBadge>{unreadMessages}</UnreadBadge>}
+      </MessageIconWrapper>
+      <UserAvatar>
+        <img src="/user.png" alt="Perfil do usuário" />
+      </UserAvatar>
+    </UserMenuContainer>
   </AppHeader>
 );
 
@@ -174,6 +199,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubme
 
 export default AppLayout;
 
+// Estilos existentes
 const MainContent = styled.div<{ isMenuOpen: boolean }>`
   flex: 1;
   display: flex;
@@ -202,22 +228,36 @@ const AppSidebarContainer = styled.div<{ isActive: boolean }>`
   overflow-x: hidden;
 `;
 
+// Estilos modificados e novos estilos
 const AppHeader = styled.div`
   height: 60px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
   color: ${({ theme }) => theme.colors.tertiary};
   background-color: ${({ theme }) => theme.colors.secondary};
   box-shadow: 0 2px 5px ${({ theme }) => theme.colors.tertiary};
   padding: 0 20px;
   flex-shrink: 0;
+`;
 
-  > svg {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-  }
+const MenuIconContainer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const TitleHeaderContainer = styled.div`
+  flex: 2;
+  display: flex;
+  justify-content: center;
+`;
+
+const UserMenuContainer = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
 `;
 
 const MenuIcon = styled.div`
@@ -229,6 +269,42 @@ const MenuIcon = styled.div`
   
   svg {
     font-size: 25px;
+  }
+`;
+
+const MessageIconWrapper = styled.div`
+  position: relative;
+  font-size: 20px;
+  cursor: pointer;
+`;
+
+const UnreadBadge = styled.div`
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const UserAvatar = styled.div`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid ${({ theme }) => theme.colors.tertiary};
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 `;
 

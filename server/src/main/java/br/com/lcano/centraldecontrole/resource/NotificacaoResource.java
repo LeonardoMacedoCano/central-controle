@@ -34,4 +34,9 @@ public class NotificacaoResource {
     public void markAsRead(@PathVariable Long id) {
         service.markAsRead(id);
     }
+
+    @GetMapping("/nao-lidas/total")
+    public ResponseEntity<Long> getTotalNotificacoesNaoLidas() {
+        return ResponseEntity.ok(service.getTotalNotificacoesNaoLidas());
+    }
 }

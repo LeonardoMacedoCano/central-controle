@@ -11,6 +11,7 @@ import {
 import AppLayout from './menus/AppLayout';
 import AppRoutes from './routes';
 import { DynamicFavicon } from './components';
+import { NotificationProvider } from './contexts/notificacao/NotificationContext';
 
 const App: React.FC = () => {
   return (
@@ -20,9 +21,11 @@ const App: React.FC = () => {
           <BrowserRouter>
             <GlobalStyles />
             <RequireAuth>
-              <AppLayout>
-                <AppRoutes />
-              </AppLayout>
+              <NotificationProvider>
+                <AppLayout>
+                  <AppRoutes />
+                </AppLayout>
+              </NotificationProvider>
             </RequireAuth>
             <DynamicFavicon />
           </BrowserRouter>

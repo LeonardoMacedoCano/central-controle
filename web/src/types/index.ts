@@ -98,6 +98,9 @@ import {
   ResumoFluxoCaixa,
   initialResumoFluxoCaixaState
 } from "./fluxocaixa/ResumoFluxoCaixa";
+import { 
+  Notificacao
+} from "./Notificacao";
 
 export type {
   Categoria,
@@ -130,6 +133,7 @@ export type {
   TipoRegraExtratoContaCorrenteEnum,
   RegraExtratoContaCorrente,
   ResumoFluxoCaixa,
+  Notificacao,
 };
 
 export {
