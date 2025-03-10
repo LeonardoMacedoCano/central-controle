@@ -20,8 +20,12 @@ const SearchFilter: React.FC<Props> = ({ fields, search }) => {
   const [filters, setFilters] = useState<FilterDTO[]>([]);
 
   useEffect(() => {
-    if (selectedField?.type.toLowerCase() === 'date' && !searchValue) {
-      setSearchValue(formatDateToYMDString(getCurrentDate()));
+    if (!searchValue) {
+      if (selectedField?.type.toLowerCase() === 'date') {
+        setSearchValue(formatDateToYMDString(getCurrentDate()));
+      } else if (selectedField?.type.toLowerCase() === 'boolean') {
+        setSearchValue('true');
+      }
     }
   }, [selectedField, searchValue]);
 
@@ -45,6 +49,8 @@ const SearchFilter: React.FC<Props> = ({ fields, search }) => {
     if (selectedField?.type.toLowerCase() === 'date') {
       const formattedValue = formatDateValue(value);
       setSearchValue(formattedValue);
+    } else if (selectedField?.type.toLowerCase() === 'boolean') {
+      setSearchValue(value);
     } else {
       setSearchValue(value);
     }
@@ -54,6 +60,7 @@ const SearchFilter: React.FC<Props> = ({ fields, search }) => {
     if (value instanceof Date) {
       return formatDateToYMDString(value);
     }
+    
     const parsedDate = parseDateStringToDate(value);
     return parsedDate ? formatDateToYMDString(parsedDate) : String(value);
   };

@@ -58,6 +58,10 @@ interface StyledButtonProps {
 
 const getButtonVariantStyles = (variant: StyledButtonProps['variant'], theme: any) => {
   switch (variant) {
+    case 'primary':
+    case 'secondary':
+    case 'tertiary':
+    case 'quaternary':
     case 'success':
     case 'info':
     case 'warning':

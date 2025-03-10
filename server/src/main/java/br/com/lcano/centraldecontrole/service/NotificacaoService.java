@@ -17,7 +17,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @Service
@@ -57,9 +60,9 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
                 .map(entity -> getDtoInstance().fromEntity(entity));
     }
 
-    public void markAsRead(Long id) {
+    public void alterStatus(Long id, Boolean visto) {
         Notificacao notificacao = findById(id);
-        notificacao.setVisto(Boolean.TRUE);
+        notificacao.setVisto(!visto);
         save(notificacao);
     }
 
@@ -79,18 +82,25 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
 
     private Specification<Notificacao> applyDataHoraSpecification(String operator, String value) {
         OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
-        LocalDateTime date = DateUtil.parseDateTime(value);
+        Date date = DateUtil.parseDate(value);
+
+        LocalDateTime startOfDay = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1).minusNanos(1);
+
+        Date startOfDayDate = Date.from(startOfDay.atZone(ZoneId.systemDefault()).toInstant());
+        Date endOfDayDate = Date.from(endOfDay.atZone(ZoneId.systemDefault()).toInstant());
 
         return switch (filterEnum) {
-            case IGUAL -> NotificacaoSpecifications.hasDataHoraEqual(date);
-            case DIFERENTE -> NotificacaoSpecifications.hasDataHoraNotEqual(date);
-            case MAIOR -> NotificacaoSpecifications.hasDataHoraAfter(date);
-            case MENOR -> NotificacaoSpecifications.hasDataHoraBefore(date);
-            case MAIOR_OU_IGUAL -> NotificacaoSpecifications.hasDataHoraGreaterOrEqual(date);
-            case MENOR_OU_IGUAL -> NotificacaoSpecifications.hasDataHoraLessOrEqual(date);
+            case IGUAL -> NotificacaoSpecifications.hasDataHoraBetween(startOfDayDate, endOfDayDate);
+            case DIFERENTE -> NotificacaoSpecifications.hasDataHoraNotEqual(startOfDayDate, endOfDayDate);
+            case MAIOR -> NotificacaoSpecifications.hasDataHoraAfter(startOfDayDate);
+            case MENOR -> NotificacaoSpecifications.hasDataHoraBefore(endOfDayDate);
+            case MAIOR_OU_IGUAL -> NotificacaoSpecifications.hasDataHoraGreaterOrEqual(startOfDayDate);
+            case MENOR_OU_IGUAL -> NotificacaoSpecifications.hasDataHoraLessOrEqual(endOfDayDate);
             default -> null;
         };
     }
+
 
     private Specification<Notificacao> applyMensagemSpecification(String operator, String value) {
         OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
@@ -116,10 +126,11 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
 
     private Specification<Notificacao> applyVistoSpecification(String operator, String value) {
         OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        Boolean visto = Objects.equals(value, "true");
 
         return switch (filterEnum) {
-            case IGUAL -> NotificacaoSpecifications.hasVisto(value);
-            case DIFERENTE -> NotificacaoSpecifications.hasVistoNot(value);
+            case IGUAL -> NotificacaoSpecifications.hasVisto(visto);
+            case DIFERENTE -> NotificacaoSpecifications.hasVistoNot(visto);
             default -> null;
         };
     }

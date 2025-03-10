@@ -3,6 +3,7 @@ package br.com.lcano.centraldecontrole.resource;
 import br.com.lcano.centraldecontrole.dto.FilterDTO;
 import br.com.lcano.centraldecontrole.dto.NotificacaoDTO;
 import br.com.lcano.centraldecontrole.service.NotificacaoService;
+import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,13 +31,20 @@ public class NotificacaoResource {
         return ResponseEntity.ok(service.search(pageable, filterDTOs));
     }
 
-    @PostMapping("/{id}/read")
-    public void markAsRead(@PathVariable Long id) {
-        service.markAsRead(id);
+    @PostMapping("/{id}/alterar-status/{visto}")
+    public void alterStatus(@PathVariable Long id,
+                            @PathVariable Boolean visto) {
+        service.alterStatus(id, visto);
     }
 
     @GetMapping("/nao-lidas/total")
     public ResponseEntity<Long> getTotalNotificacoesNaoLidas() {
         return ResponseEntity.ok(service.getTotalNotificacoesNaoLidas());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteById(@PathVariable Long id) {
+        this.service.deleteById(id);
+        return CustomSuccess.buildResponseEntity("Notificação deletada com sucesso.");
     }
 }

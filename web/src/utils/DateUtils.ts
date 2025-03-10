@@ -2,6 +2,14 @@ export const getCurrentDate = (): Date => {
   return new Date();
 };
 
+export const parseShortStringToDateTime = (dateStr: string | undefined): string => {
+  if (!dateStr) return '';
+
+  const dateParts = dateStr.toString().split(',');
+
+  return `${dateParts[2].padStart(2, '0')}/${(parseInt(dateParts[1], 10) + 1).toString().padStart(2, '0')}/${dateParts[0].slice(-2)} ${dateParts[3].padStart(2, '0')}:${dateParts[4].padStart(2, '0')}`;
+};
+
 export const formatDateToShortString = (date: Date | undefined): string => {
   if (!date) return '';
 

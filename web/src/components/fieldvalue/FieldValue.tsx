@@ -68,7 +68,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
         formattedValue = validateMaxValue(formattedValue);
         break;
       case 'boolean':
-        formattedValue = event.target.value === 'true';
+        formattedValue = event.target.value === 'false' ? 'false' : 'true';
         break;
       case 'date':
         formattedValue = parseDateStringToDate(event.target.value);
@@ -126,7 +126,7 @@ const FieldValue: React.FC<FieldValueProps> = ({
       return formatDateToYMDString(val);
     }
   
-    if (typeof val === 'boolean' && type === 'boolean') {
+    if (typeof val === 'string' && type === 'boolean') {
       return val ? 'true' : 'false';
     }
   

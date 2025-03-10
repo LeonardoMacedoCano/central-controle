@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -36,19 +35,6 @@ public class DateUtil {
         try {
             return new SimpleDateFormat(format).parse(dateStr);
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Erro ao converter a data: " + dateStr + " com o formato: " + format, e);
-        }
-    }
-
-    public static LocalDateTime parseDateTime(String dateStr) {
-        return parseDateTime(dateStr, "yyyy-MM-dd HH:mm:ss");
-    }
-
-    public static LocalDateTime parseDateTime(String dateStr, String format) throws IllegalArgumentException {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-            return LocalDateTime.parse(dateStr, formatter);
-        } catch (Exception e) {
             throw new IllegalArgumentException("Erro ao converter a data: " + dateStr + " com o formato: " + format, e);
         }
     }

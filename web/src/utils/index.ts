@@ -4,7 +4,8 @@ import {
   formatDateToYMDString,
   formatDateToYMString,
   parseDateStringToDate,
-  isDateValid
+  isDateValid,
+  parseShortStringToDateTime
 } from "./DateUtils";
 
 import { 
@@ -46,6 +47,7 @@ export {
   formatNumberWithLeadingZeros,
   copyLinkToClipboard,
   formatNumberWithTrailingZeros,
+  parseShortStringToDateTime,
 };
 
 export type {
