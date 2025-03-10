@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components';
 import { FaBars, FaDollarSign, FaHome, FaServer, FaSignOutAlt, FaEnvelope } from 'react-icons/fa';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { AuthContext, NotificationContext } from '../contexts';
 
 interface AppLayoutProps {
@@ -69,29 +69,37 @@ interface HeaderProps {
   unreadMessages: number;
 }
 
-const Header: React.FC<HeaderProps> = ({ toggleMenu, unreadMessages }) => (
-  <AppHeader>
-    <MenuIconContainer>
-      <MenuIcon onClick={toggleMenu}>
-        <FaBars />
-      </MenuIcon>
-    </MenuIconContainer>
-    
-    <TitleHeaderContainer>
-      <TitleHeader>Central de Controle</TitleHeader>
-    </TitleHeaderContainer>
-    
-    <UserMenuContainer>
-      <MessageIconWrapper>
-        <FaEnvelope />
-        {unreadMessages > 0 && <UnreadBadge>{unreadMessages}</UnreadBadge>}
-      </MessageIconWrapper>
-      <UserAvatar>
-        <img src="/user.png" alt="Perfil do usuário" />
-      </UserAvatar>
-    </UserMenuContainer>
-  </AppHeader>
-);
+const Header: React.FC<HeaderProps> = ({ toggleMenu, unreadMessages }) => {
+  const navigate = useNavigate();
+
+  const handleNotificationClick = () => {
+    navigate('/notificacoes');
+  };
+
+  return (
+    <AppHeader>
+      <MenuIconContainer>
+        <MenuIcon onClick={toggleMenu}>
+          <FaBars />
+        </MenuIcon>
+      </MenuIconContainer>
+
+      <TitleHeaderContainer>
+        <TitleHeader>Central de Controle</TitleHeader>
+      </TitleHeaderContainer>
+
+      <UserMenuContainer>
+        <MessageIconWrapper onClick={handleNotificationClick}>
+          <FaEnvelope />
+          {unreadMessages > 0 && <UnreadBadge>{unreadMessages}</UnreadBadge>}
+        </MessageIconWrapper>
+        <UserAvatar>
+          <img src="/user.png" alt="Perfil do usuário" />
+        </UserAvatar>
+      </UserMenuContainer>
+    </AppHeader>
+  );
+};
 
 interface SidebarProps {
   isOpen: boolean;
