@@ -10,7 +10,6 @@ import RegraExtratoContaCorrenteListPage from '../pages/fluxocaixa/Configuracao/
 import RegraExtratoContaCorrenteFormPage from '../pages/fluxocaixa/Configuracao/Regra/RegraExtratoContaCorrenteFormPage';
 import RegraExtratoContaCorrentePage from '../pages/fluxocaixa/Configuracao/Regra/RegraExtratoContaCorrentePage';
 import ResumoFluxoCaixaPage from '../pages/fluxocaixa/Resumo/ResumoFluxoCaixaPage';
-import NotificacaoListPage from '../pages/notificacao/NotificacaoListPage';
 
 const FluxoCaixaRoutes: RouteObject[] = [
   { path: "/lancamentos", element: <LancamentoListPage /> },
@@ -26,7 +25,6 @@ const FluxoCaixaRoutes: RouteObject[] = [
   { path: "/regra-extrato-conta-corrente/editar/:id", element: <RegraExtratoContaCorrenteFormPage /> },
   { path: "/regra-extrato-conta-corrente/:id", element: <RegraExtratoContaCorrentePage /> },
   { path: "/resumo-fluxo-caixa", element: <ResumoFluxoCaixaPage /> },
-  { path: "/notificacoes", element: <NotificacaoListPage /> },
 ];
 
 export default FluxoCaixaRoutes;

@@ -25,9 +25,7 @@
             <column name="mensagem" type="${varchar_255}">
                 <constraints nullable="false"/>
             </column>
-            <column name="link" type="${varchar_100}">
-                <constraints nullable="false"/>
-            </column>
+            <column name="link" type="${varchar_100}" />
             <column name="visto" type="${char_1}" defaultValue="S">
                 <constraints nullable="false"/>
             </column>

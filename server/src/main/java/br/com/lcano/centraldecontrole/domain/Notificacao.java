@@ -33,7 +33,7 @@ public class Notificacao implements Serializable {
     @Column(nullable = false)
     private String mensagem;
 
-    @Column(nullable = false)
+    @Column
     private String link;
 
     @Convert(converter = BooleanToCharConverter.class)

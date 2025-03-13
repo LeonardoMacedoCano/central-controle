@@ -98,9 +98,10 @@ const NotificacaoListPage: React.FC = () => {
               <Button
                 variant="primary"
                 icon={<FaLink />}
-                onClick={() => {}}
+                onClick={() => handleNavigation(`${item.link}`)}
                 hint={"Link"}
                 style={{ borderRadius: '50%', justifyContent: 'center', alignItems: 'center', display: 'flex', height: '25px', width: '25px' }}
+                disabled={!item.link || item.link.trim() === ""}
               />
               <Button
                 variant="info"

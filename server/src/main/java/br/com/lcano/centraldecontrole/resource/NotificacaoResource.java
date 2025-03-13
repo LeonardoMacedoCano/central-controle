@@ -21,7 +21,7 @@ public class NotificacaoResource {
     private NotificacaoService service;
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<NotificacaoDTO>> findByIdAsDto(@PathVariable Long id) {
+    public ResponseEntity<NotificacaoDTO> findByIdAsDto(@PathVariable Long id) {
         return ResponseEntity.ok(this.service.findByIdAsDto(id));
     }
 
