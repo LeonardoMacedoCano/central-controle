@@ -5,6 +5,7 @@ interface Option {
   icon: React.ReactNode;
   hint: string;
   action: () => void;
+  disabled?: boolean;
 }
 
 interface FloatingButtonProps {
@@ -42,7 +43,7 @@ const FloatingButton: React.FC<FloatingButtonProps> = ({ mainButtonIcon, mainBut
       {options && showOptions && (
         <OptionsContainer onMouseEnter={() => toggleOptions(true)} onMouseLeave={() => toggleOptions(false)}>
           {options.map((option, index) => (
-            <OptionCircle key={index} onClick={() => handleOptionClick(option.action)} title={option.hint}>
+            <OptionCircle key={index} onClick={() => handleOptionClick(option.action)} title={option.hint} disabled={option.disabled}>
               {option.icon}
             </OptionCircle>
           ))}
