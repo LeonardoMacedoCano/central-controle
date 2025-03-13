@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.enums.servicos;
 import lombok.Getter;
 
 @Getter
-public enum DockerStatusEnum {
+public enum DockerStatus {
     RUNNING("Em execução"),
     STOPPED("Parado"),
     PAUSED("Pausado"),
@@ -15,7 +15,7 @@ public enum DockerStatusEnum {
 
     private final String description;
 
-    DockerStatusEnum(String description) {
+    DockerStatus(String description) {
         this.description = description;
     }
 

@@ -4,7 +4,7 @@ import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.AtivoDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.DespesaDTO;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.RendaDTO;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
@@ -18,7 +18,7 @@ public class LancamentoDTO extends BaseDTO<Lancamento> {
     private Long id;
     private Date dataLancamento;
     private String descricao;
-    private TipoLancamentoEnum tipo;
+    private TipoLancamento tipo;
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "tipo")
     @JsonSubTypes({

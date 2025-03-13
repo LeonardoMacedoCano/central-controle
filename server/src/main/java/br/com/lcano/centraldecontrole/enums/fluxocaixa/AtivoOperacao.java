@@ -3,18 +3,18 @@ package br.com.lcano.centraldecontrole.enums.fluxocaixa;
 import lombok.Getter;
 
 @Getter
-public enum AtivoOperacaoEnum {
+public enum AtivoOperacao {
     VENDA("VENDA"),
     COMPRA("COMPRA");
 
     private final String descricao;
 
-    AtivoOperacaoEnum(String descricao) {
+    AtivoOperacao(String descricao) {
         this.descricao = descricao;
     }
 
-    public static AtivoOperacaoEnum fromDescricao(String descricao) {
-        for (AtivoOperacaoEnum operacao : values()) {
+    public static AtivoOperacao fromDescricao(String descricao) {
+        for (AtivoOperacao operacao : values()) {
             if (operacao.getDescricao().equalsIgnoreCase(descricao)) {
                 return operacao;
             }

@@ -6,8 +6,8 @@ import br.com.lcano.centraldecontrole.repository.LancamentoSpecifications;
 import br.com.lcano.centraldecontrole.dto.FilterDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
-import br.com.lcano.centraldecontrole.enums.OperatorFilterEnum;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.enums.OperatorFilter;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
 import br.com.lcano.centraldecontrole.exception.LancamentoException;
 import br.com.lcano.centraldecontrole.repository.LancamentoRepository;
 import br.com.lcano.centraldecontrole.util.DateUtil;
@@ -26,7 +26,7 @@ import java.util.*;
 @AllArgsConstructor
 public class LancamentoService extends AbstractGenericService<Lancamento, Long> {
     private final LancamentoRepository repository;
-    private final Map<TipoLancamentoEnum, LancamentoItemService<? extends LancamentoItemDTO>> lancamentoItemServices;
+    private final Map<TipoLancamento, LancamentoItemService<? extends LancamentoItemDTO>> lancamentoItemServices;
     private final UsuarioUtil usuarioUtil;
 
     @Override
@@ -68,7 +68,7 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
                 });
     }
 
-    private LancamentoItemService<LancamentoItemDTO> getLancamentoItemService(TipoLancamentoEnum tipo) {
+    private LancamentoItemService<LancamentoItemDTO> getLancamentoItemService(TipoLancamento tipo) {
         return (LancamentoItemService<LancamentoItemDTO>) Optional.ofNullable(lancamentoItemServices.get(tipo))
                 .orElseThrow(() -> new LancamentoException.LancamentoTipoNaoSuportado(tipo.getDescricao()));
     }
@@ -87,7 +87,7 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
     }
 
     private Specification<Lancamento> applyDescricaoSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
 
         return switch (filterEnum) {
             case IGUAL -> LancamentoSpecifications.hasDescricao(value);
@@ -98,8 +98,8 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
     }
 
     private Specification<Lancamento> applyTipoSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
-        TipoLancamentoEnum tipo = TipoLancamentoEnum.valueOf(value);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
+        TipoLancamento tipo = TipoLancamento.valueOf(value);
 
         return switch (filterEnum) {
             case IGUAL -> LancamentoSpecifications.hasTipos(List.of(tipo));
@@ -109,7 +109,7 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
     }
 
     private Specification<Lancamento> applyDataSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
         Date date = DateUtil.parseDate(value);
         if (date == null) return null;
 
@@ -125,7 +125,7 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
     }
 
 
-    public List<Lancamento> findByUsuarioAutenticadoAndTipoAndDateRange(TipoLancamentoEnum tipoLancamentoEnum, Date inicio, Date fim) {
+    public List<Lancamento> findByUsuarioAutenticadoAndTipoAndDateRange(TipoLancamento tipoLancamentoEnum, Date inicio, Date fim) {
         return repository.findAll(
                 LancamentoRepository.withUsuarioAndTipoAndDateRange(
                         usuarioUtil.getUsuarioAutenticado(),

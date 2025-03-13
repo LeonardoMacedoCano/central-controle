@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.service;
 import br.com.lcano.centraldecontrole.domain.Notificacao;
 import br.com.lcano.centraldecontrole.dto.FilterDTO;
 import br.com.lcano.centraldecontrole.dto.NotificacaoDTO;
-import br.com.lcano.centraldecontrole.enums.OperatorFilterEnum;
+import br.com.lcano.centraldecontrole.enums.OperatorFilter;
 import br.com.lcano.centraldecontrole.repository.NotificacaoRepository;
 import br.com.lcano.centraldecontrole.repository.NotificacaoSpecifications;
 import br.com.lcano.centraldecontrole.util.DateUtil;
@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,7 +29,7 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
     private UsuarioUtil usuarioUtil;
 
     @Override
-    protected JpaRepository<Notificacao, Long> getRepository() {
+    protected NotificacaoRepository getRepository() {
         return repository;
     }
 
@@ -81,7 +80,7 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
     }
 
     private Specification<Notificacao> applyDataHoraSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
         Date date = DateUtil.parseDate(value);
 
         LocalDateTime startOfDay = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
@@ -103,7 +102,7 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
 
 
     private Specification<Notificacao> applyMensagemSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
 
         return switch (filterEnum) {
             case IGUAL -> NotificacaoSpecifications.hasMensagem(value);
@@ -114,7 +113,7 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
     }
 
     private Specification<Notificacao> applyLinkSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
 
         return switch (filterEnum) {
             case IGUAL -> NotificacaoSpecifications.hasLink(value);
@@ -125,7 +124,7 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
     }
 
     private Specification<Notificacao> applyVistoSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
         Boolean visto = Objects.equals(value, "true");
 
         return switch (filterEnum) {

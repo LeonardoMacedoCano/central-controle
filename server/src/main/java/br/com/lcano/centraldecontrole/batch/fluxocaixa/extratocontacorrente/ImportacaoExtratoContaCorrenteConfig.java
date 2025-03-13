@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import static br.com.lcano.centraldecontrole.enums.JobName.IMPORTACAO_EXTRATO_CONTA_CORRENTE_JOB;
+
 @Configuration
 @EnableBatchProcessing
 public class ImportacaoExtratoContaCorrenteConfig {
@@ -24,7 +26,7 @@ public class ImportacaoExtratoContaCorrenteConfig {
     @Bean
     public Job importacaoExtratoContaCorrenteJob(JobRepository jobRepository,
                                                  Step importacaoExtratoContaCorrenteStep) {
-        return new JobBuilder("importacaoExtratoContaCorrenteJob", jobRepository)
+        return new JobBuilder(IMPORTACAO_EXTRATO_CONTA_CORRENTE_JOB.getJobId(), jobRepository)
                 .incrementer(new org.springframework.batch.core.launch.support.RunIdIncrementer())
                 .listener(jobErrorListener)
                 .start(importacaoExtratoContaCorrenteStep)

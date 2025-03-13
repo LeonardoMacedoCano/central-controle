@@ -5,8 +5,8 @@ import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoMensalCartaoDTO;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamento;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.DespesaCategoriaService;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.FluxoCaixaParametroService;
@@ -73,7 +73,7 @@ public class ImportacaoExtratoMensalCartaoProcessor implements ItemProcessor<Ext
         Lancamento lancamento = new Lancamento();
         lancamento.setDataLancamento(extratoMensalCartaoDTO.getDataLancamento());
         lancamento.setDescricao(extratoMensalCartaoDTO.getDescricao());
-        lancamento.setTipo(TipoLancamentoEnum.DESPESA);
+        lancamento.setTipo(TipoLancamento.DESPESA);
         lancamento.setUsuario(usuario);
         return lancamento;
     }
@@ -84,7 +84,7 @@ public class ImportacaoExtratoMensalCartaoProcessor implements ItemProcessor<Ext
         despesa.setCategoria(this.getDespesaCategoriaDTO(descricaoCategoriaFormatada));
         despesa.setDataVencimento(dataVencimento);
         despesa.setValor(extratoMensalCartaoDTO.getValor());
-        despesa.setFormaPagamento(DespesaFormaPagamentoEnum.CARTAO_CREDITO);
+        despesa.setFormaPagamento(DespesaFormaPagamento.CARTAO_CREDITO);
         despesa.setLancamento(lancamento);
         return despesa;
     }

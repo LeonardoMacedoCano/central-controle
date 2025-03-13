@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.enums;
 import lombok.Getter;
 
 @Getter
-public enum OperatorFilterEnum {
+public enum OperatorFilter {
     IGUAL("==", "Igual"),
     DIFERENTE("!=", "Diferente"),
     CONTEM("LIKE", "Contém"),
@@ -15,13 +15,13 @@ public enum OperatorFilterEnum {
     private final String symbol;
     private final String description;
 
-    OperatorFilterEnum(String symbol, String description) {
+    OperatorFilter(String symbol, String description) {
         this.symbol = symbol;
         this.description = description;
     }
 
-    public static OperatorFilterEnum fromSymbol(String symbol) {
-        for (OperatorFilterEnum operator : values()) {
+    public static OperatorFilter fromSymbol(String symbol) {
+        for (OperatorFilter operator : values()) {
             if (operator.getSymbol().equals(symbol)) {
                 return operator;
             }

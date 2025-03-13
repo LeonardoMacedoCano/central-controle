@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.enums.fluxocaixa;
 import lombok.Getter;
 
 @Getter
-public enum DespesaFormaPagamentoEnum {
+public enum DespesaFormaPagamento {
     DINHEIRO("Dinheiro"),
     PIX("PIX"),
     CARTAO_CREDITO("Cartão de Crédito"),
@@ -11,7 +11,7 @@ public enum DespesaFormaPagamentoEnum {
 
     private final String descricao;
 
-    DespesaFormaPagamentoEnum(String descricao) {
+    DespesaFormaPagamento(String descricao) {
         this.descricao = descricao;
     }
 }

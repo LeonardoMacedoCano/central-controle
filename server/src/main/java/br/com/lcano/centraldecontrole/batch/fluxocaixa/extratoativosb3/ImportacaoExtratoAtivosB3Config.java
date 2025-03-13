@@ -14,6 +14,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import static br.com.lcano.centraldecontrole.enums.JobName.IMPORTACAO_EXTRATO_ATIVOS_B3_JOB;
+
 @Configuration
 @EnableBatchProcessing
 public class ImportacaoExtratoAtivosB3Config {
@@ -24,7 +26,7 @@ public class ImportacaoExtratoAtivosB3Config {
     @Bean
     public Job importacaoExtratoAtivosB3Job(JobRepository jobRepository,
                                             Step importacaoExtratoAtivosB3Step) {
-        return new JobBuilder("importacaoExtratoAtivosB3Job", jobRepository)
+        return new JobBuilder(IMPORTACAO_EXTRATO_ATIVOS_B3_JOB.getJobId(), jobRepository)
                 .incrementer(new org.springframework.batch.core.launch.support.RunIdIncrementer())
                 .listener(jobErrorListener)
                 .start(importacaoExtratoAtivosB3Step)

@@ -4,8 +4,8 @@ import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.*;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoContaCorrenteDTO;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamento;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoContaCorrente;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
 import br.com.lcano.centraldecontrole.service.fluxocaixa.RegraExtratoContaCorrenteService;
@@ -92,12 +92,12 @@ public class ImportacaoExtratoContaCorrenteProcessor
 
 
     private Lancamento criarLancamentoDespesa(ExtratoContaCorrenteDTO dto, RegraExtratoContaCorrente regra) {
-        Lancamento lancamento = criarLancamentoBase(dto, TipoLancamentoEnum.DESPESA, regra);
+        Lancamento lancamento = criarLancamentoBase(dto, TipoLancamento.DESPESA, regra);
 
         Despesa despesa = new Despesa();
         despesa.setValor(dto.getValor().abs());
         despesa.setDataVencimento(dto.getDataLancamento());
-        despesa.setFormaPagamento(DespesaFormaPagamentoEnum.PIX);
+        despesa.setFormaPagamento(DespesaFormaPagamento.PIX);
         despesa.setCategoria(obterCategoriaDespesa(regra));
         despesa.setLancamento(lancamento);
 
@@ -106,7 +106,7 @@ public class ImportacaoExtratoContaCorrenteProcessor
     }
 
     private Lancamento criarLancamentoRenda(ExtratoContaCorrenteDTO dto, RegraExtratoContaCorrente regra) {
-        Lancamento lancamento = criarLancamentoBase(dto, TipoLancamentoEnum.RENDA, regra);
+        Lancamento lancamento = criarLancamentoBase(dto, TipoLancamento.RENDA, regra);
 
         Renda renda = new Renda();
         renda.setValor(dto.getValor().abs());
@@ -118,7 +118,7 @@ public class ImportacaoExtratoContaCorrenteProcessor
         return lancamento;
     }
 
-    private Lancamento criarLancamentoBase(ExtratoContaCorrenteDTO dto, TipoLancamentoEnum tipo, RegraExtratoContaCorrente regra) {
+    private Lancamento criarLancamentoBase(ExtratoContaCorrenteDTO dto, TipoLancamento tipo, RegraExtratoContaCorrente regra) {
         Lancamento lancamento = new Lancamento();
         lancamento.setDataLancamento(dto.getDataLancamento());
         lancamento.setDescricao(obterDescricaoLancamento(dto, regra));

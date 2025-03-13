@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.FluxoCaixaParametro;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.RendaCategoria;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ResumoFluxoCaixaDTO;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
 import br.com.lcano.centraldecontrole.service.LancamentoService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -82,42 +82,42 @@ public class FluxoCaixaResumoService {
     }
 
     private BigDecimal calculateRendasPeriodo(YearMonth periodo) {
-        return calculateValorPeriodo(TipoLancamentoEnum.RENDA, periodo);
+        return calculateValorPeriodo(TipoLancamento.RENDA, periodo);
     }
 
     private BigDecimal calculateDespesasPeriodo(YearMonth periodo) {
-        return calculateValorPeriodo(TipoLancamentoEnum.DESPESA, periodo);
+        return calculateValorPeriodo(TipoLancamento.DESPESA, periodo);
     }
 
     private BigDecimal calculateAtivosPeriodo(YearMonth periodo) {
-        return calculateValorPeriodo(TipoLancamentoEnum.ATIVO, periodo);
+        return calculateValorPeriodo(TipoLancamento.ATIVO, periodo);
     }
 
     private BigDecimal calculateRendasPeriodo(Year ano) {
-        return calculateValorPeriodo(TipoLancamentoEnum.RENDA, ano);
+        return calculateValorPeriodo(TipoLancamento.RENDA, ano);
     }
 
     private BigDecimal calculateDespesasPeriodo(Year ano) {
-        return calculateValorPeriodo(TipoLancamentoEnum.DESPESA, ano);
+        return calculateValorPeriodo(TipoLancamento.DESPESA, ano);
     }
 
     private BigDecimal calculateAtivosPeriodo(Year ano) {
-        return calculateValorPeriodo(TipoLancamentoEnum.ATIVO, ano);
+        return calculateValorPeriodo(TipoLancamento.ATIVO, ano);
     }
 
-    private BigDecimal calculateValorPeriodo(TipoLancamentoEnum tipo, YearMonth periodo) {
+    private BigDecimal calculateValorPeriodo(TipoLancamento tipo, YearMonth periodo) {
         Date inicio = Date.from(periodo.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date fim = Date.from(periodo.atEndOfMonth().atStartOfDay(ZoneId.systemDefault()).toInstant());
         return calculateValor(tipo, inicio, fim);
     }
 
-    private BigDecimal calculateValorPeriodo(TipoLancamentoEnum tipo, Year ano) {
+    private BigDecimal calculateValorPeriodo(TipoLancamento tipo, Year ano) {
         Date inicio = Date.from(ano.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date fim = Date.from(ano.atMonth(12).atEndOfMonth().atStartOfDay(ZoneId.systemDefault()).toInstant());
         return calculateValor(tipo, inicio, fim);
     }
 
-    private BigDecimal calculateValor(TipoLancamentoEnum tipo, Date inicio, Date fim) {
+    private BigDecimal calculateValor(TipoLancamento tipo, Date inicio, Date fim) {
         return lancamentoService.findByUsuarioAutenticadoAndTipoAndDateRange(tipo, inicio, fim)
                 .stream()
                 .map(lancamento -> switch (lancamento.getTipo()) {
@@ -134,7 +134,7 @@ public class FluxoCaixaResumoService {
         }
         Date inicio = Date.from(periodo.atDay(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
         Date fim = Date.from(periodo.atEndOfMonth().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return lancamentoService.findByUsuarioAutenticadoAndTipoAndDateRange(TipoLancamentoEnum.RENDA, inicio, fim)
+        return lancamentoService.findByUsuarioAutenticadoAndTipoAndDateRange(TipoLancamento.RENDA, inicio, fim)
                 .stream()
                 .filter(l -> l.getRenda().getCategoria().equals(categoriaRendaPassiva))
                 .map(l -> l.getRenda().getValor())

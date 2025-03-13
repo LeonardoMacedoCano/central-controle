@@ -1,8 +1,8 @@
 package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoriaEnum;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoOperacaoEnum;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoria;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoOperacao;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,14 +32,14 @@ public class Ativo implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "categoria", nullable = false)
-    private AtivoCategoriaEnum categoria;
+    private AtivoCategoria categoria;
 
     @Column(nullable = false)
     private String ticker;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "operacao", nullable = false)
-    private AtivoOperacaoEnum operacao;
+    private AtivoOperacao operacao;
 
     @Column(nullable = false, precision = 18, scale = 6)
     private BigDecimal quantidade;

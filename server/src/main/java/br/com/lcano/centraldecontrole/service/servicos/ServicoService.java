@@ -4,9 +4,9 @@ import br.com.lcano.centraldecontrole.domain.servicos.Servico;
 import br.com.lcano.centraldecontrole.dto.FilterDTO;
 import br.com.lcano.centraldecontrole.dto.servicos.ServicoCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.servicos.ServicoDTO;
-import br.com.lcano.centraldecontrole.enums.OperatorFilterEnum;
-import br.com.lcano.centraldecontrole.enums.servicos.ContainerActionEnum;
-import br.com.lcano.centraldecontrole.enums.servicos.DockerStatusEnum;
+import br.com.lcano.centraldecontrole.enums.OperatorFilter;
+import br.com.lcano.centraldecontrole.enums.servicos.ContainerAction;
+import br.com.lcano.centraldecontrole.enums.servicos.DockerStatus;
 import br.com.lcano.centraldecontrole.repository.servicos.ServicoRepository;
 import br.com.lcano.centraldecontrole.repository.servicos.ServicoSpecifications;
 import br.com.lcano.centraldecontrole.util.FilterUtil;
@@ -35,14 +35,14 @@ public class ServicoService {
         Specification<Servico> combinedSpecification = FilterUtil.buildSpecificationsFromDTO(filterDTOs, this::applyFieldSpecification);
         return repository.findAll(combinedSpecification, pageable)
                 .map(servico -> {
-                    DockerStatusEnum status = dockerService.getContainerStatusByName(servico.getNome());
+                    DockerStatus status = dockerService.getContainerStatusByName(servico.getNome());
                     Boolean hasPermission = usuarioServicoService.hasPermissionForService(servico.getId());
                     List<ServicoCategoriaDTO> categorias = servicoCategoriaService.findByServicoId(servico.getId());
                     return new ServicoDTO().fromEntity(servico, status, hasPermission, categorias);
                 });
     }
 
-    public void changeContainerStatusByName(String name, ContainerActionEnum action) {
+    public void changeContainerStatusByName(String name, ContainerAction action) {
         this.dockerService.changeContainerStatusByName(name, action);
     }
 
@@ -65,7 +65,7 @@ public class ServicoService {
     }
 
     private Specification<Servico> applyNomeSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
 
         return switch (filterEnum) {
             case IGUAL -> ServicoSpecifications.hasNome(value);
@@ -76,7 +76,7 @@ public class ServicoService {
     }
 
     private Specification<Servico> applyDescricaoSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
 
         return switch (filterEnum) {
             case IGUAL -> ServicoSpecifications.hasDescricao(value);
@@ -87,7 +87,7 @@ public class ServicoService {
     }
 
     private Specification<Servico> applyPortaSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
         Integer porta = Integer.valueOf(value);
 
         return switch (filterEnum) {
@@ -102,7 +102,7 @@ public class ServicoService {
     }
 
     private Specification<Servico> applyCategoriasSpecification(String operator, String value) {
-        OperatorFilterEnum filterEnum = OperatorFilterEnum.fromSymbol(operator);
+        OperatorFilter filterEnum = OperatorFilter.fromSymbol(operator);
 
         return switch (filterEnum) {
             case IGUAL -> ServicoSpecifications.hasCategorias(value);

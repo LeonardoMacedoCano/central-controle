@@ -1,18 +1,18 @@
 package br.com.lcano.centraldecontrole.repository;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Date;
 import java.util.List;
 
 public class LancamentoSpecifications {
-    public static Specification<Lancamento> hasTipos(List<TipoLancamentoEnum> tipos) {
+    public static Specification<Lancamento> hasTipos(List<TipoLancamento> tipos) {
         return (root, query, criteriaBuilder) -> root.get("tipo").in(tipos);
     }
 
-    public static Specification<Lancamento> hasTiposNot(List<TipoLancamentoEnum> tipos) {
+    public static Specification<Lancamento> hasTiposNot(List<TipoLancamento> tipos) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.not(root.get("tipo").in(tipos));
     }
 

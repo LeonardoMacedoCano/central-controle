@@ -10,7 +10,6 @@ import br.com.lcano.centraldecontrole.service.AbstractGenericService;
 import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class RegraExtratoContaCorrenteService extends AbstractGenericService<Reg
     private final FluxoCaixaParametroService fluxoCaixaParametroService;
 
     @Override
-    protected JpaRepository<RegraExtratoContaCorrente, Long> getRepository() {
+    protected RegraExtratoContaCorrenteRepository getRepository() {
         return repository;
     }
 

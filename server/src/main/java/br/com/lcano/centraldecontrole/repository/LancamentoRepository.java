@@ -2,7 +2,7 @@ package br.com.lcano.centraldecontrole.repository;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,7 +15,7 @@ import java.util.Date;
 @Repository
 public interface LancamentoRepository extends JpaRepository<Lancamento, Long>, JpaSpecificationExecutor<Lancamento> {
 
-    static Specification<Lancamento> withUsuarioAndTipoAndDateRange(Usuario usuario, TipoLancamentoEnum tipo, Date inicio, Date fim) {
+    static Specification<Lancamento> withUsuarioAndTipoAndDateRange(Usuario usuario, TipoLancamento tipo, Date inicio, Date fim) {
         return (root, query, criteriaBuilder) -> {
             var predicates = criteriaBuilder.and(
                     criteriaBuilder.equal(root.get("usuario"), usuario),

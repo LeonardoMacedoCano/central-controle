@@ -4,9 +4,9 @@ import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.*;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoAtivosB3DTO;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoriaEnum;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoOperacaoEnum;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoria;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoOperacao;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepExecution;
@@ -51,15 +51,15 @@ public class ImportacaoExtratoAtivosB3Processor implements ItemProcessor<Extrato
         Lancamento lancamento = new Lancamento();
         lancamento.setDataLancamento(extratoAtivosB3DTO.getDataNegocio());
         lancamento.setDescricao(obterDescricaoLancamento(extratoAtivosB3DTO));
-        lancamento.setTipo(TipoLancamentoEnum.ATIVO);
+        lancamento.setTipo(TipoLancamento.ATIVO);
         lancamento.setUsuario(usuario);
 
         Ativo ativo = new Ativo();
         ativo.setLancamento(lancamento);
-        ativo.setCategoria(AtivoCategoriaEnum.DESCONHECIDO);
+        ativo.setCategoria(AtivoCategoria.DESCONHECIDO);
         ativo.setTicker(extratoAtivosB3DTO.getCodigoNegociacao());
         ativo.setOperacao(
-                AtivoOperacaoEnum.fromDescricao(
+                AtivoOperacao.fromDescricao(
                         extratoAtivosB3DTO.getTipoMovimentacao().toUpperCase()
                 )
         );

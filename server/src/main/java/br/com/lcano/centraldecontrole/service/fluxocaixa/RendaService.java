@@ -3,8 +3,7 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Renda;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.RendaDTO;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
-import br.com.lcano.centraldecontrole.repository.LancamentoItemRepository;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.RendaRepository;
 import br.com.lcano.centraldecontrole.service.AbstractLancamentoItemService;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ public class RendaService extends AbstractLancamentoItemService<Renda, RendaDTO>
     private final RendaRepository repository;
 
     @Override
-    protected LancamentoItemRepository<Renda> getRepository() {
+    protected RendaRepository getRepository() {
         return repository;
     }
 
@@ -34,7 +33,7 @@ public class RendaService extends AbstractLancamentoItemService<Renda, RendaDTO>
     }
 
     @Override
-    public TipoLancamentoEnum getTipoLancamento() {
-        return TipoLancamentoEnum.RENDA;
+    public TipoLancamento getTipoLancamento() {
+        return TipoLancamento.RENDA;
     }
 }

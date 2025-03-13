@@ -3,8 +3,7 @@ package br.com.lcano.centraldecontrole.service.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Ativo;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.AtivoDTO;
-import br.com.lcano.centraldecontrole.enums.TipoLancamentoEnum;
-import br.com.lcano.centraldecontrole.repository.LancamentoItemRepository;
+import br.com.lcano.centraldecontrole.enums.TipoLancamento;
 import br.com.lcano.centraldecontrole.repository.fluxocaixa.AtivoRepository;
 import br.com.lcano.centraldecontrole.service.AbstractLancamentoItemService;
 import lombok.AllArgsConstructor;
@@ -19,7 +18,7 @@ public class AtivoService extends AbstractLancamentoItemService<Ativo, AtivoDTO>
     private final AtivoRepository repository;
 
     @Override
-    protected LancamentoItemRepository<Ativo> getRepository() {
+    protected AtivoRepository getRepository() {
         return repository;
     }
 
@@ -34,7 +33,7 @@ public class AtivoService extends AbstractLancamentoItemService<Ativo, AtivoDTO>
     }
 
     @Override
-    public TipoLancamentoEnum getTipoLancamento() {
-        return TipoLancamentoEnum.ATIVO;
+    public TipoLancamento getTipoLancamento() {
+        return TipoLancamento.ATIVO;
     }
 }

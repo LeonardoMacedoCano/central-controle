@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamento;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +17,7 @@ public class DespesaDTO extends BaseDTO<Despesa> implements LancamentoItemDTO {
     private DespesaCategoriaDTO categoria;
     private Date dataVencimento;
     private BigDecimal valor;
-    private DespesaFormaPagamentoEnum formaPagamento;
+    private DespesaFormaPagamento formaPagamento;
 
     @Override
     public DespesaDTO fromEntity(Despesa entity) {

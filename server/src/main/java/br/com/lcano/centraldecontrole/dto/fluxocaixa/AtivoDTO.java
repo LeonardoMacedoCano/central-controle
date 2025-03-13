@@ -3,8 +3,8 @@ package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Ativo;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoriaEnum;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoOperacaoEnum;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoria;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoOperacao;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,9 +15,9 @@ import java.util.Date;
 @Data
 public class AtivoDTO extends BaseDTO<Ativo> implements LancamentoItemDTO {
     private Long id;
-    private AtivoCategoriaEnum categoria;
+    private AtivoCategoria categoria;
     private String ticker;
-    private AtivoOperacaoEnum operacao;
+    private AtivoOperacao operacao;
     private BigDecimal quantidade;
     private BigDecimal precoUnitario;
     private Date dataMovimento;

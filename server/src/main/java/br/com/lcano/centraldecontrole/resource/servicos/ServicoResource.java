@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.resource.servicos;
 import br.com.lcano.centraldecontrole.dto.FilterDTO;
 import br.com.lcano.centraldecontrole.dto.servicos.ServicoCategoriaDTO;
 import br.com.lcano.centraldecontrole.dto.servicos.ServicoDTO;
-import br.com.lcano.centraldecontrole.enums.servicos.ContainerActionEnum;
+import br.com.lcano.centraldecontrole.enums.servicos.ContainerAction;
 import br.com.lcano.centraldecontrole.service.servicos.ServicoService;
 import br.com.lcano.centraldecontrole.util.CustomSuccess;
 import lombok.AllArgsConstructor;
@@ -30,7 +30,7 @@ public class ServicoResource {
     }
 
     @PostMapping("/status/{name}/{action}")
-    public ResponseEntity<Object> changeContainerStatusByName(@PathVariable String name, @PathVariable ContainerActionEnum action) {
+    public ResponseEntity<Object> changeContainerStatusByName(@PathVariable String name, @PathVariable ContainerAction action) {
         this.service.changeContainerStatusByName(name, action);
         return CustomSuccess.buildResponseEntity(String.format("Serviço %s com sucesso.", action.getDescricao()));
     }

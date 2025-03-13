@@ -1,7 +1,7 @@
 package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamentoEnum;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamento;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.*;
@@ -42,5 +42,5 @@ public class Despesa implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "formapagamento", nullable = false)
-    private DespesaFormaPagamentoEnum formaPagamento;
+    private DespesaFormaPagamento formaPagamento;
 }

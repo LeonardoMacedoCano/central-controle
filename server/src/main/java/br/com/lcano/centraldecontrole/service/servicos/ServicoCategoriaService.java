@@ -7,7 +7,6 @@ import br.com.lcano.centraldecontrole.repository.servicos.ServicoCategoriaReposi
 import br.com.lcano.centraldecontrole.service.AbstractGenericService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +21,7 @@ public class ServicoCategoriaService extends AbstractGenericService<ServicoCateg
     private final ServicoCategoriaRelService servicoCategoriaRelService;
 
     @Override
-    protected JpaRepository<ServicoCategoria, Long> getRepository() {
+    protected ServicoCategoriaRepository getRepository() {
         return repository;
     }
 

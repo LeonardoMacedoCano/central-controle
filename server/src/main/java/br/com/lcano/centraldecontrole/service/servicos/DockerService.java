@@ -1,7 +1,7 @@
 package br.com.lcano.centraldecontrole.service.servicos;
 
-import br.com.lcano.centraldecontrole.enums.servicos.ContainerActionEnum;
-import br.com.lcano.centraldecontrole.enums.servicos.DockerStatusEnum;
+import br.com.lcano.centraldecontrole.enums.servicos.ContainerAction;
+import br.com.lcano.centraldecontrole.enums.servicos.DockerStatus;
 import br.com.lcano.centraldecontrole.exception.servicos.DockerException;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.exception.NotFoundException;
@@ -26,7 +26,7 @@ public class DockerService {
         this.dockerClient = DockerClientBuilder.getInstance(config).build();
     }
 
-    public void changeContainerStatusByName(String containerName, ContainerActionEnum action) {
+    public void changeContainerStatusByName(String containerName, ContainerAction action) {
         final Container container = getContainerByName(containerName);
 
         try {
@@ -43,23 +43,23 @@ public class DockerService {
         }
     }
 
-    public DockerStatusEnum getContainerStatusByName(String containerName) {
+    public DockerStatus getContainerStatusByName(String containerName) {
         try {
             Container container = getContainerByName(containerName);
             String state = container.getState().toLowerCase();
 
             return switch (state) {
-                case "running" -> DockerStatusEnum.RUNNING;
-                case "exited", "stopped" -> DockerStatusEnum.STOPPED;
-                case "paused" -> DockerStatusEnum.PAUSED;
-                case "restarting" -> DockerStatusEnum.RESTARTING;
-                case "dead" -> DockerStatusEnum.DEAD;
-                default -> DockerStatusEnum.UNKNOWN;
+                case "running" -> DockerStatus.RUNNING;
+                case "exited", "stopped" -> DockerStatus.STOPPED;
+                case "paused" -> DockerStatus.PAUSED;
+                case "restarting" -> DockerStatus.RESTARTING;
+                case "dead" -> DockerStatus.DEAD;
+                default -> DockerStatus.UNKNOWN;
             };
         } catch (NotFoundException e) {
-            return DockerStatusEnum.NOT_FOUND;
+            return DockerStatus.NOT_FOUND;
         } catch (Exception e) {
-            return DockerStatusEnum.ERROR;
+            return DockerStatus.ERROR;
         }
     }
 
