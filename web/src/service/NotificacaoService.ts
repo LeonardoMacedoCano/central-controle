@@ -36,7 +36,7 @@ const NotificacaoService = (): NotificacaoApi => {
 
   const markAsRead = async (token: string, id: string | number, lido: boolean): Promise<void | undefined> => {
     try {
-      return await request<undefined>('post', `notificacao/${id}/alterar-status/${lido}`, token);
+      return await request<undefined>('post', `notificacao/${id}/marcar-como-lida/${lido}`, token);
     } catch (error) {
       return undefined;
     }

@@ -59,9 +59,9 @@ public class NotificacaoService extends AbstractGenericService<Notificacao, Long
                 .map(entity -> getDtoInstance().fromEntity(entity));
     }
 
-    public void alterStatus(Long id, Boolean visto) {
+    public void markAsRead(Long id, Boolean visto) {
         Notificacao notificacao = findById(id);
-        notificacao.setVisto(!visto);
+        notificacao.setVisto(visto);
         save(notificacao);
     }
 

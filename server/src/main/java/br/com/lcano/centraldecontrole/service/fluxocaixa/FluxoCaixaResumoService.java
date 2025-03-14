@@ -25,6 +25,8 @@ public class FluxoCaixaResumoService {
     private final FluxoCaixaParametroService parametroService;
 
     public ResumoFluxoCaixaDTO getResumoFluxoCaixa() {
+        parametroService.validateParametro();
+
         ResumoFluxoCaixaDTO dto = new ResumoFluxoCaixaDTO();
         YearMonth mesAtual = YearMonth.now();
         Year anoAtual = Year.now();

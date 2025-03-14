@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { VariantColor } from '../../../utils';
 import { FluxoCaixaResumoService } from '../../../service';
 import { initialResumoFluxoCaixaState, ResumoFluxoCaixa } from '../../../types';
-import { AuthContext, useMessage } from '../../../contexts';
+import { AuthContext } from '../../../contexts';
 
 const handleRendasClick = () => {
   console.log("Rendas");
@@ -36,7 +36,6 @@ const ResumoFluxoCaixaPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const auth = useContext(AuthContext);
-  const message = useMessage();
   const service = FluxoCaixaResumoService();
 
   useEffect(() => {
@@ -50,8 +49,6 @@ const ResumoFluxoCaixaPage: React.FC = () => {
     try {
       const result = await service.getResumoFluxoCaixa(auth.usuario!.token);
       if (result) setResumo(result);
-    } catch (error) {
-      message.showErrorWithLog("Erro ao carregar o resumo do fluxo de caixa.", error);
     } finally {
       setIsLoading(false);
     }

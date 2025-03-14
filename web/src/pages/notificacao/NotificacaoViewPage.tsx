@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Notificacao } from '../../types';
-import { AuthContext, useMessage } from '../../contexts';
+import { AuthContext, NotificationContext, useMessage } from '../../contexts';
 import { NotificacaoService } from '../../service';
 import { Container, FieldValue, FlexBox, FloatingButton, Panel } from '../../components';
 import { parseShortStringToDateTime } from '../../utils';
-import { FaBars, FaEnvelope, FaLink, FaTrash } from 'react-icons/fa';
+import { FaBars, FaEnvelope, FaEnvelopeOpen, FaLink, FaTrash } from 'react-icons/fa';
 import { useConfirmModal } from '../../hooks';
 
 const NotificacaoViewPage: React.FC = () => {
@@ -14,6 +14,7 @@ const NotificacaoViewPage: React.FC = () => {
 
   const auth = useContext(AuthContext);
   const { confirm, ConfirmModalComponent } = useConfirmModal();
+  const { refreshNotifications } = useContext(NotificationContext);
   const message = useMessage();
   const service = NotificacaoService();
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const NotificacaoViewPage: React.FC = () => {
   useEffect(() => {
     if (id) {
       loadNotificacao(id);
-      markAsRead();
+      if (!notificacao?.visto) markAsRead();
     }
   }, [auth.usuario?.token, id]);
 
@@ -51,11 +52,18 @@ const NotificacaoViewPage: React.FC = () => {
   };
 
   const markAsUnread = async () => {
-    await service.markAsRead(auth.usuario!.token, id!, true);
+    await toggleReadStatus(false);
+    loadNotificacao(id!)
   };
 
   const markAsRead = async () => {
-    await service.markAsRead(auth.usuario!.token, id!, false);
+    await toggleReadStatus(true);
+    loadNotificacao(id!)
+  };
+
+  const toggleReadStatus = async (isUnread: boolean) => {
+    await service.markAsRead(auth.usuario!.token, id!, isUnread);
+    refreshNotifications();
   };
 
   return (
@@ -65,7 +73,7 @@ const NotificacaoViewPage: React.FC = () => {
         mainButtonIcon={<FaBars />}
         options={[
           { icon: <FaLink />, hint: 'Link', action: () => navigate(`${notificacao?.link}`), disabled: !notificacao?.link || notificacao.link.trim() === "" },
-          { icon: <FaEnvelope />, hint: 'Marcar como não lida', action: () => markAsUnread() },
+          { icon: notificacao?.visto ? <FaEnvelope /> : <FaEnvelopeOpen />, hint: notificacao?.visto ? "Marcar como não lida" : "Marcar como lida", action: () => notificacao?.visto ? markAsUnread() : markAsRead() },
           { icon: <FaTrash />, hint: 'Excluir', action: () => handleDelete() },
         ]}
       />

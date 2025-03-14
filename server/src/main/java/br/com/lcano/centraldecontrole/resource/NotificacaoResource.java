@@ -31,10 +31,10 @@ public class NotificacaoResource {
         return ResponseEntity.ok(service.search(pageable, filterDTOs));
     }
 
-    @PostMapping("/{id}/alterar-status/{visto}")
-    public void alterStatus(@PathVariable Long id,
+    @PostMapping("/{id}/marcar-como-lida/{visto}")
+    public void markAsRead(@PathVariable Long id,
                             @PathVariable Boolean visto) {
-        service.alterStatus(id, visto);
+        service.markAsRead(id, visto);
     }
 
     @GetMapping("/nao-lidas/total")

@@ -67,8 +67,8 @@ const NotificacaoListPage: React.FC = () => {
     }
   };
 
-  const markAsRead = async (id: number, lido: boolean) => {
-    await notificacaoService.markAsRead(usuario?.token!, id, lido);
+  const markAsRead = async (id: number, isUnread: boolean) => {
+    await notificacaoService.markAsRead(usuario?.token!, id, isUnread);
     loadNotificacoes(filters);
   };
 
@@ -106,7 +106,7 @@ const NotificacaoListPage: React.FC = () => {
               <Button
                 variant="info"
                 icon={item.visto ? <FaEnvelope /> : <FaEnvelopeOpen />}
-                onClick={() => markAsRead(item.id, item.visto)}
+                onClick={() => markAsRead(item.id, !item.visto)}
                 hint={item.visto ? "Marcar como não lida" : "Marcar como lida"}
                 style={{ borderRadius: '50%', justifyContent: 'center', alignItems: 'center', display: 'flex', height: '25px', width: '25px' }}
               />
