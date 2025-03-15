@@ -26,7 +26,7 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler) throws Exception {
         String path = request.getRequestURI().substring(request.getContextPath().length());
 
-        if (path.startsWith("/api/auth") && (path.length() == 9 || path.charAt(9) == '/')) {
+        if (isPathExemptFromAuthentication(path)) {
             return true;
         }
 
@@ -46,4 +46,10 @@ public class TokenInterceptor implements HandlerInterceptor {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token inválido");
         return false;
     }
+
+    private boolean isPathExemptFromAuthentication(String path) {
+        return (path.startsWith("/api/auth") && (path.length() == 9 || path.charAt(9) == '/')) ||
+                path.equals("/api/tema/default");
+    }
+
 }

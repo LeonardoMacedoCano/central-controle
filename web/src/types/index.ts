@@ -101,6 +101,9 @@ import {
 import { 
   Notificacao
 } from "./Notificacao";
+import { 
+  Tema 
+} from "./Tema";
 
 export type {
   Categoria,
@@ -134,6 +137,7 @@ export type {
   RegraExtratoContaCorrente,
   ResumoFluxoCaixa,
   Notificacao,
+  Tema,
 };
 
 export {

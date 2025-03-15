@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { AuthService } from "../../service";
-import { AuthContext } from "../";
+import { AuthContext } from "../auth/AuthContext";
 import { Usuario } from "../../types";
+import { ThemeContext } from "../theme/ThemeControlProvider";
 
-export const AuthProvider = ({ children }: { children: JSX.Element }) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [usuario, setUsuario] = useState<Usuario | null>(null);
   const authService = AuthService();
+  const { loadUserTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     const validateToken = async () => {
@@ -14,19 +16,28 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
         const data = await authService.validateToken(storageData);
         if (data?.usuario) {
           setUsuario(data.usuario);
+          
+          if (data.usuario.idTema) {
+            loadUserTheme(data.usuario.idTema, data.usuario.token);
+          }
         } else {
           clearToken(); 
         }
       } 
     }
     validateToken();
-  }, [usuario]);
+  }, []);
 
   const login = async (username: string, senha: string) => {
     const data = await authService.login(username, senha);
     if (data?.usuario) {
       setUsuario(data.usuario);
       setToken(data.usuario.token);
+      
+      if (data.usuario.idTema) {
+        loadUserTheme(data.usuario.idTema, data.usuario.token);
+      }
+      
       return true;
     }
     return false;

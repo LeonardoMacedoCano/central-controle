@@ -35,6 +35,10 @@ public class Usuario implements UserDetails {
     @Column(nullable = false)
     private boolean ativo;
 
+    @ManyToOne
+    @JoinColumn(name = "idtema", referencedColumnName = "id")
+    private Tema tema;
+
     public Usuario(String username, String senha, Date dataInclusao) {
         this.username = username;
         this.senha = senha;

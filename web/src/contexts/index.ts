@@ -2,7 +2,8 @@ import { AuthContext } from "./auth/AuthContext";
 import { AuthProvider } from "./auth/AuthProvider";
 import { RequireAuth } from "./auth/RequireAuth";
 import ContextMessageProvider, { useMessage } from "./message/ContextMessageProvider";
-import { NotificationContext } from "./notificacao/NotificationContext";
+import { NotificationContext, NotificationProvider, } from "./notificacao/NotificationContext";
+import { ThemeControlProvider, ThemeContext } from "./theme/ThemeControlProvider";
 
 export {
   AuthContext,
@@ -10,5 +11,8 @@ export {
   RequireAuth,
   ContextMessageProvider,
   useMessage,
-  NotificationContext
+  NotificationContext,
+  NotificationProvider,
+  ThemeContext,
+  ThemeControlProvider
 }

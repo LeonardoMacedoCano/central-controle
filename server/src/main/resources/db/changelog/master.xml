@@ -44,6 +44,7 @@
     <property name="varchar_4" value="CHARACTER VARYING(4)" dbms="postgresql"/>
     <property name="varchar_5" value="CHARACTER VARYING(5)" dbms="postgresql"/>
     <property name="varchar_6" value="CHARACTER VARYING(6)" dbms="postgresql"/>
+    <property name="varchar_7" value="CHARACTER VARYING(7)" dbms="postgresql"/>
     <property name="varchar_8" value="CHARACTER VARYING(8)" dbms="postgresql"/>
     <property name="varchar_10" value="CHARACTER VARYING(10)" dbms="postgresql"/>
     <property name="varchar_14" value="CHARACTER VARYING(14)" dbms="postgresql"/>
