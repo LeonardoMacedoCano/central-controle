@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 import { Container } from '../';
 
 interface PanelProps {
@@ -11,6 +11,7 @@ interface PanelProps {
   padding?: string;
   transparent?: boolean;
   actionButton?: ReactNode;
+  style?: CSSProperties;
 }
 
 const Panel: React.FC<PanelProps> = ({ 
@@ -21,15 +22,17 @@ const Panel: React.FC<PanelProps> = ({
   maxWidth,
   padding,
   actionButton ,
+  style,
   transparent = false
 }) => {
   return (
     <Container
       width={width || '100%'}
+      maxWidth={maxWidth}
       padding={padding}
       margin="auto"
       backgroundColor="transparent"
-      style={{ maxWidth: maxWidth || 'none' }}
+      style={style}
     >
       {(title || actionButton) && (
         <Title>

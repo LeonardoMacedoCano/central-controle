@@ -25,7 +25,8 @@ import {
 } from "./FilterUtils";
 
 import {
-  getIconByName
+  getIconByName,
+  IMG_PERFIL_PADRAO
 } from "./IconUtils";
 
 import {
@@ -48,6 +49,7 @@ export {
   copyLinkToClipboard,
   formatNumberWithTrailingZeros,
   parseShortStringToDateTime,
+  IMG_PERFIL_PADRAO,
 };
 
 export type {

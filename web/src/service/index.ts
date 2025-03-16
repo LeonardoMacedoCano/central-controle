@@ -12,6 +12,7 @@ import RegraExtratoContaCorrenteService from "./fluxocaixa/RegraExtratoContaCorr
 import FluxoCaixaResumoService from "./fluxocaixa/FluxoCaixaResumoService";
 import NotificacaoService from "./NotificacaoService";
 import TemaBaseService from "./TemaBaseService";
+import UsuarioService from "./UsuarioService";
 
 export {
   AuthService,
@@ -28,4 +29,5 @@ export {
   FluxoCaixaResumoService,
   NotificacaoService,
   TemaBaseService,
+  UsuarioService,
 }

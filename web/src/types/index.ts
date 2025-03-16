@@ -13,7 +13,7 @@ import {
   tipoLancamentoOptions,
   tipoLancamentoFilters
 } from "./TipoLancamentoEnum";
-import { Usuario } from "./Usuario";
+import { Usuario, UsuarioForm } from "./Usuario";
 import { Despesa } from "./fluxocaixa/Despesa";
 import { 
   DespesaFormaPagamentoEnum,
@@ -138,6 +138,7 @@ export type {
   ResumoFluxoCaixa,
   Notificacao,
   Tema,
+  UsuarioForm,
 };
 
 export {

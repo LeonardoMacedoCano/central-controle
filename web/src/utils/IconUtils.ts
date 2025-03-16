@@ -39,3 +39,5 @@ const iconMap: Record<string, IconDefinition> = {
 export const getIconByName = (iconName: string): IconDefinition | null => {
   return iconMap[iconName] || null;
 };
+
+export const IMG_PERFIL_PADRAO = '/user.svg';

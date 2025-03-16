@@ -30,6 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async (username: string, senha: string) => {
     const data = await authService.login(username, senha);
+    
     if (data?.usuario) {
       setUsuario(data.usuario);
       setToken(data.usuario.token);

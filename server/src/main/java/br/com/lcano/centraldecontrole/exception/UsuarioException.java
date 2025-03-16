@@ -7,6 +7,7 @@ public class UsuarioException extends RuntimeException {
     private static final String MSG_USUARIO_DESATIVADO = "Usuário desativado.";
     private static final String MSG_ERRO_GERAR_TOKEN = "Erro ao gerar Token.";
     private static final String MSG_TOKEN_EXPIRADO_OU_INVALIDO = "Token expirado ou inválido.";
+    public static final String MSG_SENHA_ATUAL_INCORRETA = "A senha atual fornecida está incorreta. Verifique e tente novamente.";
 
     public static class UsuarioNaoEncontrado extends RuntimeException {
         public UsuarioNaoEncontrado() {
@@ -35,6 +36,18 @@ public class UsuarioException extends RuntimeException {
     public static class TokenExpiradoOuInvalido extends RuntimeException {
         public TokenExpiradoOuInvalido() {
             super(MSG_TOKEN_EXPIRADO_OU_INVALIDO);
+        }
+    }
+
+    public static class CredenciaisInvalidas extends RuntimeException {
+        public CredenciaisInvalidas() {
+            super(MSG_CREDENCIAIS_INVALIDAS);
+        }
+    }
+
+    public static class SenhaAtualIncorreta extends RuntimeException {
+        public SenhaAtualIncorreta() {
+            super(MSG_SENHA_ATUAL_INCORRETA);
         }
     }
 }

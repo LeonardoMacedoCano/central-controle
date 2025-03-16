@@ -19,9 +19,11 @@ import ServicoCategoriaIcon from "./icon/ServicoCategoriaIcon";
 import InfoCard from "./card/InfoCard";
 import CustomBarChart from "./chart/CustomBarChart";
 import CustomPieChart from "./chart/CustomPieChart";
+import ImagePicker from "./imagepicker/ImagePicker";
+import ThemeSelector, { ThemeOption } from "./themeselector/ThemeSelector";
 
 export {
-  Button, 
+  Button,
   FloatingButton,
   Container,
   FieldValue,
@@ -42,5 +44,11 @@ export {
   ServicoCategoriaIcon,
   InfoCard,
   CustomBarChart,
-  CustomPieChart
+  CustomPieChart,
+  ImagePicker,
+  ThemeSelector
+};
+
+export type { 
+  ThemeOption 
 };

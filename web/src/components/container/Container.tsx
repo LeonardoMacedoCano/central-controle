@@ -5,6 +5,7 @@ interface ContainerProps {
   children: ReactNode;
   height?: string;
   width?: string;
+  maxWidth?: string;
   margin?: string;
   padding?: string;
   backgroundColor?: string;
@@ -16,6 +17,7 @@ const Container: FC<ContainerProps> = ({
   children, 
   height,
   width,
+  maxWidth,
   margin, 
   padding, 
   backgroundColor,
@@ -30,6 +32,7 @@ const Container: FC<ContainerProps> = ({
     backgroundColor={backgroundColor} 
     variantColor={variantColor}
     style={style}
+    maxWidth={maxWidth}
   >
     {children}
   </StyledContainer>
@@ -42,5 +45,6 @@ const StyledContainer = styled.div<ContainerProps>`
   width: ${({ width }) => width || 'auto'};
   margin: ${({ margin }) => margin || '0'};
   padding: ${({ padding }) => padding || '0'};
+  max-width: ${({ maxWidth }) => maxWidth || 'none'};
   background-color: ${({ backgroundColor, theme, variantColor }) => variantColor && theme.colors[variantColor] || backgroundColor};
 `;

@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import { FaBars, FaDollarSign, FaHome, FaServer, FaSignOutAlt, FaEnvelope } from 'react-icons/fa';
+import { FaBars, FaDollarSign, FaHome, FaServer, FaEnvelope } from 'react-icons/fa';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { AuthContext, NotificationContext } from '../contexts';
+import { ArquivoService } from '../service';
+import { IMG_PERFIL_PADRAO } from '../utils';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -70,7 +72,78 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleMenu, unreadMessages }) => {
+  const [imagemPerfil, setImagemPerfil] = useState<string>(IMG_PERFIL_PADRAO);
+  const blobRef = useRef<Blob | null>(null);
+  const blobUrlRef = useRef<string | null>(null);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement | null>(null);
+
+  const auth = useContext(AuthContext);
+  const arquivoService = ArquivoService();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const cleanupBlobUrl = () => {
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
+    }
+  };
+
+  const toggleUserMenu = () => {
+    setIsUserMenuOpen(!isUserMenuOpen);
+  };
+  
+  const handleLogout = () => {
+    auth.signout();
+    setIsUserMenuOpen(false);
+  };
+  
+  const handleProfileClick = () => {
+    navigate('/usuario');
+    setIsUserMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const fetchArquivo = async () => {
+      if (!auth.usuario?.token) return;
+      
+      try {
+        if (auth.usuario.idArquivo) {
+          const result = await arquivoService.getArquivoById(auth.usuario.token, auth.usuario.idArquivo);
+          if (result) {
+            cleanupBlobUrl();
+            blobRef.current = result;
+            blobUrlRef.current = URL.createObjectURL(result);
+            setImagemPerfil(blobUrlRef.current);
+          } else {
+            setImagemPerfil(IMG_PERFIL_PADRAO);
+          }
+        } else {
+          setImagemPerfil(IMG_PERFIL_PADRAO);
+        }
+      } catch (error) {
+        setImagemPerfil(IMG_PERFIL_PADRAO);
+      }
+    };
+  
+    fetchArquivo();
+    return () => {
+      cleanupBlobUrl();
+    };
+  }, [auth.usuario?.idArquivo]);
 
   const handleNotificationClick = () => {
     navigate('/notificacoes');
@@ -93,8 +166,14 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu, unreadMessages }) => {
           <FaEnvelope />
           {unreadMessages > 0 && <UnreadBadge>{unreadMessages}</UnreadBadge>}
         </MessageIconWrapper>
-        <UserAvatar>
-          <img src="/user.png" alt="Perfil do usuário" />
+        <UserAvatar onClick={toggleUserMenu}>
+          <img src={imagemPerfil} alt="Avatar" />
+          {isUserMenuOpen && (
+            <UserMenuDropdown ref={userMenuRef}>
+              <UserMenuItem onClick={handleProfileClick}>Ver Perfil</UserMenuItem>
+              <UserMenuItem onClick={handleLogout}>Sair</UserMenuItem>
+            </UserMenuDropdown>
+          )}
         </UserAvatar>
       </UserMenuContainer>
     </AppHeader>
@@ -122,13 +201,6 @@ interface SidebarItem {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubmenu, handleLinkClick }) => {
-  const auth = useContext(AuthContext);
-
-  const handleLogout = () => {
-    auth.signout();
-    handleLinkClick();
-  };
-
   const handleSubmenuToggle = (submenu: string) => {
     setActiveSubmenu(prev => (prev === submenu ? null : submenu));
   };
@@ -161,12 +233,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubme
       to: "/servicos",
       Icon: FaServer,
       Text: "Serviços"
-    },
-    {
-      to: "/",
-      Icon: FaSignOutAlt,
-      Text: "Sair",
-      onClick: handleLogout }
+    }
   ];
 
   return (
@@ -207,7 +274,6 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, activeSubmenu, setActiveSubme
 
 export default AppLayout;
 
-// Estilos existentes
 const MainContent = styled.div<{ isMenuOpen: boolean }>`
   flex: 1;
   display: flex;
@@ -236,7 +302,6 @@ const AppSidebarContainer = styled.div<{ isActive: boolean }>`
   overflow-x: hidden;
 `;
 
-// Estilos modificados e novos estilos
 const AppHeader = styled.div`
   height: 60px;
   display: flex;
@@ -284,13 +349,14 @@ const MessageIconWrapper = styled.div`
   position: relative;
   font-size: 20px;
   cursor: pointer;
+  top: 5px;
 `;
 
 const UnreadBadge = styled.div`
   position: absolute;
   top: -5px;
   right: -5px;
-  background-color: #4CAF50;
+  background-color: ${({ theme }) => theme.colors.success};
   color: white;
   border-radius: 50%;
   width: 18px;
@@ -369,4 +435,24 @@ const TitleHeader = styled.div`
   font-size: 18px;
   font-weight: bold;
   color: ${({ theme }) => theme.colors.white};
+`;
+
+const UserMenuDropdown = styled.div`
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background-color: ${({ theme }) => theme.colors.secondary};
+  box-shadow: 0 2px 5px ${({ theme }) => theme.colors.tertiary};
+  border-radius: 5px;
+  min-width: 150px;
+  padding: 10px 0;
+  z-index: 100;
+`;
+
+const UserMenuItem = styled.div`
+  padding: 10px 20px;
+  cursor: pointer;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.tertiary};
+  }
 `;

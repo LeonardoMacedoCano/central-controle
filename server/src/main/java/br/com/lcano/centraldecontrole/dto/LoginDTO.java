@@ -6,8 +6,8 @@ import lombok.Data;
 public class LoginDTO {
     private UsuarioLoginDTO usuario;
 
-    public LoginDTO(String username, String token, Long idTema) {
-        this.usuario = new UsuarioLoginDTO(username, token, idTema);
+    public LoginDTO(String username, String token, Long idTema, Long idArquivo) {
+        this.usuario = new UsuarioLoginDTO(username, token, idTema, idArquivo);
     }
 
     @Data
@@ -15,11 +15,13 @@ public class LoginDTO {
         private String username;
         private String token;
         private Long idTema;
+        private Long idArquivo;
 
-        public UsuarioLoginDTO(String username, String token, Long idTema) {
+        public UsuarioLoginDTO(String username, String token, Long idTema, Long idArquivo) {
             this.username = username;
             this.token = token;
             this.idTema = idTema;
+            this.idArquivo = idArquivo;
         }
     }
 }

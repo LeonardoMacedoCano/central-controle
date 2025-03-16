@@ -30,6 +30,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(HttpStatus.UNAUTHORIZED, UsuarioException.MSG_CREDENCIAIS_INVALIDAS);
     }
 
+    @ExceptionHandler({UsuarioException.CredenciaisInvalidas.class})
+    protected ResponseEntity<Object> handleCredenciaisInvalidas(UsuarioException.CredenciaisInvalidas ex) {
+        return buildResponseEntity(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
     @ExceptionHandler({UsuarioException.UsuarioJaCadastrado.class})
     protected ResponseEntity<Object> handleUsuarioJaCadastrado(UsuarioException.UsuarioJaCadastrado ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -53,6 +58,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({UsuarioException.TokenExpiradoOuInvalido.class})
     protected ResponseEntity<Object> handleTokenExpiradoOuInvalido(UsuarioException.TokenExpiradoOuInvalido ex) {
         return buildResponseEntity(HttpStatus.UNAUTHORIZED, ex.getMessage());
+    }
+
+    @ExceptionHandler({UsuarioException.SenhaAtualIncorreta.class})
+    protected ResponseEntity<Object> handleSenhaAtualIncorreta(UsuarioException.SenhaAtualIncorreta ex) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler({LancamentoException.LancamentoNaoEncontradoById.class})

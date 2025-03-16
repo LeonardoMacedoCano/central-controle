@@ -5,6 +5,8 @@ import br.com.lcano.centraldecontrole.dto.LoginDTO;
 import br.com.lcano.centraldecontrole.dto.UsuarioDTO;
 import br.com.lcano.centraldecontrole.exception.UsuarioException;
 import br.com.lcano.centraldecontrole.repository.UsuarioRepository;
+import br.com.lcano.centraldecontrole.util.DateUtil;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,12 +20,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthorizationService implements UserDetailsService {
     private final UsuarioRepository usuarioRepository;
-    private final UsuarioService usuarioService;
     private final TokenService tokenService;
+    private final DateUtil dateUtil;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return usuarioService.findByUsername(username);
+        return this.usuarioRepository.findByUsername(username);
+    }
+
+    public Usuario findUsuarioByUsername(String username) {
+        return this.usuarioRepository.findUsuarioByUsername(username);
     }
 
     public boolean usuarioJaCadastrado(String username) {
@@ -51,15 +57,18 @@ public class AuthorizationService implements UserDetailsService {
         return new LoginDTO(
                 usuario.getUsername(),
                 token,
-                usuario.getTema() != null ? usuario.getTema().getId() : null
+                usuario.getTema() != null ? usuario.getTema().getId() : null,
+                usuario.getArquivo() != null ? usuario.getArquivo().getId() : null
         );
     }
 
+    @Transactional
     public void register(UsuarioDTO data) {
         if (this.usuarioJaCadastrado(data.getUsername())) {
             throw new UsuarioException.UsuarioJaCadastrado();
         }
-        usuarioService.register(data.getUsername(), new BCryptPasswordEncoder().encode(data.getSenha()));
+        Usuario novoUsuario = new Usuario(data.getUsername(), new BCryptPasswordEncoder().encode(data.getSenha()), dateUtil.getDataAtual());
+        this.usuarioRepository.save(novoUsuario);
     }
 
     public LoginDTO validateToken(String token) {
@@ -68,7 +77,8 @@ public class AuthorizationService implements UserDetailsService {
         return new LoginDTO(
                 usuario.getUsername(),
                 token,
-                usuario.getTema() != null ? usuario.getTema().getId() : null
+                usuario.getTema() != null ? usuario.getTema().getId() : null,
+                usuario.getArquivo() != null ? usuario.getArquivo().getId() : null
         );
     }
 }

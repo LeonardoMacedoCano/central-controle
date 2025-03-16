@@ -10,7 +10,7 @@ const loadingTheme: DefaultTheme = {
     secondary: '#999999',
     tertiary: '#666666',
     quaternary: '#333333',
-    white: '#ffffff',
+    white: '#ffffffb7',
     black: '#000000',
     gray: '#888888',
     success: '#28a745',

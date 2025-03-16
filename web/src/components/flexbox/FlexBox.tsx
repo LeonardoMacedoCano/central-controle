@@ -23,6 +23,7 @@ interface FlexBoxChildProps {
   borderLeft?: boolean;
   alignCenter?: boolean;
   alignRight?: boolean;
+  style?: CSSProperties;
 }
 
 export const FlexBox: FC<FlexBoxProps> & { Item: FC<FlexBoxChildProps> } = ({ children, ...rest }) => (

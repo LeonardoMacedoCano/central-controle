@@ -66,6 +66,22 @@ public class ArquivoService {
         return arquivoRepository.save(arquivo);
     }
 
+    public Arquivo uploadArquivoOrGetExists(MultipartFile file) throws Exception {
+        String hash = this.calculateHash(file.getInputStream());
+        Optional<Arquivo> arquivoExists = this.findByHash(hash);
+
+        if (arquivoExists.isPresent()) return arquivoExists.get();
+
+        Arquivo arquivo = new Arquivo();
+        arquivo.setNome(FilenameUtils.getBaseName(file.getOriginalFilename()));
+        arquivo.setConteudo(file.getBytes());
+        arquivo.setExtensao(FilenameUtils.getExtension(file.getOriginalFilename()));
+        arquivo.setHash(hash);
+        arquivo.setDataImportacao(dateUtil.getDataAtual());
+
+        return arquivoRepository.save(arquivo);
+    }
+
     public void deleteArquivoIfExists(Long arquivoId) {
         Optional<Arquivo> arquivoOptional = this.findById(arquivoId);
         arquivoOptional.ifPresent(arquivo -> this.arquivoRepository.delete(arquivo));

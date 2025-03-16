@@ -39,6 +39,10 @@ public class Usuario implements UserDetails {
     @JoinColumn(name = "idtema", referencedColumnName = "id")
     private Tema tema;
 
+    @OneToOne
+    @JoinColumn(name = "idarquivo", referencedColumnName = "id")
+    private Arquivo arquivo;
+
     public Usuario(String username, String senha, Date dataInclusao) {
         this.username = username;
         this.senha = senha;
