@@ -104,23 +104,19 @@ export const UsuarioFormPage: React.FC = () => {
       idTema: usuario.idTema,
     });
   };
-
-  const isPasswordMatch = () => usuarioForm?.newPassword === confirmPassword;
   
   const handleSubmit = async () => {
     if (!usuarioForm) return;
   
-    if (!usuarioForm.username?.trim()) {
-      message.showError('O nome do usuário não pode estar vazio.');
+    const { currentPassword, newPassword } = usuarioForm;
+  
+    if ((currentPassword || newPassword || confirmPassword) && 
+        (!currentPassword || !newPassword || !confirmPassword)) {
+      message.showError('Todos os campos de senha devem ser preenchidos.');
       return;
     }
   
-    if (!usuarioForm.currentPassword?.trim() && (usuarioForm.newPassword || confirmPassword)) {
-      message.showError('A senha atual é necessária para alterar a senha.');
-      return;
-    }
-  
-    if ((usuarioForm.newPassword || confirmPassword) && !isPasswordMatch()) {
+    if (newPassword && confirmPassword && newPassword !== confirmPassword) {
       message.showError('A nova senha e a confirmação não coincidem.');
       return;
     }
@@ -128,7 +124,8 @@ export const UsuarioFormPage: React.FC = () => {
     if (!auth.usuario?.token) return;
   
     await usuarioService.updateUsuario(auth.usuario.token, usuarioForm);
-  };  
+};
+
 
   const update = (updatedFields: Partial<UsuarioForm>) => {
     setUsuarioForm(prev => (prev ? { ...prev, ...updatedFields } : prev));
@@ -142,7 +139,8 @@ export const UsuarioFormPage: React.FC = () => {
           <FloatingButton
             mainButtonIcon={<FaCheck />}
             mainButtonHint={'Salvar'}
-            mainAction={handleSubmit} />
+            mainAction={handleSubmit} 
+          />
           <Panel maxWidth='800px' title='Usuário'>
             <FlexBox flexDirection="column" style={{ padding: '20px' }}>
               <FlexBox flexDirection="row">
@@ -152,7 +150,8 @@ export const UsuarioFormPage: React.FC = () => {
                     onImageChange={(file) => update({ file })}
                     borderColor={theme.colors.tertiary}
                     isLoading={isLoadingImage}
-                    key={imagemPerfil} />
+                    key={imagemPerfil} 
+                  />
                 </FlexBox.Item>
               </FlexBox>
               <Panel>
@@ -162,8 +161,7 @@ export const UsuarioFormPage: React.FC = () => {
                       type="string"
                       value={usuarioForm.username}
                       description="Nome"
-                      editable
-                      onUpdate={(value) => update({ username: value })} />
+                    />
                   </FlexBox.Item>
                   <FlexBox.Item borderBottom>
                     <FieldValue
@@ -172,7 +170,8 @@ export const UsuarioFormPage: React.FC = () => {
                       description="Senha Atual"
                       editable
                       onUpdate={(value) => update({ currentPassword: value })}
-                      placeholder="Digite sua senha atual" />
+                      placeholder="Digite sua senha atual" 
+                    />
                   </FlexBox.Item>
                   <FlexBox.Item borderBottom>
                     <FieldValue
@@ -181,7 +180,8 @@ export const UsuarioFormPage: React.FC = () => {
                       description="Nova Senha"
                       editable
                       onUpdate={(value) => update({ newPassword: value })}
-                      placeholder="Digite sua nova senha" />
+                      placeholder="Digite sua nova senha" 
+                    />
                   </FlexBox.Item>
                   <FlexBox.Item>
                     <FieldValue
@@ -199,7 +199,8 @@ export const UsuarioFormPage: React.FC = () => {
                 <ThemeSelector
                   themes={temas}
                   currentTheme={usuarioForm.idTema}
-                  onThemeChange={(idTema) => update({ idTema })} />
+                  onThemeChange={(idTema) => update({ idTema })} 
+                />
               </Panel>
             </FlexBox>
           </Panel>

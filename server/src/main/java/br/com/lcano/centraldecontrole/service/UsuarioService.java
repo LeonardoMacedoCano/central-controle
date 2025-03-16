@@ -28,8 +28,6 @@ public class UsuarioService {
     @Transactional
     public void updateAsDto(UsuarioFormDTO usuarioFormDTO) throws Exception {
         Usuario usuario = usuarioUtil.getUsuarioAutenticado();
-        usuario.setUsername(usuarioFormDTO.getUsername());
-
         String currentPassword = usuarioFormDTO.getCurrentPassword();
         String newPassword = usuarioFormDTO.getNewPassword();
 
