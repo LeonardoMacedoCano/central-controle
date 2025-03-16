@@ -6,28 +6,12 @@
                             http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
 
     <!-- Number types -->
-    <property name="number_1" value="NUMERIC(1)" dbms="postgresql"/>
-    <property name="number_2" value="NUMERIC(2)" dbms="postgresql"/>
-    <property name="number_3" value="NUMERIC(3)" dbms="postgresql"/>
-    <property name="number_4" value="NUMERIC(4)" dbms="postgresql"/>
-    <property name="number_5" value="NUMERIC(5)" dbms="postgresql"/>
-    <property name="number_10" value="NUMERIC(10)" dbms="postgresql"/>
-    <property name="number_11" value="NUMERIC(11)" dbms="postgresql"/>
-    <property name="number_15" value="NUMERIC(15)" dbms="postgresql"/>
-    <property name="number_20" value="NUMERIC(20)" dbms="postgresql"/>
-    <property name="number_22" value="NUMERIC(22)" dbms="postgresql"/>
-    <property name="number_8_4" value="NUMERIC(8, 4)" dbms="postgresql"/>
     <property name="number_15_2" value="NUMERIC(15, 2)" dbms="postgresql"/>
-    <property name="number_5_2" value="NUMERIC(5, 2)" dbms="postgresql"/>
-    <property name="number_15_4" value="NUMERIC(15, 4)" dbms="postgresql"/>
     <property name="number_10_2" value="NUMERIC(10, 2)" dbms="postgresql"/>
-    <property name="number_10_6" value="NUMERIC(10, 6)" dbms="postgresql"/>
     <property name="number_18_6" value="NUMERIC(18, 6)" dbms="postgresql"/>
-    <property name="number" value="NUMERIC" dbms="postgresql"/>
 
     <!-- Integer types -->
     <property name="integer" value="INTEGER" dbms="postgresql"/>
-    <property name="bigint" value="BIGINT" dbms="postgresql"/>
 
     <!-- Date/Time types -->
     <property name="date" value="date" dbms="postgresql"/>
@@ -35,45 +19,20 @@
 
     <!-- Char types -->
     <property name="char_1" value="CHARACTER(1)" dbms="postgresql"/>
-    <property name="char_2" value="CHARACTER(2)" dbms="postgresql"/>
 
     <!-- Varchar types -->
-    <property name="varchar_1" value="CHARACTER VARYING(1)" dbms="postgresql"/>
-    <property name="varchar_2" value="CHARACTER VARYING(2)" dbms="postgresql"/>
-    <property name="varchar_3" value="CHARACTER VARYING(3)" dbms="postgresql"/>
-    <property name="varchar_4" value="CHARACTER VARYING(4)" dbms="postgresql"/>
-    <property name="varchar_5" value="CHARACTER VARYING(5)" dbms="postgresql"/>
     <property name="varchar_6" value="CHARACTER VARYING(6)" dbms="postgresql"/>
     <property name="varchar_7" value="CHARACTER VARYING(7)" dbms="postgresql"/>
-    <property name="varchar_8" value="CHARACTER VARYING(8)" dbms="postgresql"/>
     <property name="varchar_10" value="CHARACTER VARYING(10)" dbms="postgresql"/>
-    <property name="varchar_14" value="CHARACTER VARYING(14)" dbms="postgresql"/>
     <property name="varchar_15" value="CHARACTER VARYING(15)" dbms="postgresql"/>
     <property name="varchar_20" value="CHARACTER VARYING(20)" dbms="postgresql"/>
-    <property name="varchar_30" value="CHARACTER VARYING(30)" dbms="postgresql"/>
-    <property name="varchar_32" value="CHARACTER VARYING(32)" dbms="postgresql"/>
-    <property name="varchar_40" value="CHARACTER VARYING(40)" dbms="postgresql"/>
     <property name="varchar_50" value="CHARACTER VARYING(50)" dbms="postgresql"/>
-    <property name="varchar_60" value="CHARACTER VARYING(60)" dbms="postgresql"/>
     <property name="varchar_64" value="CHARACTER VARYING(64)" dbms="postgresql"/>
-    <property name="varchar_70" value="CHARACTER VARYING(70)" dbms="postgresql"/>
-    <property name="varchar_77" value="CHARACTER VARYING(77)" dbms="postgresql"/>
     <property name="varchar_100" value="CHARACTER VARYING(100)" dbms="postgresql"/>
-    <property name="varchar_150" value="CHARACTER VARYING(150)" dbms="postgresql"/>
-    <property name="varchar_200" value="CHARACTER VARYING(200)" dbms="postgresql"/>
-    <property name="varchar_250" value="CHARACTER VARYING(250)" dbms="postgresql"/>
     <property name="varchar_255" value="CHARACTER VARYING(255)" dbms="postgresql"/>
-    <property name="varchar_400" value="CHARACTER VARYING(400)" dbms="postgresql"/>
     <property name="varchar_500" value="CHARACTER VARYING(500)" dbms="postgresql"/>
-    <property name="varchar_600" value="CHARACTER VARYING(600)" dbms="postgresql"/>
-    <property name="varchar_1000" value="CHARACTER VARYING(1000)" dbms="postgresql"/>
-    <property name="varchar_2000" value="CHARACTER VARYING(2000)" dbms="postgresql"/>
-    <property name="varchar_2500" value="CHARACTER VARYING(2500)" dbms="postgresql"/>
-    <property name="varchar_4000" value="CHARACTER VARYING(4000)" dbms="postgresql"/>
 
     <!-- Text types -->
-    <property name="text" value="TEXT" dbms="postgresql"/>
-    <property name="payload" value="text" dbms="postgresql"/>
     <property name="binary" value="BYTEA" dbms="postgresql"/>
 
     <includeAll path="changes" relativeToChangelogFile="true"/>
