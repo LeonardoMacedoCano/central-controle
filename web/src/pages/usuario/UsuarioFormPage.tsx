@@ -7,7 +7,8 @@ import {
   ImagePicker,
   ThemeSelector,
   Panel,
-  FloatingButton
+  FloatingButton,
+  Loading
 } from '../../components';
 import { FaCheck } from 'react-icons/fa';
 import { AuthContext, useMessage } from '../../contexts';
@@ -106,93 +107,104 @@ export const UsuarioFormPage: React.FC = () => {
 
   const isPasswordMatch = () => usuarioForm?.newPassword === confirmPassword;
   
-  const isFormValid = () => usuarioForm?.username?.trim() !== '';
-
   const handleSubmit = async () => {
-    if (!isFormValid() || !auth.usuario?.token || !usuarioForm) return;
+    if (!usuarioForm) return;
+  
+    if (!usuarioForm.username?.trim()) {
+      message.showError('O nome do usuário não pode estar vazio.');
+      return;
+    }
+  
+    if (!usuarioForm.currentPassword?.trim() && (usuarioForm.newPassword || confirmPassword)) {
+      message.showError('A senha atual é necessária para alterar a senha.');
+      return;
+    }
+  
+    if ((usuarioForm.newPassword || confirmPassword) && !isPasswordMatch()) {
+      message.showError('A nova senha e a confirmação não coincidem.');
+      return;
+    }
+  
+    if (!auth.usuario?.token) return;
+  
     await usuarioService.updateUsuario(auth.usuario.token, usuarioForm);
-  };
+  };  
 
   const update = (updatedFields: Partial<UsuarioForm>) => {
     setUsuarioForm(prev => (prev ? { ...prev, ...updatedFields } : prev));
   };
 
-  if (!usuarioForm) return <p>Carregando...</p>;
-
   return (
     <Container>
-      <FloatingButton
-        mainButtonIcon={<FaCheck />}
-        mainButtonHint={'Salvar'}
-        mainAction={handleSubmit}
-        disabled={!isFormValid()}
-      />
-      <Panel maxWidth='800px' title='Usuário'>
-        <FlexBox flexDirection="column" style={{ padding: '20px' }}>
-          <FlexBox flexDirection="row">
-            <FlexBox.Item>
-              <ImagePicker 
-                currentImage={imagemPerfil}
-                onImageChange={(file) => update({ file })}
-                borderColor={theme.colors.tertiary}
-                isLoading={isLoadingImage}
-                key={imagemPerfil}
-              />
-            </FlexBox.Item>
-          </FlexBox>
-          <Panel>
-            <FlexBox flexDirection="column">
-              <FlexBox.Item borderBottom>
-                <FieldValue
-                  type="string"
-                  value={usuarioForm.username}
-                  description="Nome"
-                  editable
-                  onUpdate={(value) => update({ username: value })}
-                />
-              </FlexBox.Item>
-              <FlexBox.Item borderBottom>
-                <FieldValue
-                  type="string"
-                  value={usuarioForm.currentPassword}
-                  description="Senha Atual"
-                  editable
-                  onUpdate={(value) => update({ currentPassword: value })}
-                  placeholder="Digite sua senha atual"
-                />
-              </FlexBox.Item>
-              <FlexBox.Item borderBottom>
-                <FieldValue
-                  type="string"
-                  value={usuarioForm.newPassword}
-                  description="Nova Senha"
-                  editable
-                  onUpdate={(value) => update({ newPassword: value })}
-                  placeholder="Digite sua nova senha"
-                />
-              </FlexBox.Item>
-              <FlexBox.Item>
-                <FieldValue
-                  type="string"
-                  value={confirmPassword}
-                  description="Confirmar Nova Senha"
-                  editable
-                  onUpdate={setConfirmPassword}
-                  placeholder="Confirme sua nova senha"
-                  variant={usuarioForm.newPassword && !isPasswordMatch() ? 'warning' : undefined}
-                />
-              </FlexBox.Item>
+      <Loading isLoading={!usuarioForm}></Loading>
+      {usuarioForm && (
+        <>
+          <FloatingButton
+            mainButtonIcon={<FaCheck />}
+            mainButtonHint={'Salvar'}
+            mainAction={handleSubmit} />
+          <Panel maxWidth='800px' title='Usuário'>
+            <FlexBox flexDirection="column" style={{ padding: '20px' }}>
+              <FlexBox flexDirection="row">
+                <FlexBox.Item>
+                  <ImagePicker
+                    currentImage={imagemPerfil}
+                    onImageChange={(file) => update({ file })}
+                    borderColor={theme.colors.tertiary}
+                    isLoading={isLoadingImage}
+                    key={imagemPerfil} />
+                </FlexBox.Item>
+              </FlexBox>
+              <Panel>
+                <FlexBox flexDirection="column">
+                  <FlexBox.Item borderBottom>
+                    <FieldValue
+                      type="string"
+                      value={usuarioForm.username}
+                      description="Nome"
+                      editable
+                      onUpdate={(value) => update({ username: value })} />
+                  </FlexBox.Item>
+                  <FlexBox.Item borderBottom>
+                    <FieldValue
+                      type="string"
+                      value={usuarioForm.currentPassword}
+                      description="Senha Atual"
+                      editable
+                      onUpdate={(value) => update({ currentPassword: value })}
+                      placeholder="Digite sua senha atual" />
+                  </FlexBox.Item>
+                  <FlexBox.Item borderBottom>
+                    <FieldValue
+                      type="string"
+                      value={usuarioForm.newPassword}
+                      description="Nova Senha"
+                      editable
+                      onUpdate={(value) => update({ newPassword: value })}
+                      placeholder="Digite sua nova senha" />
+                  </FlexBox.Item>
+                  <FlexBox.Item>
+                    <FieldValue
+                      type="string"
+                      value={confirmPassword}
+                      description="Confirmar Nova Senha"
+                      editable
+                      onUpdate={setConfirmPassword}
+                      placeholder="Confirme sua nova senha"
+                    />
+                  </FlexBox.Item>
+                </FlexBox>
+              </Panel>
+              <Panel maxWidth='1000px' title='Temas' transparent style={{ marginTop: '20px' }}>
+                <ThemeSelector
+                  themes={temas}
+                  currentTheme={usuarioForm.idTema}
+                  onThemeChange={(idTema) => update({ idTema })} />
+              </Panel>
             </FlexBox>
           </Panel>
-          <Panel maxWidth='1000px' title='Temas' transparent style={{ marginTop: '20px' }}>
-            <ThemeSelector 
-              themes={temas}
-              currentTheme={usuarioForm.idTema}
-              onThemeChange={(idTema) => update({ idTema })}
-            />
-          </Panel>
-        </FlexBox>  
-      </Panel>  
+        </>  
+      )}
     </Container>
   );
 };
