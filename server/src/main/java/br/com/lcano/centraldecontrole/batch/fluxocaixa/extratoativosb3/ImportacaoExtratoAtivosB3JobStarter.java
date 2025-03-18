@@ -6,25 +6,30 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ImportacaoExtratoAtivosB3JobStarter {
     @Autowired
-    JobLauncher jobLauncher;
+    private JobLauncher jobLauncher;
 
     @Autowired
-    Job importacaoExtratoAtivosB3Job;
+    @Qualifier("importacaoExtratoAtivosB3Job")
+    private Job importacaoExtratoAtivosB3Job;
 
     @Autowired
-    DateUtil dateUtil;
+    private DateUtil dateUtil;
 
     public void startJob(Long arquivoId, Long usuarioId) throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("arquivoId", arquivoId)
                 .addLong("usuarioId", usuarioId)
                 .addDate("startDate", dateUtil.getDataAtual())
+                .addString("jobIdentifier", "importacaoExtratoAtivosB3Job")
+                .addLong("run.id", System.currentTimeMillis())
                 .toJobParameters();
+
         jobLauncher.run(importacaoExtratoAtivosB3Job, jobParameters);
     }
 }

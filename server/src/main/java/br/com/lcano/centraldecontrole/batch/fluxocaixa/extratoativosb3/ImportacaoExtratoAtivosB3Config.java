@@ -5,7 +5,6 @@ import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoAtivosB3DTO;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -17,13 +16,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 import static br.com.lcano.centraldecontrole.enums.JobName.IMPORTACAO_EXTRATO_ATIVOS_B3_JOB;
 
 @Configuration
-@EnableBatchProcessing
 public class ImportacaoExtratoAtivosB3Config {
 
     @Autowired
     private JobErrorListener jobErrorListener;
 
-    @Bean
+    @Bean(name = "importacaoExtratoAtivosB3Job")
     public Job importacaoExtratoAtivosB3Job(JobRepository jobRepository,
                                             Step importacaoExtratoAtivosB3Step) {
         return new JobBuilder(IMPORTACAO_EXTRATO_ATIVOS_B3_JOB.getJobId(), jobRepository)

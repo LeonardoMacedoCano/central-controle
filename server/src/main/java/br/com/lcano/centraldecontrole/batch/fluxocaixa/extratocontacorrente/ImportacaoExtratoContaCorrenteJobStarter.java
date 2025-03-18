@@ -6,26 +6,31 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ImportacaoExtratoContaCorrenteJobStarter {
 
     @Autowired
-    JobLauncher jobLauncher;
+    private JobLauncher jobLauncher;
 
     @Autowired
-    Job importacaoExtratoContaCorrenteJob;
+    @Qualifier("importacaoExtratoContaCorrenteJob")
+    private Job importacaoExtratoContaCorrenteJob;
 
     @Autowired
-    DateUtil dateUtil;
+    private DateUtil dateUtil;
 
     public void startJob(Long arquivoId, Long usuarioId) throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
                 .addLong("arquivoId", arquivoId)
                 .addLong("usuarioId", usuarioId)
                 .addDate("startDate", dateUtil.getDataAtual())
+                .addString("jobIdentifier", "importacaoExtratoContaCorrenteJob")
+                .addLong("run.id", System.currentTimeMillis())
                 .toJobParameters();
+
         jobLauncher.run(importacaoExtratoContaCorrenteJob, jobParameters);
     }
 }

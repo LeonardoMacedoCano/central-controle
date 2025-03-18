@@ -6,6 +6,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -14,21 +15,28 @@ import java.util.Date;
 public class ImportacaoExtratoMensalCartaoJobStarter {
 
     @Autowired
-    JobLauncher jobLauncher;
+    private JobLauncher jobLauncher;
 
     @Autowired
-    Job importacaoExtratoMensalCartaoJob;
+    @Qualifier("importacaoExtratoMensalCartaoJob")
+    private Job importacaoExtratoMensalCartaoJob;
 
     @Autowired
-    DateUtil dateUtil;
+    private DateUtil dateUtil;
 
     public void startJob(Long arquivoId, Long usuarioId, Date dataVencimento) throws Exception {
-        JobParameters jobParameters = new JobParametersBuilder()
+        JobParametersBuilder parametersBuilder = new JobParametersBuilder()
                 .addLong("arquivoId", arquivoId)
                 .addLong("usuarioId", usuarioId)
                 .addDate("startDate", dateUtil.getDataAtual())
-                .addDate("dataVencimento", dataVencimento)
-                .toJobParameters();
+                .addString("jobIdentifier", "importacaoExtratoMensalCartaoJob")
+                .addLong("run.id", System.currentTimeMillis());
+
+        if (dataVencimento != null) {
+            parametersBuilder.addDate("dataVencimento", dataVencimento);
+        }
+
+        JobParameters jobParameters = parametersBuilder.toJobParameters();
         jobLauncher.run(importacaoExtratoMensalCartaoJob, jobParameters);
     }
 }
