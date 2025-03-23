@@ -104,6 +104,9 @@ import {
 import { 
   Tema 
 } from "./Tema";
+import { 
+  JobErrorLog
+} from "./JobErrorLog";
 
 export type {
   Categoria,
@@ -139,6 +142,7 @@ export type {
   Notificacao,
   Tema,
   UsuarioForm,
+  JobErrorLog,
 };
 
 export {

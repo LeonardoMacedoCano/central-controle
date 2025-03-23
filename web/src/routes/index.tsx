@@ -5,6 +5,7 @@ import ServicoListPage from '../pages/servicos/ServicoListPage';
 import NotificacaoListPage from '../pages/notificacao/NotificacaoListPage';
 import NotificacaoViewPage from '../pages/notificacao/NotificacaoViewPage';
 import UsuarioFormPage from '../pages/usuario/UsuarioFormPage';
+import JobErrorLogViewPage from '../pages/jobErrorLog/JobErrorLogViewPage';
 
 const defaultRoutes = [
   { path: "/", element: <Home /> },
@@ -12,6 +13,7 @@ const defaultRoutes = [
   { path: "/notificacoes", element: <NotificacaoListPage /> },
   { path: "/notificacao/:id", element: <NotificacaoViewPage /> },
   { path: "/usuario", element: <UsuarioFormPage /> },
+  { path: "/job-error/:id", element: <JobErrorLogViewPage /> },
 ];
 
 const combinedRoutes = [

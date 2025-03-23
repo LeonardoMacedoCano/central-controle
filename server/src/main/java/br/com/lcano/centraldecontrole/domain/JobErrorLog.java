@@ -3,7 +3,7 @@ package br.com.lcano.centraldecontrole.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Table(name = "joberrorlog")
 @Entity
@@ -18,7 +18,7 @@ public class JobErrorLog {
     private String jobName;
 
     @Column(name = "errortimestamp", nullable = false)
-    private Date errorTimestamp;
+    private LocalDateTime errorTimestamp;
 
     @Column(name = "errormessage", nullable = false, length = 500)
     private String errorMessage;

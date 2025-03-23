@@ -13,6 +13,7 @@ import FluxoCaixaResumoService from "./fluxocaixa/FluxoCaixaResumoService";
 import NotificacaoService from "./NotificacaoService";
 import TemaBaseService from "./TemaBaseService";
 import UsuarioService from "./UsuarioService";
+import JobErrorLogService from "./JobErrorLogService";
 
 export {
   AuthService,
@@ -30,4 +31,5 @@ export {
   NotificacaoService,
   TemaBaseService,
   UsuarioService,
+  JobErrorLogService,
 }

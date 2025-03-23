@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -20,7 +21,9 @@ public class DateUtil {
     }
 
     public LocalDateTime getDataHoraAtual() {
-        return LocalDateTime.now(ZoneId.of(PropertiesConfig.getTimeZone()));
+        ZoneId zoneId = ZoneId.of(PropertiesConfig.getTimeZone());
+        ZoneOffset offset = zoneId.getRules().getOffset(LocalDateTime.now());
+        return LocalDateTime.now().plusSeconds(offset.getTotalSeconds());
     }
 
     public TimeZone getTimeZone() {
