@@ -62,7 +62,7 @@ const CardTitle = styled.h3`
 
 const CardDescription = styled.p`
   font-size: 0.85rem;
-  color: ${({ theme }) => theme.colors.gray};
+  color: ${({ theme }) => theme.colors.white};
   margin: 5px 0 10px;
   text-align: justify;
 `;

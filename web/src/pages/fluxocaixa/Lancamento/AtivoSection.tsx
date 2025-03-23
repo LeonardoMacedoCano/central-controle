@@ -1,6 +1,6 @@
 import React from 'react';
 import { FieldValue, FlexBox, Panel } from '../../../components';
-import { Ativo, getDescricaoAtivoOperacao } from '../../../types';
+import { Ativo, getDescricaoAtivoCategoria, getDescricaoAtivoOperacao } from '../../../types';
 import { formatDateToShortString, formatNumberWithTrailingZeros, formatValueToBRL } from '../../../utils';
 
 interface AtivoSectionProps {
@@ -22,7 +22,7 @@ const AtivoSection: React.FC<AtivoSectionProps> = ({ ativo }) => {
             <FieldValue 
               description='Categoria'
               type='string'
-              value={ativo?.categoria?.descricao || ''}
+              value={getDescricaoAtivoCategoria(ativo?.categoria) || ''}
             />
           </FlexBox.Item>
         </FlexBox>

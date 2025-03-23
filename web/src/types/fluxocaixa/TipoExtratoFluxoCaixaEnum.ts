@@ -10,7 +10,7 @@ interface TipoExtratoFluxoCaixaInfo {
 }
 
 const TipoExtratoFluxoCaixa: Record<TipoExtratoFluxoCaixaEnum, TipoExtratoFluxoCaixaInfo> = {
-  EXTRATO_MENSAL_CARTAO: { tipo: 'EXTRATO_MENSAL_CARTAO', descricao: 'Extrato mensal do cartão', codigo: '1' },
+  EXTRATO_MENSAL_CARTAO: { tipo: 'EXTRATO_MENSAL_CARTAO', descricao: 'Extrato mensal da fatura do cartão', codigo: '1' },
   EXTRATO_CONTA_CORRENTE: { tipo: 'EXTRATO_CONTA_CORRENTE', descricao: 'Extrato da conta corrente', codigo: '2' },
   EXTRATO_ATIVOS_B3: { tipo: 'EXTRATO_ATIVOS_B3', descricao: 'Extrato dos ativos na B3', codigo: '3' },
 };

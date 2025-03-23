@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.text.DecimalFormat;
+
 @Component
 @StepScope
 public class ImportacaoExtratoAtivosB3Processor implements ItemProcessor<ExtratoAtivosB3DTO, Lancamento>, StepExecutionListener {
@@ -48,16 +50,9 @@ public class ImportacaoExtratoAtivosB3Processor implements ItemProcessor<Extrato
     }
 
     private Lancamento buildLancamentoAtivo(ExtratoAtivosB3DTO extratoAtivosB3DTO) {
-        Lancamento lancamento = new Lancamento();
-        lancamento.setDataLancamento(extratoAtivosB3DTO.getDataNegocio());
-        lancamento.setDescricao(obterDescricaoLancamento(extratoAtivosB3DTO));
-        lancamento.setTipo(TipoLancamento.ATIVO);
-        lancamento.setUsuario(usuario);
-
         Ativo ativo = new Ativo();
-        ativo.setLancamento(lancamento);
         ativo.setCategoria(AtivoCategoria.DESCONHECIDO);
-        ativo.setTicker(extratoAtivosB3DTO.getCodigoNegociacao());
+        ativo.setTicker(formatTickerAtivo(extratoAtivosB3DTO.getCodigoNegociacao()));
         ativo.setOperacao(
                 AtivoOperacao.fromDescricao(
                         extratoAtivosB3DTO.getTipoMovimentacao().toUpperCase()
@@ -67,12 +62,28 @@ public class ImportacaoExtratoAtivosB3Processor implements ItemProcessor<Extrato
         ativo.setPrecoUnitario(extratoAtivosB3DTO.getPreco());
         ativo.setDataMovimento(extratoAtivosB3DTO.getDataNegocio());
 
+
+        Lancamento lancamento = new Lancamento();
+        lancamento.setDataLancamento(extratoAtivosB3DTO.getDataNegocio());
+        lancamento.setDescricao(obterDescricaoLancamento(ativo));
+        lancamento.setTipo(TipoLancamento.ATIVO);
+        lancamento.setUsuario(usuario);
         lancamento.setAtivo(ativo);
+        ativo.setLancamento(lancamento);
 
         return lancamento;
     }
 
-    private String obterDescricaoLancamento(ExtratoAtivosB3DTO extratoAtivosB3DTO) {
-        return String.format("%s - %s", extratoAtivosB3DTO.getTipoMovimentacao(), extratoAtivosB3DTO.getCodigoNegociacao());
+    private String obterDescricaoLancamento(Ativo ativo) {
+        DecimalFormat decimalFormat = new DecimalFormat("#0.######");
+        String quantidadeFormatada = decimalFormat.format(ativo.getQuantidade());
+
+        return String.format("%s - %s x %s", ativo.getOperacao().getDescricao(), quantidadeFormatada, ativo.getTicker());
     }
+
+
+    private String formatTickerAtivo(String codigoNegociacao) {
+        return codigoNegociacao.split(" - ")[0];
+    }
+
 }
