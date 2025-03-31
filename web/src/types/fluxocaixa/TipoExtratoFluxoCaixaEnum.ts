@@ -1,7 +1,7 @@
 export type TipoExtratoFluxoCaixaEnum = 
-  | 'EXTRATO_MENSAL_CARTAO'
+  | 'EXTRATO_FATURA_CARTAO'
   | 'EXTRATO_CONTA_CORRENTE'
-  | 'EXTRATO_ATIVOS_B3';
+  | 'EXTRATO_MOVIMENTACAO_B3';
 
 interface TipoExtratoFluxoCaixaInfo {
   tipo: TipoExtratoFluxoCaixaEnum;
@@ -10,9 +10,9 @@ interface TipoExtratoFluxoCaixaInfo {
 }
 
 const TipoExtratoFluxoCaixa: Record<TipoExtratoFluxoCaixaEnum, TipoExtratoFluxoCaixaInfo> = {
-  EXTRATO_MENSAL_CARTAO: { tipo: 'EXTRATO_MENSAL_CARTAO', descricao: 'Extrato mensal da fatura do cartão', codigo: '1' },
+  EXTRATO_FATURA_CARTAO: { tipo: 'EXTRATO_FATURA_CARTAO', descricao: 'Extrato mensal da fatura do cartão', codigo: '1' },
   EXTRATO_CONTA_CORRENTE: { tipo: 'EXTRATO_CONTA_CORRENTE', descricao: 'Extrato da conta corrente', codigo: '2' },
-  EXTRATO_ATIVOS_B3: { tipo: 'EXTRATO_ATIVOS_B3', descricao: 'Extrato dos ativos na B3', codigo: '3' },
+  EXTRATO_MOVIMENTACAO_B3: { tipo: 'EXTRATO_MOVIMENTACAO_B3', descricao: 'Extrato de movimentações na B3', codigo: '3' },
 };
 
 export const getDescricaoTipoExtratoFluxoCaixa = (tipo?: TipoExtratoFluxoCaixaEnum): string => {

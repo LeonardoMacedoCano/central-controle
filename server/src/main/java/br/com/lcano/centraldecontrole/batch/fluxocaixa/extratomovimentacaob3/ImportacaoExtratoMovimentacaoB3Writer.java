@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratomensalcartao;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratomovimentacaob3;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.repository.LancamentoRepository;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ImportacaoExtratoMensalCartaoWriter implements ItemWriter<Lancamento> {
+public class ImportacaoExtratoMovimentacaoB3Writer implements ItemWriter<Lancamento> {
 
     @Autowired
     LancamentoRepository lancamentoRepository;

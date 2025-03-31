@@ -22,10 +22,10 @@ public class ExtratoFluxoCaixaResource {
     @Autowired
     private final ExtratoFluxoCaixaService service;
 
-    @PostMapping("/import-extrato-mensal-cartao")
-    public ResponseEntity<Object> importExtratoMensalCartao(@RequestParam MultipartFile file,
+    @PostMapping("/import-extrato-fatura-cartao")
+    public ResponseEntity<Object> importExtratoFaturaCartao(@RequestParam MultipartFile file,
                                                             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date dataVencimento) throws Exception {
-        this.service.importExtratoMensalCartao(file, dataVencimento);
+        this.service.importExtratoFaturaCartao(file, dataVencimento);
         return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
 
@@ -35,9 +35,9 @@ public class ExtratoFluxoCaixaResource {
         return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
 
-    @PostMapping("/import-extrato-ativos-b3")
-    public ResponseEntity<Object> importExtratoAtivosB3(@RequestParam MultipartFile file) throws Exception {
-        this.service.importExtratoAtivosB3(file);
+    @PostMapping("/import-extrato-movimentacao-b3")
+    public ResponseEntity<Object> importExtratoMovimentacaoB3(@RequestParam MultipartFile file) throws Exception {
+        this.service.importExtratoMovimentacaoB3(file);
         return CustomSuccess.buildResponseEntity("Importação iniciada.");
     }
 }

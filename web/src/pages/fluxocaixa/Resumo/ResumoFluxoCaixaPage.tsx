@@ -1,34 +1,20 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Container, CustomBarChart, CustomPieChart, InfoCard, Loading, Panel } from '../../../components';
 import styled from 'styled-components';
-import { VariantColor } from '../../../utils';
+import { getCurrentDate, VariantColor } from '../../../utils';
 import { FluxoCaixaResumoService } from '../../../service';
 import { initialResumoFluxoCaixaState, ResumoFluxoCaixa } from '../../../types';
 import { AuthContext } from '../../../contexts';
 
-const handleRendasClick = () => {
-  console.log("Rendas");
-}
-
-const handleDespesasClick = () => {
-  console.log("Despesas");
-}
-
-const handleAtivosClick = () => {
-  console.log("Ativos");
-}
-
-const handleMetasClick = () => {
-  console.log("Metas");
-}
-
-type SummaryData = {
+type SummaryCardData = {
   title: string;
   descricao?: string;
   valueMensal: string;
   valueAnual: string;
   variant: VariantColor;
   onClick: () => void;
+  mes: string;
+  ano: number;
 };
 
 const ResumoFluxoCaixaPage: React.FC = () => {
@@ -54,64 +40,88 @@ const ResumoFluxoCaixaPage: React.FC = () => {
     }
   };
 
-  const summaryData: SummaryData[] = [
+  const handleCardClick = {
+    rendas: () => console.log("Rendas"),
+    despesas: () => console.log("Despesas"),
+    ativos: () => console.log("Ativos"),
+    metas: () => console.log("Metas")
+  };
+
+  const currentMonth = resumo.labelsMensalAnoAtual[resumo.labelsMensalAnoAtual.length - 1];
+  const currentYear = getCurrentDate().getFullYear();
+
+  const summaryCardsData: SummaryCardData[] = [
     {
       title: 'Rendas',
-      valueMensal: `R$ ${resumo.valorRendaMesAtual}`,
+      valueMensal: `R$ ${resumo.valorRendaMesAnterior}`,
       valueAnual: `R$ ${resumo.valorRendaAnoAtual}`,
       variant: 'success',
-      onClick: handleRendasClick,
-      descricao: 'Total das rendas recebidas no mês e no ano até o momento.'
+      onClick: handleCardClick.rendas,
+      descricao: 'Total das rendas recebidas no mês e no ano até o momento.',
+      mes: currentMonth,
+      ano: currentYear
     },
     {
       title: 'Despesas',
-      valueMensal: `R$ ${resumo.valorDespesaMesAtual}`,
+      valueMensal: `R$ ${resumo.valorDespesaMesAnterior}`,
       valueAnual: `R$ ${resumo.valorDespesaAnoAtual}`,
       variant: 'warning',
-      onClick: handleDespesasClick,
-      descricao: 'Total das despesas realizadas no mês e acumuladas no ano.'
+      onClick: handleCardClick.despesas,
+      descricao: 'Total das despesas realizadas no mês e acumuladas no ano.',
+      mes: currentMonth,
+      ano: currentYear
     },
     {
       title: 'Ativos',
-      valueMensal: `R$ ${resumo.valorAtivosMesAtual}`,
+      valueMensal: `R$ ${resumo.valorAtivosMesAnterior}`,
       valueAnual: `R$ ${resumo.valorAtivosAnoAtual}`,
       variant: 'info',
-      onClick: handleAtivosClick,
-      descricao: 'Valor total investido em ativos no mês e acumulado no ano.'
+      onClick: handleCardClick.ativos,
+      descricao: 'Valor total investido em ativos no mês e acumulado no ano.',
+      mes: currentMonth,
+      ano: currentYear
     },
     {
       title: 'Metas',
-      valueMensal: `${resumo.percentualMetasMesAtual}%`,
+      valueMensal: `${resumo.percentualMetasMesAnterior}%`,
       valueAnual: `${resumo.percentualMetasAnoAtual}%`,
       variant: 'quaternary',
-      onClick: handleMetasClick,
-      descricao: 'Porcentagem de cumprimento das metas de rendimento para o mês e o ano.'
+      onClick: handleCardClick.metas,
+      descricao: 'Porcentagem de cumprimento das metas de rendimento para o mês e o ano.',
+      mes: currentMonth,
+      ano: currentYear
     },
-  ];  
+  ];
+  
+  const renderSummaryCard = (cardData: SummaryCardData, index: number) => (
+    <InfoCard 
+      key={index} 
+      height='170px'
+      width='225px'
+      variant={cardData.variant}
+      title={cardData.title} 
+      description={cardData.descricao}
+      onClick={cardData.onClick}
+    >
+      <ValuesContainer>
+        <p><span>Mês {cardData.mes}:</span> <span>{cardData.valueMensal}</span></p>
+        <p><span>Ano {cardData.ano}:</span> <span>{cardData.valueAnual}</span></p>
+      </ValuesContainer>
+    </InfoCard>
+  );
 
   return (
     <Container>
       <Loading isLoading={isLoading}/>
+
       <Panel maxWidth="1000px" title="Resumo Fluxo Caixa" transparent>
-        <CardContainer>
-          {summaryData.map((item, index) => (
-            <InfoCard 
-              key={index} 
-              height='170px'
-              width='225px'
-              variant={item.variant}
-              title={item.title} 
-              description={item.descricao}
-              onClick={item.onClick}
-            >
-              <ValuesContainer>
-                <p><span>Mensal:</span> <span>{item.valueMensal}</span></p>
-                <p><span>Anual:</span> <span>{item.valueAnual}</span></p>
-              </ValuesContainer>
-            </InfoCard>
-          ))}
-        </CardContainer>
+        {currentMonth && (
+          <CardContainer>
+            {summaryCardsData.map(renderSummaryCard)}
+          </CardContainer>
+        )}
       </Panel>
+      
       <Panel maxWidth="1000px" >
         <CustomBarChart 
           title='Renda x Despesa'
@@ -133,13 +143,17 @@ const ResumoFluxoCaixaPage: React.FC = () => {
           }}
         />
       </Panel>
-      <Panel maxWidth="1000px" >
-        <CustomPieChart title="Renda Passiva x Despesa (Mês atual)" data={
-          [
-            { name: "Renda Passiva", value: resumo.valorRendaPassivaMesAtual, variant: 'success'},
-            { name: "Despesa", value: resumo.valorDespesaMesAtual, variant: 'warning' },
-          ]
-        } showLegend />
+    
+      <Panel maxWidth="1000px">
+        <CustomPieChart 
+          title={`Renda Passiva x Despesa (Mês ${resumo.labelsMensalAnoAtual[resumo.labelsMensalAnoAtual.length - 1]})`} 
+          data={[
+            { name: "Renda Passiva", value: resumo.valorRendaPassivaMesAnterior, variant: 'success'},
+            { name: "Despesa", value: resumo.valorDespesaMesAnterior, variant: 'warning' },
+          ]} 
+          showLegend 
+          minVisualPercentage={3}
+        />
       </Panel>
     </Container>
   );

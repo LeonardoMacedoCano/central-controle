@@ -1,10 +1,10 @@
-package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratomensalcartao;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
 
 import br.com.lcano.centraldecontrole.domain.Lancamento;
 import br.com.lcano.centraldecontrole.domain.Usuario;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.Despesa;
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.DespesaCategoria;
-import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoMensalCartaoDTO;
+import br.com.lcano.centraldecontrole.dto.fluxocaixa.ExtratoFaturaCartaoDTO;
 import br.com.lcano.centraldecontrole.enums.TipoLancamento;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.DespesaFormaPagamento;
 import br.com.lcano.centraldecontrole.service.UsuarioService;
@@ -25,7 +25,7 @@ import java.util.Date;
 
 @Component
 @StepScope
-public class ImportacaoExtratoMensalCartaoProcessor implements ItemProcessor<ExtratoMensalCartaoDTO, Lancamento>, StepExecutionListener {
+public class ImportacaoExtratoFaturaCartaoProcessor implements ItemProcessor<ExtratoFaturaCartaoDTO, Lancamento>, StepExecutionListener {
 
     @Autowired
     UsuarioService usuarioService;
@@ -41,7 +41,7 @@ public class ImportacaoExtratoMensalCartaoProcessor implements ItemProcessor<Ext
     private Usuario usuario;
 
     @Autowired
-    public ImportacaoExtratoMensalCartaoProcessor(
+    public ImportacaoExtratoFaturaCartaoProcessor(
             @Value("#{jobParameters['usuarioId']}") Long usuarioId,
             @Value("#{jobParameters['dataVencimento']}") Date dataVencimento) {
         this.usuarioId = usuarioId;
@@ -54,10 +54,10 @@ public class ImportacaoExtratoMensalCartaoProcessor implements ItemProcessor<Ext
     }
 
     @Override
-    public Lancamento process(ExtratoMensalCartaoDTO extratoMensalCartaoDTO) {
-        if (this.isDespesa(extratoMensalCartaoDTO)) {
-            Lancamento lancamento = this.buildLancamento(extratoMensalCartaoDTO);
-            Despesa despesa = this.buildDespesa(extratoMensalCartaoDTO, lancamento);
+    public Lancamento process(ExtratoFaturaCartaoDTO extratoFaturaCartaoDTO) {
+        if (this.isDespesa(extratoFaturaCartaoDTO)) {
+            Lancamento lancamento = this.buildLancamento(extratoFaturaCartaoDTO);
+            Despesa despesa = this.buildDespesa(extratoFaturaCartaoDTO, lancamento);
             lancamento.setDespesa(despesa);
             return lancamento;
         }
@@ -65,25 +65,25 @@ public class ImportacaoExtratoMensalCartaoProcessor implements ItemProcessor<Ext
         return null;
     }
 
-    private Boolean isDespesa(ExtratoMensalCartaoDTO extratoMensalCartaoDTO) {
-        return extratoMensalCartaoDTO.getValor().compareTo(BigDecimal.valueOf(0.00)) > 0;
+    private Boolean isDespesa(ExtratoFaturaCartaoDTO extratoFaturaCartaoDTO) {
+        return extratoFaturaCartaoDTO.getValor().compareTo(BigDecimal.valueOf(0.00)) > 0;
     }
 
-    private Lancamento buildLancamento(ExtratoMensalCartaoDTO extratoMensalCartaoDTO) {
+    private Lancamento buildLancamento(ExtratoFaturaCartaoDTO extratoFaturaCartaoDTO) {
         Lancamento lancamento = new Lancamento();
-        lancamento.setDataLancamento(extratoMensalCartaoDTO.getDataLancamento());
-        lancamento.setDescricao(extratoMensalCartaoDTO.getDescricao());
+        lancamento.setDataLancamento(extratoFaturaCartaoDTO.getDataLancamento());
+        lancamento.setDescricao(extratoFaturaCartaoDTO.getDescricao());
         lancamento.setTipo(TipoLancamento.DESPESA);
         lancamento.setUsuario(usuario);
         return lancamento;
     }
 
-    private Despesa buildDespesa(ExtratoMensalCartaoDTO extratoMensalCartaoDTO, Lancamento lancamento) {
+    private Despesa buildDespesa(ExtratoFaturaCartaoDTO extratoFaturaCartaoDTO, Lancamento lancamento) {
         Despesa despesa = new Despesa();
-        String descricaoCategoriaFormatada = StringUtil.capitalizeFirstLetter(extratoMensalCartaoDTO.getCategoria());
+        String descricaoCategoriaFormatada = StringUtil.capitalizeFirstLetter(extratoFaturaCartaoDTO.getCategoria());
         despesa.setCategoria(this.getDespesaCategoriaDTO(descricaoCategoriaFormatada));
         despesa.setDataVencimento(dataVencimento);
-        despesa.setValor(extratoMensalCartaoDTO.getValor());
+        despesa.setValor(extratoFaturaCartaoDTO.getValor());
         despesa.setFormaPagamento(DespesaFormaPagamento.CARTAO_CREDITO);
         despesa.setLancamento(lancamento);
         return despesa;

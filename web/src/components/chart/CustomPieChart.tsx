@@ -6,6 +6,8 @@ export type PieChartData = {
   name: string;
   value: number;
   variant?: VariantColor;
+  realPercentage?: number;
+  visualPercentage?: number;
 };
 
 type CustomPieChartProps = {
@@ -13,6 +15,7 @@ type CustomPieChartProps = {
   data: PieChartData[];
   showLegend?: boolean;
   size?: number;
+  minVisualPercentage?: number;
 };
 
 const CustomPieChart: React.FC<CustomPieChartProps> = ({
@@ -20,14 +23,69 @@ const CustomPieChart: React.FC<CustomPieChartProps> = ({
   data,
   showLegend = true,
   size = 200,
+  minVisualPercentage = 5,
 }) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
 
   const validData = data.filter(item => item.value > 0);
   const hasValidData = validData.length > 0;
   const totalValue = hasValidData ? validData.reduce((sum, item) => sum + item.value, 0) : 0;
+  
+  let visualData = [...validData];
+  
+  if (hasValidData && validData.length > 1) {
+    let cumulativeAdjustment = 0;
+    
+    visualData = validData.map(item => {
+      const realPercentage = (item.value / totalValue) * 100;
+      
+      if (realPercentage < minVisualPercentage) {
+        const adjustment = minVisualPercentage - realPercentage;
+        cumulativeAdjustment += adjustment;
+        
+        return {
+          ...item,
+          visualPercentage: minVisualPercentage,
+          realPercentage: realPercentage
+        };
+      }
+      
+      return {
+        ...item,
+        visualPercentage: realPercentage,
+        realPercentage: realPercentage
+      };
+    });
+    
+    if (cumulativeAdjustment > 0) {
+      const largerItems = visualData.filter(item => (item.realPercentage || 0) >= minVisualPercentage);
+      const totalLargerPercentage = largerItems.reduce((sum, item) => sum + (item.realPercentage || 0), 0);
+      
+      if (totalLargerPercentage > 0) {
+        visualData = visualData.map(item => {
+          if ((item.realPercentage || 0) >= minVisualPercentage) {
+            const adjustmentRatio = (item.realPercentage || 0) / totalLargerPercentage;
+            const adjustment = cumulativeAdjustment * adjustmentRatio;
+            
+            return {
+              ...item,
+              visualPercentage: (item.visualPercentage || 0) - adjustment
+            };
+          }
+          return item;
+        });
+      }
+    }
+  } else if (hasValidData) {
+    visualData = validData.map(item => ({
+      ...item,
+      visualPercentage: 100,
+      realPercentage: 100
+    }));
+  }
+  
   let cumulativePercentage = 0;
-  const coloredData = assignColors(validData);
+  const coloredData = assignColors(visualData);
 
   const drawFullCircle = validData.length === 1;
 
@@ -52,25 +110,27 @@ const CustomPieChart: React.FC<CustomPieChartProps> = ({
                       cy="16"
                       r="15"
                       variant={item.variant!}
-                      onMouseEnter={() => setHoveredItem(`${item.name}: ${item.value}`)}
+                      onMouseEnter={() => setHoveredItem(`${item.name}: ${item.value.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}`)}
                       onMouseLeave={() => setHoveredItem(null)}
                     />
                   );
                 }
 
-                const percentage = (item.value / totalValue) * 100;
+                const percentage = item.visualPercentage || 0;
                 const startAngle = (cumulativePercentage / 100) * 360;
                 cumulativePercentage += percentage;
                 const endAngle = (cumulativePercentage / 100) * 360;
                 const pathData = describeArc(16, 16, 15, startAngle, endAngle);
+                const realPercentage = item.realPercentage || 0;
 
                 return (
                   <Slice
                     key={item.name}
                     variant={item.variant!}
                     d={pathData}
-                    onMouseEnter={() => setHoveredItem(`${item.name}: ${item.value}`)}
+                    onMouseEnter={() => setHoveredItem(`${item.name}: ${item.value.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})} (${realPercentage.toFixed(1)}%)`)}
                     onMouseLeave={() => setHoveredItem(null)}
+                    className={realPercentage < minVisualPercentage ? "adjusted-slice" : ""}
                   />
                 );
               })}
@@ -78,12 +138,18 @@ const CustomPieChart: React.FC<CustomPieChartProps> = ({
 
             {showLegend && (
               <LegendContainer>
-                {coloredData.map((item) => (
-                  <LegendItem key={item.name}>
-                    <LegendColor variant={item.variant!} />
-                    <LegendText>{item.name}</LegendText>
-                  </LegendItem>
-                ))}
+                {coloredData.map((item) => {
+                  const realPercentage = item.realPercentage || 0;
+                  return (
+                    <LegendItem key={item.name}>
+                      <LegendColor variant={item.variant!} />
+                      <LegendText>
+                        {item.name}: {item.value.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}
+                        {` (${realPercentage.toFixed(1)}%)`}
+                      </LegendText>
+                    </LegendItem>
+                  );
+                })}
               </LegendContainer>
             )}
           </>
@@ -175,6 +241,7 @@ const ChartContent = styled.div`
   justify-content: center;
   width: 100%;
   gap: 10px;
+  flex-direction: column;
 `;
 
 const NoDataMessage = styled.div`
@@ -194,6 +261,7 @@ const LegendContainer = styled.div`
   gap: 16px;
   flex-wrap: wrap;
   justify-content: center;
+  margin-top: 15px;
 `;
 
 const LegendItem = styled.div`

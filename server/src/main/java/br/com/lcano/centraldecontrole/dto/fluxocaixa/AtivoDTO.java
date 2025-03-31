@@ -4,7 +4,7 @@ import br.com.lcano.centraldecontrole.domain.fluxocaixa.Ativo;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
 import br.com.lcano.centraldecontrole.dto.LancamentoItemDTO;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoria;
-import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoOperacao;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoOperacaoExtratoMovimentacaoB3;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +17,7 @@ public class AtivoDTO extends BaseDTO<Ativo> implements LancamentoItemDTO {
     private Long id;
     private AtivoCategoria categoria;
     private String ticker;
-    private AtivoOperacao operacao;
+    private TipoOperacaoExtratoMovimentacaoB3 operacao;
     private BigDecimal quantidade;
     private BigDecimal precoUnitario;
     private Date dataMovimento;

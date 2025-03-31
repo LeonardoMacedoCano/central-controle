@@ -16,7 +16,9 @@ import br.com.lcano.centraldecontrole.util.UsuarioUtil;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -61,12 +63,17 @@ public class LancamentoService extends AbstractGenericService<Lancamento, Long> 
 
     public Page<LancamentoDTO> search(Pageable pageable, List<FilterDTO> filterDTOs) {
         Specification<Lancamento> combinedSpecification = FilterUtil.buildSpecificationsFromDTO(filterDTOs, this::applyFieldSpecification);
-        return repository.findAll(combinedSpecification, pageable)
+
+        Sort sort = Sort.by(Sort.Order.desc("dataLancamento"));
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        return repository.findAll(combinedSpecification, sortedPageable)
                 .map(lancamento -> {
                     var itemDTO = getLancamentoItemService(lancamento.getTipo()).getByLancamentoId(lancamento.getId());
                     return new LancamentoDTO().fromEntityWithItem(lancamento, itemDTO);
                 });
     }
+
 
     private LancamentoItemService<LancamentoItemDTO> getLancamentoItemService(TipoLancamento tipo) {
         return (LancamentoItemService<LancamentoItemDTO>) Optional.ofNullable(lancamentoItemServices.get(tipo))

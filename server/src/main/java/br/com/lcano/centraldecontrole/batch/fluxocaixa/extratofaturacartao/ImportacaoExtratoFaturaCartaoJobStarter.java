@@ -1,4 +1,4 @@
-package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratomensalcartao;
+package br.com.lcano.centraldecontrole.batch.fluxocaixa.extratofaturacartao;
 
 import br.com.lcano.centraldecontrole.util.DateUtil;
 import org.springframework.batch.core.Job;
@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
-public class ImportacaoExtratoMensalCartaoJobStarter {
+public class ImportacaoExtratoFaturaCartaoJobStarter {
 
     @Autowired
     private JobLauncher jobLauncher;
 
     @Autowired
-    @Qualifier("importacaoExtratoMensalCartaoJob")
-    private Job importacaoExtratoMensalCartaoJob;
+    @Qualifier("importacaoExtratoFaturaCartaoJob")
+    private Job importacaoExtratoFaturaCartaoJob;
 
     @Autowired
     private DateUtil dateUtil;
@@ -29,7 +29,7 @@ public class ImportacaoExtratoMensalCartaoJobStarter {
                 .addLong("arquivoId", arquivoId)
                 .addLong("usuarioId", usuarioId)
                 .addDate("startDate", dateUtil.getDataAtual())
-                .addString("jobIdentifier", "importacaoExtratoMensalCartaoJob")
+                .addString("jobIdentifier", "importacaoExtratoFaturaCartaoJob")
                 .addLong("run.id", System.currentTimeMillis());
 
         if (dataVencimento != null) {
@@ -37,6 +37,6 @@ public class ImportacaoExtratoMensalCartaoJobStarter {
         }
 
         JobParameters jobParameters = parametersBuilder.toJobParameters();
-        jobLauncher.run(importacaoExtratoMensalCartaoJob, jobParameters);
+        jobLauncher.run(importacaoExtratoFaturaCartaoJob, jobParameters);
     }
 }

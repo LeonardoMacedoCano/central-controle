@@ -45,6 +45,10 @@ public class FluxoCaixaParametroService extends AbstractGenericService<FluxoCaix
         return findByUsuario().getRendaCategoriaPadrao();
     }
 
+    public RendaCategoria getRendaPassivaCategoria() {
+        return findByUsuario().getRendaPassivaCategoria();
+    }
+
     public void validateParametro() {
         FluxoCaixaParametro fluxoCaixaParametro = findByUsuario();
 

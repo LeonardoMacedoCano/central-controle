@@ -29,7 +29,7 @@ const ExtratoFluxoCaixaFormPage: React.FC = () => {
     dataVencimento: getCurrentDate(),
     file: null
   });
-  const [tipo, setTipo] = useState<TipoExtratoFluxoCaixaEnum>('EXTRATO_MENSAL_CARTAO');
+  const [tipo, setTipo] = useState<TipoExtratoFluxoCaixaEnum>('EXTRATO_FATURA_CARTAO');
 
   const auth = useContext(AuthContext);
   const extratoFluxoCaixaService = ExtratoFluxoCaixaService();
@@ -41,8 +41,8 @@ const ExtratoFluxoCaixaFormPage: React.FC = () => {
     setIsLoading(true);
     try {
       switch (tipo) {
-        case 'EXTRATO_MENSAL_CARTAO':
-          await extratoFluxoCaixaService.importExtratoMensalCartao(
+        case 'EXTRATO_FATURA_CARTAO':
+          await extratoFluxoCaixaService.importExtratoFaturaCartao(
             auth.usuario.token, 
             extratoDTO.file, 
             (extratoDTO as ExtratoMensalCartaoDTO).dataVencimento
@@ -51,8 +51,8 @@ const ExtratoFluxoCaixaFormPage: React.FC = () => {
         case 'EXTRATO_CONTA_CORRENTE':
           await extratoFluxoCaixaService.importExtratoContaCorrente(auth.usuario.token, extratoDTO.file);
           break;
-        case 'EXTRATO_ATIVOS_B3':
-          await extratoFluxoCaixaService.importExtratoAtivosB3(auth.usuario.token, extratoDTO.file);
+        case 'EXTRATO_MOVIMENTACAO_B3':
+          await extratoFluxoCaixaService.importExtratoMovimentacaoB3(auth.usuario.token, extratoDTO.file);
           break;
         default:
           throw new Error('Tipo de extrato não suportado.');
@@ -65,7 +65,7 @@ const ExtratoFluxoCaixaFormPage: React.FC = () => {
 
   const isRequiredFieldsFilled = (): boolean => {
     if (!extratoDTO.file) return false;
-    if (tipo === 'EXTRATO_MENSAL_CARTAO') {
+    if (tipo === 'EXTRATO_FATURA_CARTAO') {
       return isDateValid((extratoDTO as ExtratoMensalCartaoDTO).dataVencimento);
     }
     return true;
@@ -116,7 +116,7 @@ const ExtratoFluxoCaixaFormPage: React.FC = () => {
               />
             </FlexBox.Item>
           </FlexBox>
-          {tipo === 'EXTRATO_MENSAL_CARTAO' && (
+          {tipo === 'EXTRATO_FATURA_CARTAO' && (
             <FlexBox flexDirection='row' borderBottom>
               <FieldValue 
                 description='Data Vencimento'
