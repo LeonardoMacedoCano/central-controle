@@ -1,4 +1,4 @@
-export type AtivoOperacaoEnum = 'COMPRA' | 'VENDA';
+export type AtivoOperacaoEnum = 'CREDITO' | 'DEBITO';
 
 interface AtivoOperacaoInfo {
   tipo: AtivoOperacaoEnum;
@@ -7,8 +7,8 @@ interface AtivoOperacaoInfo {
 }
 
 const AtivoOperacoes: Record<AtivoOperacaoEnum, AtivoOperacaoInfo> = {
-  COMPRA: { tipo: 'COMPRA', descricao: 'Compra', codigo: '1' },
-  VENDA: { tipo: 'VENDA', descricao: 'Venda', codigo: '2' }
+  CREDITO: { tipo: 'CREDITO', descricao: 'Compra', codigo: '1' },
+  DEBITO: { tipo: 'DEBITO', descricao: 'Venda', codigo: '2' }
 };
 
 export const getDescricaoAtivoOperacao = (tipo?: AtivoOperacaoEnum): string => {
