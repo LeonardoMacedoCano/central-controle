@@ -7,16 +7,16 @@ import java.util.List;
 
 @Data
 public class ResumoFluxoCaixaDTO {
-    private BigDecimal valorRendaMesAnterior;
+    private BigDecimal valorRendaUltimoMes;
     private BigDecimal valorRendaAnoAtual;
-    private BigDecimal valorDespesaMesAnterior;
+    private BigDecimal valorDespesaUltimoMes;
     private BigDecimal valorDespesaAnoAtual;
-    private BigDecimal valorAtivosMesAnterior;
+    private BigDecimal valorAtivosUltimoMes;
     private BigDecimal valorAtivosAnoAtual;
-    private BigDecimal percentualMetasMesAnterior;
+    private BigDecimal percentualMetasUltimoMes;
     private BigDecimal percentualMetasAnoAtual;
     private List<String> labelsMensalAnoAtual;
     private List<BigDecimal> valoresRendaAnoAtual;
     private List<BigDecimal> valoresDespesaAnoAtual;
-    private BigDecimal valorRendaPassivaMesAnterior;
+    private BigDecimal valorRendaPassivaUltimoMes;
 }

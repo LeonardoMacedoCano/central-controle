@@ -12,13 +12,28 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Year;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @Service
 public class FluxoCaixaResumoService {
+    private static final int SCALE = 2;
+    private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_UP;
+    private static final BigDecimal ONE_HUNDRED = BigDecimal.valueOf(100);
+    private static final String[] MONTHS_IN_PORTUGUESE = {
+            "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
+    };
+    private static final Map<String, Integer> MONTH_MAP = Map.ofEntries(
+            Map.entry("Jan", 1), Map.entry("Fev", 2), Map.entry("Mar", 3), Map.entry("Abr", 4),
+            Map.entry("Mai", 5), Map.entry("Jun", 6), Map.entry("Jul", 7), Map.entry("Ago", 8),
+            Map.entry("Set", 9), Map.entry("Out", 10), Map.entry("Nov", 11), Map.entry("Dez", 12)
+    );
+
+
     private final LancamentoService lancamentoService;
     private final FluxoCaixaParametroService parametroService;
 
@@ -26,114 +41,86 @@ public class FluxoCaixaResumoService {
         parametroService.validateParametro();
 
         ResumoFluxoCaixaDTO dto = new ResumoFluxoCaixaDTO();
-        YearMonth mesAnterior = YearMonth.now().minusMonths(1);
-        Year anoAtual = Year.now();
         FluxoCaixaParametro parametros = parametroService.findByUsuario();
+        Year anoAtual = Year.now();
 
-        calculateAndSetValoresMensais(dto, mesAnterior);
-        calculateAndSetValoresAnuais(dto, anoAtual);
+        populateMonthlySummary(dto, anoAtual);
 
-        dto.setPercentualMetasMesAnterior(calculatePercentualMetasMensais(dto, parametros));
-        dto.setPercentualMetasAnoAtual(calculatePercentualMetasAnuais(dto, parametros));
+        YearMonth ultimoMes = getUltimoMes(dto.getLabelsMensalAnoAtual());
+        populateMonthlyValues(dto, ultimoMes);
+        populateAnnualValues(dto, anoAtual);
 
-        calculateAndSetRendasEDespesasAnuais(dto, anoAtual);
-        dto.setValorRendaPassivaMesAnterior(calculateRendaPassivaPeriodo(mesAnterior, parametros.getRendaPassivaCategoria()));
+        dto.setPercentualMetasUltimoMes(calculateMonthlyGoalsPercentage(dto, parametros));
+        dto.setPercentualMetasAnoAtual(calculateAnnualGoalsPercentage(dto, parametros));
+        dto.setValorRendaPassivaUltimoMes(calculatePassiveIncome(ultimoMes, parametros.getRendaPassivaCategoria()));
 
         return dto;
     }
 
-    private void calculateAndSetValoresMensais(ResumoFluxoCaixaDTO dto, YearMonth mesAnterior) {
-        Year anoAtual = Year.now();
-        if (mesAnterior.getYear() == anoAtual.getValue()) {
-            dto.setValorRendaMesAnterior(calculateRendasPeriodo(mesAnterior));
-            dto.setValorDespesaMesAnterior(calculateDespesasPeriodo(mesAnterior));
-            dto.setValorAtivosMesAnterior(calculateAtivosPeriodo(mesAnterior));
-        } else {
-            resetValoresMensais(dto);
-        }
+    private YearMonth getUltimoMes(List<String> labels) {
+        String ultimoLabel = labels.get(labels.size() - 1);
+        String[] parts = ultimoLabel.split("/");
+
+        int mes = MONTH_MAP.get(parts[0]);
+
+        return YearMonth.of(Year.now().getValue(), mes);
     }
 
-    private void resetValoresMensais(ResumoFluxoCaixaDTO dto) {
-        dto.setValorRendaMesAnterior(BigDecimal.ZERO);
-        dto.setValorDespesaMesAnterior(BigDecimal.ZERO);
-        dto.setValorAtivosMesAnterior(BigDecimal.ZERO);
-    }
-
-    private void calculateAndSetValoresAnuais(ResumoFluxoCaixaDTO dto, Year anoAtual) {
-        dto.setValorRendaAnoAtual(calculateRendasPeriodo(anoAtual));
-        dto.setValorDespesaAnoAtual(calculateDespesasPeriodo(anoAtual));
-        dto.setValorAtivosAnoAtual(calculateAtivosPeriodo(anoAtual));
-    }
-
-    private void calculateAndSetRendasEDespesasAnuais(ResumoFluxoCaixaDTO dto, Year anoAtual) {
+    private void populateMonthlySummary(ResumoFluxoCaixaDTO dto, Year currentYear) {
         List<String> labels = new ArrayList<>();
-        List<BigDecimal> valoresRenda = new ArrayList<>();
-        List<BigDecimal> valoresDespesa = new ArrayList<>();
+        List<BigDecimal> incomeValues = new ArrayList<>();
+        List<BigDecimal> expenseValues = new ArrayList<>();
 
-        for (int mes = 1; mes <= 12; mes++) {
-            addAndSetRendasEDespesasMensais(labels, valoresRenda, valoresDespesa, anoAtual, mes);
+        for (int month = 1; month <= 12; month++) {
+            YearMonth yearMonth = YearMonth.of(currentYear.getValue(), month);
+            BigDecimal income = calculatePeriodAmount(TipoLancamento.RENDA, yearMonth);
+            BigDecimal expense = calculatePeriodAmount(TipoLancamento.DESPESA, yearMonth);
+
+            if (income.compareTo(BigDecimal.ZERO) > 0 || expense.compareTo(BigDecimal.ZERO) > 0) {
+                labels.add(String.format("%s/%d", MONTHS_IN_PORTUGUESE[month - 1], currentYear.getValue() % 100));
+                incomeValues.add(income);
+                expenseValues.add(expense);
+            }
         }
 
         dto.setLabelsMensalAnoAtual(labels);
-        if (!valoresRenda.isEmpty()) dto.setValoresRendaAnoAtual(valoresRenda);
-        if (!valoresDespesa.isEmpty()) dto.setValoresDespesaAnoAtual(valoresDespesa);
+        if (!incomeValues.isEmpty()) dto.setValoresRendaAnoAtual(incomeValues);
+        if (!expenseValues.isEmpty()) dto.setValoresDespesaAnoAtual(expenseValues);
     }
 
-    private void addAndSetRendasEDespesasMensais(List<String> labels, List<BigDecimal> valoresRenda, List<BigDecimal> valoresDespesa, Year anoAtual, int mes) {
-        String[] monthsInPortuguese = {
-                "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"
-        };
-
-        YearMonth yearMonth = YearMonth.of(anoAtual.getValue(), mes);
-        BigDecimal renda = calculateRendasPeriodo(yearMonth);
-        BigDecimal despesa = calculateDespesasPeriodo(yearMonth);
-
-        if (renda.compareTo(BigDecimal.ZERO) > 0 || despesa.compareTo(BigDecimal.ZERO) > 0) {
-            labels.add(String.format("%s/%d", monthsInPortuguese[mes - 1], anoAtual.getValue() % 100));
-
-            valoresRenda.add(renda);
-            valoresDespesa.add(despesa);
+    private void populateMonthlyValues(ResumoFluxoCaixaDTO dto, YearMonth lastMonth) {
+        Year currentYear = Year.now();
+        if (lastMonth.getYear() == currentYear.getValue()) {
+            dto.setValorRendaUltimoMes(calculatePeriodAmount(TipoLancamento.RENDA, lastMonth));
+            dto.setValorDespesaUltimoMes(calculatePeriodAmount(TipoLancamento.DESPESA, lastMonth));
+            dto.setValorAtivosUltimoMes(calculatePeriodAmount(TipoLancamento.ATIVO, lastMonth));
+        } else {
+            dto.setValorRendaUltimoMes(BigDecimal.ZERO);
+            dto.setValorDespesaUltimoMes(BigDecimal.ZERO);
+            dto.setValorAtivosUltimoMes(BigDecimal.ZERO);
         }
     }
 
-    private BigDecimal calculateRendasPeriodo(YearMonth periodo) {
-        return calculateValorPeriodo(TipoLancamento.RENDA, periodo);
+    private void populateAnnualValues(ResumoFluxoCaixaDTO dto, Year currentYear) {
+        dto.setValorRendaAnoAtual(calculatePeriodAmount(TipoLancamento.RENDA, currentYear));
+        dto.setValorDespesaAnoAtual(calculatePeriodAmount(TipoLancamento.DESPESA, currentYear));
+        dto.setValorAtivosAnoAtual(calculatePeriodAmount(TipoLancamento.ATIVO, currentYear));
     }
 
-    private BigDecimal calculateDespesasPeriodo(YearMonth periodo) {
-        return calculateValorPeriodo(TipoLancamento.DESPESA, periodo);
+    private BigDecimal calculatePeriodAmount(TipoLancamento type, YearMonth period) {
+        Date start = convertToDate(period.atDay(1));
+        Date end = convertToDate(period.atEndOfMonth());
+        return calculateAmount(type, start, end);
     }
 
-    private BigDecimal calculateAtivosPeriodo(YearMonth periodo) {
-        return calculateValorPeriodo(TipoLancamento.ATIVO, periodo);
+    private BigDecimal calculatePeriodAmount(TipoLancamento type, Year year) {
+        Date start = convertToDate(year.atDay(1));
+        Date end = convertToDate(year.atMonth(12).atEndOfMonth());
+        return calculateAmount(type, start, end);
     }
 
-    private BigDecimal calculateRendasPeriodo(Year ano) {
-        return calculateValorPeriodo(TipoLancamento.RENDA, ano);
-    }
-
-    private BigDecimal calculateDespesasPeriodo(Year ano) {
-        return calculateValorPeriodo(TipoLancamento.DESPESA, ano);
-    }
-
-    private BigDecimal calculateAtivosPeriodo(Year ano) {
-        return calculateValorPeriodo(TipoLancamento.ATIVO, ano);
-    }
-
-    private BigDecimal calculateValorPeriodo(TipoLancamento tipo, YearMonth periodo) {
-        Date inicio = Date.from(periodo.atDay(1).atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant());
-        Date fim = Date.from(periodo.atEndOfMonth().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant());
-        return calculateValor(tipo, inicio, fim);
-    }
-
-    private BigDecimal calculateValorPeriodo(TipoLancamento tipo, Year ano) {
-        Date inicio = Date.from(ano.atDay(1).atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant());
-        Date fim = Date.from(ano.atMonth(12).atEndOfMonth().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant());
-        return calculateValor(tipo, inicio, fim);
-    }
-
-    private BigDecimal calculateValor(TipoLancamento tipo, Date inicio, Date fim) {
-        return lancamentoService.findByUsuarioAutenticadoAndTipoAndDateRange(tipo, inicio, fim)
+    private BigDecimal calculateAmount(TipoLancamento type, Date start, Date end) {
+        return lancamentoService.findByUsuarioAutenticadoAndTipoAndDateRange(type, start, end)
                 .stream()
                 .map(lancamento -> switch (lancamento.getTipo()) {
                     case RENDA -> lancamento.getRenda().getValor();
@@ -143,50 +130,83 @@ public class FluxoCaixaResumoService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private BigDecimal calculateRendaPassivaPeriodo(YearMonth periodo, RendaCategoria categoriaRendaPassiva) {
-        if (categoriaRendaPassiva == null) {
+    private BigDecimal calculatePassiveIncome(YearMonth period, RendaCategoria passiveIncomeCategory) {
+        if (passiveIncomeCategory == null) {
             return BigDecimal.ZERO;
         }
-        Date inicio = Date.from(periodo.atDay(1).atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant());
-        Date fim = Date.from(periodo.atEndOfMonth().atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant());
-        return lancamentoService.findByUsuarioAutenticadoAndTipoAndDateRange(TipoLancamento.RENDA, inicio, fim)
+
+        Date start = convertToDate(period.atDay(1));
+        Date end = convertToDate(period.atEndOfMonth());
+
+        return lancamentoService.findByUsuarioAutenticadoAndTipoAndDateRange(TipoLancamento.RENDA, start, end)
                 .stream()
-                .filter(l -> l.getRenda().getCategoria().equals(categoriaRendaPassiva))
+                .filter(l -> l.getRenda().getCategoria().equals(passiveIncomeCategory))
                 .map(l -> l.getRenda().getValor())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    private BigDecimal calculatePercentualMetasMensais(ResumoFluxoCaixaDTO dto, FluxoCaixaParametro parametros) {
-        BigDecimal percentualLimiteDespesa = calculatePercentualLimiteDespesa(dto.getValorDespesaMesAnterior(), parametros.getMetaLimiteDespesaMensal());
-        BigDecimal percentualAporteMensal = calculatePercentualAporteMensal(dto.getValorAtivosMesAnterior(), parametros.getMetaAporteMensal());
+    private BigDecimal calculateMonthlyGoalsPercentage(ResumoFluxoCaixaDTO dto, FluxoCaixaParametro parameters) {
+        BigDecimal expenseLimitPercentage = calculateExpenseLimitPercentage(
+                dto.getValorDespesaUltimoMes(),
+                parameters.getMetaLimiteDespesaMensal());
 
-        return percentualLimiteDespesa.add(percentualAporteMensal).divide(BigDecimal.valueOf(2), 2, RoundingMode.HALF_UP);
+        BigDecimal monthlyContributionPercentage = calculateMonthlyContributionPercentage(
+                dto.getValorAtivosUltimoMes(),
+                parameters.getMetaAporteMensal());
+
+        return expenseLimitPercentage.add(monthlyContributionPercentage)
+                .divide(BigDecimal.valueOf(2), SCALE, ROUNDING_MODE);
     }
 
-    private BigDecimal calculatePercentualLimiteDespesa(BigDecimal valorDespesaMesAnterior, BigDecimal metaLimiteDespesa) {
-        if (metaLimiteDespesa == null || metaLimiteDespesa.compareTo(BigDecimal.ZERO) <= 0) {
+    private BigDecimal calculateExpenseLimitPercentage(BigDecimal monthlyExpense, BigDecimal expenseLimitGoal) {
+        if (expenseLimitGoal == null || expenseLimitGoal.compareTo(BigDecimal.ZERO) <= 0) {
             return BigDecimal.ZERO;
         }
-        return valorDespesaMesAnterior.compareTo(metaLimiteDespesa) <= 0 ? BigDecimal.valueOf(100) : BigDecimal.ZERO;
+        return monthlyExpense.compareTo(expenseLimitGoal) <= 0 ? ONE_HUNDRED : BigDecimal.ZERO;
     }
 
-    private BigDecimal calculatePercentualAporteMensal(BigDecimal valorAtivosMesAnterior, BigDecimal metaAporteMensal) {
-        if (metaAporteMensal == null || metaAporteMensal.compareTo(BigDecimal.ZERO) <= 0) {
+    private BigDecimal calculateMonthlyContributionPercentage(BigDecimal monthlyAssets, BigDecimal monthlyContributionGoal) {
+        if (monthlyContributionGoal == null || monthlyContributionGoal.compareTo(BigDecimal.ZERO) <= 0) {
             return BigDecimal.ZERO;
         }
 
-        BigDecimal percentual = valorAtivosMesAnterior.divide(metaAporteMensal, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP);
-        return percentual.min(BigDecimal.valueOf(100));
+        BigDecimal percentage = monthlyAssets
+                .divide(monthlyContributionGoal, 4, ROUNDING_MODE)
+                .multiply(ONE_HUNDRED)
+                .setScale(SCALE, ROUNDING_MODE);
+
+        return percentage.min(ONE_HUNDRED);
     }
 
-    private BigDecimal calculatePercentualMetasAnuais(ResumoFluxoCaixaDTO dto, FluxoCaixaParametro parametros) {
-        return calculatePercentualAporteTotal(dto.getValorRendaAnoAtual().subtract(dto.getValorDespesaAnoAtual()), parametros.getMetaAporteTotal());
+    private BigDecimal calculateAnnualGoalsPercentage(ResumoFluxoCaixaDTO dto, FluxoCaixaParametro parameters) {
+        BigDecimal annualIncome = getValueOrZero(dto.getValorRendaAnoAtual());
+        BigDecimal annualExpense = getValueOrZero(dto.getValorDespesaAnoAtual());
+        BigDecimal netIncome = annualIncome.subtract(annualExpense);
+
+        return calculateTotalContributionPercentage(netIncome, parameters.getMetaAporteTotal());
     }
 
-    private BigDecimal calculatePercentualAporteTotal(BigDecimal rendaLiquidaAnual, BigDecimal metaAporteTotal) {
-        if (metaAporteTotal == null || metaAporteTotal.compareTo(BigDecimal.ZERO) <= 0) {
+    private BigDecimal calculateTotalContributionPercentage(BigDecimal annualNetIncome, BigDecimal totalContributionGoal) {
+        if (totalContributionGoal == null || totalContributionGoal.compareTo(BigDecimal.ZERO) <= 0) {
             return BigDecimal.ZERO;
         }
-        return rendaLiquidaAnual.divide(metaAporteTotal, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP);
+
+        return annualNetIncome
+                .divide(totalContributionGoal, 4, ROUNDING_MODE)
+                .multiply(ONE_HUNDRED)
+                .setScale(SCALE, ROUNDING_MODE);
+    }
+
+    private BigDecimal getValueOrZero(BigDecimal value) {
+        return value != null ? value : BigDecimal.ZERO;
+    }
+
+    private Date convertToDate(java.time.temporal.TemporalAccessor temporal) {
+        return Date.from(java.time.LocalDateTime.of(
+                        temporal.get(java.time.temporal.ChronoField.YEAR),
+                        temporal.get(java.time.temporal.ChronoField.MONTH_OF_YEAR),
+                        temporal.get(java.time.temporal.ChronoField.DAY_OF_MONTH),
+                        0, 0)
+                .atZone(ZoneId.systemDefault()).toInstant());
     }
 }

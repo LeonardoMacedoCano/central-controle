@@ -53,7 +53,7 @@ const ResumoFluxoCaixaPage: React.FC = () => {
   const summaryCardsData: SummaryCardData[] = [
     {
       title: 'Rendas',
-      valueMensal: `R$ ${resumo.valorRendaMesAnterior}`,
+      valueMensal: `R$ ${resumo.valorRendaUltimoMes}`,
       valueAnual: `R$ ${resumo.valorRendaAnoAtual}`,
       variant: 'success',
       onClick: handleCardClick.rendas,
@@ -63,7 +63,7 @@ const ResumoFluxoCaixaPage: React.FC = () => {
     },
     {
       title: 'Despesas',
-      valueMensal: `R$ ${resumo.valorDespesaMesAnterior}`,
+      valueMensal: `R$ ${resumo.valorDespesaUltimoMes}`,
       valueAnual: `R$ ${resumo.valorDespesaAnoAtual}`,
       variant: 'warning',
       onClick: handleCardClick.despesas,
@@ -73,7 +73,7 @@ const ResumoFluxoCaixaPage: React.FC = () => {
     },
     {
       title: 'Ativos',
-      valueMensal: `R$ ${resumo.valorAtivosMesAnterior}`,
+      valueMensal: `R$ ${resumo.valorAtivosUltimoMes}`,
       valueAnual: `R$ ${resumo.valorAtivosAnoAtual}`,
       variant: 'info',
       onClick: handleCardClick.ativos,
@@ -83,7 +83,7 @@ const ResumoFluxoCaixaPage: React.FC = () => {
     },
     {
       title: 'Metas',
-      valueMensal: `${resumo.percentualMetasMesAnterior}%`,
+      valueMensal: `${resumo.percentualMetasUltimoMes}%`,
       valueAnual: `${resumo.percentualMetasAnoAtual}%`,
       variant: 'quaternary',
       onClick: handleCardClick.metas,
@@ -97,7 +97,7 @@ const ResumoFluxoCaixaPage: React.FC = () => {
     <InfoCard 
       key={index} 
       height='170px'
-      width='225px'
+      width='170px'
       variant={cardData.variant}
       title={cardData.title} 
       description={cardData.descricao}
@@ -113,12 +113,12 @@ const ResumoFluxoCaixaPage: React.FC = () => {
   return (
     <Container>
       <Loading isLoading={isLoading}/>
-
+      
       <Panel maxWidth="1000px" title="Resumo Fluxo Caixa" transparent>
-        {currentMonth && (
-          <CardContainer>
-            {summaryCardsData.map(renderSummaryCard)}
-          </CardContainer>
+      {currentMonth && (
+        <CardContainer>
+          {summaryCardsData.map(renderSummaryCard)}
+        </CardContainer>
         )}
       </Panel>
       
@@ -148,8 +148,8 @@ const ResumoFluxoCaixaPage: React.FC = () => {
         <CustomPieChart 
           title={`Renda Passiva x Despesa (Mês ${resumo.labelsMensalAnoAtual[resumo.labelsMensalAnoAtual.length - 1]})`} 
           data={[
-            { name: "Renda Passiva", value: resumo.valorRendaPassivaMesAnterior, variant: 'success'},
-            { name: "Despesa", value: resumo.valorDespesaMesAnterior, variant: 'warning' },
+            { name: "Renda Passiva", value: resumo.valorRendaPassivaUltimoMes, variant: 'success'},
+            { name: "Despesa", value: resumo.valorDespesaUltimoMes, variant: 'warning' },
           ]} 
           showLegend 
           minVisualPercentage={3}
@@ -168,7 +168,7 @@ const CardContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin: 10px;
-  gap: 25px;
+  gap: clamp(30px, 3vw, 80px);;
 `;
 
 const ValuesContainer = styled.div`
@@ -176,7 +176,7 @@ const ValuesContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 4px;
-  font-size: 14px;
+  font-size: 12px;
 
   p {
     display: flex;

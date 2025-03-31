@@ -1,29 +1,29 @@
 export type ResumoFluxoCaixa = {
-  valorRendaMesAnterior: number;
+  valorRendaUltimoMes: number;
   valorRendaAnoAtual: number;
-  valorDespesaMesAnterior: number;
+  valorDespesaUltimoMes: number;
   valorDespesaAnoAtual: number;
-  valorAtivosMesAnterior: number;
+  valorAtivosUltimoMes: number;
   valorAtivosAnoAtual: number;
-  percentualMetasMesAnterior: number;
+  percentualMetasUltimoMes: number;
   percentualMetasAnoAtual: number;
   labelsMensalAnoAtual: string[];
   valoresRendaAnoAtual: number[];
   valoresDespesaAnoAtual: number[];
-  valorRendaPassivaMesAnterior: number;
+  valorRendaPassivaUltimoMes: number;
 }
 
 export const initialResumoFluxoCaixaState: ResumoFluxoCaixa = {
-  valorRendaMesAnterior: 0,
+  valorRendaUltimoMes: 0,
   valorRendaAnoAtual: 0,
-  valorDespesaMesAnterior: 0,
+  valorDespesaUltimoMes: 0,
   valorDespesaAnoAtual: 0,
-  valorAtivosMesAnterior: 0,
+  valorAtivosUltimoMes: 0,
   valorAtivosAnoAtual: 0,
-  percentualMetasMesAnterior: 0,
+  percentualMetasUltimoMes: 0,
   percentualMetasAnoAtual: 0,
   labelsMensalAnoAtual: [],
   valoresRendaAnoAtual: [],
   valoresDespesaAnoAtual: [],
-  valorRendaPassivaMesAnterior: 0
+  valorRendaPassivaUltimoMes: 0
 };
