@@ -168,7 +168,7 @@ const CardContainer = styled.div`
   justify-content: center;
   align-items: center;
   margin: 10px;
-  gap: clamp(30px, 3vw, 80px);;
+  gap: clamp(30px, 5vw, 80px);;
 `;
 
 const ValuesContainer = styled.div`
