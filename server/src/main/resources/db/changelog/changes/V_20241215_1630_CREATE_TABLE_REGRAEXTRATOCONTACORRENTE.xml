@@ -31,6 +31,7 @@
             <column name="descricaodestino" type="${varchar_255}"/>
             <column name="idcategoriadespesadestino" type="${integer}"/>
             <column name="idcategoriarendadestino" type="${integer}"/>
+            <column name="categoriaativodestino" type="${varchar_20}" />
             <column name="prioridade" type="${integer}" defaultValue="0">
                 <constraints nullable="false"/>
             </column>

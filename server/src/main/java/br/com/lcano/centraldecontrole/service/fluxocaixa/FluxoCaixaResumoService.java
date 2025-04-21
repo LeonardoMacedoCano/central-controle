@@ -47,17 +47,42 @@ public class FluxoCaixaResumoService {
         populateMonthlySummary(dto, anoAtual);
 
         YearMonth ultimoMes = getUltimoMes(dto.getLabelsMensalAnoAtual());
+
+        if (ultimoMes != null) {
+            fillResumoWithDados(dto, parametros, anoAtual, ultimoMes);
+        } else {
+            resetValoresResumo(dto);
+        }
+
+        return dto;
+    }
+
+    private void fillResumoWithDados(ResumoFluxoCaixaDTO dto, FluxoCaixaParametro parametros, Year anoAtual, YearMonth ultimoMes) {
         populateMonthlyValues(dto, ultimoMes);
         populateAnnualValues(dto, anoAtual);
 
         dto.setPercentualMetasUltimoMes(calculateMonthlyGoalsPercentage(dto, parametros));
         dto.setPercentualMetasAnoAtual(calculateAnnualGoalsPercentage(dto, parametros));
         dto.setValorRendaPassivaUltimoMes(calculatePassiveIncome(ultimoMes, parametros.getRendaPassivaCategoria()));
+    }
 
-        return dto;
+    private void resetValoresResumo(ResumoFluxoCaixaDTO dto) {
+        dto.setValorRendaUltimoMes(BigDecimal.ZERO);
+        dto.setValorDespesaUltimoMes(BigDecimal.ZERO);
+        dto.setValorAtivosUltimoMes(BigDecimal.ZERO);
+        dto.setValorRendaAnoAtual(BigDecimal.ZERO);
+        dto.setValorDespesaAnoAtual(BigDecimal.ZERO);
+        dto.setValorAtivosAnoAtual(BigDecimal.ZERO);
+        dto.setPercentualMetasUltimoMes(BigDecimal.ZERO);
+        dto.setPercentualMetasAnoAtual(BigDecimal.ZERO);
+        dto.setValorRendaPassivaUltimoMes(BigDecimal.ZERO);
     }
 
     private YearMonth getUltimoMes(List<String> labels) {
+        if (labels == null || labels.isEmpty()) {
+            return null;
+        }
+
         String ultimoLabel = labels.get(labels.size() - 1);
         String[] parts = ultimoLabel.split("/");
 

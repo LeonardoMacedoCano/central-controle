@@ -12,13 +12,6 @@
         <sqlFile path="org/springframework/batch/core/schema-postgresql.sql"/>
     </changeSet>
 
-    <changeSet id="create-spring-batch-tables-oracle" author="lcano">
-        <preConditions onFail="MARK_RAN">
-            <dbms type="oracle"/>
-        </preConditions>
-        <sqlFile path="org/springframework/batch/core/schema-oracle.sql"/>
-    </changeSet>
-
     <changeSet id="create-spring-batch-tables-h2" author="lcano">
         <preConditions onFail="MARK_RAN">
             <dbms type="h2"/>

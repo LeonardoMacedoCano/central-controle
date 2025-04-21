@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.4.xsd">
+
+    <changeSet id="create-table-servidorconfig" author="lcano">
+        <preConditions onFail="MARK_RAN" onFailMessage="A tabela servidorconfig já existe">
+            <not>
+                <tableExists tableName="servidorconfig"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="servidorconfig">
+            <column name="id" type="${integer}">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pkservidorconfig"/>
+            </column>
+            <column name="ipexterno" type="${varchar_50}">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <insert tableName="servidorconfig">
+            <column name="id" value="1"/>
+            <column name="ipexterno" value="0.0.0.0"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

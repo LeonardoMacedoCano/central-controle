@@ -85,7 +85,7 @@ public class ImportacaoExtratoContaCorrenteProcessor implements ItemProcessor<Ex
 
         TipoRegraExtratoContaCorrente tipo = regra.getTipoRegra();
         return isDespesa
-                ? tipo.isDespesa() || tipo.equals(TipoRegraExtratoContaCorrente.CLASSIFICAR_ATIVO)
+                ? tipo.isDespesa() || tipo.isAtivo()
                 : tipo.isRenda();
     }
 

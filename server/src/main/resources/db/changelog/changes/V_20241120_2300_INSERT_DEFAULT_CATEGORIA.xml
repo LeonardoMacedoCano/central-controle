@@ -34,6 +34,9 @@
         <insert tableName="despesacategoria">
             <column name="descricao" value="Vestuário"/>
         </insert>
+        <insert tableName="despesacategoria">
+            <column name="descricao" value="Outros"/>
+        </insert>
     </changeSet>
 
     <changeSet id="insert-default-rendacategoria" author="lcano">

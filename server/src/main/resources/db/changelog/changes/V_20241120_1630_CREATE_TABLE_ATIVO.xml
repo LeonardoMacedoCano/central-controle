@@ -22,16 +22,10 @@
             <column name="categoria" type="${varchar_20}">
                 <constraints nullable="false"/>
             </column>
-            <column name="ticker" type="${varchar_255}">
+            <column name="operacao" type="${varchar_10}">
                 <constraints nullable="false"/>
             </column>
-            <column name="operacao" type="${varchar_6}">
-                <constraints nullable="false"/>
-            </column>
-            <column name="quantidade" type="${number_18_6}">
-                <constraints nullable="false"/>
-            </column>
-            <column name="precounitario" type="${number_10_2}">
+            <column name="valor" type="${number_10_2}">
                 <constraints nullable="false"/>
             </column>
             <column name="datamovimento" type="${date}">

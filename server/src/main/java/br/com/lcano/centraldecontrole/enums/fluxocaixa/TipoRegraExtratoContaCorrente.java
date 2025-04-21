@@ -17,18 +17,14 @@ public enum TipoRegraExtratoContaCorrente {
     }
 
     public boolean isDespesa() {
-        return this == CLASSIFICAR_DESPESA;
+        return this == CLASSIFICAR_DESPESA || this == IGNORAR_DESPESA;
     }
 
     public boolean isRenda() {
-        return this == CLASSIFICAR_RENDA;
+        return this == CLASSIFICAR_RENDA || this == IGNORAR_RENDA;
     }
 
     public boolean isAtivo() {
         return this == CLASSIFICAR_ATIVO;
-    }
-
-    public boolean isIgnorar() {
-        return this == IGNORAR_DESPESA || this == IGNORAR_RENDA;
     }
 }
