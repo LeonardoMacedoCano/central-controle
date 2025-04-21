@@ -16,19 +16,15 @@ import java.util.Date;
 public class AtivoDTO extends BaseDTO<Ativo> implements LancamentoItemDTO {
     private Long id;
     private AtivoCategoria categoria;
-    private String ticker;
     private TipoOperacaoExtratoMovimentacaoB3 operacao;
-    private BigDecimal quantidade;
-    private BigDecimal precoUnitario;
+    private BigDecimal valor;
     private Date dataMovimento;
 
     @Override
     public AtivoDTO fromEntity(Ativo entity) {
         this.id = entity.getId();
-        this.ticker = entity.getTicker();
         this.operacao = entity.getOperacao();
-        this.quantidade = entity.getQuantidade();
-        this.precoUnitario = entity.getPrecoUnitario();
+        this.valor = entity.getValor();
         this.dataMovimento = entity.getDataMovimento();
         this.categoria = entity.getCategoria();
         return this;
@@ -38,10 +34,8 @@ public class AtivoDTO extends BaseDTO<Ativo> implements LancamentoItemDTO {
     public Ativo toEntity() {
         Ativo entity = new Ativo();
         entity.setId(this.id);
-        entity.setTicker(this.ticker);
         entity.setOperacao(this.operacao);
-        entity.setQuantidade(this.quantidade);
-        entity.setPrecoUnitario(this.precoUnitario);
+        entity.setValor(this.valor);
         entity.setDataMovimento(this.dataMovimento);
         entity.setCategoria(this.categoria);
         return entity;

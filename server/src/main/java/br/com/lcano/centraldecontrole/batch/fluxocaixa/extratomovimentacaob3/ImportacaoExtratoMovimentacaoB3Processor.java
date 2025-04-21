@@ -18,6 +18,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 @Component
@@ -67,7 +68,7 @@ public class ImportacaoExtratoMovimentacaoB3Processor implements ItemProcessor<E
             Ativo ativo = buildAtivo(extratoDTO);
             ativo.setLancamento(lancamento);
 
-            lancamento.setDescricao(obterDescricaoLancamentoAtivo(ativo));
+            lancamento.setDescricao(obterDescricaoLancamentoAtivo(ativo.getOperacao(), extratoDTO.getQuantidade(), extratoDTO.getProduto()));
             lancamento.setTipo(TipoLancamento.ATIVO);
             lancamento.setAtivo(ativo);
         } else {
@@ -85,14 +86,12 @@ public class ImportacaoExtratoMovimentacaoB3Processor implements ItemProcessor<E
     private Ativo buildAtivo(ExtratoMovimentacaoB3DTO extratoDTO) {
         Ativo ativo = new Ativo();
         ativo.setCategoria(AtivoCategoria.DESCONHECIDO);
-        ativo.setTicker(formatTickerProduto(extratoDTO.getProduto()));
         ativo.setOperacao(
                 TipoOperacaoExtratoMovimentacaoB3.fromDescricao(
                         extratoDTO.getTipoOperacao().toUpperCase()
                 )
         );
-        ativo.setQuantidade(extratoDTO.getQuantidade());
-        ativo.setPrecoUnitario(extratoDTO.getPrecoUnitario());
+        ativo.setValor(extratoDTO.getPrecoTotal());
         ativo.setDataMovimento(extratoDTO.getDataMovimentacao());
         return ativo;
     }
@@ -105,12 +104,12 @@ public class ImportacaoExtratoMovimentacaoB3Processor implements ItemProcessor<E
         return renda;
     }
 
-    private String obterDescricaoLancamentoAtivo(Ativo ativo) {
-        String descricaoOperacao = ativo.getOperacao() == TipoOperacaoExtratoMovimentacaoB3.CREDITO ? "Compra" : "Venda";
+    private String obterDescricaoLancamentoAtivo(TipoOperacaoExtratoMovimentacaoB3 operacao, BigDecimal quantidade, String ticker) {
+        String descricaoOperacao = operacao == TipoOperacaoExtratoMovimentacaoB3.CREDITO ? "Compra" : "Venda";
         return String.format("%s - %sx %s",
                 descricaoOperacao,
-                DECIMAL_FORMAT.format(ativo.getQuantidade()),
-                ativo.getTicker());
+                DECIMAL_FORMAT.format(quantidade),
+                formatTickerProduto(ticker));
     }
 
     private String obterDescricaoLancamentoRenda(ExtratoMovimentacaoB3DTO extratoDTO) {

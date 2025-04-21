@@ -91,9 +91,7 @@ const LancamentoFormPage: React.FC = () => {
       const ativo = itemDTO as Ativo;
       return (
         !!ativo.categoria &&
-        !!ativo.ticker &&
-        ativo.quantidade > 0 &&
-        ativo.precoUnitario > 0 &&
+        !!ativo.valor &&
         !!ativo.operacao &&
         isDateValid(ativo.dataMovimento)
       );      

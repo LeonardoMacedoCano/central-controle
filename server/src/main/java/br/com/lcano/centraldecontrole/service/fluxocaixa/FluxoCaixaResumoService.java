@@ -125,7 +125,7 @@ public class FluxoCaixaResumoService {
                 .map(lancamento -> switch (lancamento.getTipo()) {
                     case RENDA -> lancamento.getRenda().getValor();
                     case DESPESA -> lancamento.getDespesa().getValor();
-                    case ATIVO -> lancamento.getAtivo().getPrecoUnitario().multiply(lancamento.getAtivo().getQuantidade());
+                    case ATIVO -> lancamento.getAtivo().getValor();
                 })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }

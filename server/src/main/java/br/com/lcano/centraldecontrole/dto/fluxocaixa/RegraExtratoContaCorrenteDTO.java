@@ -2,6 +2,7 @@ package br.com.lcano.centraldecontrole.dto.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.fluxocaixa.RegraExtratoContaCorrente;
 import br.com.lcano.centraldecontrole.dto.BaseDTO;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoria;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoContaCorrente;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +17,7 @@ public class RegraExtratoContaCorrenteDTO extends BaseDTO<RegraExtratoContaCorre
     private String descricaoDestino;
     private DespesaCategoriaDTO despesaCategoriaDestino;
     private RendaCategoriaDTO rendaCategoriaDestino;
+    private AtivoCategoria ativoCategoriaDestino;
     private Long prioridade;
     private boolean ativo;
 
@@ -32,6 +34,7 @@ public class RegraExtratoContaCorrenteDTO extends BaseDTO<RegraExtratoContaCorre
         this.rendaCategoriaDestino = entity.getRendaCategoriaDestino() != null
                 ? new RendaCategoriaDTO().fromEntity(entity.getRendaCategoriaDestino())
                 : null;
+        this.ativoCategoriaDestino = entity.getAtivoCategoriaDestino();
         this.prioridade = entity.getPrioridade();
         this.ativo = entity.isAtivo();
         return this;
@@ -47,6 +50,7 @@ public class RegraExtratoContaCorrenteDTO extends BaseDTO<RegraExtratoContaCorre
         entity.setDescricaoDestino(this.descricaoDestino);
         if (this.despesaCategoriaDestino != null) entity.setDespesaCategoriaDestino(this.despesaCategoriaDestino.toEntity());
         if (this.rendaCategoriaDestino != null) entity.setRendaCategoriaDestino(this.rendaCategoriaDestino.toEntity());
+        entity.setAtivoCategoriaDestino(this.ativoCategoriaDestino);
         entity.setPrioridade(this.prioridade);
         entity.setAtivo(this.ativo);
         return entity;

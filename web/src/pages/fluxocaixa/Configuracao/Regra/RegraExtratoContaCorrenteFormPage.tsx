@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Container, FieldValue, FlexBox, FloatingButton, Loading, Panel } from "../../../../components";
-import { Categoria, getCodigoTipoRegraExtratoContaCorrente, getDescricaoTipoRegraExtratoContaCorrente, getTipoRegraExtratoContaCorrenteByCodigo, initialRegraExtratoContaCorrenteState, RegraExtratoContaCorrente, tipoRegraExtratoContaCorrenteOptions } from "../../../../types";
+import { ativoCategoriaOptions, Categoria, getAtivoCategoriaByCodigo, getCodigoAtivoCategoria, getCodigoTipoRegraExtratoContaCorrente, getDescricaoAtivoCategoria, getDescricaoTipoRegraExtratoContaCorrente, getTipoRegraExtratoContaCorrenteByCodigo, initialRegraExtratoContaCorrenteState, RegraExtratoContaCorrente, tipoRegraExtratoContaCorrenteOptions } from "../../../../types";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext, useMessage } from "../../../../contexts";
 import { DespesaCategoriaService, RendaCategoriaService, RegraExtratoContaCorrenteService } from "../../../../service";
@@ -119,6 +119,11 @@ const RegraExtratoContaCorrenteFormPage: React.FC = () => {
     updateRegra({ rendaCategoriaDestino: selectedCategoria });
   };
 
+  const handleUpdateCategoriaAtivo = (value: any) => {
+    const selectedCategoria = getAtivoCategoriaByCodigo(String(value)); 
+    updateRegra({ ativoCategoriaDestino: selectedCategoria });
+  };
+
   const handleUpdatePrioridade = (value: any) => {
     updateRegra({ prioridade: value });
   };
@@ -139,7 +144,6 @@ const RegraExtratoContaCorrenteFormPage: React.FC = () => {
           options: categoriasDespesa.map(c => ({ key: String(c.id), value: c.descricao })),
           onUpdate: handleUpdateCategoriaDespesa,
         };
-  
       case 'CLASSIFICAR_RENDA':
         return {
           value: {
@@ -150,7 +154,16 @@ const RegraExtratoContaCorrenteFormPage: React.FC = () => {
           options: categoriasRenda.map(c => ({ key: String(c.id), value: c.descricao })),
           onUpdate: handleUpdateCategoriaRenda,
         };
-  
+      case 'CLASSIFICAR_ATIVO':
+        return {
+          value: {
+            key: getCodigoAtivoCategoria(regra.ativoCategoriaDestino),
+            value: getDescricaoAtivoCategoria(regra.ativoCategoriaDestino),
+          },
+          editable: true,
+          options: ativoCategoriaOptions,
+          onUpdate: handleUpdateCategoriaAtivo,
+        };
       default:
         return {
           descricao: 'Categoria',

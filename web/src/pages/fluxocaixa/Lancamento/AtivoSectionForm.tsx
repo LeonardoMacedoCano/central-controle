@@ -28,23 +28,13 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
     updateAtivo({ categoria: selectedCategoria });
   };
 
-  const handleUpdatePrecoUnitario = (value: any) => {
-    updateAtivo({ precoUnitario: value });
-  };
-
-  const handleUpdateQuantidade = (value: any) => {
-    updateAtivo({ quantidade: value });
+  const handleUpdateValor = (value: any) => {
+    updateAtivo({ valor: value });
   };
   
   const handleUpdateOperacao = (value: any) => {
     const selectedOperacao = getAtivoOperacaoByCodigo(value); 
     updateAtivo({ operacao: selectedOperacao });
-  };
-
-  const handleUpdateTicker = (value: any) => {
-    if (typeof value === 'string') {
-      updateAtivo({ ticker: value });
-    }
   };
 
   return (
@@ -71,17 +61,8 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
             />
           </FlexBox.Item>
         </FlexBox>
-        <FlexBox flexDirection="row" borderBottom>
+        <FlexBox flexDirection="row">
           <FlexBox.Item borderRight >
-            <FieldValue 
-              description='Ticker'
-              type='string'
-              value={ativo?.ticker}
-              editable={true}
-              onUpdate={handleUpdateTicker}
-            />
-          </FlexBox.Item>
-          <FlexBox.Item >
             <FieldValue 
               description='Operação'
               type='select'
@@ -91,26 +72,13 @@ const AtivoSectionForm: React.FC<AtivoSectionFormProps> = ({ ativo, onUpdate }) 
               onUpdate={handleUpdateOperacao}
             />
           </FlexBox.Item>
-        </FlexBox>
-        <FlexBox flexDirection="row">
-          <FlexBox.Item borderRight >
-            <FieldValue 
-              description='Preço Unitário'
-              type='number'
-              value={ativo.precoUnitario}
-              editable={true}
-              onUpdate={handleUpdatePrecoUnitario}
-            />
-          </FlexBox.Item>
           <FlexBox.Item >
             <FieldValue 
-              description='Quantidade'
+              description='Valor'
               type='number'
-              value={ativo.quantidade}
+              value={ativo.valor}
               editable={true}
-              maxDecimalPlaces={6}
-              maxIntegerDigits={12}
-              onUpdate={handleUpdateQuantidade}
+              onUpdate={handleUpdateValor}
             />
           </FlexBox.Item>
         </FlexBox>

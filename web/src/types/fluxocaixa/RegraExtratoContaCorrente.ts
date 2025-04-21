@@ -1,4 +1,5 @@
 import { Categoria } from "../Categoria";
+import { AtivoCategoriaEnum } from "./AtivoCategoriaEnum";
 import { TipoRegraExtratoContaCorrenteEnum } from "./TipoRegraExtratoContaCorrenteEnum";
 
 export type RegraExtratoContaCorrente = {
@@ -9,6 +10,7 @@ export type RegraExtratoContaCorrente = {
   descricaoDestino?: string;
   despesaCategoriaDestino?: Categoria;
   rendaCategoriaDestino?: Categoria;
+  ativoCategoriaDestino?: AtivoCategoriaEnum;
   prioridade: number;
   ativo: boolean;
 }

@@ -1,6 +1,7 @@
 package br.com.lcano.centraldecontrole.domain.fluxocaixa;
 
 import br.com.lcano.centraldecontrole.domain.Usuario;
+import br.com.lcano.centraldecontrole.enums.fluxocaixa.AtivoCategoria;
 import br.com.lcano.centraldecontrole.enums.fluxocaixa.TipoRegraExtratoContaCorrente;
 import br.com.lcano.centraldecontrole.util.BooleanToCharConverter;
 import jakarta.persistence.*;
@@ -38,6 +39,10 @@ public class RegraExtratoContaCorrente {
     @ManyToOne
     @JoinColumn(name = "idcategoriarendadestino")
     private RendaCategoria rendaCategoriaDestino;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "categoriaativodestino")
+    private AtivoCategoria ativoCategoriaDestino;
 
     @Column(nullable = false)
     private Long prioridade;

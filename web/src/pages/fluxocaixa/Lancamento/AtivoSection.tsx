@@ -1,7 +1,7 @@
 import React from 'react';
 import { FieldValue, FlexBox, Panel } from '../../../components';
 import { Ativo, getDescricaoAtivoCategoria, getDescricaoAtivoOperacao } from '../../../types';
-import { formatDateToShortString, formatNumberWithTrailingZeros, formatValueToBRL } from '../../../utils';
+import { formatDateToShortString, formatValueToBRL } from '../../../utils';
 
 interface AtivoSectionProps {
   ativo: Ativo;
@@ -26,36 +26,20 @@ const AtivoSection: React.FC<AtivoSectionProps> = ({ ativo }) => {
             />
           </FlexBox.Item>
         </FlexBox>
-        <FlexBox flexDirection="row" borderBottom>
+        <FlexBox flexDirection="row" >
           <FlexBox.Item borderRight >
-            <FieldValue 
-              description='Ticker'
-              type='string'
-              value={ativo?.ticker || ''}
-            />
-          </FlexBox.Item>
-          <FlexBox.Item >
             <FieldValue 
                 description='Operação'
                 type='string'
                 value={getDescricaoAtivoOperacao(ativo?.operacao)}
               />
           </FlexBox.Item>
-        </FlexBox>
-        <FlexBox flexDirection="row">
-          <FlexBox.Item borderRight >
-            <FieldValue 
-              description='Preço Unitário'
-              type='string'
-              value={formatValueToBRL(ativo.precoUnitario)}
-            />
-          </FlexBox.Item>
           <FlexBox.Item >
             <FieldValue 
-                description='Quantidade'
-                type='string'
-                value={formatNumberWithTrailingZeros(ativo.quantidade, 6)}
-              />
+              description='Valor'
+              type='string'
+              value={formatValueToBRL(ativo.valor)}
+            />
           </FlexBox.Item>
         </FlexBox>
       </FlexBox>

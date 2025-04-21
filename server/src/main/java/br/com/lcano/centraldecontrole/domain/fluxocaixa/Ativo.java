@@ -34,19 +34,13 @@ public class Ativo implements Serializable {
     @Column(name = "categoria", nullable = false)
     private AtivoCategoria categoria;
 
-    @Column(nullable = false)
-    private String ticker;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "operacao", nullable = false)
     private TipoOperacaoExtratoMovimentacaoB3 operacao;
 
-    @Column(nullable = false, precision = 18, scale = 6)
-    private BigDecimal quantidade;
-
-    @Column(name = "precounitario", nullable = false)
-    private BigDecimal precoUnitario;
-
     @Column(name = "datamovimento", nullable = false)
     private Date dataMovimento;
+
+    @Column(nullable = false)
+    private BigDecimal valor;
 }
